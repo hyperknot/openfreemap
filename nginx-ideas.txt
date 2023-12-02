@@ -1,0 +1,61 @@
+# ideas https://calomel.org/nginx.html
+
+open_file_cache
+tcp_nodelay
+
+client_body_buffer_size
+client_max_body_size
+client_header_buffer_size 1k;
+large_client_header_buffers 4 8k;
+server_tokens 1k;
+
+Disable Access Logs
+Enable HTTP/2 or HTTP/3
+SSL Session Cache
+SSL OCSP Stapling
+
+keepalive_timeout 65;
+types_hash_max_size 2048;
+
+# SSL optimizations
+ssl_session_cache shared:SSL:10m;
+ssl_session_timeout 10m;
+ssl_prefer_server_ciphers on;
+
+# Caching
+open_file_cache max=10000 inactive=20s;
+open_file_cache_valid 30s;
+open_file_cache_min_uses 2;
+open_file_cache_errors on;
+
+multi_accept on
+
+
+client_body_timeout 12;
+client_header_timeout 12;
+send_timeout 10;
+
+
+# gzip
+gzip on;
+gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+gzip_vary on;
+gzip_min_length 10240;
+gzip_comp_level 5;
+gzip_proxied any;
+
+access_log /var/log/nginx/access.log main buffer=32k;
+
+# https://www.nginx.com/blog/tuning-nginx/
+net.core.somaxconn - backlog
+net.core.netdev_max_backlog
+
+sys.fs.file-max
+nofile
+
+keepalive_requests
+keepalive_timeout
+keepalive
+
+
+https://github.com/denji/nginx-tuning

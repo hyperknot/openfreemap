@@ -1,0 +1,43 @@
+target-version = "py310"
+line-length = 100
+
+
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  'UP',  # pyupgrade
+  'A',   # flake8-builtins
+  "C4",  # flake8-comprehensions
+  'EXE', # flake8-executable
+  'FA',  # flake8-future-annotations
+  'PT',  # flake8-pytest-style
+  'RSE', # flake8-raise
+  'SIM', # flake8-simplify
+  'DTZ', # flake8-datetimez, https://beta.ruff.rs/docs/rules/#flake8-datetimez-dtz
+]
+
+ignore = [
+  'E501',
+  'E711',
+  'E712',
+  'E741',
+  'A003',
+  'PT004',
+  'SIM108',
+  'SIM102',
+  'SIM105',
+  'SIM115',
+  'F841',
+]
+
+[format]
+quote-style = "single"
+
+[isort]
+known-first-party = ["openfreemaps"]
+lines-after-imports = 2
+
+[flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true

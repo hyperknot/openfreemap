@@ -1,0 +1,10 @@
+tcp_tw_reuse
+tcp_fin_timeout
+tcp_max_syn_backlog
+TCP max buffer size
+
+Increase File Descriptors Limit
+
+Disable Swapping
+
+
