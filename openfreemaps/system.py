@@ -1,11 +1,23 @@
 from openfreemaps.config import templates
-from openfreemaps.utils import apt_get_install, apt_get_purge, put, put_str
+from openfreemaps.utils import (
+    apt_get_install,
+    apt_get_purge,
+    put,
+    put_str,
+)
+
+
+def setup_time(c):
+    apt_get_install(c, 'dbus')
+
+    c.sudo('timedatectl set-local-rtc 0')
+    c.sudo('timedatectl set-ntp 1')
+    c.sudo('timedatectl set-timezone UTC')
 
 
 def setup_kernel_settings(c):
     put(c, f'{templates}/sysctl/60-optim.conf', '/etc/sysctl.d/')
 
-    set_cpu_governor(c)
 
 
 def set_cpu_governor(c):
