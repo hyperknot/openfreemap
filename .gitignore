@@ -1,7 +1,9 @@
 *.pyc
 *.egg-info
 
+.env
 .DS_Store
+
 /venv
 /.idea
 /temp
