@@ -21,3 +21,5 @@ def install_planetiler(c):
 
     c.sudo(f'java -jar {PLANETILER_PATH} --help')
     put(c, templates / 'planetiler' / 'run_planet.sh', PLANETILER_DIR, permissions='755')
+
+    c.sudo('chown -R ofm:ofm /data/planetiler')

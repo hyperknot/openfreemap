@@ -1,7 +1,11 @@
 from setuptools import setup
 
 
-requirements = ['fabric', 'ruff']
+requirements = [
+    'fabric',
+    'ruff',
+    'python-dotenv',
+]
 
 setup(
     python_requires='>=3.10',
