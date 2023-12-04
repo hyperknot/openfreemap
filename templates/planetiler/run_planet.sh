@@ -7,7 +7,12 @@ RUN_FOLDER="/data/planetiler/runs/$DATE"
 mkdir -p "$RUN_FOLDER"
 cd "$RUN_FOLDER" || exit
 
-java -Xmx20g \
+
+# the Xmx value below the most important parameter here
+# setting is less then 25g means there is too little memory
+# setting it to too much means there is too much memory used
+
+java -Xmx30g \
   -jar /data/planetiler/bin/planetiler.jar \
   `# Download the latest planet.osm.pbf from s3://osm-pds bucket` \
   --area=planet --bounds=planet --download \
@@ -18,4 +23,5 @@ java -Xmx20g \
   --output=output.mbtiles \
   `# Store temporary node locations at fixed positions in a memory-mapped file` \
   --nodemap-type=array --storage=mmap \
-  > "output_$DATE.log"
+  --force \
+  > "output_$DATE.log" 2> "err_$DATE.log"
