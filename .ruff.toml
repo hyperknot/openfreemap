@@ -1,6 +1,6 @@
 target-version = "py310"
 line-length = 100
-
+extend-exclude = ["temp"]
 
 select = [
   "E",   # pycodestyle errors
@@ -19,24 +19,25 @@ select = [
 ]
 
 ignore = [
+  'A003',
   'E501',
   'E711',
   'E712',
   'E741',
-  'A003',
+  'F401',
+  'F841',
   'PT004',
-  'SIM108',
   'SIM102',
   'SIM105',
+  'SIM108',
   'SIM115',
-  'F841',
 ]
 
 [format]
 quote-style = "single"
 
 [isort]
-known-first-party = ["openfreemaps"]
+known-first-party = ["lib"]
 lines-after-imports = 2
 
 [flake8-comprehensions]

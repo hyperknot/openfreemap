@@ -101,3 +101,45 @@ def apt_get_autoremove(c):
 
 def get_username(c):
     return c.run('whoami').stdout.strip()
+
+
+def add_user(c, username, passwd=None):
+    # ssh-key login only
+    c.sudo(f'adduser --disabled-password --gecos "" {username}', warn=True)
+    if passwd:
+        c.sudo(f'echo "{username}:{passwd}" | chpasswd')
+
+
+def remove_user(c, username):
+    c.sudo(f'userdel -r {username}', warn=True)
+    c.sudo(f'rm -rf /home/{username}')
+
+
+def enable_sudo(c, username):
+    c.sudo(f'usermod -aG sudo {username}')
+
+
+def ssh_copy_id(c, username, key_file_path):
+    with open(key_file_path) as fp:
+        public_key_str = fp.read()
+
+    if username == 'root':
+        home_dir = '/root'
+    else:
+        home_dir = f'/home/{username}'
+
+    ssh_dir = f'{home_dir}/.ssh'
+
+    c.sudo(f'mkdir -p {ssh_dir}')
+    c.sudo(f'chown {username}:{username} {ssh_dir}')
+
+    put_str(c, f'{ssh_dir}/authorized_keys', public_key_str)
+    set_permission(c, f'{ssh_dir}/authorized_keys', '400', username, username)
+
+
+def setup_time(c):
+    apt_get_install(c, 'dbus')
+
+    c.sudo('timedatectl set-local-rtc 0')
+    c.sudo('timedatectl set-ntp 1')
+    c.sudo('timedatectl set-timezone UTC')

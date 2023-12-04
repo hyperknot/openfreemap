@@ -1,5 +1,5 @@
-from openfreemaps.config import templates
-from openfreemaps.utils import (
+from lib.config import templates
+from lib.utils import (
     apt_get_install,
     apt_get_purge,
     apt_get_update,
@@ -45,6 +45,7 @@ def nginx(c):
 
     put(c, f'{templates}/nginx/nginx.conf', '/etc/nginx/')
     put(c, f'{templates}/nginx/default_disable.conf', '/data/nginx/sites')
+    put(c, f'{templates}/nginx/cloudflare.conf', '/data/nginx/config')
 
     c.sudo('service nginx restart')
 
@@ -52,10 +53,10 @@ def nginx(c):
 def certbot(c):
     # https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx
     apt_get_install(c, 'snapd')
-    c.run('snap install core', warn=True)
-    c.run('snap refresh core', warn=True)
+    c.sudo('snap install core', warn=True)
+    c.sudo('snap refresh core', warn=True)
 
     apt_get_purge(c, 'certbot')
-    c.run('snap install --classic certbot', warn=True)
-    c.run('snap set certbot trust-plugin-with-root=ok')
-    c.run('snap install certbot-dns-cloudflare')
+    c.sudo('snap install --classic certbot', warn=True)
+    c.sudo('snap set certbot trust-plugin-with-root=ok')
+    c.sudo('snap install certbot-dns-cloudflare')

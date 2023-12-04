@@ -1,4 +1,4 @@
-from openfreemaps.utils import (
+from lib.utils import (
     apt_get_autoremove,
     apt_get_install,
     apt_get_purge,
@@ -20,11 +20,18 @@ def pkg_clean(c):
         'ufw',
         'nftables',
         'firewalld',
+        'iptables-persistent',
+        # bloat
+        'ntfs-3g',
+        'popularity-contest',
+        'landscape*',
+        'ubuntu-advantage-tools',
     ]
 
     apt_get_purge(c, ' '.join(clean_list))
     apt_get_autoremove(c)
     sudo_cmd(c, 'dpkg --list | grep "^rc" | cut -d " " -f 3 | xargs -r dpkg --purge')
+    c.sudo('iptables -L')
 
 
 def pkg_base(c):
