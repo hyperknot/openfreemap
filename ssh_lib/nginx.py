@@ -51,12 +51,13 @@ def nginx(c):
 
 
 def certbot(c):
-    # https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx
     apt_get_install(c, 'snapd')
-    c.sudo('snap install core', warn=True)
+
+    # this is silly, but needs to be run twice
+    c.sudo('snap install core', warn=True, echo=True)
+    c.sudo('snap install core', warn=True, echo=True)
+
     c.sudo('snap refresh core', warn=True)
 
     apt_get_purge(c, 'certbot')
     c.sudo('snap install --classic certbot', warn=True)
-    c.sudo('snap set certbot trust-plugin-with-root=ok')
-    c.sudo('snap install certbot-dns-cloudflare')

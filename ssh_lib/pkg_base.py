@@ -15,7 +15,7 @@ def pkg_upgrade(c):
 
 
 def pkg_clean(c):
-    clean_list = [
+    pkg_list = [
         # firewalls
         'ufw',
         'nftables',
@@ -28,11 +28,21 @@ def pkg_clean(c):
         'ubuntu-advantage-tools',
     ]
 
-    apt_get_purge(c, ' '.join(clean_list))
+    apt_get_purge(c, ' '.join(pkg_list))
     apt_get_autoremove(c)
     sudo_cmd(c, 'dpkg --list | grep "^rc" | cut -d " " -f 3 | xargs -r dpkg --purge')
-    c.sudo('iptables -L')
+    c.sudo('iptables -L', warn=True)
 
 
 def pkg_base(c):
-    apt_get_install(c, 'python3 nload iftop')
+    pkg_list = [
+        'wget',
+        'gpg',
+        'gnupg-agent',
+        'python3',
+        'nload',
+        'iftop',
+        'snapd',
+    ]
+
+    apt_get_install(c, ' '.join(pkg_list))

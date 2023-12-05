@@ -88,6 +88,7 @@ def apt_get_install(c, pkgs, warn=False):
     c.sudo(
         f'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends {pkgs}',
         warn=warn,
+        echo=True,
     )
 
 

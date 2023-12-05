@@ -37,7 +37,6 @@ if input(f'run {sys.argv[0]} on {HOSTNAME}? [y/N]: ') != 'y':
 
 c = Connection(
     host=HOSTNAME,
-    user='ofm',
     config=Config(overrides={'sudo': {'password': OFM_USER_PASSWD}}),
 )
 prepare_server(c)
