@@ -37,7 +37,7 @@ ignore = [
 quote-style = "single"
 
 [isort]
-known-first-party = ["lib"]
+known-first-party = ["ssh_lib"]
 lines-after-imports = 2
 
 [flake8-comprehensions]

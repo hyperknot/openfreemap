@@ -1,6 +1,6 @@
 import time
 
-from lib.utils import apt_get_purge, exists, put_str
+from ssh_lib.utils import apt_get_purge, exists, put_str
 
 
 def setup_dns(c):

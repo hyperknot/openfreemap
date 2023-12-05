@@ -4,11 +4,11 @@ import sys
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
-from lib.kernel import set_cpu_governor, setup_kernel_settings
-from lib.nginx import certbot, nginx
-from lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
-from lib.planetiler import install_planetiler
-from lib.utils import reboot, setup_time
+from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
+from ssh_lib.nginx import certbot, nginx
+from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
+from ssh_lib.planetiler import install_planetiler
+from ssh_lib.utils import reboot, setup_time
 
 
 def prepare_server(c):

@@ -1,4 +1,4 @@
-from lib.utils import (
+from ssh_lib.utils import (
     apt_get_autoremove,
     apt_get_install,
     apt_get_purge,
@@ -35,4 +35,4 @@ def pkg_clean(c):
 
 
 def pkg_base(c):
-    apt_get_install(c, 'nload iftop')
+    apt_get_install(c, 'python3 nload iftop')

@@ -8,8 +8,8 @@ requirements = [
 ]
 
 setup(
+    name='openfreemaps',
     python_requires='>=3.10',
     install_requires=requirements,
-    name='lib',
-    packages=['lib'],
+    packages=['ssh_lib'],
 )

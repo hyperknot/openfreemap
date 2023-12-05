@@ -1,5 +1,5 @@
-from lib.config import templates
-from lib.utils import (
+from ssh_lib.config import templates
+from ssh_lib.utils import (
     apt_get_install,
     apt_get_purge,
     apt_get_update,
