@@ -28,7 +28,7 @@ def prepare_tile_creator(c):
     install_planetiler(c)
     put(
         c,
-        scripts / 'planetiler' / 'run_planet.sh',
+        scripts / 'tile_creator' / 'run_planet.sh',
         PLANETILER_DIR,
         permissions='755',
         owner='ofm',
@@ -73,7 +73,7 @@ def main(hostname, user, port, tile_creator, http_host):
             port=port,
         )
 
-    prepare_shared(c)
+    # prepare_shared(c)
 
     if tile_creator:
         prepare_tile_creator(c)
