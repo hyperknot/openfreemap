@@ -38,11 +38,14 @@ def pkg_base(c):
     pkg_list = [
         'wget',
         'gpg',
+        'git',
         'gnupg-agent',
-        'python3',
         'nload',
         'iftop',
         'snapd',
+        #
+        'python3',
+        'python3-venv',
     ]
 
     apt_get_install(c, ' '.join(pkg_list))

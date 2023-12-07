@@ -8,8 +8,8 @@ from ssh_lib.config import scripts
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
-from ssh_lib.planetiler import PLANETILER_DIR, install_planetiler
-from ssh_lib.utils import add_user, put, setup_time
+from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
+from ssh_lib.utils import add_user, put, setup_time, sudo_cmd
 
 
 def prepare_shared(c):
@@ -26,13 +26,24 @@ def prepare_shared(c):
 
 def prepare_tile_creator(c):
     install_planetiler(c)
+
     put(
         c,
-        scripts / 'tile_creator' / 'run_planet.sh',
-        PLANETILER_DIR,
+        scripts / 'tile_creator' / 'prepare-virtualenv.sh',
+        TILE_GEN_BIN,
         permissions='755',
         owner='ofm',
     )
+
+    put(
+        c,
+        scripts / 'tile_creator' / 'run_planet.sh',
+        TILE_GEN_BIN,
+        permissions='755',
+        owner='ofm',
+    )
+
+    sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
 
 def prepare_http_host(c):
@@ -73,7 +84,7 @@ def main(hostname, user, port, tile_creator, http_host):
             port=port,
         )
 
-    # prepare_shared(c)
+    prepare_shared(c)
 
     if tile_creator:
         prepare_tile_creator(c)

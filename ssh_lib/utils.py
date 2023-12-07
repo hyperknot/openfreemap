@@ -36,9 +36,9 @@ def append_str(c, remote_path, str_):
     c.sudo(f'rm -f {tmp_path}')
 
 
-def sudo_cmd(c, cmd):
+def sudo_cmd(c, cmd, user=None):
     cmd = cmd.replace('"', '\\"')
-    c.sudo(f'bash -c "{cmd}"')
+    c.sudo(f'bash -c "{cmd}"', user=user)
 
 
 def set_permission(c, path, permissions=None, owner=None, group=None):
