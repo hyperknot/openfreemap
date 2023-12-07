@@ -11,7 +11,7 @@ def install_planetiler(c):
     apt_get_update(c)
     apt_get_install(c, 'openjdk-17-jdk')
 
-    c.sudo('mkdir -p /data/planetiler/bin')
+    c.sudo(f'mkdir -p {TILE_GEN_BIN}')
 
     c.sudo(
         f'wget -q https://github.com/onthegomap/planetiler/releases/download/v{PLANETILER_VERSION}/planetiler.jar '
@@ -20,4 +20,4 @@ def install_planetiler(c):
 
     c.sudo(f'java -jar {PLANETILER_PATH} --help', hide=True)
 
-    c.sudo('chown -R ofm:ofm /data/planetiler')
+    c.sudo('chown -R ofm:ofm /data/ofm')

@@ -53,8 +53,8 @@ def prepare_http_host(c):
 
 @click.command()
 @click.argument('hostname')
-@click.option('--port', type=int, help='SSH port')
-@click.option('--user', help='SSH user')
+@click.option('--port', type=int, help='SSH port (if not in .ssh/config)')
+@click.option('--user', help='SSH user (if not in .ssh/config)')
 @click.option('--tile-creator', is_flag=True, help='Install tile-creator task')
 @click.option('--http-host', is_flag=True, help='Install http-host task')
 def main(hostname, user, port, tile_creator, http_host):
@@ -84,7 +84,7 @@ def main(hostname, user, port, tile_creator, http_host):
             port=port,
         )
 
-    prepare_shared(c)
+    # prepare_shared(c)
 
     if tile_creator:
         prepare_tile_creator(c)
