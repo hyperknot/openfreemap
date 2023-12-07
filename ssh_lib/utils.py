@@ -108,7 +108,7 @@ def add_user(c, username, passwd=None):
     # ssh-key login only
     c.sudo(f'adduser --disabled-password --gecos "" {username}', warn=True)
     if passwd:
-        c.sudo(f'echo "{username}:{passwd}" | chpasswd')
+        sudo_cmd(c, f'echo "{username}:{passwd}" | chpasswd')
 
 
 def remove_user(c, username):

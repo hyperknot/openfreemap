@@ -8,7 +8,7 @@ from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
 from ssh_lib.planetiler import install_planetiler
-from ssh_lib.utils import reboot, setup_time
+from ssh_lib.utils import add_user, enable_sudo, reboot, setup_time
 
 
 def prepare_server(c):
@@ -22,6 +22,9 @@ def prepare_server(c):
 
     nginx(c)
     certbot(c)
+
+    add_user(c, 'ofm', OFM_USER_PASSWD)
+    enable_sudo(c, 'ofm')
 
     install_planetiler(c)
 
