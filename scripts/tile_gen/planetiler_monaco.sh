@@ -5,7 +5,7 @@
 # setting it to too much means there is too much memory used
 
 java -Xmx1g \
-  -jar /data/ofm/tile_creator/bin/planetiler.jar \
+  -jar /data/ofm/tile_gen/planetiler.jar \
   `# Download the latest planet.osm.pbf from s3://osm-pds bucket` \
   --area=monaco --download \
   `# Accelerate the download by fetching the 10 1GB chunks at a time in parallel` \

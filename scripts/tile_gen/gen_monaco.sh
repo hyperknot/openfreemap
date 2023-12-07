@@ -2,10 +2,10 @@
 
 DATE=$(date +"%Y%m%d_%H%M%S")
 
-RUN_FOLDER="/data/tile_creator/runs/monaco_$DATE"
+RUN_FOLDER="/data/ofm/runs/monaco_$DATE"
 
 mkdir -p "$RUN_FOLDER"
 cd "$RUN_FOLDER" || exit
 
-bash /data/tile_creator/bin/run_monaco.sh "$DATE"
+bash /data/tile_gen/run_monaco.sh "$DATE"
 

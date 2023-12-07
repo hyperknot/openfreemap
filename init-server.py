@@ -24,24 +24,22 @@ def prepare_shared(c):
     set_cpu_governor(c)
 
 
-def prepare_tile_creator(c):
+def prepare_tile_gen(c):
     install_planetiler(c)
 
-    put(
-        c,
-        scripts / 'tile_creator' / 'prepare-virtualenv.sh',
-        TILE_GEN_BIN,
-        permissions='755',
-        owner='ofm',
-    )
-
-    put(
-        c,
-        scripts / 'tile_creator' / 'run_planet.sh',
-        TILE_GEN_BIN,
-        permissions='755',
-        owner='ofm',
-    )
+    for file in [
+        'prepare-virtualenv.sh',
+        'run_planet.sh',
+        'run_monaco.sh',
+        'gen_monaco.sh',
+    ]:
+        put(
+            c,
+            scripts / 'tile_gen' / file,
+            TILE_GEN_BIN,
+            permissions='755',
+            owner='ofm',
+        )
 
     sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
@@ -55,16 +53,16 @@ def prepare_http_host(c):
 @click.argument('hostname')
 @click.option('--port', type=int, help='SSH port (if not in .ssh/config)')
 @click.option('--user', help='SSH user (if not in .ssh/config)')
-@click.option('--tile-creator', is_flag=True, help='Install tile-creator task')
+@click.option('--tile-gen', is_flag=True, help='Install tile-gen task')
 @click.option('--http-host', is_flag=True, help='Install http-host task')
-def main(hostname, user, port, tile_creator, http_host):
+def main(hostname, user, port, tile_gen, http_host):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 
-    if not tile_creator and not http_host:
-        tile_creator = click.confirm('Would you like to install tile-creator task?')
+    if not tile_gen and not http_host:
+        tile_gen = click.confirm('Would you like to install tile-gen task?')
         http_host = click.confirm('Would you like to install http-host task?')
-        if not tile_creator and not http_host:
+        if not tile_gen and not http_host:
             return
 
     ssh_passwd = dotenv_values('.env').get('SSH_PASSWD')
@@ -86,8 +84,8 @@ def main(hostname, user, port, tile_creator, http_host):
 
     # prepare_shared(c)
 
-    if tile_creator:
-        prepare_tile_creator(c)
+    if tile_gen:
+        prepare_tile_gen(c)
 
     if http_host:
         prepare_http_host(c)
