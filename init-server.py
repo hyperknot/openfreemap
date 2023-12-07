@@ -4,7 +4,7 @@ import click
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
-from ssh_lib.config import config
+from ssh_lib.config import scripts
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
@@ -28,7 +28,7 @@ def prepare_tile_creator(c):
     install_planetiler(c)
     put(
         c,
-        config / 'planetiler' / 'run_planet.sh',
+        scripts / 'planetiler' / 'run_planet.sh',
         PLANETILER_DIR,
         permissions='755',
         owner='ofm',
