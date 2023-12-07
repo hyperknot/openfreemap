@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-import sys
 
+import click
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
+from ssh_lib.config import templates
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
-from ssh_lib.planetiler import install_planetiler
-from ssh_lib.utils import add_user, enable_sudo, reboot, setup_time
+from ssh_lib.planetiler import PLANETILER_DIR, install_planetiler
+from ssh_lib.utils import add_user, put, setup_time
 
 
-def prepare_server(c):
+def prepare_shared(c):
+    add_user(c, 'ofm')
+
     pkg_upgrade(c)
     pkg_clean(c)
     pkg_base(c)
@@ -20,27 +23,64 @@ def prepare_server(c):
     setup_kernel_settings(c)
     set_cpu_governor(c)
 
+
+def prepare_tile_creator(c):
+    install_planetiler(c)
+    put(
+        c,
+        templates / 'planetiler' / 'run_planet.sh',
+        PLANETILER_DIR,
+        permissions='755',
+        owner='ofm',
+    )
+
+
+def prepare_http_host(c):
     nginx(c)
     certbot(c)
 
-    add_user(c, 'ofm', OFM_USER_PASSWD)
-    enable_sudo(c, 'ofm')
 
-    install_planetiler(c)
+@click.command()
+@click.argument('hostname')
+@click.option('--port', type=int, help='SSH port')
+@click.option('--user', help='SSH user')
+@click.option('--tile-creator', is_flag=True, help='Install tile-creator task')
+@click.option('--http-host', is_flag=True, help='Install http-host task')
+def main(hostname, user, port, tile_creator, http_host):
+    if not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    if not tile_creator and not http_host:
+        tile_creator = click.confirm('Would you like to install tile-creator task?')
+        http_host = click.confirm('Would you like to install http-host task?')
+        if not tile_creator and not http_host:
+            return
+
+    ssh_passwd = dotenv_values('.env').get('SSH_PASSWD')
+
+    if ssh_passwd:
+        c = Connection(
+            host=hostname,
+            user=user,
+            port=port,
+            connect_kwargs={'password': ssh_passwd},
+            config=Config(overrides={'sudo': {'password': ssh_passwd}}),
+        )
+    else:
+        c = Connection(
+            host=hostname,
+            user=user,
+            port=port,
+        )
+
+    prepare_shared(c)
+
+    if tile_creator:
+        prepare_tile_creator(c)
+
+    if http_host:
+        prepare_http_host(c)
 
 
-HOSTNAME = sys.argv[1]
-
-OFM_USER_PASSWD = dotenv_values('.env')['OFM_USER_PASSWD']
-assert OFM_USER_PASSWD
-
-if input(f'run {sys.argv[0]} on {HOSTNAME}? [y/N]: ') != 'y':
-    sys.exit()
-
-
-c = Connection(
-    host=HOSTNAME,
-    config=Config(overrides={'sudo': {'password': OFM_USER_PASSWD}}),
-)
-prepare_server(c)
-reboot(c)
+if __name__ == '__main__':
+    main()

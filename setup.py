@@ -1,11 +1,7 @@
 from setuptools import setup
 
 
-requirements = [
-    'fabric',
-    'ruff',
-    'python-dotenv',
-]
+requirements = ['fabric', 'ruff', 'python-dotenv', 'click']
 
 setup(
     name='openfreemap',

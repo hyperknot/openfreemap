@@ -1,5 +1,4 @@
-from ssh_lib.config import templates
-from ssh_lib.utils import apt_get_install, apt_get_update, put
+from ssh_lib.utils import apt_get_install, apt_get_update
 
 
 PLANETILER_VERSION = '0.7.0'
@@ -20,6 +19,5 @@ def install_planetiler(c):
     )
 
     c.sudo(f'java -jar {PLANETILER_PATH} --help')
-    put(c, templates / 'planetiler' / 'run_planet.sh', PLANETILER_DIR, permissions='755')
 
     c.sudo('chown -R ofm:ofm /data/planetiler')
