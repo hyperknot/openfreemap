@@ -29,8 +29,8 @@ def prepare_tile_gen(c):
 
     for file in [
         'prepare-virtualenv.sh',
-        'run_planet.sh',
-        'run_monaco.sh',
+        'planetiler_planet.sh',
+        'planetiler_monaco.sh',
         'gen_monaco.sh',
     ]:
         put(
@@ -55,7 +55,10 @@ def prepare_http_host(c):
 @click.option('--user', help='SSH user (if not in .ssh/config)')
 @click.option('--tile-gen', is_flag=True, help='Install tile-gen task')
 @click.option('--http-host', is_flag=True, help='Install http-host task')
-def main(hostname, user, port, tile_gen, http_host):
+@click.option(
+    '--skip-shared', is_flag=True, help='Skip the shared installtion step (useful for development)'
+)
+def main(hostname, user, port, tile_gen, http_host, skip_shared):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 
@@ -82,7 +85,8 @@ def main(hostname, user, port, tile_gen, http_host):
             port=port,
         )
 
-    # prepare_shared(c)
+    if not skip_shared:
+        prepare_shared(c)
 
     if tile_gen:
         prepare_tile_gen(c)
