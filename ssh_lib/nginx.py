@@ -1,4 +1,4 @@
-from ssh_lib.config import templates
+from ssh_lib.config import config
 from ssh_lib.utils import (
     apt_get_install,
     apt_get_purge,
@@ -43,9 +43,9 @@ def nginx(c):
             '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"'
         )
 
-    put(c, f'{templates}/nginx/nginx.conf', '/etc/nginx/')
-    put(c, f'{templates}/nginx/default_disable.conf', '/data/nginx/sites')
-    put(c, f'{templates}/nginx/cloudflare.conf', '/data/nginx/config')
+    put(c, f'{config}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{config}/nginx/default_disable.conf', '/data/nginx/sites')
+    put(c, f'{config}/nginx/cloudflare.conf', '/data/nginx/config')
 
     c.sudo('service nginx restart')
 

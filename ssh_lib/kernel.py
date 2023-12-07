@@ -1,9 +1,9 @@
-from ssh_lib.config import templates
+from ssh_lib.config import config
 from ssh_lib.utils import apt_get_install, apt_get_purge, put, put_str
 
 
 def setup_kernel_settings(c):
-    put(c, f'{templates}/sysctl/60-optim.conf', '/etc/sysctl.d/')
+    put(c, f'{config}/sysctl/60-optim.conf', '/etc/sysctl.d/')
 
 
 def set_cpu_governor(c):

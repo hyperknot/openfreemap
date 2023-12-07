@@ -2,7 +2,7 @@
 
 DATE=$(date +"%Y%m%d_%H%M%S")
 
-RUN_FOLDER="/data/planetiler/runs/$DATE"
+RUN_FOLDER="/data/planetiler/runs/planet_$DATE"
 
 mkdir -p "$RUN_FOLDER"
 cd "$RUN_FOLDER" || exit
@@ -25,3 +25,6 @@ java -Xmx30g \
   --nodemap-type=array --storage=mmap \
   --force \
   > "output_$DATE.log" 2> "err_$DATE.log"
+
+
+
