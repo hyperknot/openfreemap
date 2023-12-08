@@ -1,6 +1,10 @@
 *.pyc
 *.egg-info
 
+*.sqlite
+*.mbtiles
+*.pbf
+
 .env
 .DS_Store
 

@@ -16,7 +16,7 @@ java -Xmx1g \
   `# Store temporary node locations at fixed positions in a memory-mapped file` \
   --nodemap-type=array --storage=mmap \
   --force \
-  > "output.log" 2> "err.log"
+  > "planetiler_out.log" 2> "planetiler_err.log"
 
 
 

@@ -27,8 +27,8 @@ rm -f image.ext4
 # make a sparse file
 # make sure it's bigger then the current OSM output
 # less fragmentation with fallocate
-fallocate -l 150G image.ext4
-#truncate -s 150G image.ext4
+fallocate -l 1500G image.ext4
+#truncate -s 1500G image.ext4
 
 
 mke2fs -t ext4 -v \
@@ -42,10 +42,14 @@ mke2fs -t ext4 -v \
 mkdir mnt
 sudo mount -v \
   -t ext4 \
-  -o nobarrier,noatime,data=writeback,commit=100 \
+  -o nobarrier,noatime \
   image.ext4 mnt
 
-sudo /data/ofm/tile_gen/venv/bin/mb-util output.mbtiles mnt/extract
+sudo chown ofm:ofm -R mnt
+
+../../tile_gen/venv/bin/python ../../tile_gen/extract.py output.mbtiles mnt/extract \
+  > "extract_out.log" 2> "extract_err.log"
+
 sudo umount mnt
 
 resize2fs -M image.ext4
