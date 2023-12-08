@@ -30,7 +30,7 @@ def prepare_shared(c):
 
 
 def prepare_tile_gen(c):
-    # install_planetiler(c)
+    install_planetiler(c)
 
     for file in [
         'prepare-virtualenv.sh',
@@ -47,7 +47,7 @@ def prepare_tile_gen(c):
             owner='ofm',
         )
 
-    # sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
+    sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
 
 def prepare_http_host(c):
