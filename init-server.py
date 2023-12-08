@@ -13,12 +13,9 @@ from ssh_lib.utils import add_user, enable_sudo, put, setup_time, sudo_cmd
 
 
 def prepare_shared(c):
-    add_user(
-        c,
-        'ofm',
-        passwd='x',
-    )
-    enable_sudo(c, 'ofm')
+    # creates ofm user with uid=2000, disabled password and nopasswd sudo
+    add_user(c, 'ofm', uid=2000)
+    enable_sudo(c, 'ofm', nopasswd=True)
 
     pkg_upgrade(c)
     pkg_clean(c)
@@ -36,6 +33,7 @@ def prepare_tile_gen(c):
         'prepare-virtualenv.sh',
         'planetiler_planet.sh',
         'planetiler_monaco.sh',
+        'gen_planet.sh',
         'gen_monaco.sh',
         'extract.sh',
     ]:

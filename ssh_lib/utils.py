@@ -17,7 +17,7 @@ def put(c, local_path, remote_path, permissions=None, owner='root', group=None):
     c.sudo(f"mv '{tmp_path}' '{remote_path}'")
     c.sudo(f"rm -rf '{tmp_path}'")
 
-    set_permission(c, remote_path, permissions, owner, group)
+    set_permission(c, remote_path, permissions=permissions, owner=owner, group=group)
 
 
 def put_str(c, remote_path, str_):
@@ -41,11 +41,10 @@ def sudo_cmd(c, cmd, user=None):
     c.sudo(f'bash -c "{cmd}"', user=user)
 
 
-def set_permission(c, path, permissions=None, owner=None, group=None):
+def set_permission(c, path, *, permissions=None, owner=None, group=None):
     if owner:
         if not group:
             group = owner
-
         c.sudo(f"chown {owner}:{group} '{path}'")
 
     if permissions:
@@ -104,9 +103,11 @@ def get_username(c):
     return c.run('whoami').stdout.strip()
 
 
-def add_user(c, username, passwd=None):
-    # ssh-key login only
-    c.sudo(f'adduser --disabled-password --gecos "" {username}', warn=True)
+def add_user(c, username, passwd=None, uid=None):
+    uid_str = f'--uid={uid}' if uid else ''
+
+    # --disabled-password - ssh-key login only
+    c.sudo(f'adduser --disabled-password --gecos "" {uid_str} {username}', warn=True)
     if passwd:
         sudo_cmd(c, f'echo "{username}:{passwd}" | chpasswd')
 
@@ -116,8 +117,12 @@ def remove_user(c, username):
     c.sudo(f'rm -rf /home/{username}')
 
 
-def enable_sudo(c, username):
+def enable_sudo(c, username, nopasswd=False):
     c.sudo(f'usermod -aG sudo {username}')
+    if nopasswd:
+        put_str(c, '/etc/sudoers.d/tmp.', f'{username} ALL=(ALL) NOPASSWD:ALL')
+        set_permission(c, '/etc/sudoers.d/tmp.', permissions='440', owner='root')
+        c.sudo(f'mv /etc/sudoers.d/tmp. /etc/sudoers.d/{username}')
 
 
 def ssh_copy_id(c, username, key_file_path):
@@ -135,7 +140,7 @@ def ssh_copy_id(c, username, key_file_path):
     c.sudo(f'chown {username}:{username} {ssh_dir}')
 
     put_str(c, f'{ssh_dir}/authorized_keys', public_key_str)
-    set_permission(c, f'{ssh_dir}/authorized_keys', '400', username, username)
+    set_permission(c, f'{ssh_dir}/authorized_keys', permissions='400', owner=username)
 
 
 def setup_time(c):

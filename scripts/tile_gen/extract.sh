@@ -42,8 +42,8 @@ mke2fs -t ext4 -v \
 mkdir mnt
 sudo mount -v \
   -t ext4 \
+  -o nobarrier,noatime,data=writeback,commit=100 \
   image.ext4 mnt
-
 
 sudo /data/ofm/tile_gen/venv/bin/mb-util output.mbtiles mnt/extract
 sudo umount mnt
@@ -51,18 +51,15 @@ sudo umount mnt
 resize2fs -M image.ext4
 e2fsck -vf image.ext4
 
+#fsck.ext4 -f -C 0 /dev/sda1;
+#
+#filefrag -e image.ext4
+#
+#tune2fs -E mount_opts=ro image.ext4
+#
+#cp --sparse=never sparsefile regularfile
+#
 
-filefrag -e image.ext4
 
-tune2fs -E mount_opts=ro image.ext4
-
-cp --sparse=never sparsefile regularfile
-
-
-# -o barriers=[0|1]
-# -o data=writeback
-
-# set mount option
-#tune2fs -E mount_opts=ro
 
 
