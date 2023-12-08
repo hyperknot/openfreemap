@@ -7,5 +7,5 @@ RUN_FOLDER="/data/ofm/runs/monaco_$DATE"
 mkdir -p "$RUN_FOLDER"
 cd "$RUN_FOLDER" || exit
 
-bash /data/tile_gen/run_monaco.sh "$DATE"
+bash /data/ofm/tile_gen/planetiler_monaco.sh "$DATE"
 

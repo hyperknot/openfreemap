@@ -9,11 +9,16 @@ from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
-from ssh_lib.utils import add_user, put, setup_time, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, setup_time, sudo_cmd
 
 
 def prepare_shared(c):
-    add_user(c, 'ofm')
+    add_user(
+        c,
+        'ofm',
+        passwd='x',
+    )
+    enable_sudo(c, 'ofm')
 
     pkg_upgrade(c)
     pkg_clean(c)
@@ -25,13 +30,14 @@ def prepare_shared(c):
 
 
 def prepare_tile_gen(c):
-    install_planetiler(c)
+    # install_planetiler(c)
 
     for file in [
         'prepare-virtualenv.sh',
         'planetiler_planet.sh',
         'planetiler_monaco.sh',
         'gen_monaco.sh',
+        'extract.sh',
     ]:
         put(
             c,
@@ -41,7 +47,7 @@ def prepare_tile_gen(c):
             owner='ofm',
         )
 
-    sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
+    # sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
 
 def prepare_http_host(c):
