@@ -26,9 +26,7 @@ rm -f image.ext4
 
 # make a sparse file
 # make sure it's bigger then the current OSM output
-# less fragmentation with fallocate
-fallocate -l 1500G image.ext4
-#truncate -s 1500G image.ext4
+fallocate -l 300G image.ext4
 
 
 mke2fs -t ext4 -v \
@@ -52,17 +50,14 @@ sudo chown ofm:ofm -R mnt
 
 sudo umount mnt
 
-resize2fs -M image.ext4
-e2fsck -vf image.ext4
+e2fsck -vf image.ext4 && \
+  resize2fs -M image.ext4 && \
+  e2fsck -vf image.ext4
 
-#fsck.ext4 -f -C 0 /dev/sda1;
-#
-#filefrag -e image.ext4
-#
-#tune2fs -E mount_opts=ro image.ext4
-#
-#cp --sparse=never sparsefile regularfile
-#
+# default to read-only mode
+tune2fs -E mount_opts=ro image.ext4
+
+
 
 
 
