@@ -55,7 +55,7 @@ def write_dedupl_files(c, *, dir_path):
         dedupl_path.parent.mkdir(parents=True, exist_ok=True)
         with open(dedupl_path, 'wb') as fp:
             fp.write(row[1])
-            print(f'written dedupl file {i}/{total}: {dedupl_id}')
+            print(f'written dedupl file {i}/{total}')
 
 
 def write_tile_file(c, *, dir_path):
