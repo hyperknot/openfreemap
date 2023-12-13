@@ -28,7 +28,9 @@ sudo chown ofm:ofm -R mnt
 ../../tile_gen/venv/bin/python ../../tile_gen/extract.py output.mbtiles mnt/extract \
   > "extract_out.log" 2> "extract_err.log"
 
+sudo umount mnt
 
+../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image.btrfs
 
 
 

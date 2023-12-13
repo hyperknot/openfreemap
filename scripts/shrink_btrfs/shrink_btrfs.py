@@ -39,7 +39,7 @@ def cli(btrfs_img: Path):
     # needs to start with a balancing
     # https://btrfs.readthedocs.io/en/latest/Balance.html
     # https://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
-    print('Starting a balancing')
+    print('Starting btrfs balancing')
     p = subprocess.run(
         ['btrfs', 'balance', 'start', '-dusage=100', mnt_dir], capture_output=True, text=True
     )
