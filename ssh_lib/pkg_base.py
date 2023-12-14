@@ -36,13 +36,17 @@ def pkg_clean(c):
 
 def pkg_base(c):
     pkg_list = [
+        'lsb-release',
         'wget',
-        'gpg',
         'git',
+        #
+        'gnupg2',
         'gnupg-agent',
+        'ca-certificates',
+        'ubuntu-keyring',
+        #
         'nload',
         'iftop',
-        'snapd',
         #
         'python3',
         'python3-venv',

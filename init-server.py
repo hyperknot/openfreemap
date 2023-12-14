@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 
 import click
 from dotenv import dotenv_values
@@ -6,10 +7,10 @@ from fabric import Config, Connection
 
 from ssh_lib.config import scripts
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
-from ssh_lib.nginx import certbot, nginx
+from ssh_lib.nginx import certbot, k6, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
-from ssh_lib.utils import add_user, enable_sudo, put, setup_time, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, reboot, setup_time, sudo_cmd
 
 
 def prepare_shared(c):
@@ -51,6 +52,7 @@ def prepare_tile_gen(c):
 def prepare_http_host(c):
     nginx(c)
     certbot(c)
+    k6(c)
 
 
 @click.command()
@@ -59,14 +61,16 @@ def prepare_http_host(c):
 @click.option('--user', help='SSH user (if not in .ssh/config)')
 @click.option('--tile-gen', is_flag=True, help='Install tile-gen task')
 @click.option('--http-host', is_flag=True, help='Install http-host task')
+@click.option('--reboot', 'do_reboot', is_flag=True, help='Reboot after installation')
+@click.option('--debug', is_flag=True)
 @click.option(
     '--skip-shared', is_flag=True, help='Skip the shared installtion step (useful for development)'
 )
-def main(hostname, user, port, tile_gen, http_host, skip_shared):
+def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debug):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 
-    if not tile_gen and not http_host:
+    if not tile_gen and not http_host and not debug:
         tile_gen = click.confirm('Would you like to install tile-gen task?')
         http_host = click.confirm('Would you like to install http-host task?')
         if not tile_gen and not http_host:
@@ -89,6 +93,10 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared):
             port=port,
         )
 
+    if debug:
+        debug_tmp(c)
+        sys.exit()
+
     if not skip_shared:
         prepare_shared(c)
 
@@ -97,6 +105,13 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared):
 
     if http_host:
         prepare_http_host(c)
+
+    if do_reboot:
+        reboot(c)
+
+
+def debug_tmp(c):
+    k6(c)
 
 
 if __name__ == '__main__':

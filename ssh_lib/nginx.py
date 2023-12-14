@@ -15,14 +15,16 @@ def nginx(c):
     codename = ubuntu_codename(c)
 
     if not exists(c, '/usr/sbin/nginx'):
+        sudo_cmd(
+            c,
+            'curl https://nginx.org/keys/nginx_signing.key '
+            '| gpg --dearmor '
+            '| sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null',
+        )
         put_str(
             c,
             '/etc/apt/sources.list.d/nginx.list',
-            f'deb http://nginx.org/packages/mainline/ubuntu {codename} nginx',
-        )
-        sudo_cmd(
-            c,
-            'wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add -',
+            f'deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/mainline/ubuntu {codename} nginx',
         )
         apt_get_update(c)
         apt_get_install(c, 'nginx')
@@ -40,7 +42,8 @@ def nginx(c):
         c.sudo(
             'openssl req -x509 -nodes -days 365 -newkey rsa:2048 '
             '-keyout /etc/nginx/ssl/dummy.key -out /etc/nginx/ssl/dummy.crt '
-            '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"'
+            '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
+            hide=True,
         )
 
     put(c, f'{config}/nginx/nginx.conf', '/etc/nginx/')
@@ -61,3 +64,19 @@ def certbot(c):
 
     apt_get_purge(c, 'certbot')
     c.sudo('snap install --classic certbot', warn=True)
+
+
+def k6(c):
+    sudo_cmd(
+        c,
+        'curl https://dl.k6.io/key.gpg '
+        '| gpg --dearmor '
+        '| tee /usr/share/keyrings/k6-archive-keyring.gpg >/dev/null',
+    )
+    put_str(
+        c,
+        '/etc/apt/sources.list.d/k6.list',
+        'deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main',
+    )
+    apt_get_update(c)
+    apt_get_install(c, 'k6')
