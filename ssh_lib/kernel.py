@@ -3,7 +3,8 @@ from ssh_lib.utils import apt_get_install, apt_get_purge, put, put_str
 
 
 def setup_kernel_settings(c):
-    put(c, f'{config}/sysctl/60-optim.conf', '/etc/sysctl.d/')
+    put(c, f'{config}/sysctl/60-ofm.conf', '/etc/sysctl.d/')
+    put(c, f'{config}/limits/limits-ofm.conf', '/etc/security/limits.d/')
 
 
 def set_cpu_governor(c):

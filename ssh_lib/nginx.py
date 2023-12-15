@@ -64,19 +64,3 @@ def certbot(c):
 
     apt_get_purge(c, 'certbot')
     c.sudo('snap install --classic certbot', warn=True)
-
-
-def k6(c):
-    sudo_cmd(
-        c,
-        'curl https://dl.k6.io/key.gpg '
-        '| gpg --dearmor '
-        '| tee /usr/share/keyrings/k6-archive-keyring.gpg >/dev/null',
-    )
-    put_str(
-        c,
-        '/etc/apt/sources.list.d/k6.list',
-        'deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main',
-    )
-    apt_get_update(c)
-    apt_get_install(c, 'k6')

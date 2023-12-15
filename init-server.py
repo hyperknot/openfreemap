@@ -5,9 +5,10 @@ import click
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
-from ssh_lib.config import scripts
+from ssh_lib.benchmark import benchmark, c1000k, k6
+from ssh_lib.config import config, scripts
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
-from ssh_lib.nginx import certbot, k6, nginx
+from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
 from ssh_lib.utils import add_user, enable_sudo, put, reboot, setup_time, sudo_cmd
@@ -52,7 +53,18 @@ def prepare_tile_gen(c):
 def prepare_http_host(c):
     nginx(c)
     certbot(c)
-    k6(c)
+    c1000k(c)
+
+
+def debug_tmp(c):
+    c.sudo('rm -rf /data/ofm/logs')
+    c.sudo('mkdir -p /data/ofm/logs')
+    put(c, f'{config}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{scripts}/http_host/nginx_site.conf', '/data/nginx/sites')
+    c.sudo('nginx -t')
+    c.sudo('service nginx restart')
+
+    benchmark(c)
 
 
 @click.command()
@@ -108,10 +120,6 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debu
 
     if do_reboot:
         reboot(c)
-
-
-def debug_tmp(c):
-    k6(c)
 
 
 if __name__ == '__main__':

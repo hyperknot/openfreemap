@@ -39,6 +39,8 @@ def pkg_base(c):
         'lsb-release',
         'wget',
         'git',
+        'build-essential',
+        'unzip',
         #
         'gnupg2',
         'gnupg-agent',
