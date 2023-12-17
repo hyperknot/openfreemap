@@ -11,6 +11,7 @@
 # from  /etc/mke2fs.conf
 # defaults: has_journal,extent,huge_file,flex_bg,metadata_csum,64bit,dir_nlink,extra_isize
 # disabling journalling, since it's a read-only fs, as well as other unused features
+# extent is actually needed for tail packing small files
 #
 # -E extended-options
 # lazy_itable_init - inode table is fully initialized at the time of file system creation
@@ -32,9 +33,10 @@ fallocate -l 300G image.ext4
 mke2fs -t ext4 -v \
   -m 0 \
   -F \
-  -O ^has_journal,^extent,^huge_file,^metadata_csum,^64bit,^extra_isize \
+  -O ^has_journal,^huge_file,^metadata_csum,^64bit,^extra_isize \
   -E lazy_itable_init=0,nodiscard \
   -T small \
+  -I 128 \
   image.ext4
 
 mkdir mnt

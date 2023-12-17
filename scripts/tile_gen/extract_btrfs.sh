@@ -25,12 +25,13 @@ sudo mount -v \
 
 sudo chown ofm:ofm -R mnt_rw
 
-../../tile_gen/venv/bin/python ../../tile_gen/extract.py output.mbtiles mnt_rw/extract \
+../../tile_gen/venv/bin/python ../../tile_gen/extract_mbtiles.py output.mbtiles mnt_rw/extract \
   > "extract_out.log" 2> "extract_err.log"
 
 sudo umount mnt_rw
 
-../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image.btrfs
+sudo ../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image.btrfs \
+  > "shrink_out.log" 2> "shrink_err.log"
 
 # pigz -k image.btrfs --fast
 

@@ -1,0 +1,5 @@
+ext4
+
+Reduce the inode size: 256 -> -I 128
+
+Reduce the inode ratio: The inode ratio is the number of blocks per inode. You can increase the inode ratio to reduce the number of inodes created. This can be done with the -i option when creating the filesystem. For example, -i 8192 will create one inode every 8192 blocks.
