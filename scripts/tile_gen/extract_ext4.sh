@@ -17,7 +17,8 @@
 # lazy_itable_init - inode table is fully initialized at the time of file system creation
 # nodiscard - Do not attempt to discard blocks at mkfs time.
 #
-# -T news or small
+# inode_size = 128 (minimum)
+# inode_ratio = 16384 (default but experimenting)
 
 
 sudo umount mnt || true
@@ -27,7 +28,7 @@ rm -f image.ext4
 
 # make a sparse file
 # make sure it's bigger then the current OSM output
-fallocate -l 300G image.ext4
+fallocate -l 200G image.ext4
 
 
 mke2fs -t ext4 -v \
@@ -35,8 +36,8 @@ mke2fs -t ext4 -v \
   -F \
   -O ^has_journal,^huge_file,^metadata_csum,^64bit,^extra_isize \
   -E lazy_itable_init=0,nodiscard \
-  -T small \
   -I 128 \
+  -i 16384 \
   image.ext4
 
 mkdir mnt

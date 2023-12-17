@@ -6,7 +6,7 @@ rm -f image.btrfs
 
 
 # make an empty file that's definitely bigger then the current OSM output
-fallocate -l 300G image.btrfs
+fallocate -l 200G image.btrfs
 
 
 # metadata: single needed as default is now DUP
@@ -35,3 +35,4 @@ sudo ../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image.btrfs \
 
 # pigz -k image.btrfs --fast
 
+# rsync -avH mnt_rw/extract/ mnt_rw2/extract/ > rsync_out.log 2> rsync_err.log
