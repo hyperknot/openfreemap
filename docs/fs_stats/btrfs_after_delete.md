@@ -72,8 +72,8 @@ Unallocated:
 
 ```
 compsize -x mnt_rw
-Processed 308790063 files, 3458682 regular extents (6917363 refs), 301872700 inline.
-Type       Perc     Disk Usage   Uncompressed Referenced  
-TOTAL      100%      118G         118G         165G       
-none       100%      118G         118G         165G       
+Processed 269219146 files, 3458682 regular extents (3458682 refs), 265760464 inline.
+Type       Perc     Disk Usage   Uncompressed Referenced
+TOTAL      100%       92G          92G          92G
+none       100%       92G          92G          92G
 ```
