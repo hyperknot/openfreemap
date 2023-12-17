@@ -43,13 +43,13 @@ mount -o noacl,nobarrier,noatime,max_inline=4096
 ```
 df -h mnt_rw
 Filesystem      Size  Used Avail Use% Mounted on
-/dev/loop3      300G  139G  161G  47%
+/dev/loop3      300G  133G  158G  46%
 ```
 
 ```
 df mnt_rw
 Filesystem     1K-blocks      Used Available Use% Mounted on
-/dev/loop3     314572800 145030788 168339820  47%
+/dev/loop3     314572800 139364004 165194092  46%
 ```
 
 ### btrfs
@@ -58,7 +58,7 @@ Filesystem     1K-blocks      Used Available Use% Mounted on
 btrfs filesystem df mnt_rw
 Data, single: total=48.01GiB, used=47.45GiB
 System, single: total=4.00MiB, used=16.00KiB
-Metadata, single: total=92.01GiB, used=90.37GiB
+Metadata, single: total=95.01GiB, used=84.96GiB
 GlobalReserve, single: total=512.00MiB, used=0.00B
 ```
 
@@ -70,20 +70,20 @@ btrfs filesystem du -s mnt_rw
 ```
 ```
 btrfs filesystem show mnt_rw
-	Total devices 1 FS bytes used 137.81GiB
-	devid    1 size 300.00GiB used 140.02GiB path /dev/loop3
+	Total devices 1 FS bytes used 132.41GiB
+	devid    1 size 300.00GiB used 143.02GiB path /dev/loop3
 ```
 
 ```
 btrfs filesystem usage mnt_rw
 Overall:
     Device size:		 300.00GiB
-    Device allocated:		 140.02GiB
-    Device unallocated:		 159.98GiB
+    Device allocated:		 143.02GiB
+    Device unallocated:		 156.98GiB
     Device missing:		     0.00B
-    Used:			 137.81GiB
-    Free (estimated):		 160.54GiB	(min: 160.54GiB)
-    Free (statfs, df):		 160.54GiB
+    Used:			 132.41GiB
+    Free (estimated):		 157.54GiB	(min: 157.54GiB)
+    Free (statfs, df):		 157.54GiB
     Data ratio:			      1.00
     Metadata ratio:		      1.00
     Global reserve:		 512.00MiB	(used: 0.00B)
@@ -92,14 +92,14 @@ Overall:
 Data,single: Size:48.01GiB, Used:47.45GiB (98.83%)
    /dev/loop3	  48.01GiB
 
-Metadata,single: Size:92.01GiB, Used:90.37GiB (98.22%)
-   /dev/loop3	  92.01GiB
+Metadata,single: Size:95.01GiB, Used:84.96GiB (89.43%)
+   /dev/loop3	  95.01GiB
 
 System,single: Size:4.00MiB, Used:16.00KiB (0.39%)
    /dev/loop3	   4.00MiB
 
 Unallocated:
-   /dev/loop3	 159.98GiB
+   /dev/loop3	 156.98GiB
 ```
 
 ### compsize
