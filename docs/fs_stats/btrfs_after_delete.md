@@ -1,35 +1,6 @@
-# Comparing filesystem stats after extraction
+# deduplicated on BTRFS
 
-Run: *planet_20231208*
-
-
-## native mapbox/mbutil
-
-Filesystem      1K-blocks       Used Available Use% Mounted on
-/dev/loop0     1,474,386,100 1,119,622,516 354,763,584  76%
-
-Filesystem        Inodes     IUsed     IFree IUse% Mounted on
-/dev/loop0     393,216,000 269,252,174 123,963,826   69%
-
-
-## deduplicated on ext4
-
-39,570,683 dedupl files
-
-df -h mnt_rw
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/loop0      1.4T  187G  1.2T  14%
-
-df mnt_rw
-Filesystem      1K-blocks      Used  Available Use% Mounted on
-/dev/loop0     1474386100 195624664 1278761436  14%
-
-df -i mnt_rw
-Filesystem        Inodes    IUsed     IFree IUse% Mounted on
-/dev/loop0     393216000 39614466 353601534   11%
-
-
-## deduplicated on BTRFS
+After extration, after deleting the dedupl folder.
 
 ### creation params
 
@@ -44,12 +15,6 @@ mount -o noacl,nobarrier,noatime,max_inline=4096
 df -h mnt_rw
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/loop3      300G  133G  158G  46%
-```
-
-```
-df mnt_rw
-Filesystem     1K-blocks      Used Available Use% Mounted on
-/dev/loop3     314572800 139364004 165194092  46%
 ```
 
 ### btrfs
