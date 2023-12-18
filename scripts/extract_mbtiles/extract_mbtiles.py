@@ -35,13 +35,11 @@ def cli(mbtiles_path: Path, dir_path: Path):
     write_dedupl_files(c, dir_path=dir_path)
     write_tile_files(c, dir_path=dir_path)
 
-    # remove dedupl files at the end
-    shutil.rmtree(dir_path / 'dedupl')
-
     # if it's a full planet run,
     # make sure there are exactly the right number of files generated
-    if 'planet' in mbtiles_path.parent.name:
+    if 'planet' in mbtiles_path.resolve().parent.name:
         assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
+        print(f'Tile number: {calculate_tiles_sum(14)} - OK')
 
     print('DONE')
 

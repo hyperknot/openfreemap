@@ -5,7 +5,7 @@ sudo umount mnt_rw 2> /dev/null || true
 sudo umount mnt_rw2 2> /dev/null || true
 rm -rf mnt_rw* tmp_*
 rm -f *.btrfs *.gz
-rm -f *.log
+rm -f *.log *.txt
 
 # make an empty file that's definitely bigger then the current OSM output
 fallocate -l 200G image.btrfs
@@ -44,7 +44,10 @@ grep fixed extract_out.log > dedupl_fixed.log || true
 
 # Unfortunately, by deleting files from the btrfs partition, the size _grows_.
 # So we need to rsync onto a new partition.
-rsync -avH mnt_rw/extract/ mnt_rw2/extract/ > rsync_out.log 2> rsync_err.log
+rsync -avH \
+  --exclude dedupl \
+  mnt_rw/extract/ mnt_rw2/extract/ \
+  > rsync_out.log 2> rsync_err.log
 
 
 # collect stats
@@ -61,11 +64,11 @@ sudo btrfs filesystem show mnt_rw
 echo -e "\n\nbtrfs filesystem usage"
 sudo btrfs filesystem usage mnt_rw
 
-echo -e "\n\nbtrfs filesystem du -s"
-sudo btrfs filesystem du -s mnt_rw
-
-echo -e "\n\ncompsize -x"
-sudo compsize -x mnt_rw 2> /dev/null || true
+# takes a lot of time, should only be used when debugging
+#echo -e "\n\nbtrfs filesystem du -s"
+#sudo btrfs filesystem du -s mnt_rw
+#echo -e "\n\ncompsize -x"
+#sudo compsize -x mnt_rw 2> /dev/null || true
 } > stats1.txt
 
 {
@@ -81,11 +84,11 @@ sudo btrfs filesystem show mnt_rw2
 echo -e "\n\nbtrfs filesystem usage"
 sudo btrfs filesystem usage mnt_rw2
 
-echo -e "\n\nbtrfs filesystem du -s"
-sudo btrfs filesystem du -s mnt_rw2
-
-echo -e "\n\ncompsize -x"
-sudo compsize -x mnt_rw2 2> /dev/null || true
+# takes a lot of time, should only be used when debugging
+#echo -e "\n\nbtrfs filesystem du -s"
+#sudo btrfs filesystem du -s mnt_rw2
+#echo -e "\n\ncompsize -x"
+#sudo compsize -x mnt_rw2 2> /dev/null || true
 } > stats2.txt
 
 

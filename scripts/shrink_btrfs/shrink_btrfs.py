@@ -8,7 +8,7 @@ from pathlib import Path
 import click
 
 
-# btrfs cannot shrink smaller than about 256 MiB
+# btrfs cannot shrink smaller than 256 MiB
 SMALLEST_SIZE = 256 * 1024 * 1024
 
 
@@ -49,11 +49,11 @@ def cli(btrfs_img: Path):
 
         free_bytes = get_usage(mnt_dir, 'Device unallocated')
         device_size = get_usage(mnt_dir, 'Device size')
-        shrink_idea = free_bytes * 0.9
+        shrink_idea = free_bytes * 0.7
 
         # workaround for the SMALLEST_SIZE limit
         if device_size - free_bytes < SMALLEST_SIZE:
-            shrink_idea = (device_size - SMALLEST_SIZE) * 0.9
+            shrink_idea = (device_size - SMALLEST_SIZE) * 0.7
 
         # stop if 10 MB left
         if shrink_idea < 10_000_000:
