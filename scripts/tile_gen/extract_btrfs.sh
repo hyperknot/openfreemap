@@ -50,6 +50,26 @@ rsync -avH mnt_rw/extract/ mnt_rw2/extract/ > rsync_out.log 2> rsync_err.log
 # collect stats
 {
 echo -e "df -h"
+sudo df -h mnt_rw
+
+echo -e "\n\nbtrfs filesystem df"
+sudo btrfs filesystem df mnt_rw
+
+echo -e "\n\nbtrfs filesystem show"
+sudo btrfs filesystem show mnt_rw
+
+echo -e "\n\nbtrfs filesystem usage"
+sudo btrfs filesystem usage mnt_rw
+
+echo -e "\n\nbtrfs filesystem du -s"
+sudo btrfs filesystem du -s mnt_rw
+
+echo -e "\n\ncompsize -x"
+sudo compsize -x mnt_rw 2> /dev/null || true
+} > stats1.txt
+
+{
+echo -e "df -h"
 sudo df -h mnt_rw2
 
 echo -e "\n\nbtrfs filesystem df"
@@ -66,7 +86,7 @@ sudo btrfs filesystem du -s mnt_rw2
 
 echo -e "\n\ncompsize -x"
 sudo compsize -x mnt_rw2 2> /dev/null || true
-} > stats.txt
+} > stats2.txt
 
 
 sudo umount mnt_rw
