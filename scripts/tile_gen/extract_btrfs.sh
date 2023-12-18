@@ -42,8 +42,8 @@ sudo chown ofm:ofm -R mnt_rw mnt_rw2
 
 grep fixed extract_out.log > dedupl_fixed.log || true
 
-# we need to extract, delete dedupl and rsync onto a new partition
-# otherwise the partition image stays big
+# Unfortunately, by deleting files from the btrfs partition, the size _grows_.
+# So we need to rsync onto a new partition.
 rsync -avH mnt_rw/extract/ mnt_rw2/extract/ > rsync_out.log 2> rsync_err.log
 
 
