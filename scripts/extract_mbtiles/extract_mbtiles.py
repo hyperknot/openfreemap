@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import shutil
 import sqlite3
 import sys
@@ -22,20 +23,25 @@ def cli(mbtiles_path: Path, dir_path: Path):
     used for reference: https://github.com/mapbox/mbutil
     """
 
-    # if dir_path.exists() and any(dir_path.iterdir()):
-    #     sys.exit('Dir not empty')
+    if dir_path.exists() and any(dir_path.iterdir()):
+        sys.exit('Dir not empty')
 
     dir_path.mkdir(exist_ok=True)
 
     conn = sqlite3.connect(mbtiles_path)
     c = conn.cursor()
 
-    # write_metadata(c, dir_path=dir_path)
-    # write_dedupl_files(c, dir_path=dir_path)
+    write_metadata(c, dir_path=dir_path)
+    write_dedupl_files(c, dir_path=dir_path)
     write_tile_files(c, dir_path=dir_path)
 
     # remove dedupl files at the end
-    # shutil.rmtree(dir_path / 'dedupl')
+    shutil.rmtree(dir_path / 'dedupl')
+
+    # if it's a full planet run,
+    # make sure there are exactly the right number of files generated
+    if 'planet' in mbtiles_path.parent.name:
+        assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
 
 
 def write_metadata(c, *, dir_path):
@@ -92,13 +98,20 @@ def write_tile_files(c, *, dir_path):
             if e.errno == 31:
                 bug_fix_dict.setdefault(dedupl_path, 0)
                 bug_fix_dict[dedupl_path] += 1
-                fixed_path = get_fixed_dedupl_name(bug_fix_dict, dedupl_path)
-                shutil.copyfile(dedupl_path, fixed_path)
-                print(f'Created fixed dedupl file: {fixed_path}')
+                dedupl_path_fixed = get_fixed_dedupl_name(bug_fix_dict, dedupl_path)
+                shutil.copyfile(dedupl_path, dedupl_path_fixed)
+                print(f'Created fixed dedupl file: {dedupl_path_fixed}')
+                tile_path.hardlink_to(dedupl_path_fixed)
+                print(f'hard link created {i}/{total} {i / total * 100:.1f}%: {tile_path}')
             else:
                 raise
 
-    # last file: 14/16383/0.pbf
+
+def count_files(folder):
+    total = 0
+    for root, dirs, files in os.walk(folder):
+        total += len(files)
+    return
 
 
 def get_fixed_dedupl_name(bug_fix_dict, dedupl_path):
@@ -122,6 +135,17 @@ def dedupl_helper_path(dedupl_id: int) -> Path:
 
 def flip_y(zoom, y):
     return (2**zoom - 1) - y
+
+
+def calculate_tiles(zoom_level):
+    return (2**zoom_level) ** 2
+
+
+def calculate_tiles_sum(zoom_level):
+    """
+    Tiles up to zoom level (geometric series)
+    """
+    return (4 ** (zoom_level + 1) - 1) // 3
 
 
 if __name__ == '__main__':

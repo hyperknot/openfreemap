@@ -34,3 +34,5 @@ def benchmark(c):
     apt_get_install(c, 'wrk')
     c.sudo('mkdir -p /data/ofm/benchmark')
     put(c, f'{scripts}/benchmark/wrk_custom_list.lua', '/data/ofm/benchmark')
+
+    # wrk -c10 -d10s -t1 -s /data/ofm/benchmark/wrk_custom_list.lua http://localhost

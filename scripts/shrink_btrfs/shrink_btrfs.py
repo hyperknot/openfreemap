@@ -8,6 +8,10 @@ from pathlib import Path
 import click
 
 
+# btrfs cannot shrink smaller than about 268 MB
+SMALLEST_SIZE = 270_000_000
+
+
 @click.command()
 @click.argument(
     'btrfs_img',

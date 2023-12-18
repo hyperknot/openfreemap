@@ -59,6 +59,7 @@ def prepare_http_host(c):
 def debug_tmp(c):
     c.sudo('rm -rf /data/ofm/logs')
     c.sudo('mkdir -p /data/ofm/logs')
+    c.sudo('rm -f /data/nginx/logs/*')
     put(c, f'{config}/nginx/nginx.conf', '/etc/nginx/')
     put(c, f'{scripts}/http_host/nginx_site.conf', '/data/nginx/sites')
     c.sudo('nginx -t')
