@@ -43,6 +43,8 @@ def cli(mbtiles_path: Path, dir_path: Path):
     if 'planet' in mbtiles_path.parent.name:
         assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
 
+    print('DONE')
+
 
 def write_metadata(c, *, dir_path):
     metadata = dict(c.execute('select name, value from metadata').fetchall())
@@ -72,9 +74,6 @@ def write_tile_files(c, *, dir_path):
 
     c.execute('select zoom_level, tile_column, tile_row, tile_data_id from tiles_shallow')
     for i, row in enumerate(c, start=1):
-        if i < 4678400:
-            continue
-
         z = row[0]
         x = row[1]
         y = flip_y(z, row[2])

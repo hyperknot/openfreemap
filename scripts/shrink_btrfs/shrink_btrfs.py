@@ -40,25 +40,28 @@ def cli(btrfs_img: Path):
     mnt_dir = Path(tempfile.mkdtemp(dir=current_dir, prefix='tmp_shrink_'))
     subprocess.run(['mount', '-t', 'btrfs', btrfs_img, mnt_dir], check=True)
 
-    # needs to start with a balancing
-    # https://btrfs.readthedocs.io/en/latest/Balance.html
-    # https://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
-    print('Starting btrfs balancing')
-    p = subprocess.run(
-        ['btrfs', 'balance', 'start', '-dusage=100', mnt_dir], capture_output=True, text=True
-    )
-    if p.returncode:
-        # subprocess.run(['umount', mnt_dir])
-        # mnt_dir.rmdir()
-        print(f'Balance error: {p.stdout} {p.stderr}')
-    print('Balancing done')
+    # shink until max. 10 MB left or reached SMALLEST_SIZE or failure
+    while True:
+        # needs to start with a balancing
+        # https://btrfs.readthedocs.io/en/latest/Balance.html
+        # https://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
+        do_balancing(mnt_dir)
 
-    # shink until max. 10 MB left, or failure
-    free_bytes = get_usage(mnt_dir, 'Device unallocated')
-    while free_bytes > 10_000_000:
-        if not shrink(mnt_dir, int(free_bytes * 0.9)):
-            break
         free_bytes = get_usage(mnt_dir, 'Device unallocated')
+        device_size = get_usage(mnt_dir, 'Device size')
+        shrink_idea = free_bytes * 0.9
+
+        # workaround for the SMALLEST_SIZE limit
+        if device_size - free_bytes < SMALLEST_SIZE:
+            shrink_idea = (device_size - SMALLEST_SIZE) * 0.9
+
+        # stop if 10 MB left
+        if shrink_idea < 10_000_000:
+            break
+
+        # stop if process error
+        if not do_shrink(mnt_dir, shrink_idea):
+            break
 
     total_size = get_usage(mnt_dir, 'Device size')
 
@@ -80,10 +83,21 @@ def get_usage(mnt: Path, key: str):
         return free
 
 
-def shrink(mnt: Path, delta_size: int):
+def do_shrink(mnt: Path, delta_size: float):
+    delta_size = int(delta_size)
     print(f'Trying to shrink by {delta_size//1_000_000} MB')
     p = subprocess.run(['btrfs', 'filesystem', 'resize', str(-delta_size), mnt])
     return p.returncode == 0
+
+
+def do_balancing(mnt: Path):
+    print('Starting btrfs balancing')
+    p = subprocess.run(
+        ['btrfs', 'balance', 'start', '-dusage=100', mnt], capture_output=True, text=True
+    )
+    if p.returncode:
+        print(f'Balance error: {p.stdout} {p.stderr}')
+    print('Balancing done')
 
 
 if __name__ == '__main__':
