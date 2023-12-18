@@ -57,6 +57,16 @@ def prepare_http_host(c):
 
 
 def debug_tmp(c):
+    put(c, scripts / 'tile_gen' / 'extract_btrfs.sh', TILE_GEN_BIN, permissions='755', owner='ofm')
+    put(
+        c,
+        scripts / 'extract_mbtiles' / 'extract_mbtiles.py',
+        TILE_GEN_BIN,
+        permissions='755',
+        owner='ofm',
+    )
+
+    return
     c.sudo('rm -rf /data/ofm/logs')
     c.sudo('mkdir -p /data/ofm/logs')
     c.sudo('rm -f /data/nginx/logs/*')
@@ -80,7 +90,7 @@ def debug_tmp(c):
     '--skip-shared', is_flag=True, help='Skip the shared installtion step (useful for development)'
 )
 def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debug):
-    if not click.confirm(f'Run script on {hostname}?'):
+    if not debug and not click.confirm(f'Run script on {hostname}?'):
         return
 
     if not tile_gen and not http_host and not debug:

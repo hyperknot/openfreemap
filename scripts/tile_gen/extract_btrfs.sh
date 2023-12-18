@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-sudo umount mnt_rw || true
-sudo umount mnt_rw2 || true
+sudo umount mnt_rw 2> /dev/null || true
+sudo umount mnt_rw2 2> /dev/null || true
 rm -rf mnt_rw* tmp_*
 rm -f *.btrfs *.gz
 rm -f *.log
@@ -13,24 +13,24 @@ fallocate -l 200G image2.btrfs
 
 
 # metadata: single needed as default is now DUP
-mkfs.btrfs -v \
+mkfs.btrfs \
   -m single \
-  image.btrfs
+  image.btrfs > /dev/null
 
-mkfs.btrfs -v \
+mkfs.btrfs \
   -m single \
-  image2.btrfs
+  image2.btrfs > /dev/null
 
 # https://btrfs.readthedocs.io/en/latest/btrfs-man5.html#mount-options
 # compression doesn't make sense, data is already gzip compressed
 mkdir -p mnt_rw mnt_rw2
 
-sudo mount -v \
+sudo mount \
   -t btrfs \
   -o noacl,nobarrier,noatime,max_inline=4096 \
   image.btrfs mnt_rw
 
-sudo mount -v \
+sudo mount \
   -t btrfs \
   -o noacl,nobarrier,noatime,max_inline=4096 \
   image2.btrfs mnt_rw2
@@ -50,24 +50,23 @@ rsync -avH mnt_rw/extract/ mnt_rw2/extract/ > rsync_out.log 2> rsync_err.log
 # collect stats
 {
 echo -e "df -h"
-df -h mnt_rw2
+sudo df -h mnt_rw2
 
 echo -e "\n\nbtrfs filesystem df"
-btrfs filesystem df mnt_rw2
-
-echo -e "\n\nbtrfs filesystem du -s"
-btrfs filesystem du -s mnt_rw2
+sudo btrfs filesystem df mnt_rw2
 
 echo -e "\n\nbtrfs filesystem show"
-btrfs filesystem show mnt_rw2
+sudo btrfs filesystem show mnt_rw2
 
 echo -e "\n\nbtrfs filesystem usage"
-btrfs filesystem usage mnt_rw2
+sudo btrfs filesystem usage mnt_rw2
+
+echo -e "\n\nbtrfs filesystem du -s"
+sudo btrfs filesystem du -s mnt_rw2
 
 echo -e "\n\ncompsize -x"
-compsize -x mnt_rw2
+sudo compsize -x mnt_rw2 2> /dev/null || true
 } > stats.txt
-
 
 
 sudo umount mnt_rw
@@ -76,9 +75,6 @@ rm -r mnt_rw*
 
 sudo ../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image2.btrfs \
   > shrink_out.log 2> shrink_err.log
-
-
-
 
 
 rm image.btrfs
