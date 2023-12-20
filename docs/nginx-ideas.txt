@@ -1,0 +1,43 @@
+# ideas https://calomel.org/nginx.html
+# https://www.nginx.com/blog/tuning-nginx/
+# https://github.com/denji/nginx-tuning
+
+
+# not using
+
+sendfile_max_chunk 512k; # no need for small files
+keepalive_requests # default seems reasonable
+keepalive_timeout # default seems reasonable
+
+gzip_vary on; # no need probably
+gzip_min_length 10240; # only one file
+gzip_proxied any; # no proxying
+
+types_hash_max_size 2048; # default should be good for the default set
+
+
+# not tested
+
+client_body_buffer_size  128k;
+client_max_body_size 128k;
+client_header_buffer_size 1k;
+large_client_header_buffers 2 1k;
+
+
+
+
+# SSL optimizations
+SSL Session Cache
+SSL OCSP Stapling
+ssl_session_cache shared:SSL:10m;
+ssl_session_timeout 10m;
+ssl_prefer_server_ciphers on;
+
+client_header_timeout 12; # default is 60
+
+
+location / {
+    try_files $uri =404;
+}
+
+
