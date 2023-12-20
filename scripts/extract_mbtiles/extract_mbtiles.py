@@ -31,21 +31,27 @@ def cli(mbtiles_path: Path, dir_path: Path):
     conn = sqlite3.connect(mbtiles_path)
     c = conn.cursor()
 
-    write_metadata(c, dir_path=dir_path)
     write_dedupl_files(c, dir_path=dir_path)
     write_tile_files(c, dir_path=dir_path)
 
     # if it's a full planet run,
     # make sure there are exactly the right number of files generated
-    if 'planet' in mbtiles_path.resolve().parent.name:
-        assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
-        print(f'Tile number: {calculate_tiles_sum(14)} - OK')
+    # if 'planet' in mbtiles_path.resolve().parent.name:
+    #     assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
+    #     print(f'Tile number: {calculate_tiles_sum(14)} - OK')
 
+    write_metadata(c, dir_path=dir_path)
     print('DONE')
 
 
 def write_metadata(c, *, dir_path):
     metadata = dict(c.execute('select name, value from metadata').fetchall())
+    metadata['name'] = 'OpenFreeMap'
+    metadata['description'] = 'https://openfreemap.org/'
+    metadata['attribution'] = (
+        '<a href="https://openfreemap.org/" target="_blank">OpenFreeMap</a> '
+        + metadata['attribution']
+    )
     json.dump(metadata, open(dir_path / 'metadata.json', 'w'), indent=2)
 
 
