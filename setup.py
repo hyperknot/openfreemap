@@ -1,7 +1,13 @@
 from setuptools import setup
 
 
-requirements = ['fabric', 'ruff', 'python-dotenv', 'click']
+requirements = [
+    'fabric',
+    'ruff',
+    'python-dotenv',
+    'click',
+    'nginxfmt',
+]
 
 setup(
     name='openfreemap',

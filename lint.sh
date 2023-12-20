@@ -3,5 +3,4 @@
 ruff check --fix .
 ruff format .
 
-# https://github.com/soulteary/nginx-formatter
-nginx-formatter
+find . -type f -name '*.conf' -path '*/nginx*' -exec nginxfmt -v {} +;
