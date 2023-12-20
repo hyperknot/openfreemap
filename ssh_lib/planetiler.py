@@ -9,7 +9,7 @@ PLANETILER_PATH = f'{TILE_GEN_BIN}/planetiler.jar'
 
 def install_planetiler(c):
     apt_get_update(c)
-    apt_get_install(c, 'openjdk-17-jdk')
+    apt_get_install(c, 'openjdk-21-jre-headless')
 
     c.sudo(f'mkdir -p {TILE_GEN_BIN}')
 
