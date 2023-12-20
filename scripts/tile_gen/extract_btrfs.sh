@@ -101,8 +101,8 @@ sudo ../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image2.btrfs 
 
 
 rm image.btrfs
-mv image2.btrfs done.btrfs
+mv image2.btrfs tiles.btrfs
 
-pigz done.btrfs --fast
+pigz tiles.btrfs --fast
 
 echo DONE
