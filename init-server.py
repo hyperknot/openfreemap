@@ -5,7 +5,7 @@ import click
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
-from ssh_lib.benchmark import benchmark, c1000k, k6
+from ssh_lib.benchmark import benchmark, c1000k
 from ssh_lib.config import config, scripts
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx

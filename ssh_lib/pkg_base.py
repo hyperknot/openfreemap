@@ -49,6 +49,7 @@ def pkg_base(c):
         #
         'nload',
         'iftop',
+        'vnstat',
         #
         'python3',
         'python3-venv',
