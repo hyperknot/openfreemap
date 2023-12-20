@@ -45,6 +45,7 @@ grep fixed extract_out.log > dedupl_fixed.log || true
 # Unfortunately, by deleting files from the btrfs partition, the size _grows_.
 # So we need to rsync onto a new partition.
 rsync -avH \
+  --max-alloc=4294967296 \
   --exclude dedupl \
   mnt_rw/extract/ mnt_rw2/extract/ \
   > rsync_out.log 2> rsync_err.log
