@@ -11,3 +11,4 @@
 /venv
 /.idea
 /temp
+/rclone-ofm.conf
