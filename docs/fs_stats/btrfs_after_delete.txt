@@ -1,0 +1,44 @@
+df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/loop4      200G  130G   70G  65% /data/ofm/runs/planet_20231208_091355/mnt_rw2
+
+
+btrfs filesystem df
+Data, single: total=48.01GiB, used=47.32GiB
+System, single: total=4.00MiB, used=16.00KiB
+Metadata, single: total=83.01GiB, used=81.27GiB
+GlobalReserve, single: total=512.00MiB, used=0.00B
+
+
+btrfs filesystem show
+Label: none  uuid: d95b460e-4005-4f1f-ba28-bf4a82ecdbd5
+	Total devices 1 FS bytes used 128.59GiB
+	devid    1 size 200.00GiB used 131.02GiB path /dev/loop4
+
+
+
+btrfs filesystem usage
+Overall:
+    Device size:		 200.00GiB
+    Device allocated:		 131.02GiB
+    Device unallocated:		  68.98GiB
+    Device missing:		     0.00B
+    Used:			 128.59GiB
+    Free (estimated):		  69.67GiB	(min: 69.67GiB)
+    Free (statfs, df):		  69.67GiB
+    Data ratio:			      1.00
+    Metadata ratio:		      1.00
+    Global reserve:		 512.00MiB	(used: 0.00B)
+    Multiple profiles:		        no
+
+Data,single: Size:48.01GiB, Used:47.32GiB (98.57%)
+   /dev/loop4	  48.01GiB
+
+Metadata,single: Size:83.01GiB, Used:81.27GiB (97.91%)
+   /dev/loop4	  83.01GiB
+
+System,single: Size:4.00MiB, Used:16.00KiB (0.39%)
+   /dev/loop4	   4.00MiB
+
+Unallocated:
+   /dev/loop4	  68.98GiB
