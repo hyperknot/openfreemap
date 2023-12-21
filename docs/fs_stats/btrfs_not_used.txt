@@ -1,0 +1,7 @@
+# takes a lot of time, should only be used when debugging
+
+echo -e "\n\nbtrfs filesystem du -s"
+sudo btrfs filesystem du -s mnt_rw
+
+echo -e "\n\ncompsize -x"
+sudo compsize -x mnt_rw 2> /dev/null || true

@@ -1,5 +1,7 @@
 ## native mapbox/mbutil
 
+// pip install git+https://github.com/mapbox/mbutil.git@544c76e
+
 ```
 Filesystem      1K-blocks       Used Available Use% Mounted on
 /dev/loop0     1,474,386,100 1,119,622,516 354,763,584  76%

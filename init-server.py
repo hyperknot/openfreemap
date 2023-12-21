@@ -32,12 +32,13 @@ def prepare_tile_gen(c):
     install_planetiler(c)
 
     for file in [
-        'prepare-virtualenv.sh',
-        'planetiler_planet.sh',
+        'extract_btrfs.sh',
         'planetiler_monaco.sh',
-        'gen_planet.sh',
-        'gen_monaco.sh',
-        'extract.sh',
+        'planetiler_planet.sh',
+        'prepare-virtualenv.sh',
+        'upload_cloudflare.sh',
+        'extract_mbtiles/extract_mbtiles.py',
+        'shrink_btrfs/shrink_btrfs.py',
     ]:
         put(
             c,
@@ -57,23 +58,6 @@ def prepare_http_host(c):
 
 
 def debug_tmp(c):
-    put(c, scripts / 'tile_gen' / 'extract_btrfs.sh', TILE_GEN_BIN, permissions='755', owner='ofm')
-    put(
-        c,
-        scripts / 'extract_mbtiles' / 'extract_mbtiles.py',
-        TILE_GEN_BIN,
-        permissions='755',
-        owner='ofm',
-    )
-    put(
-        c,
-        scripts / 'shrink_btrfs' / 'shrink_btrfs.py',
-        TILE_GEN_BIN,
-        permissions='755',
-        owner='ofm',
-    )
-
-    return
     c.sudo('rm -rf /data/ofm/logs')
     c.sudo('mkdir -p /data/ofm/logs')
     c.sudo('rm -f /data/nginx/logs/*')

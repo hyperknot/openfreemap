@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+export TILE_GEN_BIN=/data/ofm/tile_gen/bin
+export VENV_PYTHON=$TILE_GEN_BIN/venv/python
+
 sudo umount mnt_rw 2> /dev/null || true
 sudo umount mnt_rw2 2> /dev/null || true
 rm -rf mnt_rw* tmp_*
-rm -f *.btrfs *.gz
-rm -f *.log *.txt
+rm -f "*.btrfs" "*.gz"
+rm -f "*.log" "*.txt"
 
 # make an empty file that's definitely bigger then the current OSM output
 fallocate -l 200G image.btrfs
@@ -37,7 +40,8 @@ sudo mount \
 
 sudo chown ofm:ofm -R mnt_rw mnt_rw2
 
-../../tile_gen/venv/bin/python ../../tile_gen/extract_mbtiles.py output.mbtiles mnt_rw/extract \
+$VENV_PYTHON $TILE_GEN_BIN/extract_mbtiles/extract_mbtiles.py \
+  tiles.mbtiles mnt_rw/extract \
   > extract_out.log 2> extract_err.log
 
 grep fixed extract_out.log > dedupl_fixed.log || true
@@ -55,41 +59,23 @@ rsync -avH \
 {
 echo -e "df -h"
 sudo df -h mnt_rw
-
 echo -e "\n\nbtrfs filesystem df"
 sudo btrfs filesystem df mnt_rw
-
 echo -e "\n\nbtrfs filesystem show"
 sudo btrfs filesystem show mnt_rw
-
 echo -e "\n\nbtrfs filesystem usage"
 sudo btrfs filesystem usage mnt_rw
-
-# takes a lot of time, should only be used when debugging
-#echo -e "\n\nbtrfs filesystem du -s"
-#sudo btrfs filesystem du -s mnt_rw
-#echo -e "\n\ncompsize -x"
-#sudo compsize -x mnt_rw 2> /dev/null || true
 } > stats1.txt
 
 {
 echo -e "df -h"
 sudo df -h mnt_rw2
-
 echo -e "\n\nbtrfs filesystem df"
 sudo btrfs filesystem df mnt_rw2
-
 echo -e "\n\nbtrfs filesystem show"
 sudo btrfs filesystem show mnt_rw2
-
 echo -e "\n\nbtrfs filesystem usage"
 sudo btrfs filesystem usage mnt_rw2
-
-# takes a lot of time, should only be used when debugging
-#echo -e "\n\nbtrfs filesystem du -s"
-#sudo btrfs filesystem du -s mnt_rw2
-#echo -e "\n\ncompsize -x"
-#sudo compsize -x mnt_rw2 2> /dev/null || true
 } > stats2.txt
 
 
@@ -97,7 +83,7 @@ sudo umount mnt_rw
 sudo umount mnt_rw2
 rm -r mnt_rw*
 
-sudo ../../tile_gen/venv/bin/python ../../tile_gen/shrink_btrfs.py image2.btrfs \
+sudo $VENV_PYTHON $TILE_GEN_BIN/shrink_btrfs/shrink_btrfs.py image2.btrfs \
   > shrink_out.log 2> shrink_err.log
 
 
