@@ -9,9 +9,9 @@ from ssh_lib.benchmark import benchmark, c1000k
 from ssh_lib.config import config, scripts
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
-from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
+from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
-from ssh_lib.utils import add_user, apt_get_install, enable_sudo, put, reboot, setup_time, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, reboot, setup_time, sudo_cmd
 
 
 def prepare_shared(c):
@@ -20,7 +20,6 @@ def prepare_shared(c):
     enable_sudo(c, 'ofm', nopasswd=True)
 
     pkg_upgrade(c)
-    pkg_clean(c)
     pkg_base(c)
 
     setup_time(c)
