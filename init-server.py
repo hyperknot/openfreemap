@@ -11,7 +11,7 @@ from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
-from ssh_lib.utils import add_user, enable_sudo, put, reboot, setup_time, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, reboot, sudo_cmd
 
 
 def prepare_shared(c):
@@ -22,7 +22,6 @@ def prepare_shared(c):
     pkg_upgrade(c)
     pkg_base(c)
 
-    setup_time(c)
     setup_kernel_settings(c)
     set_cpu_governor(c)
 

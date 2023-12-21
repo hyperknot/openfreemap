@@ -130,29 +130,3 @@ def enable_sudo(c, username, nopasswd=False):
         put_str(c, '/etc/sudoers.d/tmp.', f'{username} ALL=(ALL) NOPASSWD:ALL')
         set_permission(c, '/etc/sudoers.d/tmp.', permissions='440', owner='root')
         c.sudo(f'mv /etc/sudoers.d/tmp. /etc/sudoers.d/{username}')
-
-
-def ssh_copy_id(c, username, key_file_path):
-    with open(key_file_path) as fp:
-        public_key_str = fp.read()
-
-    if username == 'root':
-        home_dir = '/root'
-    else:
-        home_dir = f'/home/{username}'
-
-    ssh_dir = f'{home_dir}/.ssh'
-
-    c.sudo(f'mkdir -p {ssh_dir}')
-    c.sudo(f'chown {username}:{username} {ssh_dir}')
-
-    put_str(c, f'{ssh_dir}/authorized_keys', public_key_str)
-    set_permission(c, f'{ssh_dir}/authorized_keys', permissions='400', owner=username)
-
-
-def setup_time(c):
-    apt_get_install(c, 'dbus')
-
-    c.sudo('timedatectl set-local-rtc 0')
-    c.sudo('timedatectl set-ntp 1')
-    c.sudo('timedatectl set-timezone UTC')

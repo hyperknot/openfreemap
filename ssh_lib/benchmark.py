@@ -2,22 +2,6 @@ from ssh_lib.config import scripts
 from ssh_lib.utils import apt_get_install, apt_get_update, put, put_str, sudo_cmd
 
 
-def k6(c):
-    sudo_cmd(
-        c,
-        'curl https://dl.k6.io/key.gpg '
-        '| gpg --dearmor '
-        '| tee /usr/share/keyrings/k6-archive-keyring.gpg >/dev/null',
-    )
-    put_str(
-        c,
-        '/e' 'tc/apt/sources.list.d/k6.list',
-        'deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main',
-    )
-    apt_get_update(c)
-    apt_get_install(c, 'k6')
-
-
 def c1000k(c):
     c.run('wget https://github.com/ideawu/c1000k/archive/master.zip -O tmp.zip')
     c.run('unzip -o tmp.zip')
