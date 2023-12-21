@@ -62,7 +62,7 @@ def prepare_tile_gen(c):
     )
 
     c.sudo('chown ofm:ofm /data/ofm')
-    c.sudo('chown -R ofm:ofm /data/ofm/bin')
+    c.sudo(f'chown -R ofm:ofm {TILE_GEN_BIN}')
 
     sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
