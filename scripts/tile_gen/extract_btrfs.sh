@@ -92,4 +92,4 @@ mv image2.btrfs tiles.btrfs
 
 pigz tiles.btrfs --fast
 
-echo DONE
+echo extract_btrfs.sh DONE

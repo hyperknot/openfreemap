@@ -24,7 +24,8 @@ java -Xmx30g \
   `# Store temporary node locations at fixed positions in a memory-mapped file` \
   --nodemap-type=array --storage=mmap \
   --force \
-  > "planetiler_out.log" 2> "planetiler_err.log"
+  > planetiler_out 2> planetiler_err
 
 rm -r data
 
+#$TILE_GEN_BIN/extract_btrfs.sh

@@ -24,6 +24,7 @@ ignore = [
   'E711',
   'E712',
   'E741',
+  'F401', # unused imports
   'F841',
   'PT004',
   'SIM102',

@@ -42,7 +42,7 @@ def cli(mbtiles_path: Path, dir_path: Path):
     #     print(f'Tile number: {calculate_tiles_sum(14)} - OK')
 
     write_metadata(c, dir_path=dir_path)
-    print('DONE')
+    print('extract_mbtiles.py DONE')
 
 
 def write_metadata(c, *, dir_path):

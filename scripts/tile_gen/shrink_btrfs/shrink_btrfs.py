@@ -70,6 +70,7 @@ def cli(btrfs_img: Path):
 
     subprocess.run(['truncate', '-s', str(total_size), btrfs_img])
     print(f'Truncated {btrfs_img} to {total_size//1_000_000} MB size')
+    print('shrink_btrfs.py DONE')
 
 
 def get_usage(mnt: Path, key: str):

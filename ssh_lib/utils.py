@@ -4,12 +4,17 @@ import string
 
 
 def put(
-    c, local_path, remote_path, permissions=None, owner='root', group=None, target_is_dir=False
+    c, local_path, remote_path, permissions=None, owner='root', group=None, create_parent_dir=False
 ):
     tmp_path = f'/tmp/fabtmp_{random_string(8)}'
     c.put(local_path, tmp_path)
 
-    if is_dir(c, remote_path) or target_is_dir:
+    if create_parent_dir:
+        dirname = os.path.dirname(remote_path)
+        c.sudo(f'mkdir -p {dirname}')
+        set_permission(c, dirname, owner=owner, group=group)
+
+    if is_dir(c, remote_path):
         if not remote_path.endswith('/'):
             remote_path += '/'
 
