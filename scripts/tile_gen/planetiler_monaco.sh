@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
+set -e
 
-DATE=$(date +"%Y%m%d_%H%M%S")
 TILE_GEN_BIN=/data/ofm/tile_gen/bin
 
+DATE=$(date +"%Y%m%d_%H%M%S")
 RUN_FOLDER="/data/ofm/tile_gen/runs/monaco/${DATE}_pt"
+
 
 mkdir -p "$RUN_FOLDER"
 cd "$RUN_FOLDER" || exit
@@ -22,3 +24,6 @@ java -Xmx1g \
   --force \
   > "planetiler_out.log" 2> "planetiler_err.log"
 
+rm -r data
+
+$TILE_GEN_BIN/extract_btrfs.sh

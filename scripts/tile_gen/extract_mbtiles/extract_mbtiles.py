@@ -34,6 +34,7 @@ def cli(mbtiles_path: Path, dir_path: Path):
     write_dedupl_files(c, dir_path=dir_path)
     write_tile_files(c, dir_path=dir_path)
 
+    # planetiler has missing tiles by design, so disabling this
     # if it's a full planet run,
     # make sure there are exactly the right number of files generated
     # if 'planet' in mbtiles_path.resolve().parent.name:
@@ -56,12 +57,14 @@ def write_metadata(c, *, dir_path):
 
 
 def write_dedupl_files(c, *, dir_path):
-    # dedupl files
-    # write out the tiles_data files into a multi-level folder
+    """
+    dedupl files
+    write out the tiles_data files into a multi-level folder
+    """
+
     total = c.execute('select count(*) from tiles_data').fetchone()[0]
 
     c.execute('select tile_data_id, tile_data from tiles_data')
-
     for i, row in enumerate(c, start=1):
         dedupl_id = row[0]
         dedupl_path = dir_path / 'dedupl' / dedupl_helper_path(dedupl_id)
@@ -146,7 +149,7 @@ def calculate_tiles(zoom_level):
 
 def calculate_tiles_sum(zoom_level):
     """
-    Tiles up to zoom level (geometric series)
+    Sum of tiles up to zoom level (geometric series)
     """
     return (4 ** (zoom_level + 1) - 1) // 3
 

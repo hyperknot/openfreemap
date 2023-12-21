@@ -11,7 +11,7 @@ from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_clean, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
-from ssh_lib.utils import add_user, enable_sudo, put, reboot, setup_time, sudo_cmd
+from ssh_lib.utils import add_user, apt_get_install, enable_sudo, put, reboot, setup_time, sudo_cmd
 
 
 def prepare_shared(c):
@@ -30,6 +30,9 @@ def prepare_shared(c):
 
 def prepare_tile_gen(c):
     install_planetiler(c)
+    apt_get_install(c, 'btrfs-progs')
+
+    c.sudo('chown -R ofm:ofm /data/ofm')
 
     for file in [
         'extract_btrfs.sh',
@@ -38,7 +41,7 @@ def prepare_tile_gen(c):
         'prepare-virtualenv.sh',
         'upload_cloudflare.sh',
         'extract_mbtiles/extract_mbtiles.py',
-        'shrink_btrfs/shrink_btrfs.py',
+        'shrink_btrfs/extract_mbtiles.py',
     ]:
         put(
             c,
@@ -47,6 +50,24 @@ def prepare_tile_gen(c):
             permissions='755',
             owner='ofm',
         )
+
+    put(
+        c,
+        scripts / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
+        TILE_GEN_BIN / 'extract_mbtiles',
+        permissions='755',
+        owner='ofm',
+        target_is_dir=True,
+    )
+
+    put(
+        c,
+        scripts / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
+        TILE_GEN_BIN / 'shrink_btrfs',
+        permissions='755',
+        owner='ofm',
+        target_is_dir=True,
+    )
 
     sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 

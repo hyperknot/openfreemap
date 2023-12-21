@@ -3,11 +3,13 @@ import secrets
 import string
 
 
-def put(c, local_path, remote_path, permissions=None, owner='root', group=None):
+def put(
+    c, local_path, remote_path, permissions=None, owner='root', group=None, target_is_dir=False
+):
     tmp_path = f'/tmp/fabtmp_{random_string(8)}'
     c.put(local_path, tmp_path)
 
-    if is_dir(c, remote_path):
+    if is_dir(c, remote_path) or target_is_dir:
         if not remote_path.endswith('/'):
             remote_path += '/'
 

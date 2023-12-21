@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-export TILE_GEN_BIN=/data/ofm/tile_gen/bin
-export VENV_PYTHON=$TILE_GEN_BIN/venv/python
+TILE_GEN_BIN=/data/ofm/tile_gen/bin
+VENV_PYTHON=$TILE_GEN_BIN/venv/bin/python
 
 sudo umount mnt_rw 2> /dev/null || true
 sudo umount mnt_rw2 2> /dev/null || true
 rm -rf mnt_rw* tmp_*
-rm -f "*.btrfs" "*.gz"
-rm -f "*.log" "*.txt"
+rm -f -- *.btrfs *.gz
+rm -f -- *.log *.txt
 
 # make an empty file that's definitely bigger then the current OSM output
 fallocate -l 200G image.btrfs

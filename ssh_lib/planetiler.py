@@ -19,5 +19,3 @@ def install_planetiler(c):
     )
 
     c.sudo(f'java -jar {PLANETILER_PATH} --help', hide=True)
-
-    c.sudo('chown -R ofm:ofm /data/ofm')
