@@ -30,7 +30,6 @@ def prepare_shared(c):
 
 def prepare_tile_gen(c):
     install_planetiler(c)
-    c.sudo('chown -R ofm:ofm /data/ofm')
 
     for file in [
         'extract_btrfs.sh',
@@ -44,7 +43,6 @@ def prepare_tile_gen(c):
             scripts / 'tile_gen' / file,
             TILE_GEN_BIN,
             permissions='755',
-            owner='ofm',
         )
 
     put(
@@ -52,7 +50,6 @@ def prepare_tile_gen(c):
         scripts / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
         f'{TILE_GEN_BIN}/extract_mbtiles/extract_mbtiles.py',
         permissions='755',
-        owner='ofm',
         create_parent_dir=True,
     )
 
@@ -61,9 +58,11 @@ def prepare_tile_gen(c):
         scripts / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
         f'{TILE_GEN_BIN}/shrink_btrfs/shrink_btrfs.py',
         permissions='755',
-        owner='ofm',
         create_parent_dir=True,
     )
+
+    c.sudo('chown ofm:ofm /data/ofm')
+    c.sudo('chown -R ofm:ofm /data/ofm/bin')
 
     sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 

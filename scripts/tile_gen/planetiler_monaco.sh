@@ -25,5 +25,6 @@ java -Xmx1g \
   > planetiler_out 2> planetiler_err
 
 rm -r data
+echo planetiler.jar DONE
 
-#$TILE_GEN_BIN/extract_btrfs.sh
+$TILE_GEN_BIN/extract_btrfs.sh
