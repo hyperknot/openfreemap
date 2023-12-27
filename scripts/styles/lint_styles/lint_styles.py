@@ -35,6 +35,8 @@ def cli(styles_folder):
 
         print(f'formatting {style_file}')
 
+        remove_keys(style_file)
+
         # gl-style-migrate
         p = subprocess.run(
             [node_bin_path / 'gl-style-migrate', style_file], capture_output=True, text=True
@@ -62,6 +64,17 @@ def cli(styles_folder):
                 style_file,
             ],
         )
+
+
+def remove_keys(style_file):
+    with open(style_file) as fp:
+        data = json.load(fp)
+
+    for key in ['id', 'center', 'zoom', 'bearing', 'pitch']:
+        data.pop(key, None)
+
+    with open(style_file, 'w') as fp:
+        json.dump(data, fp, ensure_ascii=False)
 
 
 if __name__ == '__main__':
