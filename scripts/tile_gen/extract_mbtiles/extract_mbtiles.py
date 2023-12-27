@@ -35,11 +35,7 @@ def cli(mbtiles_path: Path, dir_path: Path):
     write_tile_files(c, dir_path=dir_path)
 
     # planetiler has missing tiles by design, so disabling this
-    # if it's a full planet run,
-    # make sure there are exactly the right number of files generated
-    # if 'planet' in mbtiles_path.resolve().parent.name:
-    #     assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
-    #     print(f'Tile number: {calculate_tiles_sum(14)} - OK')
+    # assert_all_tiles_present(mbtiles_path, dir_path)
 
     write_metadata(c, dir_path=dir_path)
     print('extract_mbtiles.py DONE')
@@ -111,6 +107,17 @@ def write_tile_files(c, *, dir_path):
                 print(f'hard link created {i}/{total} {i / total * 100:.1f}%: {tile_path}')
             else:
                 raise
+
+
+def assert_all_tiles_present(mbtiles_path, dir_path):
+    """
+    If it's a full planet run,
+    ake sure there are exactly the right number of files generated.
+    """
+
+    if 'planet' in mbtiles_path.resolve().parent.name:
+        assert count_files(dir_path / 'tiles') == calculate_tiles_sum(14)
+        print(f'Tile number: {calculate_tiles_sum(14)} - OK')
 
 
 def count_files(folder):
