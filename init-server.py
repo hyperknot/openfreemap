@@ -11,6 +11,7 @@ from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
+from ssh_lib.rclone import install_rclone
 from ssh_lib.utils import add_user, enable_sudo, put, reboot, sudo_cmd
 
 
@@ -28,7 +29,7 @@ def prepare_shared(c):
 
 def prepare_tile_gen(c):
     install_planetiler(c)
-    # TODO rclone
+    install_rclone(c)
 
     for file in [
         'extract_btrfs.sh',

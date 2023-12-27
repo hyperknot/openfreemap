@@ -1,10 +1,10 @@
-from ssh_lib.config import config_dir
+from ssh_lib.config import assets_dir
 from ssh_lib.utils import apt_get_install, apt_get_purge, put, put_str
 
 
 def setup_kernel_settings(c):
-    put(c, f'{config_dir}/kernel/60-ofm.conf', '/etc/sysctl.d/')
-    put(c, f'{config_dir}/kernel/limits-ofm.conf', '/etc/security/limits.d/')
+    put(c, f'{assets_dir}/kernel/60-ofm.conf', '/etc/sysctl.d/')
+    put(c, f'{assets_dir}/kernel/limits-ofm.conf', '/etc/security/limits.d/')
 
 
 def set_cpu_governor(c):
