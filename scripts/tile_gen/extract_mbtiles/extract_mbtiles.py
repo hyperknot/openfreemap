@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 import sys
 from pathlib import Path
+from pprint import pprint
 
 import click
 
@@ -38,18 +39,34 @@ def cli(mbtiles_path: Path, dir_path: Path):
     # assert_all_tiles_present(mbtiles_path, dir_path)
 
     write_metadata(c, dir_path=dir_path)
+    conn.commit()
+
     print('extract_mbtiles.py DONE')
 
 
 def write_metadata(c, *, dir_path):
     metadata = dict(c.execute('select name, value from metadata').fetchall())
-    metadata['name'] = 'OpenFreeMap'
-    metadata['description'] = 'https://openfreemap.org/'
-    metadata['attribution'] = (
-        '<a href="https://openfreemap.org/" target="_blank">OpenFreeMap</a> '
-        + metadata['attribution']
-    )
-    json.dump(metadata, open(dir_path / 'metadata.json', 'w'), indent=2)
+    c.execute("update metadata set value='OpenFreeMap' where name='name'")
+    c.execute("update metadata set value='https://openfreemap.org' where name='description'")
+
+    if 'openfreemap' not in metadata['attribution']:
+        attr_str = (
+            '<a href="https://openfreemap.org/" target="_blank">OpenFreeMap</a> '
+            + metadata['attribution']
+        )
+        c.execute("UPDATE metadata SET value = ? WHERE name = 'attribution'", (attr_str,))
+
+    if 'osm_date' not in metadata:
+        if 'planetiler:osm:osmosisreplicationtime' in metadata:
+            osm_date = metadata['planetiler:osm:osmosisreplicationtime'][:10]
+            c.execute('INSERT INTO metadata (name, value) VALUES (?, ?)', ('osm_date', osm_date))
+
+    metadata = dict(c.execute('select name, value from metadata').fetchall())
+    with open(dir_path / 'metadata.json', 'w') as fp:
+        json.dump(metadata, fp, indent=2)
+
+    with open(dir_path / 'osm_date', 'w') as fp:
+        fp.write(metadata['osm_date'])
 
 
 def write_dedupl_files(c, *, dir_path):
