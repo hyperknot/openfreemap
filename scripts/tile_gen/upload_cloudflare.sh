@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
-DIR_NAME="${PWD##*/}"
+RUN_STR=$(basename "$PWD")
+AREA=$(basename "$(dirname "$PWD")")
+
+
+if [[ $AREA != "planet" && $AREA != "monaco" ]]; then
+  echo "Area must be 'planet' or 'monaco'. Terminating."
+  exit 1
+fi
+
+if [ ! -f /data/ofm/config/rclone.conf ]; then
+    echo "rclone.conf does not exist. Terminating."
+    exit 1
+fi
+
 
 rm -f rclone.log
 
@@ -15,5 +28,5 @@ rclone sync \
   --stats-one-line \
   --log-file rclone.log \
   --exclude rclone.log \
-  . "cf:ofm-planet/$DIR_NAME"
+  . "cf:ofm-$AREA/$RUN_STR"
 

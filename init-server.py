@@ -65,13 +65,14 @@ def prepare_tile_gen(c):
         put(
             c,
             CONFIG_DIR / 'rclone.conf',
-            REMOTE_CONFIG,
+            f'{REMOTE_CONFIG}/rclone.conf',
             permissions='600',
             create_parent_dir=True,
         )
 
     c.sudo('chown ofm:ofm /data/ofm')
     c.sudo('chown -R ofm:ofm /data/ofm/tile_gen')
+    c.sudo('chown -R ofm:ofm /data/ofm/config')
 
     sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
