@@ -5,7 +5,7 @@
 *.mbtiles
 *.pbf
 
-.env
+config/.env
 .DS_Store
 
 /venv

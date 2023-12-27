@@ -6,7 +6,7 @@ from dotenv import dotenv_values
 from fabric import Config, Connection
 
 from ssh_lib.benchmark import benchmark, c1000k
-from ssh_lib.config import assets_dir, scripts_dir
+from ssh_lib.config import assets_dir, config_dir, scripts_dir
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
@@ -106,7 +106,7 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debu
         if not tile_gen and not http_host:
             return
 
-    ssh_passwd = dotenv_values('.env').get('SSH_PASSWD')
+    ssh_passwd = dotenv_values(f'{config_dir}/.env').get('SSH_PASSWD')
 
     if ssh_passwd:
         c = Connection(

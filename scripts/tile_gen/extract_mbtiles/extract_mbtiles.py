@@ -5,7 +5,6 @@ import shutil
 import sqlite3
 import sys
 from pathlib import Path
-from pprint import pprint
 
 import click
 
