@@ -16,7 +16,7 @@ if [ ! -f /data/ofm/config/rclone.conf ]; then
 fi
 
 
-rm -f rclone.log
+rm -f logs/rclone.log
 
 rclone sync \
   --config=/data/ofm/config/rclone.conf \
@@ -26,7 +26,7 @@ rclone sync \
   -v \
   --stats-file-name-length 0 \
   --stats-one-line \
-  --log-file rclone.log \
-  --exclude rclone.log \
+  --log-file logs/rclone.log \
+  --exclude 'logs/**' \
   . "cf:ofm-$AREA/$RUN_STR"
 
