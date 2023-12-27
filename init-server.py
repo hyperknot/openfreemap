@@ -6,7 +6,7 @@ from dotenv import dotenv_values
 from fabric import Config, Connection
 
 from ssh_lib.benchmark import benchmark, c1000k
-from ssh_lib.config import config, scripts
+from ssh_lib.config import assets_dir, scripts_dir
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
@@ -28,6 +28,7 @@ def prepare_shared(c):
 
 def prepare_tile_gen(c):
     install_planetiler(c)
+    # TODO rclone
 
     for file in [
         'extract_btrfs.sh',
@@ -38,14 +39,14 @@ def prepare_tile_gen(c):
     ]:
         put(
             c,
-            scripts / 'tile_gen' / file,
+            scripts_dir / 'tile_gen' / file,
             TILE_GEN_BIN,
             permissions='755',
         )
 
     put(
         c,
-        scripts / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
+        scripts_dir / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
         f'{TILE_GEN_BIN}/extract_mbtiles/extract_mbtiles.py',
         permissions='755',
         create_parent_dir=True,
@@ -53,14 +54,14 @@ def prepare_tile_gen(c):
 
     put(
         c,
-        scripts / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
+        scripts_dir / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
         f'{TILE_GEN_BIN}/shrink_btrfs/shrink_btrfs.py',
         permissions='755',
         create_parent_dir=True,
     )
 
     c.sudo('chown ofm:ofm /data/ofm')
-    c.sudo(f'chown -R ofm:ofm {TILE_GEN_BIN}')
+    c.sudo('chown -R ofm:ofm /data/ofm/tile_gen')
 
     sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
@@ -75,8 +76,8 @@ def debug_tmp(c):
     c.sudo('rm -rf /data/ofm/logs')
     c.sudo('mkdir -p /data/ofm/logs')
     c.sudo('rm -f /data/nginx/logs/*')
-    put(c, f'{config}/nginx/nginx.conf', '/etc/nginx/')
-    put(c, f'{scripts}/http_host/nginx_site.conf', '/data/nginx/sites')
+    put(c, f'{assets_dir}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{scripts_dir}/http_host/nginx_site.conf', '/data/nginx/sites')
     c.sudo('nginx -t')
     c.sudo('service nginx restart')
 

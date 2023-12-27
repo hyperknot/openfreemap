@@ -1,19 +1,19 @@
 df -h
 Filesystem      Size  Used Avail Use% Mounted on
-/dev/loop3      200G  139G   61G  70% /data/ofm/runs/planet_20231208_091355/mnt_rw
+/dev/loop0      200G  139G   61G  70% /data/ofm/tile_gen/runs/planet/20231221_134737_pt/mnt_rw
 
 
 btrfs filesystem df
-Data, single: total=48.01GiB, used=47.45GiB
+Data, single: total=48.01GiB, used=47.59GiB
 System, single: total=4.00MiB, used=16.00KiB
-Metadata, single: total=92.01GiB, used=90.36GiB
+Metadata, single: total=92.01GiB, used=90.52GiB
 GlobalReserve, single: total=512.00MiB, used=0.00B
 
 
 btrfs filesystem show
-Label: none  uuid: 1ca91839-f506-452e-bb09-4f13f58d5944
-	Total devices 1 FS bytes used 137.81GiB
-	devid    1 size 200.00GiB used 140.02GiB path /dev/loop3
+Label: none  uuid: 9c5cd306-96c8-4ee5-bfbb-b8216698f955
+	Total devices 1 FS bytes used 138.11GiB
+	devid    1 size 200.00GiB used 140.02GiB path /dev/loop0
 
 
 
@@ -23,22 +23,22 @@ Overall:
     Device allocated:		 140.02GiB
     Device unallocated:		  59.98GiB
     Device missing:		     0.00B
-    Used:			 137.81GiB
-    Free (estimated):		  60.54GiB	(min: 60.54GiB)
-    Free (statfs, df):		  60.54GiB
+    Used:			 138.11GiB
+    Free (estimated):		  60.40GiB	(min: 60.40GiB)
+    Free (statfs, df):		  60.40GiB
     Data ratio:			      1.00
     Metadata ratio:		      1.00
     Global reserve:		 512.00MiB	(used: 0.00B)
     Multiple profiles:		        no
 
-Data,single: Size:48.01GiB, Used:47.45GiB (98.83%)
-   /dev/loop3	  48.01GiB
+Data,single: Size:48.01GiB, Used:47.59GiB (99.12%)
+   /dev/loop0	  48.01GiB
 
-Metadata,single: Size:92.01GiB, Used:90.36GiB (98.21%)
-   /dev/loop3	  92.01GiB
+Metadata,single: Size:92.01GiB, Used:90.52GiB (98.38%)
+   /dev/loop0	  92.01GiB
 
 System,single: Size:4.00MiB, Used:16.00KiB (0.39%)
-   /dev/loop3	   4.00MiB
+   /dev/loop0	   4.00MiB
 
 Unallocated:
-   /dev/loop3	  59.98GiB
+   /dev/loop0	  59.98GiB

@@ -6,6 +6,7 @@ DIR_NAME="${PWD##*/}"
 rm -f rclone.log
 
 rclone sync \
+  --config=/data/ofm/config/rclone.conf \
   --transfers=8 \
   --multi-thread-streams=8 \
   --fast-list \

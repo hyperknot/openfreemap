@@ -1,0 +1,7 @@
+[cf]
+type = s3
+provider = Cloudflare
+access_key_id = xxx
+secret_access_key = xxx
+endpoint = https://xxx.r2.cloudflarestorage.com
+
