@@ -8,7 +8,7 @@ sudo umount mnt_rw 2> /dev/null || true
 sudo umount mnt_rw2 2> /dev/null || true
 rm -rf mnt_rw* tmp_*
 rm -f -- *.btrfs *.gz
-rm -f -- *.log *.txt
+rm -rf -- *.log *.txt logs
 
 # make an empty file that's definitely bigger then the current OSM output
 fallocate -l 200G image.btrfs
@@ -43,6 +43,8 @@ sudo chown ofm:ofm -R mnt_rw mnt_rw2
 $VENV_PYTHON $TILE_GEN_BIN/extract_mbtiles/extract_mbtiles.py \
   tiles.mbtiles mnt_rw/extract \
   > extract_out.log 2> extract_err.log
+
+cp mnt_rw/extract/osm_date .
 
 grep fixed extract_out.log > dedupl_fixed.log || true
 
@@ -79,6 +81,7 @@ sudo btrfs filesystem usage mnt_rw2
 } > stats2.txt
 
 
+
 sudo umount mnt_rw
 sudo umount mnt_rw2
 rm -r mnt_rw*
@@ -91,5 +94,9 @@ rm image.btrfs
 mv image2.btrfs tiles.btrfs
 
 pigz tiles.btrfs --fast
+
+mkdir -p logs
+mv -- *.log logs
+mv -- *.txt logs
 
 echo extract_btrfs.sh DONE

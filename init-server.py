@@ -84,15 +84,19 @@ def prepare_http_host(c):
 
 
 def debug_tmp(c):
-    c.sudo('rm -rf /data/ofm/logs')
-    c.sudo('mkdir -p /data/ofm/logs')
-    c.sudo('rm -f /data/nginx/logs/*')
-    put(c, f'{ASSETS_DIR}/nginx/nginx.conf', '/etc/nginx/')
-    put(c, f'{SCRIPTS_DIR}/http_host/nginx_site.conf', '/data/nginx/sites')
-    c.sudo('nginx -t')
-    c.sudo('service nginx restart')
-
-    benchmark(c)
+    for file in [
+        'extract_btrfs.sh',
+        'planetiler_monaco.sh',
+        'planetiler_planet.sh',
+        'prepare-virtualenv.sh',
+        'upload_cloudflare.sh',
+    ]:
+        put(
+            c,
+            SCRIPTS_DIR / 'tile_gen' / file,
+            TILE_GEN_BIN,
+            permissions='755',
+        )
 
 
 @click.command()

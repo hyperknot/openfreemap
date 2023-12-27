@@ -3,8 +3,9 @@ set -e
 
 TILE_GEN_BIN=/data/ofm/tile_gen/bin
 
+AREA=monaco
 DATE=$(date +"%Y%m%d_%H%M%S")
-RUN_FOLDER="/data/ofm/tile_gen/runs/monaco/${DATE}_pt"
+RUN_FOLDER="/data/ofm/tile_gen/runs/$AREA/${DATE}_pt"
 
 
 mkdir -p "$RUN_FOLDER"
@@ -13,7 +14,7 @@ cd "$RUN_FOLDER" || exit
 java -Xmx1g \
   -jar $TILE_GEN_BIN/planetiler.jar \
   `# Download the latest osm.pbf from s3://osm-pds bucket` \
-  --area=monaco --download \
+  --area=$AREA --download \
   `# Accelerate the download by fetching the 10 1GB chunks at a time in parallel` \
   --download-threads=10 --download-chunk-size-mb=1000 \
   `# Also download name translations from wikidata` \
@@ -22,7 +23,7 @@ java -Xmx1g \
   `# Store temporary node locations at fixed positions in a memory-mapped file` \
   --nodemap-type=array --storage=mmap \
   --force \
-  > planetiler_out 2> planetiler_err
+  > planetiler.out 2> planetiler.err
 
 rm -r data
 echo planetiler.jar DONE

@@ -3,8 +3,9 @@ set -e
 
 TILE_GEN_BIN=/data/ofm/tile_gen/bin
 
+AREA=planet
 DATE=$(date +"%Y%m%d_%H%M%S")
-RUN_FOLDER="/data/ofm/tile_gen/runs/planet/${DATE}_pt"
+RUN_FOLDER="/data/ofm/tile_gen/runs/$AREA/${DATE}_pt"
 
 
 mkdir -p "$RUN_FOLDER"
@@ -24,7 +25,7 @@ java -Xmx30g \
   `# Store temporary node locations at fixed positions in a memory-mapped file` \
   --nodemap-type=array --storage=mmap \
   --force \
-  > planetiler_out 2> planetiler_err
+  > planetiler.out 2> planetiler.err
 
 rm -r data
 echo planetiler.jar DONE
