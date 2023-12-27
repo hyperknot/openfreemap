@@ -12,3 +12,4 @@
 /.idea
 /temp
 /rclone-ofm.conf
+/scripts/tile_gen/extract_mbtiles/out
