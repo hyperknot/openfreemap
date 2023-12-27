@@ -2,7 +2,7 @@
 set -e
 
 TILE_GEN_BIN=/data/ofm/tile_gen/bin
-VENV_PYTHON=$TILE_GEN_BIN/venv/bin/python
+VENV_PYTHON=/data/ofm/venv/bin/python
 
 sudo umount mnt_rw 2> /dev/null || true
 sudo umount mnt_rw2 2> /dev/null || true

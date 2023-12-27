@@ -5,8 +5,8 @@ import click
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
-from ssh_lib.benchmark import benchmark, c1000k
-from ssh_lib.config import ASSETS_DIR, CONFIG_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
+from ssh_lib.benchmark import c1000k
+from ssh_lib.config import CONFIG_DIR, OFM_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
@@ -26,6 +26,22 @@ def prepare_shared(c):
     setup_kernel_settings(c)
     set_cpu_governor(c)
 
+    prepare_venv(c)
+
+
+def prepare_venv(c):
+    c.sudo(f'mkdir -p {OFM_DIR}')
+    put(
+        c,
+        SCRIPTS_DIR / 'prepare-virtualenv.sh',
+        OFM_DIR,
+        permissions='755',
+    )
+
+    c.sudo('chown ofm:ofm /data/ofm')
+
+    sudo_cmd(c, f'cd {OFM_DIR} && source prepare-virtualenv.sh', user='ofm')
+
 
 def prepare_tile_gen(c):
     install_planetiler(c)
@@ -35,7 +51,6 @@ def prepare_tile_gen(c):
         'extract_btrfs.sh',
         'planetiler_monaco.sh',
         'planetiler_planet.sh',
-        'prepare-virtualenv.sh',
         'upload_cloudflare.sh',
     ]:
         put(
@@ -70,11 +85,8 @@ def prepare_tile_gen(c):
             create_parent_dir=True,
         )
 
-    c.sudo('chown ofm:ofm /data/ofm')
     c.sudo('chown -R ofm:ofm /data/ofm/tile_gen')
     c.sudo('chown -R ofm:ofm /data/ofm/config')
-
-    sudo_cmd(c, f'cd {TILE_GEN_BIN} && source prepare-virtualenv.sh', user='ofm')
 
 
 def prepare_http_host(c):

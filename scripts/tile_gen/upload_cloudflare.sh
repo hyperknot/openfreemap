@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-RUN_STR=$(basename "$PWD")
 AREA=$(basename "$(dirname "$PWD")")
+VERSION=$(basename "$PWD")
 
 
 if [[ $AREA != "planet" && $AREA != "monaco" ]]; then
@@ -28,5 +28,5 @@ rclone sync \
   --stats-one-line \
   --log-file logs/rclone.log \
   --exclude 'logs/**' \
-  . "cf:ofm-$AREA/$RUN_STR"
+  . "cf:ofm-$AREA/$VERSION"
 

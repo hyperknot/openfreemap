@@ -48,7 +48,7 @@ sudo mount -v \
 
 sudo chown ofm:ofm -R mnt
 
-../../tile_gen/venv/bin/python ../../tile_gen/extract.py output.mbtiles mnt/extract \
+/data/ofm/venv/bin/python ../../tile_gen/extract.py output.mbtiles mnt/extract \
   > "extract_out.log" 2> "extract_err.log"
 
 sudo umount mnt

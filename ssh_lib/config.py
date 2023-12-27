@@ -8,5 +8,6 @@ SCRIPTS_DIR = base / 'scripts'
 ASSETS_DIR = Path(__file__).parent / 'assets'
 
 
-TILE_GEN_BIN = '/data/ofm/tile_gen/bin'
+OFM_DIR = '/data/ofm'
 REMOTE_CONFIG = '/data/ofm/config'
+TILE_GEN_BIN = '/data/ofm/tile_gen/bin'
