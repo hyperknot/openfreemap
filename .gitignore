@@ -8,6 +8,8 @@
 config/.env
 .DS_Store
 
+node_modules
+
 /venv
 /.idea
 /temp
