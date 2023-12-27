@@ -1,4 +1,4 @@
-from ssh_lib.config import assets_dir
+from ssh_lib.config import ASSETS_DIR
 from ssh_lib.utils import (
     apt_get_install,
     apt_get_purge,
@@ -46,9 +46,9 @@ def nginx(c):
             hide=True,
         )
 
-    put(c, f'{assets_dir}/nginx/nginx.conf', '/etc/nginx/')
-    put(c, f'{assets_dir}/nginx/default_disable.conf', '/data/nginx/sites')
-    put(c, f'{assets_dir}/nginx/cloudflare.conf', '/data/nginx/config')
+    put(c, f'{ASSETS_DIR}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{ASSETS_DIR}/nginx/default_disable.conf', '/data/nginx/sites')
+    put(c, f'{ASSETS_DIR}/nginx/cloudflare.conf', '/data/nginx/config')
 
     c.sudo('service nginx restart')
 

@@ -6,11 +6,11 @@ from dotenv import dotenv_values
 from fabric import Config, Connection
 
 from ssh_lib.benchmark import benchmark, c1000k
-from ssh_lib.config import assets_dir, config_dir, scripts_dir
+from ssh_lib.config import ASSETS_DIR, CONFIG_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
-from ssh_lib.planetiler import TILE_GEN_BIN, install_planetiler
+from ssh_lib.planetiler import install_planetiler
 from ssh_lib.rclone import install_rclone
 from ssh_lib.utils import add_user, enable_sudo, put, reboot, sudo_cmd
 
@@ -40,14 +40,14 @@ def prepare_tile_gen(c):
     ]:
         put(
             c,
-            scripts_dir / 'tile_gen' / file,
+            SCRIPTS_DIR / 'tile_gen' / file,
             TILE_GEN_BIN,
             permissions='755',
         )
 
     put(
         c,
-        scripts_dir / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
+        SCRIPTS_DIR / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
         f'{TILE_GEN_BIN}/extract_mbtiles/extract_mbtiles.py',
         permissions='755',
         create_parent_dir=True,
@@ -55,11 +55,20 @@ def prepare_tile_gen(c):
 
     put(
         c,
-        scripts_dir / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
+        SCRIPTS_DIR / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
         f'{TILE_GEN_BIN}/shrink_btrfs/shrink_btrfs.py',
         permissions='755',
         create_parent_dir=True,
     )
+
+    if (CONFIG_DIR / 'rclone.conf').exists():
+        put(
+            c,
+            CONFIG_DIR / 'rclone.conf',
+            REMOTE_CONFIG,
+            permissions='600',
+            create_parent_dir=True,
+        )
 
     c.sudo('chown ofm:ofm /data/ofm')
     c.sudo('chown -R ofm:ofm /data/ofm/tile_gen')
@@ -77,8 +86,8 @@ def debug_tmp(c):
     c.sudo('rm -rf /data/ofm/logs')
     c.sudo('mkdir -p /data/ofm/logs')
     c.sudo('rm -f /data/nginx/logs/*')
-    put(c, f'{assets_dir}/nginx/nginx.conf', '/etc/nginx/')
-    put(c, f'{scripts_dir}/http_host/nginx_site.conf', '/data/nginx/sites')
+    put(c, f'{ASSETS_DIR}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{SCRIPTS_DIR}/http_host/nginx_site.conf', '/data/nginx/sites')
     c.sudo('nginx -t')
     c.sudo('service nginx restart')
 
@@ -106,7 +115,7 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debu
         if not tile_gen and not http_host:
             return
 
-    ssh_passwd = dotenv_values(f'{config_dir}/.env').get('SSH_PASSWD')
+    ssh_passwd = dotenv_values(f'{CONFIG_DIR}/.env').get('SSH_PASSWD')
 
     if ssh_passwd:
         c = Connection(

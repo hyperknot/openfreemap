@@ -1,9 +1,8 @@
+from ssh_lib.config import TILE_GEN_BIN
 from ssh_lib.utils import apt_get_install, apt_get_update
 
 
 PLANETILER_VERSION = '0.7.0'
-
-TILE_GEN_BIN = '/data/ofm/tile_gen/bin'
 PLANETILER_PATH = f'{TILE_GEN_BIN}/planetiler.jar'
 
 

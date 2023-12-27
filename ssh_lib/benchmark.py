@@ -1,4 +1,4 @@
-from ssh_lib.config import scripts_dir
+from ssh_lib.config import SCRIPTS_DIR
 from ssh_lib.utils import apt_get_install, put
 
 
@@ -17,6 +17,6 @@ def c1000k(c):
 def benchmark(c):
     apt_get_install(c, 'wrk')
     c.sudo('mkdir -p /data/ofm/benchmark')
-    put(c, f'{scripts_dir}/http_host/benchmark/wrk_custom_list.lua', '/data/ofm/benchmark')
+    put(c, f'{SCRIPTS_DIR}/http_host/benchmark/wrk_custom_list.lua', '/data/ofm/benchmark')
 
     # wrk -c10 -d10s -t1 -s /data/ofm/benchmark/wrk_custom_list.lua http://localhost
