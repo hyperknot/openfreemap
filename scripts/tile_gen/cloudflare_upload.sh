@@ -4,13 +4,15 @@ set -e
 AREA=$(basename "$(dirname "$PWD")")
 VERSION=$(basename "$PWD")
 
+export RCLONE_CONFIG=/data/ofm/config/rclone.conf
+
 
 if [[ $AREA != "planet" && $AREA != "monaco" ]]; then
   echo "Area must be 'planet' or 'monaco'. Terminating."
   exit 1
 fi
 
-if [ ! -f /data/ofm/config/rclone.conf ]; then
+if [ ! -f $RCLONE_CONFIG ]; then
     echo "rclone.conf does not exist. Terminating."
     exit 1
 fi
@@ -19,7 +21,6 @@ fi
 rm -f logs/rclone.log
 
 rclone sync \
-  --config=/data/ofm/config/rclone.conf \
   --transfers=8 \
   --multi-thread-streams=8 \
   --fast-list \

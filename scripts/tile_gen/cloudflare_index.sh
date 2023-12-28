@@ -3,7 +3,7 @@ set -e
 
 AREAS=('planet' 'monaco')
 
-export RCLONE_CONFIG=rclone.conf
+export RCLONE_CONFIG=/data/ofm/config/rclone.conf
 
 rm -rf index
 mkdir index
