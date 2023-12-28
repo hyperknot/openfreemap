@@ -8,7 +8,7 @@ import click
 import requests
 
 
-DEFAULT_RUNS_DIR = '/data/ofm/http_host/runs'
+DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
 
 
 @click.command()

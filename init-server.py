@@ -33,20 +33,20 @@ def prepare_shared(c):
     setup_kernel_settings(c)
     set_cpu_governor(c)
 
+    c.sudo(f'mkdir -p {REMOTE_CONFIG}')
+    c.sudo(f'chown ofm:ofm {REMOTE_CONFIG}')
+
     prepare_venv(c)
 
 
 def prepare_venv(c):
-    c.sudo(f'mkdir -p {OFM_DIR}')
     put(
         c,
         SCRIPTS_DIR / 'prepare-virtualenv.sh',
         OFM_DIR,
         permissions='755',
+        owner='ofm',
     )
-
-    c.sudo('chown ofm:ofm /data/ofm')
-
     sudo_cmd(c, f'cd {OFM_DIR} && source prepare-virtualenv.sh', user='ofm')
 
 
@@ -90,11 +90,10 @@ def prepare_tile_gen(c):
             CONFIG_DIR / 'rclone.conf',
             f'{REMOTE_CONFIG}/rclone.conf',
             permissions='600',
-            create_parent_dir=True,
+            owner='ofm',
         )
 
     c.sudo('chown -R ofm:ofm /data/ofm/tile_gen')
-    c.sudo('chown -R ofm:ofm /data/ofm/config')
 
 
 def prepare_http_host(c):
@@ -116,19 +115,31 @@ def prepare_http_host(c):
             permissions='755',
         )
 
+    c.sudo('chown -R ofm:ofm /data/ofm/http_host')
+
 
 def debug_tmp(c):
+    # for file in [
+    #     'extract_btrfs.sh',
+    #     'planetiler_monaco.sh',
+    #     'planetiler_planet.sh',
+    #     'cloudflare_index.sh',
+    #     'cloudflare_upload.sh',
+    # ]:
+    #     put(
+    #         c,
+    #         SCRIPTS_DIR / 'tile_gen' / file,
+    #         TILE_GEN_BIN,
+    #         permissions='755',
+    #     )
+
     for file in [
-        'extract_btrfs.sh',
-        'planetiler_monaco.sh',
-        'planetiler_planet.sh',
-        'cloudflare_index.sh',
-        'cloudflare_upload.sh',
+        'downloader.py',
     ]:
         put(
             c,
-            SCRIPTS_DIR / 'tile_gen' / file,
-            TILE_GEN_BIN,
+            SCRIPTS_DIR / 'http_host' / file,
+            HTTP_HOST_BIN,
             permissions='755',
         )
 
