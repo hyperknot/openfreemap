@@ -14,7 +14,7 @@ def pkg_base(c):
         'rsync',
         'btrfs-progs',
         'pigz',
-        'aria2'
+        'aria2',
         #
         'gnupg2',
         'gnupg-agent',
