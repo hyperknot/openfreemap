@@ -7,6 +7,7 @@ requirements = [
     'python-dotenv',
     'click',
     'nginxfmt',
+    'requests',
 ]
 
 setup(

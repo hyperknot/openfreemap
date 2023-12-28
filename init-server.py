@@ -6,7 +6,14 @@ from dotenv import dotenv_values
 from fabric import Config, Connection
 
 from ssh_lib.benchmark import c1000k
-from ssh_lib.config import CONFIG_DIR, OFM_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
+from ssh_lib.config import (
+    CONFIG_DIR,
+    HTTP_HOST_BIN,
+    OFM_DIR,
+    REMOTE_CONFIG,
+    SCRIPTS_DIR,
+    TILE_GEN_BIN,
+)
 from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
@@ -91,9 +98,23 @@ def prepare_tile_gen(c):
 
 
 def prepare_http_host(c):
-    nginx(c)
-    certbot(c)
-    c1000k(c)
+    # nginx(c)
+    # certbot(c)
+    # c1000k(c)
+
+    prepare_venv(c)
+
+    c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
+
+    for file in [
+        'downloader.py',
+    ]:
+        put(
+            c,
+            SCRIPTS_DIR / 'http_host' / file,
+            HTTP_HOST_BIN,
+            permissions='755',
+        )
 
 
 def debug_tmp(c):
