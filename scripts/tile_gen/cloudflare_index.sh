@@ -5,29 +5,24 @@ AREAS=('planet' 'monaco')
 
 export RCLONE_CONFIG=rclone.conf
 
+rm -rf index
+mkdir index
 
 for AREA in "${AREAS[@]}"; do
   rclone lsf -R \
     --files-only \
     --fast-list \
-    "cf:ofm-$AREA" > index.txt
+    --exclude dirs.txt \
+    --exclude index.txt \
+    "cf:ofm-$AREA" > index/index.txt
 
   rclone lsf -R \
     --dirs-only \
     --dir-slash=false \
     --fast-list \
-    "cf:ofm-$AREA" > dirs.txt
+    "cf:ofm-$AREA" > index/dirs.txt
 
-  rclone sync index.txt "cf:ofm-$AREA/a/b"
-  rclone sync dirs.txt "cf:ofm-$AREA/c/d"
+  rclone copy index "cf:ofm-$AREA"
 done
 
-
-
-rclone copy \
-  -vvv \
-  --dump-bodies \
-  --retries 1 \
-  index.txt cf:ofm-monaco \
-  2> out
-
+rm -rf index

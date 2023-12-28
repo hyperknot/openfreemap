@@ -5,7 +5,8 @@
 *.mbtiles
 *.pbf
 
-config/.env
+rclone.conf
+.env
 .DS_Store
 
 node_modules
