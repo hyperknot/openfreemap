@@ -50,7 +50,7 @@ def cli(area: str, version: str, list_versions: bool, runs_dir: Path):
 def download(area: str, version: str, runs_dir: Path):
     click.echo(f'Downloading: area: {area}, version: {version}')
 
-    version_dir = runs_dir / version
+    version_dir = runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
     if btrfs_file.exists():
         print('File exists, skipping download')
@@ -59,8 +59,6 @@ def download(area: str, version: str, runs_dir: Path):
     temp_dir = runs_dir / '_tmp'
     shutil.rmtree(temp_dir, ignore_errors=True)
     temp_dir.mkdir(parents=True)
-
-    gzip_file = temp_dir / 'tiles.btrfs.gz'
 
     url = f'https://{area}.openfreemap.com/{version}/tiles.btrfs.gz'
     print(url)
@@ -71,17 +69,19 @@ def download(area: str, version: str, runs_dir: Path):
             '--split=8',
             '--max-connection-per-server=8',
             '--file-allocation=none',
-            '-o',
-            gzip_file,
+            '--dir',
+            temp_dir,
             url,
         ],
         check=True,
     )
 
-    subprocess.run(['unpigz', gzip_file])
+    subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'])
     btrfs_src = temp_dir / 'tiles.btrfs'
 
-    version_dir.mkdir()
+    shutil.rmtree(version_dir, ignore_errors=True)
+    version_dir.mkdir(parents=True)
+
     btrfs_src.rename(btrfs_file)
 
     shutil.rmtree(temp_dir)

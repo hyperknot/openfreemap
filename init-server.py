@@ -34,7 +34,8 @@ def prepare_shared(c):
     set_cpu_governor(c)
 
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
-    c.sudo('chown ofm:ofm /data/ofm/.*')
+    c.sudo('chown ofm:ofm /data/ofm/config')
+    c.sudo('chown ofm:ofm /data/ofm')
 
     prepare_venv(c)
 
@@ -93,14 +94,14 @@ def prepare_tile_gen(c):
             owner='ofm',
         )
 
-    c.sudo('chown ofm:ofm /data/ofm/tile_gen/.*')
+    c.sudo('chown ofm:ofm /data/ofm/tile_gen')
     c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
 
 
 def prepare_http_host(c):
-    # nginx(c)
-    # certbot(c)
-    # c1000k(c)
+    nginx(c)
+    certbot(c)
+    c1000k(c)
 
     prepare_venv(c)
 
