@@ -18,7 +18,7 @@ if [ ! -f $RCLONE_CONFIG ]; then
 fi
 
 
-mkdir logs
+mkdir -p logs
 rm -f logs/rclone.log
 
 rclone sync \
