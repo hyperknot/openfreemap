@@ -41,6 +41,9 @@ def cli(area: str, version: str, list_versions: bool, runs_dir: Path):
             sys.exit(f'Requested version is not available. Available versions:\n{all_versions_str}')
         selected_version = version
 
+    if not runs_dir and not Path('/data/ofm').exists():
+        sys.exit('Please specify a runs dir with --runs-dir')
+
     download(area, selected_version, runs_dir or DEFAULT_RUNS_DIR)
 
 
