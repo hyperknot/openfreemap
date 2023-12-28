@@ -51,7 +51,8 @@ def prepare_tile_gen(c):
         'extract_btrfs.sh',
         'planetiler_monaco.sh',
         'planetiler_planet.sh',
-        'upload_cloudflare.sh',
+        'cloudflare_index.sh',
+        'cloudflare_upload.sh',
     ]:
         put(
             c,
@@ -100,8 +101,8 @@ def debug_tmp(c):
         'extract_btrfs.sh',
         'planetiler_monaco.sh',
         'planetiler_planet.sh',
-        'prepare-virtualenv.sh',
-        'upload_cloudflare.sh',
+        'cloudflare_index.sh',
+        'cloudflare_upload.sh',
     ]:
         put(
             c,

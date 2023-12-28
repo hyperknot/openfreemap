@@ -5,7 +5,7 @@ AREA=$(basename "$(dirname "$PWD")")
 VERSION=$(basename "$PWD")
 
 export RCLONE_CONFIG=/data/ofm/config/rclone.conf
-
+SCRIPT_DIR=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 
 if [[ $AREA != "planet" && $AREA != "monaco" ]]; then
   echo "Area must be 'planet' or 'monaco'. Terminating."
@@ -18,6 +18,7 @@ if [ ! -f $RCLONE_CONFIG ]; then
 fi
 
 
+mkdir logs
 rm -f logs/rclone.log
 
 rclone sync \
@@ -31,3 +32,5 @@ rclone sync \
   --exclude 'logs/**' \
   . "cf:ofm-$AREA/$VERSION"
 
+
+bash "$SCRIPT_DIR/cloudflare_index.sh"
