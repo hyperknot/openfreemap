@@ -34,8 +34,6 @@ def cli():
             location /{area}/{version}/ {{    # trailing hash important
                 alias {subdir}/;              # trailing hash important
                 try_files $uri @empty;
-
-                autoindex on;
             }}
             """
 
