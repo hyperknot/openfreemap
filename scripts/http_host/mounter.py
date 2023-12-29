@@ -7,34 +7,28 @@ from pathlib import Path
 import click
 
 
-DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
-
-
 @click.command()
-@click.option(
-    '--runs-dir',
-    help='Specify /runs directory',
-    type=click.Path(dir_okay=True, file_okay=False, path_type=Path),
-)
-def cli(runs_dir: Path):
-    if os.geteuid() != 0:
-        sys.exit('Needs sudo')
-
-    if not runs_dir and not Path('/data/ofm').exists():
-        sys.exit('Please specify a runs dir with --runs-dir')
+def cli():
+    """
+    Mounts/unmounts the btrfs images from /data/ofm/http_host/runs automatically.
+    When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
+    """
 
     if not Path('/etc/fstab').exists():
         sys.exit('Needs to be run on Linux')
 
-    if not runs_dir:
-        runs_dir = DEFAULT_RUNS_DIR
+    if os.geteuid() != 0:
+        sys.exit('Needs sudo')
+
+    if not Path('/data/ofm/http_host/runs').exists():
+        sys.exit('downloader.py needs to be run first')
 
     clean_up_mounts()
 
     fstab_new = []
 
     for area in ['planet', 'monaco']:
-        area_dir = (runs_dir / area).resolve()
+        area_dir = (Path('/data/ofm/http_host/runs') / area).resolve()
         if not area_dir.exists():
             continue
 

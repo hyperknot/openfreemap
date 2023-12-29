@@ -1,8 +1,11 @@
 from ssh_lib.config import SCRIPTS_DIR
-from ssh_lib.utils import apt_get_install, put
+from ssh_lib.utils import apt_get_install, exists, put
 
 
 def c1000k(c):
+    if exists(c, 'c1000k-master'):
+        return
+
     c.run('wget https://github.com/ideawu/c1000k/archive/master.zip -O tmp.zip')
     c.run('unzip -o tmp.zip')
     c.run('rm tmp.zip')

@@ -73,7 +73,6 @@ def prepare_tile_gen(c):
         c,
         SCRIPTS_DIR / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
         f'{TILE_GEN_BIN}/extract_mbtiles/extract_mbtiles.py',
-        permissions='755',
         create_parent_dir=True,
     )
 
@@ -81,7 +80,6 @@ def prepare_tile_gen(c):
         c,
         SCRIPTS_DIR / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
         f'{TILE_GEN_BIN}/shrink_btrfs/shrink_btrfs.py',
-        permissions='755',
         create_parent_dir=True,
     )
 
@@ -105,6 +103,7 @@ def prepare_http_host(c):
 
     prepare_venv(c)
 
+    c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     for file in [
@@ -118,33 +117,25 @@ def prepare_http_host(c):
             permissions='755',
         )
 
+    for file in ['nginx_site.conf', 'nginx_sync.py']:
+        put(
+            c,
+            SCRIPTS_DIR / 'http_host' / 'nginx_sync' / file,
+            f'{HTTP_HOST_BIN}/nginx_sync/{file}',
+            create_parent_dir=True,
+        )
+
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
+    c.sudo('chown -R nginx:nginx /data/ofm/http_host/logs_nginx')
 
 
 def debug_tmp(c):
-    # for file in [
-    #     'extract_btrfs.sh',
-    #     'planetiler_monaco.sh',
-    #     'planetiler_planet.sh',
-    #     'cloudflare_index.sh',
-    #     'cloudflare_upload.sh',
-    # ]:
-    #     put(
-    #         c,
-    #         SCRIPTS_DIR / 'tile_gen' / file,
-    #         TILE_GEN_BIN,
-    #         permissions='755',
-    #     )
-
-    for file in [
-        'downloader.py',
-        'mounter.py',
-    ]:
+    for file in ['nginx_site.conf', 'nginx_sync.py']:
         put(
             c,
-            SCRIPTS_DIR / 'http_host' / file,
-            HTTP_HOST_BIN,
-            permissions='755',
+            SCRIPTS_DIR / 'http_host' / 'nginx_sync' / file,
+            f'{HTTP_HOST_BIN}/nginx_sync/{file}',
+            create_parent_dir=True,
         )
 
 

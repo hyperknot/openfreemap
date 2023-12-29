@@ -21,6 +21,11 @@ DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
 )
 @click.option('--list-versions', is_flag=True, help='List all versions in an area and terminate')
 def cli(area: str, version: str, list_versions: bool, runs_dir: Path):
+    """
+    Downloads and extracts the latest tiles.btrfs file from the public bucket.
+    Specific version can also be specified.
+    """
+
     if area not in {'planet', 'monaco'}:
         sys.exit('Please specify are: "planet" or "monaco"')
 
