@@ -12,7 +12,7 @@ DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
 
 
 @click.command()
-@click.option('--area', default='planet', help='The area to process')
+@click.argument('area', required=False)
 @click.option('--version', default='latest', help='Version string, like "20231227_043106_pt"')
 @click.option(
     '--runs-dir',
@@ -22,7 +22,7 @@ DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
 @click.option('--list-versions', is_flag=True, help='List all versions in an area and terminate')
 def cli(area: str, version: str, list_versions: bool, runs_dir: Path):
     if area not in {'planet', 'monaco'}:
-        sys.exit('Area must be planet or monaco')
+        sys.exit('Please specify are: "planet" or "monaco"')
 
     r = requests.get(f'https://{area}.openfreemap.com/dirs.txt')
     r.raise_for_status()
@@ -57,7 +57,9 @@ def download(area: str, version: str, runs_dir: Path):
         return
 
     temp_dir = runs_dir / '_tmp'
-    shutil.rmtree(temp_dir, ignore_errors=True)
+    if temp_dir.exists():
+        sys.exit(f'{temp_dir} dir exists, please delete it first')
+
     temp_dir.mkdir(parents=True)
 
     url = f'https://{area}.openfreemap.com/{version}/tiles.btrfs.gz'

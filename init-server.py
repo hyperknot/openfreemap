@@ -109,6 +109,7 @@ def prepare_http_host(c):
 
     for file in [
         'downloader.py',
+        'mounter.py',
     ]:
         put(
             c,
@@ -137,6 +138,7 @@ def debug_tmp(c):
 
     for file in [
         'downloader.py',
+        'mounter.py',
     ]:
         put(
             c,
