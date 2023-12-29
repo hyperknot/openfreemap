@@ -6,7 +6,7 @@ PLANETILER_VERSION = '0.7.0'
 PLANETILER_PATH = f'{TILE_GEN_BIN}/planetiler.jar'
 
 
-def install_planetiler(c):
+def planetiler(c):
     apt_get_update(c)
     apt_get_install(c, 'openjdk-21-jre-headless')
 

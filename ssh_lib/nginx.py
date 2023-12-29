@@ -18,13 +18,12 @@ def nginx(c):
         sudo_cmd(
             c,
             'curl https://nginx.org/keys/nginx_signing.key '
-            '| gpg --dearmor '
-            '| sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null',
+            '| gpg --dearmor --yes -o /etc/apt/keyrings/nginx.gpg',
         )
         put_str(
             c,
             '/etc/apt/sources.list.d/nginx.list',
-            f'deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/mainline/ubuntu {codename} nginx',
+            f'deb [signed-by=/etc/apt/keyrings/nginx.gpg] http://nginx.org/packages/mainline/ubuntu {codename} nginx',
         )
         apt_get_update(c)
         apt_get_install(c, 'nginx')

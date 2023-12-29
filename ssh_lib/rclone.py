@@ -1,7 +1,7 @@
 from ssh_lib.utils import apt_get_update, exists
 
 
-def install_rclone(c):
+def rclone(c):
     if exists(c, '/usr/bin/rclone'):
         return
 

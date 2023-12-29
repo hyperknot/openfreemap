@@ -10,8 +10,8 @@ from ssh_lib.benchmark import c1000k
 from ssh_lib.kernel import kernel_tweaks_ofm
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
-from ssh_lib.planetiler import install_planetiler
-from ssh_lib.rclone import install_rclone
+from ssh_lib.planetiler import planetiler
+from ssh_lib.rclone import rclone
 from ssh_lib.utils import add_user, enable_sudo, put, reboot, sudo_cmd
 
 
@@ -44,8 +44,8 @@ def prepare_venv(c):
 
 
 def prepare_tile_gen(c):
-    install_planetiler(c)
-    install_rclone(c)
+    planetiler(c)
+    rclone(c)
 
     for file in [
         'extract_btrfs.sh',
