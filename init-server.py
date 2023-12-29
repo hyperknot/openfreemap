@@ -7,7 +7,7 @@ from fabric import Config, Connection
 
 from ssh_lib import CONFIG_DIR, HTTP_HOST_BIN, OFM_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
 from ssh_lib.benchmark import c1000k
-from ssh_lib.kernel import setup_kernel_settings
+from ssh_lib.kernel import kernel_tweaks_ofm
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import install_planetiler
@@ -23,7 +23,7 @@ def prepare_shared(c):
     pkg_upgrade(c)
     pkg_base(c)
 
-    setup_kernel_settings(c)
+    kernel_tweaks_ofm(c)
 
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
     c.sudo('chown ofm:ofm /data/ofm/config')

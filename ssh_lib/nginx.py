@@ -54,6 +54,7 @@ def nginx(c):
 
 
 def mime_types(c):
+    # TODO
     pass
 
 
