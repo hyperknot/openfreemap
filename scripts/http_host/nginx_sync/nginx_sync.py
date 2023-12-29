@@ -31,9 +31,11 @@ def cli():
         area, version = subdir.name.split('-')
 
         version_str = rf"""
-            location /{area}/{version}/ {{
-                alias {subdir};
+            location /{area}/{version}/ {{    # trailing hash important
+                alias {subdir}/;              # trailing hash important
                 try_files $uri @empty;
+
+                autoindex on;
             }}
             """
 
@@ -52,7 +54,7 @@ def cli():
         print('nginx config written')
 
     subprocess.run(['nginx', '-t'], check=True)
-    subprocess.run(['service', 'nginx', 'reload'], check=True)
+    subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
     print(help_text)
 
