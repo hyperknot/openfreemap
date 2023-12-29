@@ -2,12 +2,12 @@ from setuptools import setup
 
 
 requirements = [
-    'fabric',
-    'ruff',
-    'python-dotenv',
     'click',
+    'fabric',
     'nginxfmt',
+    'python-dotenv',
     'requests',
+    'ruff',
 ]
 
 setup(
