@@ -6,23 +6,27 @@ from ssh_lib.utils import (
 
 def pkg_base(c):
     pkg_list = [
-        'lsb-release',
-        'wget',
-        'git',
-        'build-essential',
-        'unzip',
-        'rsync',
-        'btrfs-progs',
-        'pigz',
         'aria2',
+        'build-essential',
+        'curl',
+        'dnsutils',
+        'git',
+        'htop',
+        'lsb-release',
+        'pigz',
+        'rsync',
+        'unzip',
+        'wget',
         #
-        'gnupg2',
-        'gnupg-agent',
+        'btrfs-progs',
+        #
         'ca-certificates',
+        'gnupg-agent',
+        'gnupg2',
         'ubuntu-keyring',
         #
-        'nload',
         'iftop',
+        'nload',
         'vnstat',
         #
         'python3',
