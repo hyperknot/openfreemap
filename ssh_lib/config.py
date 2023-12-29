@@ -1,10 +1,8 @@
 from pathlib import Path
 
 
-base = Path(__file__).parent.parent
-
-CONFIG_DIR = base / 'config'
-SCRIPTS_DIR = base / 'scripts'
+CONFIG_DIR = Path(__file__).parent.parent / 'config'
+SCRIPTS_DIR = Path(__file__).parent.parent / 'scripts'
 ASSETS_DIR = Path(__file__).parent / 'assets'
 
 

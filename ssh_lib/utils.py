@@ -113,7 +113,7 @@ def get_username(c):
 def add_user(c, username, passwd=None, uid=None):
     uid_str = f'--uid={uid}' if uid else ''
 
-    # --disabled-password - ssh-key login only
+    # --disabled-password -> ssh-key login only
     c.sudo(f'adduser --disabled-password --gecos "" {uid_str} {username}', warn=True)
     if passwd:
         sudo_cmd(c, f'echo "{username}:{passwd}" | chpasswd')

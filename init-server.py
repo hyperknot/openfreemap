@@ -14,7 +14,7 @@ from ssh_lib.config import (
     SCRIPTS_DIR,
     TILE_GEN_BIN,
 )
-from ssh_lib.kernel import set_cpu_governor, setup_kernel_settings
+from ssh_lib.kernel import setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import install_planetiler
@@ -31,7 +31,6 @@ def prepare_shared(c):
     pkg_base(c)
 
     setup_kernel_settings(c)
-    set_cpu_governor(c)
 
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
     c.sudo('chown ofm:ofm /data/ofm/config')
