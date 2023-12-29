@@ -34,6 +34,9 @@ def cli():
             location /{area}/{version}/ {{    # trailing hash important
                 alias {subdir}/;              # trailing hash important
                 try_files $uri @empty;
+
+                add_header Cache-Control public;
+                expires 10y;
             }}
             """
 
