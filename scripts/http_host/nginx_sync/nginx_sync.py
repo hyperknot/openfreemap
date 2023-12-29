@@ -18,7 +18,7 @@ def cli():
     if not Path('/mnt/ofm').exists():
         sys.exit('mounter.py needs to be run first')
 
-    with open(Path(__file__).parent / 'nginx_site.conf') as fp:
+    with open(Path(__file__).parent / 'nginx_template.conf') as fp:
         nginx_template = fp.read()
 
     location_block_str = ''

@@ -117,7 +117,7 @@ def prepare_http_host(c):
             permissions='755',
         )
 
-    for file in ['nginx_site.conf', 'nginx_sync.py']:
+    for file in ['nginx_template.conf', 'nginx_sync.py']:
         put(
             c,
             SCRIPTS_DIR / 'http_host' / 'nginx_sync' / file,
@@ -130,7 +130,7 @@ def prepare_http_host(c):
 
 
 def debug_tmp(c):
-    for file in ['nginx_site.conf', 'nginx_sync.py']:
+    for file in ['nginx_template.conf', 'nginx_sync.py']:
         put(
             c,
             SCRIPTS_DIR / 'http_host' / 'nginx_sync' / file,
