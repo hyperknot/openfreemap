@@ -1,4 +1,4 @@
-from ssh_lib.config import ASSETS_DIR
+from ssh_lib import ASSETS_DIR
 from ssh_lib.utils import put
 
 

@@ -1,4 +1,4 @@
-from ssh_lib.config import TILE_GEN_BIN
+from ssh_lib import TILE_GEN_BIN
 from ssh_lib.utils import apt_get_install, apt_get_update
 
 

@@ -1,4 +1,4 @@
-from ssh_lib.config import ASSETS_DIR
+from ssh_lib import ASSETS_DIR
 from ssh_lib.utils import (
     apt_get_install,
     apt_get_purge,
@@ -51,6 +51,10 @@ def nginx(c):
     put(c, f'{ASSETS_DIR}/nginx/cloudflare.conf', '/data/nginx/config')
 
     c.sudo('service nginx restart')
+
+
+def mime_types(c):
+    pass
 
 
 def certbot(c):

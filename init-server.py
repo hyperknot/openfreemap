@@ -5,15 +5,8 @@ import click
 from dotenv import dotenv_values
 from fabric import Config, Connection
 
+from ssh_lib import CONFIG_DIR, HTTP_HOST_BIN, OFM_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
 from ssh_lib.benchmark import c1000k
-from ssh_lib.config import (
-    CONFIG_DIR,
-    HTTP_HOST_BIN,
-    OFM_DIR,
-    REMOTE_CONFIG,
-    SCRIPTS_DIR,
-    TILE_GEN_BIN,
-)
 from ssh_lib.kernel import setup_kernel_settings
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade

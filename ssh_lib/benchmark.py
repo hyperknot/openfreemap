@@ -1,4 +1,4 @@
-from ssh_lib.config import SCRIPTS_DIR
+from ssh_lib import SCRIPTS_DIR
 from ssh_lib.utils import apt_get_install, exists, put
 
 
