@@ -38,14 +38,14 @@ def cli():
             print(f"{run_dir} doesn't exists, skipping")
             continue
 
-        tilejson_path = run_dir / 'tilejson-tiles-org.json'
+        tilejson_path = run_dir / 'tilejson-tiles-com.json'
 
         metadata_path = subdir / 'metadata.json'
         if not metadata_path.is_file():
             print(f"{metadata_path} doesn't exists, skipping")
             continue
 
-        url_prefix = f'https://tiles.openfreemap.org/{area}/{version}/tiles//'
+        url_prefix = f'https://tiles.openfreemap.com/{area}/{version}/tiles//'
 
         subprocess.run(
             [
@@ -88,7 +88,7 @@ def cli():
 
     nginx_template = nginx_template.replace('___LOCATION_BLOCKS___', location_block_str)
 
-    with open('/data/nginx/sites/ofm.conf', 'w') as fp:
+    with open('/data/nginx/sites/ofm-tiles-com.conf', 'w') as fp:
         fp.write(nginx_template)
         print('nginx config written')
 
