@@ -45,7 +45,7 @@ def cli():
             print(f"{metadata_path} doesn't exists, skipping")
             continue
 
-        url_prefix = f'https://tiles.openfreemap.com/{area}/{version}/tiles//'
+        url_prefix = f'https://tiles.openfreemap.com/{area}/{version}'
 
         subprocess.run(
             [
@@ -59,20 +59,24 @@ def cli():
             check=True,
         )
 
+        # TODO raise expires if everything is stable
         version_str = rf"""
             location /{area}/{version} {{    # no trailing hash
-                alias {tilejson_path};       # no trailing hash\
+                alias {tilejson_path};       # no trailing hash
+
                 default_type application/json;
+                gzip on;
 
                 add_header 'Access-Control-Allow-Origin' '*' always;
                 add_header Cache-Control public;
-                expires 10y;
+                expires 1d;
             }}
 
             location /{area}/{version}/ {{    # trailing hash
                 alias {subdir}/tiles/;        # trailing hash
                 try_files $uri @empty;
 
+                add_header Content-Encoding gzip;
                 add_header 'Access-Control-Allow-Origin' '*' always;
                 add_header Cache-Control public;
                 expires 10y;
