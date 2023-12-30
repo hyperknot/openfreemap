@@ -63,6 +63,7 @@ def cli():
             location /{area}/{version} {{    # no trailing hash
                 alias {tilejson_path};       # no trailing hash
 
+                add_header 'Access-Control-Allow-Origin' '*' always;
                 add_header Cache-Control public;
                 expires 10y;
             }}
@@ -71,6 +72,7 @@ def cli():
                 alias {subdir}/tiles/;        # trailing hash
                 try_files $uri @empty;
 
+                add_header 'Access-Control-Allow-Origin' '*' always;
                 add_header Cache-Control public;
                 expires 10y;
             }}
