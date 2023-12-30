@@ -61,7 +61,8 @@ def cli():
 
         version_str = rf"""
             location /{area}/{version} {{    # no trailing hash
-                alias {tilejson_path};       # no trailing hash
+                alias {tilejson_path};       # no trailing hash\
+                default_type application/json;
 
                 add_header 'Access-Control-Allow-Origin' '*' always;
                 add_header Cache-Control public;
