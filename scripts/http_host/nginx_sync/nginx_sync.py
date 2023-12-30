@@ -60,7 +60,7 @@ def cli():
         )
 
         # TODO raise expires if everything is stable
-        version_str = rf"""
+        version_str = f"""
             location /{area}/{version} {{    # no trailing hash
                 alias {tilejson_path};       # no trailing hash
                 default_type application/json;
