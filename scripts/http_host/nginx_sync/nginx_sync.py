@@ -7,6 +7,9 @@ from pathlib import Path
 import click
 
 
+RUNS_DIR = Path('/data/ofm/http_host/runs')
+
+
 @click.command()
 def cli():
     if not Path('/etc/fstab').exists():
@@ -30,9 +33,42 @@ def cli():
 
         area, version = subdir.name.split('-')
 
+        run_dir = RUNS_DIR / area / version
+        if not run_dir.is_dir():
+            print(f"{run_dir} doesn't exists, skipping")
+            continue
+
+        tilejson_path = run_dir / 'tilejson-tiles-org.json'
+
+        metadata_path = subdir / 'metadata.json'
+        if not metadata_path.is_file():
+            print(f"{metadata_path} doesn't exists, skipping")
+            continue
+
+        url_prefix = f'https://tiles.openfreemap.org/{area}/{version}/tiles//'
+
+        subprocess.run(
+            [
+                sys.executable,
+                Path(__file__).parent.parent / 'metadata_to_tilejson.py',
+                '--minify',
+                metadata_path,
+                tilejson_path,
+                url_prefix,
+            ],
+            check=True,
+        )
+
         version_str = rf"""
-            location /{area}/{version}/ {{    # trailing hash important
-                alias {subdir}/;              # trailing hash important
+            location /{area}/{version} {{    # no trailing hash
+                alias {tilejson_path};       # no trailing hash
+
+                add_header Cache-Control public;
+                expires 10y;
+            }}
+
+            location /{area}/{version}/ {{    # trailing hash
+                alias {subdir}/tiles/;        # trailing hash
                 try_files $uri @empty;
 
                 add_header Cache-Control public;
@@ -45,7 +81,7 @@ def cli():
         if not help_text:
             help_text = (
                 '\ntest with:\n'
-                f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/tiles/14/8529/5975.pbf'
+                f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/14/8529/5975.pbf'
             )
 
     nginx_template = nginx_template.replace('___LOCATION_BLOCKS___', location_block_str)

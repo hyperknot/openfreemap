@@ -101,6 +101,7 @@ def prepare_http_host(c):
     for file in [
         'downloader.py',
         'mounter.py',
+        'metadata_to_tilejson.py',
     ]:
         put(
             c,
@@ -122,6 +123,18 @@ def prepare_http_host(c):
 
 
 def debug_tmp(c):
+    for file in [
+        'downloader.py',
+        'mounter.py',
+        'metadata_to_tilejson.py',
+    ]:
+        put(
+            c,
+            SCRIPTS_DIR / 'http_host' / file,
+            HTTP_HOST_BIN,
+            permissions='755',
+        )
+
     for file in ['nginx_template.conf', 'nginx_sync.py']:
         put(
             c,
@@ -130,6 +143,9 @@ def debug_tmp(c):
             create_parent_dir=True,
         )
 
+    c.sudo('chown -R ofm:ofm /data/ofm/http_host')
+    c.sudo('chown -R nginx:nginx /data/ofm/http_host/logs_nginx')
+
 
 @click.command()
 @click.argument('hostname')
@@ -137,12 +153,11 @@ def debug_tmp(c):
 @click.option('--user', help='SSH user (if not in .ssh/config)')
 @click.option('--tile-gen', is_flag=True, help='Install tile-gen task')
 @click.option('--http-host', is_flag=True, help='Install http-host task')
-@click.option('--reboot', 'do_reboot', is_flag=True, help='Reboot after installation')
 @click.option('--debug', is_flag=True)
 @click.option(
     '--skip-shared', is_flag=True, help='Skip the shared installtion step (useful for development)'
 )
-def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debug):
+def main(hostname, user, port, tile_gen, http_host, skip_shared, debug):
     if not debug and not click.confirm(f'Run script on {hostname}?'):
         return
 
@@ -181,9 +196,6 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared, do_reboot, debu
 
     if http_host:
         prepare_http_host(c)
-
-    if do_reboot:
-        reboot(c)
 
 
 if __name__ == '__main__':
