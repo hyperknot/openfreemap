@@ -77,7 +77,7 @@ def cli():
                 add_header Content-Encoding gzip;
                 add_header 'Access-Control-Allow-Origin' '*' always;
                 add_header Cache-Control public;
-                expires 10y;
+                expires 1d;  # target 10y
             }}
             """
 
