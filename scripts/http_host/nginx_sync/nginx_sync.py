@@ -21,11 +21,11 @@ def cli():
     if not Path('/mnt/ofm').exists():
         sys.exit('mounter.py needs to be run first')
 
-    with open(Path(__file__).parent / 'nginx_template.conf') as fp:
+    with open(Path(__file__).parent / 'nginx_template_cf.conf') as fp:
         nginx_template = fp.read()
 
     location_block_str = ''
-    help_text = ''
+    curl_text = ''
 
     for subdir in Path('/mnt/ofm').iterdir():
         if not subdir.is_dir():
@@ -83,10 +83,11 @@ def cli():
 
         location_block_str += version_str
 
-        if not help_text:
-            help_text = (
+        if not curl_text:
+            curl_text = (
                 '\ntest with:\n'
-                f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/14/8529/5975.pbf'
+                f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
+                f'curl -I https://tiles.openfreemap.com/{area}/{version}/14/8529/5975.pbf'
             )
 
     nginx_template = nginx_template.replace('___LOCATION_BLOCKS___', location_block_str)
@@ -98,7 +99,7 @@ def cli():
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    print(help_text)
+    print(curl_text)
 
 
 if __name__ == '__main__':

@@ -89,13 +89,21 @@ def prepare_tile_gen(c):
 
 
 def prepare_http_host(c):
+    c.sudo('rm -rf /data/ofm/http_host/logs_nginx')
+    c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
+    c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
+
     nginx(c)
     certbot(c)
     c1000k(c)
 
     prepare_venv(c)
 
-    c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
+    upload_https_host_files(c)
+    upload_certificates(c)
+
+
+def upload_https_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     for file in [
@@ -110,41 +118,36 @@ def prepare_http_host(c):
             permissions='755',
         )
 
-    for file in ['nginx_template.conf', 'nginx_sync.py']:
-        put(
-            c,
-            SCRIPTS_DIR / 'http_host' / 'nginx_sync' / file,
-            f'{HTTP_HOST_BIN}/nginx_sync/{file}',
-            create_parent_dir=True,
-        )
-
-    c.sudo('chown -R ofm:ofm /data/ofm/http_host')
-    c.sudo('chown -R nginx:nginx /data/ofm/http_host/logs_nginx')
-
-
-def debug_tmp(c):
     for file in [
-        'downloader.py',
-        'mounter.py',
-        'metadata_to_tilejson.py',
+        'nginx_sync.py',
+        'nginx_template_cf.conf',
     ]:
         put(
             c,
-            SCRIPTS_DIR / 'http_host' / file,
-            HTTP_HOST_BIN,
-            permissions='755',
-        )
-
-    for file in ['nginx_template.conf', 'nginx_sync.py']:
-        put(
-            c,
             SCRIPTS_DIR / 'http_host' / 'nginx_sync' / file,
             f'{HTTP_HOST_BIN}/nginx_sync/{file}',
             create_parent_dir=True,
         )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
-    c.sudo('chown -R nginx:nginx /data/ofm/http_host/logs_nginx')
+
+
+def upload_certificates(c):
+    for file in (CONFIG_DIR / 'certs').iterdir():
+        if file.name == '.gitignore':
+            continue
+        put(
+            c,
+            file,
+            f'/data/nginx/certs/{file.name}',
+            create_parent_dir=True,
+            permissions='400',
+        )
+    c.sudo('chown -R nginx:nginx /data/nginx')
+
+
+def debug_tmp(c):
+    upload_https_host_files(c)
 
 
 @click.command()

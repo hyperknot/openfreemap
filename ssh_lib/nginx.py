@@ -49,6 +49,7 @@ def nginx(c):
     put(c, f'{ASSETS_DIR}/nginx/default_disable.conf', '/data/nginx/sites')
     put(c, f'{ASSETS_DIR}/nginx/cloudflare.conf', '/data/nginx/config')
 
+    c.sudo('nginx -t')
     c.sudo('service nginx restart')
 
 
