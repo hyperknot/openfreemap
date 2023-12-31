@@ -38,14 +38,14 @@ def cli():
             print(f"{run_dir} doesn't exists, skipping")
             continue
 
-        tilejson_path = run_dir / 'tilejson-tiles-com.json'
+        tilejson_path = run_dir / 'tilejson-tiles-org.json'
 
         metadata_path = subdir / 'metadata.json'
         if not metadata_path.is_file():
             print(f"{metadata_path} doesn't exists, skipping")
             continue
 
-        url_prefix = f'https://tiles.openfreemap.com/{area}/{version}'
+        url_prefix = f'https://tiles.openfreemap.org/{area}/{version}'
 
         subprocess.run(
             [
@@ -87,12 +87,12 @@ def cli():
             curl_text = (
                 '\ntest with:\n'
                 f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
-                f'curl -I https://tiles.openfreemap.com/{area}/{version}/14/8529/5975.pbf'
+                f'curl -I https://tiles.openfreemap.org/{area}/{version}/14/8529/5975.pbf'
             )
 
     nginx_template = nginx_template.replace('___LOCATION_BLOCKS___', location_block_str)
 
-    with open('/data/nginx/sites/ofm-tiles-com.conf', 'w') as fp:
+    with open('/data/nginx/sites/ofm-tiles-org.conf', 'w') as fp:
         fp.write(nginx_template)
         print('nginx config written')
 
