@@ -107,7 +107,8 @@ def upload_https_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     for file in [
-        'downloader.py',
+        'download_assets.py',
+        'download_tiles.py',
         'mounter.py',
         'metadata_to_tilejson.py',
     ]:
@@ -129,7 +130,13 @@ def upload_https_host_files(c):
             create_parent_dir=True,
         )
 
+    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
+
+    c.sudo('rm -rf /data/ofm/http_host/logs')
+    c.sudo('mkdir -p /data/ofm/http_host/logs')
+    c.sudo('chown root:root /data/ofm/http_host/logs')
 
 
 def upload_certificates(c):

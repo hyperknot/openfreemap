@@ -1,0 +1,4 @@
+PYTHON=/data/ofm/venv/bin/python
+
+# every minute download_asset.py
+* * * * *     root     $PYTHON /data/ofm/http_host/bin/download_assets.py > /data/ofm/http_host/logs/download_assets.log 2>&1
