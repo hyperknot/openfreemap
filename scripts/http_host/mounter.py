@@ -21,7 +21,7 @@ def cli():
         sys.exit('Needs sudo')
 
     if not Path('/data/ofm/http_host/runs').exists():
-        sys.exit('downloader.py needs to be run first')
+        sys.exit('download_tiles.py needs to be run first')
 
     clean_up_mounts()
 
