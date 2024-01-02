@@ -107,10 +107,11 @@ def upload_https_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     for file in [
+        'deploy_tiles_version.py',
         'download_assets.py',
         'download_tiles.py',
-        'mounter.py',
         'metadata_to_tilejson.py',
+        'mounter.py',
     ]:
         put(
             c,
@@ -154,7 +155,17 @@ def upload_certificates(c):
 
 
 def debug_tmp(c):
-    upload_https_host_files(c)
+    # upload_https_host_files(c)
+
+    for file in [
+        'deploy_tiles_version.py',
+    ]:
+        put(
+            c,
+            SCRIPTS_DIR / 'http_host' / file,
+            HTTP_HOST_BIN,
+            permissions='755',
+        )
 
 
 @click.command()

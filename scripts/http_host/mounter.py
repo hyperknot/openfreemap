@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import os
 import subprocess
 import sys
@@ -13,6 +14,8 @@ def cli():
     Mounts/unmounts the btrfs images from /data/ofm/http_host/runs automatically.
     When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
     """
+
+    print(datetime.datetime.now(tz=datetime.timezone.utc))
 
     if not Path('/etc/fstab').exists():
         sys.exit('Needs to be run on Linux')
@@ -56,6 +59,8 @@ def cli():
 
     clean_up_mounts()
     print('DONE')
+
+    print('\n\n\n')
 
 
 def clean_up_mounts():

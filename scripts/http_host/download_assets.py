@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import shutil
 import subprocess
 import sys
@@ -22,6 +23,8 @@ def cli(assets_dir):
     Downloads and extracts assets
     """
 
+    print(datetime.datetime.now(tz=datetime.timezone.utc))
+
     if not assets_dir:
         assets_dir = DEFAULT_ASSETS_DIR
 
@@ -29,6 +32,8 @@ def cli(assets_dir):
         sys.exit("asset dir's parent doesn't exist")
 
     download_fonts(assets_dir)
+
+    print('\n\n\n')
 
 
 def download_fonts(assets_dir):

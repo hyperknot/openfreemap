@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import shutil
 import subprocess
 import sys
@@ -20,11 +21,14 @@ DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
     type=click.Path(dir_okay=True, file_okay=False, path_type=Path),
 )
 @click.option('--list-versions', is_flag=True, help='List all versions in an area and terminate')
-def cli(area: str, version: str, list_versions: bool, runs_dir: Path):
+@click.option('--run-mounter', is_flag=True, help='Run mounter.py after download is complete')
+def cli(area: str, version: str, list_versions: bool, runs_dir: Path, run_mounter: bool):
     """
     Downloads and extracts the latest tiles.btrfs file from the public bucket.
     Specific version can also be specified.
     """
+
+    print(datetime.datetime.now(tz=datetime.timezone.utc))
 
     if area not in {'planet', 'monaco'}:
         sys.exit('Please specify are: "planet" or "monaco"')
@@ -49,17 +53,27 @@ def cli(area: str, version: str, list_versions: bool, runs_dir: Path):
     if not runs_dir and not Path('/data/ofm').exists():
         sys.exit('Please specify a runs dir with --runs-dir')
 
-    download(area, selected_version, runs_dir or DEFAULT_RUNS_DIR)
+    changed = download(area, selected_version, runs_dir or DEFAULT_RUNS_DIR)
+
+    if changed and run_mounter:
+        print('running mounter.py')
+
+        subprocess.run(
+            [sys.executable, Path(__file__).parent / 'mounter.py'],
+            check=True,
+        )
+
+    print('\n\n\n')
 
 
-def download(area: str, version: str, runs_dir: Path):
+def download(area: str, version: str, runs_dir: Path) -> bool:
     click.echo(f'Downloading: area: {area}, version: {version}')
 
     version_dir = runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
     if btrfs_file.exists():
         print('File exists, skipping download')
-        return
+        return False
 
     temp_dir = runs_dir / '_tmp'
     if temp_dir.exists():
@@ -92,6 +106,8 @@ def download(area: str, version: str, runs_dir: Path):
     btrfs_src.rename(btrfs_file)
 
     shutil.rmtree(temp_dir)
+
+    return True
 
 
 if __name__ == '__main__':
