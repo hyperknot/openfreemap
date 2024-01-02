@@ -78,6 +78,7 @@ def clean_up_mounts():
     lines = [l for l in p.stdout.splitlines() if '/mnt/ofm/' in l and '(deleted)' in l]
     for l in lines:
         mnt_path = Path(l.split('(deleted) on ')[1].split(' type btrfs')[0])
+        print(f'removing deleted mount {mnt_path}')
         assert mnt_path.exists()
         subprocess.run(['umount', mnt_path], check=True)
         mnt_path.rmdir()
