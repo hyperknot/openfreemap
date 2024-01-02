@@ -97,7 +97,7 @@ def download(area: str, version: str, runs_dir: Path) -> bool:
         check=True,
     )
 
-    subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'])
+    subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'], check=True)
     btrfs_src = temp_dir / 'tiles.btrfs'
 
     shutil.rmtree(version_dir, ignore_errors=True)

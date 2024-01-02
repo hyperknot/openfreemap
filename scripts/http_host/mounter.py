@@ -73,11 +73,22 @@ def clean_up_mounts():
     with open('/etc/fstab') as fp:
         fstab_str = fp.read()
 
+    # handle deleted files
+    p = subprocess.run(['mount'], capture_output=True, text=True, check=True)
+    lines = [l for l in p.stdout.splitlines() if '/mnt/ofm/' in l and '(deleted)' in l]
+    for l in lines:
+        mnt_path = Path(l.split('(deleted) on ')[1].split(' type btrfs')[0])
+        assert mnt_path.exists()
+        subprocess.run(['umount', mnt_path], check=True)
+        mnt_path.rmdir()
+
+    # clean all mounts not in current fstab
     for subdir in mnt_dir.iterdir():
         if f'{subdir} ' in fstab_str:
             continue
 
-        subprocess.run(['umount', subdir])
+        print(f'removing old mount {subdir}')
+        subprocess.run(['umount', subdir], check=True)
         subdir.rmdir()
 
 
