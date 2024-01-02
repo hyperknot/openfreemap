@@ -97,8 +97,6 @@ def prepare_http_host(c):
     certbot(c)
     c1000k(c)
 
-    prepare_venv(c)
-
     upload_https_host_files(c)
     upload_certificates(c)
 
