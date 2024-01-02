@@ -11,4 +11,4 @@ source venv/bin/activate
 pip install -U pip wheel setuptools
 pip install -e .
 
-
+pip install -e scripts/http_host
