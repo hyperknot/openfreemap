@@ -92,6 +92,7 @@ def download_file(url, local_file):
             '--split=8',
             '--max-connection-per-server=8',
             '--file-allocation=none',
+            '--min-split-size=1M',
             '-d',
             local_file.parent,
             '-o',
