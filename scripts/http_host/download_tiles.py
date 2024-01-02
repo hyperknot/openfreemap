@@ -57,9 +57,14 @@ def cli(area: str, version: str, list_versions: bool, runs_dir: Path, run_mounte
 
     if changed and run_mounter:
         print('running mounter.py')
-
         subprocess.run(
             [sys.executable, Path(__file__).parent / 'mounter.py'],
+            check=True,
+        )
+
+        print('running nginx_sync.py')
+        subprocess.run(
+            [sys.executable, Path(__file__).parent / 'nginx_sync' / 'nginx_sync.py'],
             check=True,
         )
 
