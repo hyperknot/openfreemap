@@ -22,9 +22,7 @@ def download_and_extract_tileset(area: str, version: str, runs_dir: Path) -> boo
         return False
 
     temp_dir = runs_dir / '_tmp'
-    if temp_dir.exists():
-        sys.exit(f'{temp_dir} dir exists, avoiding parallel run')
-
+    shutil.rmtree(temp_dir, ignore_errors=True)
     temp_dir.mkdir(parents=True)
 
     url = f'https://{area}.openfreemap.com/{version}/tiles.btrfs.gz'

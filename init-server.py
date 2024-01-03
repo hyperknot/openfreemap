@@ -131,6 +131,7 @@ def upload_certificates(c):
 
 def debug_tmp(c):
     upload_https_host_files(c)
+    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 @click.command()

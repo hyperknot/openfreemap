@@ -18,6 +18,7 @@ def pkg_base(c):
         'unzip',
         'wget',
         'psmisc',
+        'util-linux'
         #
         'btrfs-progs',
         #

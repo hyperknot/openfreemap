@@ -27,7 +27,8 @@ def write_nginx_config():
                 f'curl -I https://tiles.openfreemap.org/{area}/{version}/14/8529/5975.pbf'
             )
 
-    location_str += create_deployed_location(area, version, subdir)
+    for area in ['monaco', 'planet']:
+        location_str += create_latest_location(area)
 
     nginx_template = nginx_template.replace('___LOCATION_BLOCKS___', location_str)
 
@@ -41,7 +42,7 @@ def write_nginx_config():
     print(curl_text)
 
 
-def create_version_location(area: str, version: str, subdir: Path):
+def create_version_location(area: str, version: str, subdir: Path) -> str:
     run_dir = DEFAULT_RUNS_DIR / area / version
     if not run_dir.is_dir():
         print(f"  {run_dir} doesn't exists, skipping")
@@ -91,5 +92,13 @@ def create_version_location(area: str, version: str, subdir: Path):
     """
 
 
-def create_deployed_location(area: str, version: str, subdir: Path):
-    pass
+def create_latest_location(area: str) -> str:
+    local_version_file = Path(f'/data/ofm/config/deployed_tiles_{area}.txt')
+
+    if not local_version_file.exists():
+        return ''
+
+    with open(local_version_file) as fp:
+        version_str = fp.read().strip()
+
+    print(version_str)

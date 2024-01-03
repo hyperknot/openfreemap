@@ -1,5 +1,5 @@
-PYTHON=/data/ofm/venv/bin/python
-BIN=/data/ofm/http_host/bin
+# every minute sync, locking so that only one process can run at a time
+* * * * * ofm     /usr/bin/flock -n /tmp/hostmanager.lockfile -c \
+  'sudo /data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py sync >> /data/ofm/http_host/logs/host_manager_sync.log 2>&1'
 
-# every minute sync
-* * * * * ofm     sudo $PYTHON -u $BIN/host_manager.py sync >> /data/ofm/http_host/logs/host_manager_sync.log 2>&1
+
