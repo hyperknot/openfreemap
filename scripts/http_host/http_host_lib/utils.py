@@ -16,6 +16,11 @@ def assert_linux():
         sys.exit('Needs to be run on Linux')
 
 
+# TODO
+def assert_single_process():
+    pass
+
+
 def download_if_size_differs(url: str, local_file: Path) -> bool:
     if not local_file.exists() or local_file.stat().st_size != get_remote_file_size(url):
         download_file_aria2(url, local_file)

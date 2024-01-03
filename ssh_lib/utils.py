@@ -52,6 +52,7 @@ def put_dir(
     set_permission(c, remote_dir, permissions=dir_permissions, owner=owner, group=group)
 
     for file in files:
+        print(f'uploading {remote_dir}/{file.name}')
         put(c, file, f'{remote_dir}/{file.name}', file_permissions, owner, group)
 
 

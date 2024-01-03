@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
+import datetime
+import subprocess
 import sys
 from pathlib import Path
 
 import click
 import requests
+from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, MNT_DIR
 from http_host_lib.download_fonts import download_fonts
 from http_host_lib.download_tileset import download_and_extract_tileset
-
-
-DEFAULT_RUNS_DIR = Path('/data/ofm/http_host/runs')
-DEFAULT_ASSETS_DIR = Path('/data/ofm/http_host/assets')
+from http_host_lib.mount import clean_up_mounts, create_fstab
+from http_host_lib.utils import assert_linux, assert_single_process, assert_sudo
 
 
 @click.group()
@@ -88,5 +89,42 @@ def download_assets(assets_dir: Path):
     download_fonts(assets_dir)
 
 
+@cli.command()
+def mount():
+    """
+    Mounts/unmounts the btrfs images from /data/ofm/http_host/runs automatically.
+    When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
+    """
+    assert_linux()
+    assert_sudo()
+
+    if not DEFAULT_RUNS_DIR.exists():
+        sys.exit('download_tileset needs to be run first')
+
+    clean_up_mounts(MNT_DIR)
+    create_fstab()
+
+    print('Running mount -a')
+    subprocess.run(['mount', '-a'], check=True)
+
+    clean_up_mounts(MNT_DIR)
+
+
+@cli.command()
+@click.pass_context
+def sync(ctx):
+    """
+    Runs the sync task, normally called by cron every minute
+    """
+    print(datetime.datetime.now(tz=datetime.timezone.utc))
+
+    ctx.invoke(download_tileset, area='monaco')
+    # ctx.invoke(download_tileset, area='planet')
+    ctx.invoke(download_assets)
+    ctx.invoke(mount)
+
+
 if __name__ == '__main__':
+    # TODO
+    assert_single_process()
     cli()
