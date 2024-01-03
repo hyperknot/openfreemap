@@ -89,17 +89,17 @@ def prepare_tile_gen(c):
 
 
 def prepare_http_host(c):
-    c.sudo('rm -rf /data/ofm/http_host/logs_nginx')
-    c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
-    c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
+    nginx(c)
+    certbot(c)
+    c1000k(c)
 
     c.sudo('rm -rf /data/ofm/http_host/logs')
     c.sudo('mkdir -p /data/ofm/http_host/logs')
     c.sudo('chown ofm:ofm /data/ofm/http_host/logs')
 
-    nginx(c)
-    certbot(c)
-    c1000k(c)
+    c.sudo('rm -rf /data/ofm/http_host/logs_nginx')
+    c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
+    c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
 
     upload_https_host_files(c)
     upload_certificates(c)

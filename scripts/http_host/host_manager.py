@@ -66,7 +66,7 @@ def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Pat
     if not runs_dir.parent.exists():
         sys.exit("run dir's parent doesn't exist")
 
-    download_and_extract_tileset(area, selected_version, runs_dir)
+    return download_and_extract_tileset(area, selected_version, runs_dir)
 
 
 @cli.command()
@@ -118,10 +118,14 @@ def sync(ctx):
     """
     print(datetime.datetime.now(tz=datetime.timezone.utc))
 
-    ctx.invoke(download_tileset, area='monaco')
-    # ctx.invoke(download_tileset, area='planet')
+    downloaded = False
+    downloaded += ctx.invoke(download_tileset, area='monaco')
+    # d2 = ctx.invoke(download_tileset, area='planet')
+
+    if downloaded:
+        ctx.invoke(mount)
+
     ctx.invoke(download_assets)
-    ctx.invoke(mount)
 
 
 if __name__ == '__main__':

@@ -2,8 +2,4 @@ PYTHON=/data/ofm/venv/bin/python
 BIN=/data/ofm/http_host/bin
 
 # every minute download_asset.py
-* * * * * root  $PYTHON $BIN/download_assets.py >> /data/ofm/http_host/logs/download_assets.log 2>&1
-* * * * * root  $PYTHON $BIN/download_tiles.py planet --run-mounter >> /data/ofm/http_host/logs/download_tiles_planet.log 2>&1
-* * * * * root  $PYTHON $BIN/download_tiles.py monaco --run-mounter >> /data/ofm/http_host/logs/download_tiles_monaco.log 2>&1
-* * * * * root  $PYTHON $BIN/deploy_tiles_version.py >> /data/ofm/http_host/logs/deploy_tiles_version.log 2>&1
-
+* * * * * ofm     sudo $PYTHON -u $BIN/host_manager.py sync >> /data/ofm/http_host/logs/host_manager_sync.log 2>&1
