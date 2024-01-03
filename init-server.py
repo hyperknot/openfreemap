@@ -93,6 +93,10 @@ def prepare_http_host(c):
     c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
     c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
 
+    c.sudo('rm -rf /data/ofm/http_host/logs')
+    c.sudo('mkdir -p /data/ofm/http_host/logs')
+    c.sudo('chown ofm:ofm /data/ofm/http_host/logs')
+
     nginx(c)
     certbot(c)
     c1000k(c)
@@ -102,13 +106,16 @@ def prepare_http_host(c):
 
     c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
 
+    # always last
+    # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+
 
 def upload_https_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     put_dir(
         c,
-        SCRIPTS_DIR / 'host',
+        SCRIPTS_DIR / 'http_host',
         HTTP_HOST_BIN,
         file_permissions='755',
         exclude_set={'.gitignore'},
@@ -116,46 +123,20 @@ def upload_https_host_files(c):
 
     put_dir(
         c,
-        SCRIPTS_DIR / 'host' / 'host_lib',
-        f'{HTTP_HOST_BIN}/host_lib',
+        SCRIPTS_DIR / 'http_host' / 'http_host_lib',
+        f'{HTTP_HOST_BIN}/http_host_lib',
     )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
 
-    c.sudo('rm -rf /data/ofm/http_host/logs')
-    c.sudo('mkdir -p /data/ofm/http_host/logs')
-    c.sudo('chown root:root /data/ofm/http_host/logs')
-
-    # always last
-    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
-
 
 def upload_certificates(c):
-    for file in (CONFIG_DIR / 'certs').iterdir():
-        if file.name == '.gitignore':
-            continue
-        put(
-            c,
-            file,
-            f'/data/nginx/certs/{file.name}',
-            create_parent_dir=True,
-            permissions='400',
-        )
+    put_dir(c, CONFIG_DIR / 'certs', '/data/nginx/certs', file_permissions=400)
     c.sudo('chown -R nginx:nginx /data/nginx')
 
 
 def debug_tmp(c):
-    # upload_https_host_files(c)
-
-    for file in [
-        'mounter.py',
-    ]:
-        put(
-            c,
-            SCRIPTS_DIR / 'http_host' / file,
-            HTTP_HOST_BIN,
-            permissions='755',
-        )
+    upload_https_host_files(c)
 
 
 @click.command()
