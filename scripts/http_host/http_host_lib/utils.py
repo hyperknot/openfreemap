@@ -39,7 +39,7 @@ def get_remote_file_size(url: str) -> int | None:
 
 
 def download_file_aria2(url: str, local_file: Path):
-    print(f'Downloading: {url} into {local_file}')
+    print(f'  downloading: {url} into {local_file}')
 
     subprocess.run(
         [

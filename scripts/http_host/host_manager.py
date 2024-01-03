@@ -43,6 +43,8 @@ def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Pat
     Version can also be specified.
     """
 
+    print('running download_tileset')
+
     if area not in {'planet', 'monaco'}:
         sys.exit('Please specify area: "planet" or "monaco"')
 
@@ -83,6 +85,8 @@ def download_assets(assets_dir: Path):
     Downloads and extracts assets
     """
 
+    print('running download_assets')
+
     if not assets_dir:
         assets_dir = DEFAULT_ASSETS_DIR
 
@@ -98,6 +102,9 @@ def mount():
     Mounts/unmounts the btrfs images from /data/ofm/http_host/runs automatically.
     When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
     """
+
+    print('running mount')
+
     assert_linux()
     assert_sudo()
 
@@ -123,6 +130,8 @@ def set_latest_versions():
     2. Writes to a version file
     """
 
+    print('running set_latest_versions')
+
     assert_linux()
     assert_sudo()
 
@@ -137,6 +146,8 @@ def nginx_sync():
     """
     Syncs the nginx config to the state of the system
     """
+
+    print('running nginx_sync')
 
     assert_linux()
     assert_sudo()
@@ -154,13 +165,16 @@ def sync(ctx):
     Runs the sync task, normally called by cron every minute
     On a new server this also takes care of everything, no need to run anything manually.
     """
+
+    print('---')
+    print('running sync')
     print(datetime.datetime.now(tz=datetime.timezone.utc))
 
     assert_single_process()
 
     download_done = False
     download_done += ctx.invoke(download_tileset, area='monaco')
-    download_done += ctx.invoke(download_tileset, area='planet')
+    # download_done += ctx.invoke(download_tileset, area='planet')
     if download_done:
         ctx.invoke(mount)
 

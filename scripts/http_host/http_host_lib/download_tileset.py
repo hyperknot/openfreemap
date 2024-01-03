@@ -18,7 +18,7 @@ def download_and_extract_tileset(area: str, version: str, runs_dir: Path) -> boo
     version_dir = runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
     if btrfs_file.exists():
-        print(' file exists, skipping download')
+        print('  file exists, skipping download')
         return False
 
     temp_dir = runs_dir / '_tmp'
