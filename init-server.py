@@ -88,7 +88,7 @@ def prepare_tile_gen(c):
     c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
 
 
-def prepare_http_host(c):
+def prepare_http_host(c, skip_cron: bool):
     nginx(c)
     certbot(c)
     c1000k(c)
@@ -107,7 +107,8 @@ def prepare_http_host(c):
     c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
 
     # always last
-    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+    if not skip_cron:
+        put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 def upload_https_host_files(c):
@@ -131,7 +132,7 @@ def upload_certificates(c):
 
 def debug_tmp(c):
     upload_https_host_files(c)
-    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+    # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 @click.command()
@@ -144,7 +145,8 @@ def debug_tmp(c):
 @click.option(
     '--skip-shared', is_flag=True, help='Skip the shared installtion step (useful for development)'
 )
-def main(hostname, user, port, tile_gen, http_host, skip_shared, debug):
+@click.option('--skip-cron', is_flag=True, help='Skip the cronjob (useful for development)')
+def main(hostname, user, port, tile_gen, http_host, skip_shared, skip_cron, debug):
     if not debug and not click.confirm(f'Run script on {hostname}?'):
         return
 
@@ -182,7 +184,7 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared, debug):
         prepare_tile_gen(c)
 
     if http_host:
-        prepare_http_host(c)
+        prepare_http_host(c, skip_cron=skip_cron)
 
 
 if __name__ == '__main__':

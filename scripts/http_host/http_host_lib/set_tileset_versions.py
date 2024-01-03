@@ -2,6 +2,8 @@ from pathlib import Path
 
 import requests
 
+from http_host_lib import OFM_CONFIG_DIR
+
 
 def set_tileset_versions():
     need_nginx_sync = False
@@ -12,7 +14,7 @@ def set_tileset_versions():
         remote_version = r.text.strip()
         print(f'  remote version for {area}: {remote_version}')
 
-        local_version_file = Path(f'/data/ofm/config/deployed_tiles_{area}.txt')
+        local_version_file = OFM_CONFIG_DIR / f'tileset_version_{area}.txt'
 
         if not local_version_file.exists():
             local_version_start = None

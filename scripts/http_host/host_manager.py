@@ -19,12 +19,12 @@ from http_host_lib.utils import assert_linux, assert_single_process, assert_sudo
 def cli():
     """
     Manages OpenFreeMap HTTP hosts, including:\n
-    - Deploying the correct versions of tilesets\n
     - Downloading assets\n
     - Downloading tilesets\n
     - Mounting directories\n
     - Updating nginx config\n
-    - Running the sync cron task every minute
+    - Setting the latest versions of tilesets\n
+    - Running the sync cron task (called every minute)
     """
 
 
@@ -170,11 +170,10 @@ def sync(ctx):
     print('running sync')
     print(datetime.datetime.now(tz=datetime.timezone.utc))
 
-    assert_single_process()
-
     download_done = False
     download_done += ctx.invoke(download_tileset, area='monaco')
-    # download_done += ctx.invoke(download_tileset, area='planet')
+    download_done += ctx.invoke(download_tileset, area='planet')
+
     if download_done:
         ctx.invoke(mount)
 

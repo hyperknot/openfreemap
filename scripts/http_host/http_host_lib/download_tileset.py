@@ -13,7 +13,7 @@ def download_and_extract_tileset(area: str, version: str, runs_dir: Path) -> boo
     returns True if downloaded something
     """
 
-    click.echo(f'downloading area: {area}, version: {version}')
+    click.echo(f'downloading {area} {version}')
 
     version_dir = runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
