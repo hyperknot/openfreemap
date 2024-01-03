@@ -107,7 +107,7 @@ def prepare_http_host(c):
     c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
 
     # always last
-    # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 def upload_https_host_files(c):

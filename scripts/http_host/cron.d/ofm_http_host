@@ -1,5 +1,5 @@
 PYTHON=/data/ofm/venv/bin/python
 BIN=/data/ofm/http_host/bin
 
-# every minute download_asset.py
+# every minute sync
 * * * * * ofm     sudo $PYTHON -u $BIN/host_manager.py sync >> /data/ofm/http_host/logs/host_manager_sync.log 2>&1

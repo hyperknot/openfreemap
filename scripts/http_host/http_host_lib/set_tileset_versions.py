@@ -3,7 +3,7 @@ from pathlib import Path
 import requests
 
 
-def deploy_tileset():
+def set_tileset_versions():
     need_nginx_sync = False
 
     for area in ['planet', 'monaco']:
