@@ -7,6 +7,7 @@ from pathlib import Path
 import click
 import requests
 from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, MNT_DIR
+from http_host_lib.deploy_tileset import deploy_tileset
 from http_host_lib.download_fonts import download_fonts
 from http_host_lib.download_tileset import download_and_extract_tileset
 from http_host_lib.mount import clean_up_mounts, create_fstab
@@ -111,21 +112,42 @@ def mount():
 
 
 @cli.command()
+def deploy_tileset_version():
+    """
+    Deploys the tileset version specified by
+    https://assets.openfreemap.com/versions/deployed_planet.txt
+
+    1. Check if the given version is present on the disk and is mounted
+    2. Write to a version file
+    """
+
+    assert_linux()
+    assert_sudo()
+
+    if not MNT_DIR.exists():
+        sys.exit('mount needs to be run first')
+
+    return deploy_tileset()
+
+
+@cli.command()
 @click.pass_context
 def sync(ctx):
     """
     Runs the sync task, normally called by cron every minute
+    On a new server this also takes care of everything, no need to run anything manually.
     """
     print(datetime.datetime.now(tz=datetime.timezone.utc))
 
     downloaded = False
     downloaded += ctx.invoke(download_tileset, area='monaco')
     # d2 = ctx.invoke(download_tileset, area='planet')
-
     if downloaded:
         ctx.invoke(mount)
 
     ctx.invoke(download_assets)
+
+    ctx.invoke(deploy_tileset_version)
 
 
 if __name__ == '__main__':
