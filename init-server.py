@@ -113,18 +113,12 @@ def prepare_http_host(c):
 def upload_https_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
+    put_dir(c, SCRIPTS_DIR / 'http_host', HTTP_HOST_BIN, file_permissions='755')
+    put_dir(c, SCRIPTS_DIR / 'http_host' / 'http_host_lib', f'{HTTP_HOST_BIN}/http_host_lib')
     put_dir(
         c,
-        SCRIPTS_DIR / 'http_host',
-        HTTP_HOST_BIN,
-        file_permissions='755',
-        exclude_set={'.gitignore'},
-    )
-
-    put_dir(
-        c,
-        SCRIPTS_DIR / 'http_host' / 'http_host_lib',
-        f'{HTTP_HOST_BIN}/http_host_lib',
+        SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'templates',
+        f'{HTTP_HOST_BIN}/http_host_lib/templates',
     )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')

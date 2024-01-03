@@ -1,39 +1,24 @@
-#!/usr/bin/env python3
-import os
 import subprocess
 import sys
 from pathlib import Path
 
-import click
+from http_host_lib import DEFAULT_RUNS_DIR, MNT_DIR, TEMPLATES_DIR
 
 
-RUNS_DIR = Path('/data/ofm/http_host/runs')
-
-
-@click.command()
-def cli():
-    if not Path('/etc/fstab').exists():
-        sys.exit('Needs to be run on Linux')
-
-    if os.geteuid() != 0:
-        sys.exit('Needs sudo')
-
-    if not Path('/mnt/ofm').exists():
-        sys.exit('mounter.py needs to be run first')
-
-    with open(Path(__file__).parent / 'nginx_template_cf.conf') as fp:
+def write_nginx_config():
+    with open(TEMPLATES_DIR / 'nginx_cf.conf') as fp:
         nginx_template = fp.read()
 
     location_block_str = ''
     curl_text = ''
 
-    for subdir in Path('/mnt/ofm').iterdir():
+    for subdir in MNT_DIR.iterdir():
         if not subdir.is_dir():
             continue
 
         area, version = subdir.name.split('-')
 
-        run_dir = RUNS_DIR / area / version
+        run_dir = DEFAULT_RUNS_DIR / area / version
         if not run_dir.is_dir():
             print(f"{run_dir} doesn't exists, skipping")
             continue
@@ -59,7 +44,7 @@ def cli():
             check=True,
         )
 
-        # TODO raise expires if everything is stable
+        # TODO raise the expires times once things are stable
         version_str = f"""
             location /{area}/{version} {{    # no trailing hash
                 alias {tilejson_path};       # no trailing hash
@@ -94,13 +79,9 @@ def cli():
 
     with open('/data/nginx/sites/ofm-tiles-org.conf', 'w') as fp:
         fp.write(nginx_template)
-        print('nginx config written')
+        print('  nginx config written')
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
     print(curl_text)
-
-
-if __name__ == '__main__':
-    cli()

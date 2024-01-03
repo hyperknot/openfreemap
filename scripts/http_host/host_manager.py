@@ -11,6 +11,7 @@ from http_host_lib.deploy_tileset import deploy_tileset
 from http_host_lib.download_fonts import download_fonts
 from http_host_lib.download_tileset import download_and_extract_tileset
 from http_host_lib.mount import clean_up_mounts, create_fstab
+from http_host_lib.nginx import write_nginx_config
 from http_host_lib.utils import assert_linux, assert_single_process, assert_sudo
 
 
@@ -114,7 +115,7 @@ def mount():
 @cli.command()
 def deploy_tileset_version():
     """
-    Deploys the tileset version specified by
+    Deploys the latest tileset version specified by
     https://assets.openfreemap.com/versions/deployed_planet.txt
 
     1. Check if the given version is present on the disk and is mounted
@@ -128,6 +129,21 @@ def deploy_tileset_version():
         sys.exit('mount needs to be run first')
 
     return deploy_tileset()
+
+
+@cli.command()
+def nginx_sync():
+    """
+    Syncs the nginx config to the state of the system
+    """
+
+    assert_linux()
+    assert_sudo()
+
+    if not MNT_DIR.exists():
+        sys.exit('mount needs to be run first')
+
+    write_nginx_config()
 
 
 @cli.command()
@@ -147,7 +163,10 @@ def sync(ctx):
 
     ctx.invoke(download_assets)
 
-    ctx.invoke(deploy_tileset_version)
+    deployed = ctx.invoke(deploy_tileset_version)
+
+    if downloaded or deployed:
+        ctx.invoke(nginx_sync)
 
 
 if __name__ == '__main__':
