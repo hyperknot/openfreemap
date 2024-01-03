@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import requests
@@ -16,9 +17,11 @@ def assert_linux():
         sys.exit('Needs to be run on Linux')
 
 
-# TODO
 def assert_single_process():
-    pass
+    p = subprocess.run(['pgrep', '-fl', sys.argv[0]], capture_output=True, text=True)
+    lines = [l for l in p.stdout.splitlines() if 'python' in l]
+    if len(lines) >= 2:
+        sys.exit('Detected multiple processes, terminating')
 
 
 def download_if_size_differs(url: str, local_file: Path) -> bool:

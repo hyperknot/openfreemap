@@ -19,11 +19,12 @@ from http_host_lib.utils import assert_linux, assert_single_process, assert_sudo
 def cli():
     """
     Manages OpenFreeMap HTTP hosts, including:\n
-    - Downloading tilesets\n
-    - Downloading assets\n
     - Deploying the correct versions of tilesets\n
+    - Downloading assets\n
+    - Downloading tilesets\n
     - Mounting directories\n
     - Updating nginx config\n
+    - Running the sync cron task every minute
     """
 
 
@@ -66,7 +67,7 @@ def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Pat
         runs_dir = DEFAULT_RUNS_DIR
 
     if not runs_dir.parent.exists():
-        sys.exit("run dir's parent doesn't exist")
+        sys.exit("runs dir's parent doesn't exist")
 
     return download_and_extract_tileset(area, selected_version, runs_dir)
 
@@ -155,21 +156,21 @@ def sync(ctx):
     """
     print(datetime.datetime.now(tz=datetime.timezone.utc))
 
-    downloaded = False
-    downloaded += ctx.invoke(download_tileset, area='monaco')
-    # d2 = ctx.invoke(download_tileset, area='planet')
-    if downloaded:
+    assert_single_process()
+
+    download_done = False
+    download_done += ctx.invoke(download_tileset, area='monaco')
+    download_done += ctx.invoke(download_tileset, area='planet')
+    if download_done:
         ctx.invoke(mount)
 
     ctx.invoke(download_assets)
 
-    deployed = ctx.invoke(deploy_tileset_version)
+    deploy_done = ctx.invoke(deploy_tileset_version)
 
-    if downloaded or deployed:
+    if download_done or deploy_done:
         ctx.invoke(nginx_sync)
 
 
 if __name__ == '__main__':
-    # TODO
-    assert_single_process()
     cli()

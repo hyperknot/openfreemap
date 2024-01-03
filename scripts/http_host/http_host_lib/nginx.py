@@ -20,14 +20,14 @@ def write_nginx_config():
 
         run_dir = DEFAULT_RUNS_DIR / area / version
         if not run_dir.is_dir():
-            print(f"{run_dir} doesn't exists, skipping")
+            print(f"  {run_dir} doesn't exists, skipping")
             continue
 
         tilejson_path = run_dir / 'tilejson-tiles-org.json'
 
         metadata_path = subdir / 'metadata.json'
         if not metadata_path.is_file():
-            print(f"{metadata_path} doesn't exists, skipping")
+            print(f"  {metadata_path} doesn't exists, skipping")
             continue
 
         url_prefix = f'https://tiles.openfreemap.org/{area}/{version}'
@@ -44,7 +44,7 @@ def write_nginx_config():
             check=True,
         )
 
-        # TODO raise the expires times once things are stable
+        # TODO # target 10y
         version_str = f"""
             location /{area}/{version} {{    # no trailing hash
                 alias {tilejson_path};       # no trailing hash

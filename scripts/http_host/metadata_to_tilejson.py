@@ -32,7 +32,7 @@ def cli(metadata_path: Path, tilejson_path: Path, url_prefix: str, minify: bool)
 
     ''
     tilejson['vector_layers'] = metadata_json_key.pop('vector_layers')
-    assert not metadata_json_key  # check that no more keys left
+    assert not metadata_json_key  # check that no more keys are left
 
     tilejson['attribution'] = metadata.pop('attribution')
     tilejson['bounds'] = [float(n) for n in metadata.pop('bounds').split(',')]

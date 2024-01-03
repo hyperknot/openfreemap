@@ -17,6 +17,7 @@ def pkg_base(c):
         'rsync',
         'unzip',
         'wget',
+        'psmisc',
         #
         'btrfs-progs',
         #
