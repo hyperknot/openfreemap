@@ -33,7 +33,7 @@ def cli(btrfs_img: Path):
     """
 
     if os.geteuid() != 0:
-        sys.exit('Needs sudo')
+        sys.exit('  needs sudo')
 
     current_dir = Path.cwd()
 

@@ -24,7 +24,7 @@ def cli(mbtiles_path: Path, dir_path: Path):
     """
 
     if dir_path.exists() and any(dir_path.iterdir()):
-        sys.exit('Dir not empty')
+        sys.exit('  dir not empty')
 
     dir_path.mkdir(exist_ok=True)
 

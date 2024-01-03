@@ -46,7 +46,7 @@ def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Pat
     print('running download_tileset')
 
     if area not in {'planet', 'monaco'}:
-        sys.exit('Please specify area: "planet" or "monaco"')
+        sys.exit('  please specify area: "planet" or "monaco"')
 
     r = requests.get(f'https://{area}.openfreemap.com/dirs.txt')
     r.raise_for_status()
@@ -109,12 +109,12 @@ def mount():
     assert_sudo()
 
     if not DEFAULT_RUNS_DIR.exists():
-        sys.exit('download_tileset needs to be run first')
+        sys.exit('  download_tileset needs to be run first')
 
     clean_up_mounts(MNT_DIR)
     create_fstab()
 
-    print('Running mount -a')
+    print('  running mount -a')
     subprocess.run(['mount', '-a'], check=True)
 
     clean_up_mounts(MNT_DIR)
@@ -136,7 +136,7 @@ def set_latest_versions():
     assert_sudo()
 
     if not MNT_DIR.exists():
-        sys.exit('mount needs to be run first')
+        sys.exit('  mount needs to be run first')
 
     return set_tileset_versions()
 
@@ -153,7 +153,7 @@ def nginx_sync():
     assert_sudo()
 
     if not MNT_DIR.exists():
-        sys.exit('mount needs to be run first')
+        sys.exit('  mount needs to be run first')
 
     write_nginx_config()
 
