@@ -1,6 +1,7 @@
 import os
 import secrets
 import string
+from pathlib import Path
 
 
 def put(
@@ -25,6 +26,33 @@ def put(
     c.sudo(f"rm -rf '{tmp_path}'")
 
     set_permission(c, remote_path, permissions=permissions, owner=owner, group=group)
+
+
+def put_dir(
+    c,
+    local_dir: Path,
+    remote_dir,
+    dir_permissions=None,
+    file_permissions=None,
+    owner='root',
+    group=None,
+    exclude_set=None,
+):
+    """
+    copies all files from local path to remote path
+    not recursive
+    """
+
+    files = [file for file in local_dir.iterdir() if file.is_file()]
+
+    if exclude_set:
+        files = [f for f in files if f.name not in exclude_set]
+
+    c.sudo(f'mkdir -p "{remote_dir}"')
+    set_permission(c, remote_dir, permissions=dir_permissions, owner=owner, group=group)
+
+    for file in files:
+        put(c, file, f'{remote_dir}/{file.name}', file_permissions, owner, group)
 
 
 def put_str(c, remote_path, str_):
