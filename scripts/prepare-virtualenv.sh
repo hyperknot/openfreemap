@@ -11,6 +11,5 @@ venv/bin/pip -V
 
 venv/bin/pip install -U pip wheel setuptools
 
-venv/bin/pip install click requests
 
 

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 requirements = [
@@ -6,12 +6,12 @@ requirements = [
     'fabric',
     'nginxfmt',
     'python-dotenv',
-    'requests',
     'ruff',
 ]
+
 
 setup(
     python_requires='>=3.10',
     install_requires=requirements,
-    packages=['ssh_lib'],
+    packages=find_packages(),
 )

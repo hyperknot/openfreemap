@@ -12,7 +12,7 @@ from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import planetiler
 from ssh_lib.rclone import rclone
-from ssh_lib.utils import add_user, enable_sudo, put, reboot, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, put_dir, reboot, sudo_cmd
 
 
 def prepare_shared(c):
@@ -99,6 +99,8 @@ def prepare_http_host(c):
 
     upload_https_host_files(c)
     upload_certificates(c)
+
+    c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
 
 
 def upload_https_host_files(c):
