@@ -6,7 +6,7 @@ from dotenv import dotenv_values
 from fabric import Config, Connection
 
 from ssh_lib import CONFIG_DIR, HTTP_HOST_BIN, OFM_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
-from ssh_lib.benchmark import c1000k
+from ssh_lib.benchmark import c1000k, wrk
 from ssh_lib.kernel import kernel_tweaks_ofm
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
@@ -91,7 +91,6 @@ def prepare_tile_gen(c):
 def prepare_http_host(c, skip_cron: bool):
     nginx(c)
     certbot(c)
-    c1000k(c)
 
     c.sudo('rm -rf /data/ofm/http_host/logs')
     c.sudo('mkdir -p /data/ofm/http_host/logs')
@@ -130,8 +129,14 @@ def upload_certificates(c):
     c.sudo('chown -R nginx:nginx /data/nginx')
 
 
+def install_benchmark(c):
+    c1000k(c)
+    wrk(c)
+
+
 def debug_tmp(c):
-    upload_https_host_files(c)
+    install_benchmark(c)
+    # upload_https_host_files(c)
     # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 

@@ -1,4 +1,0 @@
-wrk -c1000 -d10s -t1 -s /data/ofm/benchmark/wrk_custom_list.lua http://localhost
-
-# -t1 - needs to be single treaded, otherwise the urls would be read not in sequence
-

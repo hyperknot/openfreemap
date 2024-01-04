@@ -17,9 +17,7 @@ def c1000k(c):
     # make sure it runs till 1 million
 
 
-def benchmark(c):
+def wrk(c):
     apt_get_install(c, 'wrk')
     c.sudo('mkdir -p /data/ofm/benchmark')
     put(c, f'{SCRIPTS_DIR}/http_host/benchmark/wrk_custom_list.lua', '/data/ofm/benchmark')
-
-    # wrk -c10 -d10s -t1 -s /data/ofm/benchmark/wrk_custom_list.lua http://localhost

@@ -16,6 +16,9 @@ gzip_proxied any; # no proxying
 types_hash_max_size 2048; # default should be good for the default set
 
 
+
+
+
 # not tested
 
 client_body_buffer_size  128k;
@@ -23,21 +26,5 @@ client_max_body_size 128k;
 client_header_buffer_size 1k;
 large_client_header_buffers 2 1k;
 
-
-
-
-# SSL optimizations
-SSL Session Cache
-SSL OCSP Stapling
-ssl_session_cache shared:SSL:10m;
-ssl_session_timeout 10m;
-ssl_prefer_server_ciphers on;
-
 client_header_timeout 12; # default is 60
-
-
-location / {
-    try_files $uri =404;
-}
-
 

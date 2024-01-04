@@ -8,11 +8,8 @@ fs.file-max # not needed, recent Ubuntu has it on high by default
 tcp_fin_timeout
 TCP max buffer size
 
-
-
 net.core.netdev_max_backlog = 262144
 net.core.rmem_max = 16777216
-net.core.somaxconn = 262144
 net.core.wmem_max = 16777216
 net.ipv4.tcp_max_syn_backlog = 262144
 net.ipv4.tcp_max_tw_buckets = 6000000

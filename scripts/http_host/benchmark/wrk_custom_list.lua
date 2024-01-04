@@ -1,10 +1,10 @@
 local counter = 1
 local lines = {}
-local base_path = "/planet/20231208_091355/tiles/"
-local file_path = "/data/ofm/benchmark/path_list_100k.txt"
+local url_base = "/planet/20231221_134737_pt/"  -- trailing slash
+local path_list_txt = "/data/ofm/benchmark/path_list_500k.txt"
 
-for line in io.lines(file_path) do
-    table.insert(lines, base_path .. line)
+for line in io.lines(path_list_txt) do
+    table.insert(lines, url_base .. line)
 end
 
 local function getNextUrl()
