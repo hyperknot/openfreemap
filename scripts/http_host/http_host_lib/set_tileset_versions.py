@@ -23,7 +23,7 @@ def set_tileset_versions():
                 local_version_start = fp.read()
 
         if not remote_version:
-            print('  remote version not specified')
+            print('    remote version not specified')
             if local_version_start is not None:
                 local_version_file.unlink()
                 need_nginx_sync = True
@@ -31,7 +31,7 @@ def set_tileset_versions():
 
         mnt_file = Path(f'/mnt/ofm/{area}-{remote_version}/metadata.json')
         if not mnt_file.exists():
-            print('  local version does not exist')
+            print('    local version does not exist')
             if local_version_start is not None:
                 local_version_file.unlink()
                 need_nginx_sync = True
