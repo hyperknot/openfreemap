@@ -67,8 +67,8 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
     )
 
     return f"""
-    location = /{area}/{version} {{     # no trailing hash
-        alias {tilejson_path};          # no trailing hash
+    location = /{area}/{version} {{     # no trailing slash
+        alias {tilejson_path};          # no trailing slash
         default_type application/json;
 
         add_header 'Access-Control-Allow-Origin' '*' always;
@@ -76,8 +76,8 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
         expires 1d;  # TODO target 1w
     }}
 
-    location /{area}/{version}/ {{      # trailing hash
-        alias {subdir}/tiles/;          # trailing hash
+    location /{area}/{version}/ {{      # trailing slash
+        alias {subdir}/tiles/;          # trailing slash
         try_files $uri @empty;
 
         add_header Content-Encoding gzip;
@@ -103,8 +103,8 @@ def create_latest_locations() -> str:
         assert tilejson_path.exists()
 
         location_str += f"""
-        location = /{area} {{          # no trailing hash
-            alias {tilejson_path};       # no trailing hash
+        location = /{area} {{          # no trailing slash
+            alias {tilejson_path};       # no trailing slash
             default_type application/json;
 
             add_header 'Access-Control-Allow-Origin' '*' always;
