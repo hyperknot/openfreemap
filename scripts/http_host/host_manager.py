@@ -7,7 +7,7 @@ from pathlib import Path
 import click
 import requests
 from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, MNT_DIR
-from http_host_lib.download_fonts import download_fonts
+from http_host_lib.download_assets import download_fonts, download_natural_earth
 from http_host_lib.download_tileset import download_and_extract_tileset
 from http_host_lib.mount import clean_up_mounts, create_fstab
 from http_host_lib.nginx import write_nginx_config
@@ -94,6 +94,7 @@ def download_assets(assets_dir: Path):
         sys.exit("asset dir's parent doesn't exist")
 
     download_fonts(assets_dir)
+    download_natural_earth(assets_dir)
 
 
 @cli.command()

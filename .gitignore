@@ -12,6 +12,7 @@ rclone.conf
 node_modules
 tmp
 temp
+_temp
 
 /.idea
 venv

@@ -135,8 +135,7 @@ def install_benchmark(c):
 
 
 def debug_tmp(c):
-    install_benchmark(c)
-    # upload_https_host_files(c)
+    upload_https_host_files(c)
     # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
