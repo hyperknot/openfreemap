@@ -48,7 +48,7 @@ def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Pat
     if area not in {'planet', 'monaco'}:
         sys.exit('  please specify area: "planet" or "monaco"')
 
-    r = requests.get(f'https://{area}.openfreemap.com/dirs.txt')
+    r = requests.get(f'https://{area}.openfreemap.com/dirs.txt', timeout=30)
     r.raise_for_status()
 
     versions = sorted(r.text.splitlines())

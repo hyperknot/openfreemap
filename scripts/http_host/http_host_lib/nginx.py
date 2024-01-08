@@ -71,19 +71,21 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
         alias {tilejson_path};          # no trailing slash
         default_type application/json;
 
+        expires 1d;  # TODO target 1w
+
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
-        expires 1d;  # TODO target 1w
     }}
 
     location /{area}/{version}/ {{      # trailing slash
         alias {subdir}/tiles/;          # trailing slash
         try_files $uri @empty;
-
         add_header Content-Encoding gzip;
+
+        expires 1d;  # TODO target 10y
+
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
-        expires 1d;  # TODO target 10y
     }}
     """
 
@@ -107,9 +109,10 @@ def create_latest_locations() -> str:
             alias {tilejson_path};       # no trailing slash
             default_type application/json;
 
+            expires 1d;
+
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
-            expires 1d;
         }}
         """
 

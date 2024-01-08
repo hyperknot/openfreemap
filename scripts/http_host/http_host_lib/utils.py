@@ -33,7 +33,7 @@ def download_if_size_differs(url: str, local_file: Path) -> bool:
 
 
 def get_remote_file_size(url: str) -> int | None:
-    r = requests.head(url)
+    r = requests.head(url, timeout=30)
     size = r.headers.get('Content-Length')
     return int(size) if size else None
 

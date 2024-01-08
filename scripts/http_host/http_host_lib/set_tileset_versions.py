@@ -9,7 +9,7 @@ def set_tileset_versions():
     need_nginx_sync = False
 
     for area in ['planet', 'monaco']:
-        r = requests.get(f'https://assets.openfreemap.com/versions/deployed_{area}.txt')
+        r = requests.get(f'https://assets.openfreemap.com/versions/deployed_{area}.txt', timeout=30)
         r.raise_for_status()
         remote_version = r.text.strip()
         print(f'  remote version for {area}: {remote_version}')
