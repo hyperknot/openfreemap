@@ -1,5 +1,4 @@
-from ssh_lib import ASSETS_DIR
-from ssh_lib.utils import put, put_str
+from ssh_lib.utils import put_str
 
 
 def kernel_somaxconn65k(c):
