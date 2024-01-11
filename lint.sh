@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+prettier -w .
+
 ruff check --fix .
 ruff format .
 

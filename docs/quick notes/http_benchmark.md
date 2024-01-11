@@ -18,8 +18,6 @@ Transfer/sec:      3.84GB
 Super much overkill, we'd only need 125 MB/s for Gigabit connection and this is 3840 MB/s.
 Also max request time is super nice + no errors.
 
-
-
 ### wrk over network
 
 ```

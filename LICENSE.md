@@ -4,21 +4,21 @@ The license of this project is [MIT](https://www.tldrlegal.com/license/mit-licen
 
 Map data is from [OpenStreetMap](https://www.openstreetmap.org/copyright).
 
-[OpenMapTiles](https://github.com/openmaptiles/openmaptiles) code is released under the [BSD 3-Clause License](https://tldrlegal.com/license/bsd-3-clause-license-(revised)), design under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/openmaptiles/openmaptiles/blob/master/LICENSE.md).
+[OpenMapTiles](https://github.com/openmaptiles/openmaptiles) code is released under the [BSD 3-Clause License](<https://tldrlegal.com/license/bsd-3-clause-license-(revised)>), design under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/openmaptiles/openmaptiles/blob/master/LICENSE.md).
 
 ### Styles
 
 #### Bright
 
-Fork from [openmaptiles/osm-bright-gl-style](https://github.com/openmaptiles/osm-bright-gl-style). The OSM Bright GL Style is derived from [Mapbox Open Styles](https://github.com/mapbox/mapbox-gl-styles). The OSM Bright GL Style’s code is released under the [BSD 3-Clause License](https://tldrlegal.com/license/bsd-3-clause-license-(revised)). The OSM Bright GL Style’s design is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/LICENSE.md).
+Fork from [openmaptiles/osm-bright-gl-style](https://github.com/openmaptiles/osm-bright-gl-style). The OSM Bright GL Style is derived from [Mapbox Open Styles](https://github.com/mapbox/mapbox-gl-styles). The OSM Bright GL Style’s code is released under the [BSD 3-Clause License](<https://tldrlegal.com/license/bsd-3-clause-license-(revised)>). The OSM Bright GL Style’s design is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/LICENSE.md).
 
 #### Liberty
 
-Fork from [maputnik/osm-liberty](https://github.com/maputnik/osm-liberty). OSM Liberty is a fork of OSM Bright. The OSM Bright GL Style is derived from [Mapbox Open Styles](https://github.com/mapbox/mapbox-gl-styles). The OSM Bright GL Style’s code is released under the [BSD 3-Clause License](https://tldrlegal.com/license/bsd-3-clause-license-(revised)). The OSM Bright GL Style’s design is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/maputnik/osm-liberty/blob/gh-pages/LICENSE.md).
+Fork from [maputnik/osm-liberty](https://github.com/maputnik/osm-liberty). OSM Liberty is a fork of OSM Bright. The OSM Bright GL Style is derived from [Mapbox Open Styles](https://github.com/mapbox/mapbox-gl-styles). The OSM Bright GL Style’s code is released under the [BSD 3-Clause License](<https://tldrlegal.com/license/bsd-3-clause-license-(revised)>). The OSM Bright GL Style’s design is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/maputnik/osm-liberty/blob/gh-pages/LICENSE.md).
 
 #### Positron
 
-Fork from [openmaptiles/positron-gl-style](https://github.com/openmaptiles/positron-gl-style). The Positron GL Style is derived from [CartoDB Basemaps](https://github.com/CartoDB/CartoDB-basemaps) designed by Stamen and Paul Norman for CartoDB Inc., licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). The Positron GL style’s code is released under the [BSD 3-Clause License](https://tldrlegal.com/license/bsd-3-clause-license-(revised)). The Positron GL Style’s design is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/openmaptiles/positron-gl-style/blob/master/LICENSE.md).
+Fork from [openmaptiles/positron-gl-style](https://github.com/openmaptiles/positron-gl-style). The Positron GL Style is derived from [CartoDB Basemaps](https://github.com/CartoDB/CartoDB-basemaps) designed by Stamen and Paul Norman for CartoDB Inc., licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). The Positron GL style’s code is released under the [BSD 3-Clause License](<https://tldrlegal.com/license/bsd-3-clause-license-(revised)>). The Positron GL Style’s design is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [LICENSE.md](https://github.com/openmaptiles/positron-gl-style/blob/master/LICENSE.md).
 
 ### Fonts
 
@@ -37,8 +37,6 @@ The right arrow was derived from [Wikipedia](https://commons.wikimedia.org/wiki/
 ### Tools
 
 spritezero-cli is from [mapbox/spritezero-cli](https://github.com/mapbox/spritezero-cli), licensed [ISC](https://github.com/mapbox/spritezero-cli/blob/master/LICENSE.md).
-
-
 
 ---
 
