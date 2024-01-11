@@ -53,7 +53,7 @@ def download_styles(assets_dir: Path):
 
 def download_sprites(assets_dir: Path):
     """
-    Download and extract sprites if the version is not available
+    Download and extract sprites if a version is not available locally
     """
 
     sprites_dir = assets_dir / 'sprites'

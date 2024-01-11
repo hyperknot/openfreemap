@@ -128,7 +128,7 @@ def write_tile_files(c, *, dir_path):
 def assert_all_tiles_present(mbtiles_path, dir_path):
     """
     If it's a full planet run,
-    ake sure there are exactly the right number of files generated.
+    make sure there are exactly the right number of files generated.
     """
 
     if 'planet' in mbtiles_path.resolve().parent.name:
