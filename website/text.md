@@ -38,13 +38,13 @@ I waited for years for someone to offer this service but realized no one was goi
 
 I'll share more about the reasons in a future [blog post](https://blog.hyperknot.com/). Feel free to subscribe.
 
-## How can this work? How can a one person project offer unlimited map hosting for free?
+## How can this work? How can a one-person project offer unlimited map hosting for free?
 
-There is no technical reason why vector tile hosting should cost as much as it does today. Vector tiles are just static files. OK, serving 300 million files is not easy, but at the end of the day they are just files.
+There is no technical reason why vector tile hosting should cost as much as it does today. Vector tiles are just static files. OK, serving 300 million files is not easy, but at the end of the day, they are just files.
 
 Financially, the plan is to keep renting Hetzner servers until they cover the bandwidth. I believe it can work if enough people subscribe to the support plans.
 
-If this project helps you to save on your map hosting costs, please consider subscribing to a support plan!
+If this project helps you save on your map hosting costs, please consider subscribing to a support plan!
 
 ## How can I follow this project?
 
