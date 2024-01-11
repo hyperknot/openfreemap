@@ -1,18 +1,18 @@
 # OpenFreeMap
 
-## What is this?
+## What is OpenFreeMap?
 
 OpenFreeMap is an open and free OpenStreetMap tile hosting service.
 
-It's truly free: there is no limit on the amount of map views or requests you can make or how you use your map. There is no registration page, user database, API keys nor cookies.
+It's truly free: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
 
-It's truly open source: everything, including the full production setup is on GitHub.
+It's truly open-source: everything, including the full production setup, is on GitHub.
 
 ## Why is this important?
 
-OpenStreetMap is one of the most important collective projects in history. More than 2 million users have contributed to it over 19 years; 3 million edits are made each day.
+OpenStreetMap is one of the most significant collective projects in history. More than 2 million users have contributed to it over 19 years; 3 million edits are made each day.
 
-Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't get too popular, otherwise you might end up with a $10,000 bill in a single day, like Hoodmaps did [\*](https://twitter.com/levelsio/status/1730659933232730443).
+Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps did [\*](https://twitter.com/levelsio/status/1730659933232730443).
 
 You can try self-hosting, but it requires a big server and a lot of time to get it right.
 
