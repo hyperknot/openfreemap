@@ -69,9 +69,9 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
     return f"""
     location = /{area}/{version} {{     # no trailing slash
         alias {tilejson_path};          # no trailing slash
-        default_type application/json;
 
         expires 1d;  # TODO target 1w
+        default_type application/json;
 
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
@@ -79,10 +79,14 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
 
     location /{area}/{version}/ {{      # trailing slash
         alias {subdir}/tiles/;          # trailing slash
-        try_files $uri @empty;
+        try_files $uri @empty_tile;
         add_header Content-Encoding gzip;
 
         expires 1d;  # TODO target 10y
+
+        types {{
+            application/vnd.mapbox-vector-tile pbf;
+        }}
 
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
@@ -107,9 +111,9 @@ def create_latest_locations() -> str:
         location_str += f"""
         location = /{area} {{          # no trailing slash
             alias {tilejson_path};       # no trailing slash
-            default_type application/json;
 
             expires 1d;
+            default_type application/json;
 
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
