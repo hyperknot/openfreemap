@@ -18,7 +18,7 @@
     Include
     <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">MapLibre GL JS</a> in the
     <code>&lt;head&gt;</code>. If you are using npm, you can install the
-    <code>maplibre-gl</code> package, but make sure to load the CSS manually.
+    <code>maplibre-gl</code> package. Make sure to import the CSS as well.
   </p>
   <pre><code class="language-html">&lt;script src=&quot;https://unpkg.com/maplibre-gl/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;
 &lt;link
@@ -26,15 +26,15 @@
   rel=&quot;stylesheet&quot;
 /&gt;
 </code></pre>
-  <p>And initialize it to a div, like this:</p>
+  <p>Initialize it to a div like this:</p>
   <pre><code class="language-html">&lt;div id=&quot;map&quot; style=&quot;width: 100%; height: 500px&quot;&gt;&lt;/div&gt;
 &lt;script&gt;
   const map = new maplibregl.Map({
     style: 'https://tiles.openfreemap.org/styles/liberty',
     center: [-0.114, 51.506],
     zoom: 14.2,
-    container: 'map';
- })
+    container: 'map'
+  })
 &lt;/script&gt;
 </code></pre>
 </div>
