@@ -18,7 +18,7 @@ You can try self-hosting, but it requires a big server and a lot of time to get 
 
 ## Who is behind this project?
 
-I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I've created [MapHub](https://maphub.net/) and I've been running map hosting in production for 8 years.
+I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I created [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
 
 ## How can I use it?
 
@@ -34,9 +34,9 @@ Yes
 
 ## Why did you make this?
 
-Because I waited for years for someone to offer this service, but realised no one is going to make it. So, I thought I might use my map hosting experience and do it.
+I waited for years for someone to offer this service but realized no one was going to make it. So, I thought I might use my map hosting experience and do it myself.
 
-I'll share more about the why in a [blog post](https://blog.hyperknot.com/) in the future, feel free to subscribe.
+I'll share more about the reasons in a future [blog post](https://blog.hyperknot.com/). Feel free to subscribe.
 
 ## How can this work? How can a one person project offer unlimited map hosting for free?
 
