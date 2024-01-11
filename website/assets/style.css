@@ -25,6 +25,27 @@ select {
   font: inherit;
 }
 
+/* normalize.css */
+
+button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+  overflow: visible;
+  text-transform: none;
+  -webkit-appearance: button;
+}
+
+button::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+button:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
 /* --- start --- */
 
 body {
@@ -45,7 +66,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.col-lbl {
   color: #555;
   max-width: 600px;
   margin: 1em auto 0.5em;
@@ -58,6 +80,14 @@ h6 {
 
 a {
   color: #444;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 1px 0 #007cd7;
+  transition: box-shadow 200ms ease 0s;
+}
+
+a:hover {
+  box-shadow: 0 2px 0 #007cd7;
 }
 
 .logo {
@@ -78,7 +108,7 @@ pre {
   background: #efefef;
 
   max-width: 800px;
-  margin: 0 auto 0.6em;
+  margin: 0 auto 0.6em !important;
   font-size: 14px;
 }
 
@@ -92,4 +122,48 @@ code {
   width: 100%;
   height: 500px;
   margin-bottom: 2em;
+}
+
+button {
+  border: 0;
+  border-radius: 0.25rem;
+  background: #007cd7;
+  color: white;
+  font-family: -system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem;
+  cursor: pointer;
+}
+
+/*button:hover { }*/
+/*button:focus { }*/
+/*button:active { }*/
+
+.col-lbl {
+  display: block;
+}
+
+.col-chk {
+  display: none;
+}
+
+.col-lbl:before {
+  content: '►';
+  margin-right: 1em;
+}
+
+.col-cnt {
+  display: none;
+}
+
+.col-chk:checked ~ .col-cnt {
+  display: block;
+}
+
+.col-chk:checked ~ .col-lbl:before {
+  content: '▼';
 }

@@ -14,6 +14,9 @@ def generate():
     template = open('template.html').read()
     template = template.replace('{text}', text_html)
 
+    style_selector = open('map_docs.html').read()
+    template = template.replace('<!--map_docs-->', style_selector)
+
     open('index.html', 'w').write(template)
 
 

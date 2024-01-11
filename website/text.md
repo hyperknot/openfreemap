@@ -22,75 +22,41 @@ I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyp
 
 ## How can I use it?
 
-<div id="map"></div>
-
-<!--style_selector-->
-
-Include [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) in `<head>`
-
-```
-<script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
-<link
-  href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css"
-  rel="stylesheet"
-/>
-```
-
-And initialize it to a div, like this:
-
-```
-<div id="map" style="width: 100%; height: 500px"></div>
-<script>
-  const map = new maplibregl.Map({
-    style: 'https://tiles.openfreemap.org/styles/liberty',
-    center: [-0.114, 51.506],
-    zoom: 14.2,
-    container: 'map'
- })
-</script>
-```
-
-If you've used Mapbox GL before, please migrate to MapLibre. It is based on the last open-source version of Mapbox GL, before it went closed-source. A Leaflet based snippet is coming soon.
-
-For mobile apps, you can do the same with [MapLibre Native.](https://maplibre.org/)
-
-You can also download our processed planet MBTiles and BTRFS images if you want to self-host yourself. Details are in the GitHub at [hyperknot/openfreemap](https://github.com/hyperknot/openfreemap).
+<!--map_docs-->
 
 ## How can I donate or support this project?
 
 ...
 
+## Is commercial usage allowed?
+
+Yes
+
+## Why did you make this?
+
+Because I waited for years for someone to offer this service, but realised no one is going to make it. So, I thought I might use my map hosting experience and do it.
+
+I'll share more about the why in a [blog post](https://blog.hyperknot.com/) in the future, feel free to subscribe.
+
+## How can this work? How can a one person project offer unlimited map hosting for free?
+
+There is no technical reason why vector tile hosting should cost as much as it does today. Vector tiles are just static files. OK, serving 300 million files is not easy, but at the end of the day they are just files.
+
+Financially, the plan is to keep renting Hetzner servers until they cover the bandwidth. I believe it can work if enough people subscribe to the support plans.
+
+If this project helps you to save on your map hosting costs, please consider subscribing to a support plan!
+
 ## How can I follow this project?
+
+twitter: [hyperknot](https://twitter.com/hyperknot) and [OpenFreeMapOrg](https://twitter.com/OpenFreeMapOrg)
 
 The main repo is [hyperknot/openfreemap](https://github.com/hyperknot/openfreemap)
 
 Styles are at [hyperknot/openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 
-twitter: [@hyperknot](https://twitter.com/hyperknot)
-
-twitter: [@OpenFreeMapOrg](https://twitter.com/OpenFreeMapOrg)
-
 mastodon zsolt https://elk.zone/sigmoid.social/@hyperknot/followers
 
 mastodon ofm TODO
-
-## Is commercial usage allowed?
-
-Yes.
-
-## Why did I make this?
-
-Because I waited for years for someone to offer this service, but realised no one is going to make it. So, I thought I might use my map hosting experience and do it.
-
-I'll share more about the why in a blog post in the future, feel free to subscribe on the links above.
-
-## How can this work? How can a one person project offer unlimited map hosting for free?
-
-There is no technical reason why vector tile hosting should cost as much as it does today.
-
-Vector tiles are just static files. OK, serving 300 million files is not easy, but at the end of the day they are just files.
-
-Financially, the plan is to keep buying Hetzner servers until they cover the bandwidth. I believe it can work if enough people contribute. If this project helps you save your map hosting costs, please consider our support plans!
 
 ## What is the tech stack?
 
@@ -104,7 +70,7 @@ The server is nginx on Ubuntu.
 
 There is no cloud, just dedicated servers on Hetzner.
 
-Currently using Cloudflare, but it's designed so that it can be changed any time.
+Currently using Cloudflare, but it's designed it so it can be changed any time.
 
 Moreover, a lot of work is going into customising the styles at [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles).
 

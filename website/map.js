@@ -16,4 +16,13 @@ map.addControl(nav, 'top-right')
 let scale = new maplibregl.ScaleControl()
 map.addControl(scale)
 
-new maplibregl.Marker().setLngLat([-0.122, 51.503]).addTo(map)
+new maplibregl.Marker().setLngLat([-0.119, 51.507]).addTo(map)
+
+function selectStyle(style) {
+  const styleUrl = 'https://tiles.openfreemap.org/styles/' + style
+  map.setStyle(styleUrl)
+  map.setPitch(0)
+  map.setBearing(0)
+
+  document.getElementById('style-url-code').innerText = styleUrl
+}
