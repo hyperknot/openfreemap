@@ -10,44 +10,50 @@ from http_host_lib.utils import download_file_aria2, download_if_size_differs
 def download_fonts(assets_dir: Path):
     """
     Download and extract font assets if their file size differ.
-    Making updates atomic, with extraction to a temp dest + rename
     """
 
     fonts_dir = assets_dir / 'fonts'
     fonts_dir.mkdir(exist_ok=True, parents=True)
 
-    fonts_temp = assets_dir / 'fonts_temp'
+    url = 'https://assets.openfreemap.com/fonts/ofm.tar.gz'
+    local_file = fonts_dir / 'ofm.tar.gz'
+    if not download_if_size_differs(url, local_file):
+        return
 
-    for font in ['ofm']:
-        url = f'https://assets.openfreemap.com/fonts/{font}.tar.gz'
-        local_file = fonts_dir / f'{font}.tar.gz'
-        if not download_if_size_differs(url, local_file):
-            continue
+    ofm_dir = fonts_dir / 'ofm'
+    shutil.rmtree(ofm_dir, ignore_errors=True)
 
-        shutil.rmtree(fonts_temp, ignore_errors=True)
-        fonts_temp.mkdir()
+    subprocess.run(
+        ['tar', '-xzf', local_file, '-C', fonts_dir],
+        check=True,
+    )
 
-        subprocess.run(
-            ['tar', '-xzf', local_file, '-C', fonts_temp],
-            check=True,
-        )
 
-        target_dir = fonts_dir / font
-        target_dir_renamed = fonts_dir / f'{font}.bak'
-        temp_dir = fonts_temp / font
+def download_styles(assets_dir: Path):
+    """
+    Download and extract style assets if their file size differ.
+    """
 
-        if target_dir.exists():
-            target_dir.rename(target_dir_renamed)
-        temp_dir.rename(target_dir)
+    styles_dir = assets_dir / 'styles'
+    styles_dir.mkdir(exist_ok=True, parents=True)
 
-        shutil.rmtree(target_dir_renamed, ignore_errors=True)
+    url = 'https://assets.openfreemap.com/styles/ofm.tar.gz'
+    local_file = styles_dir / 'ofm.tar.gz'
+    if not download_if_size_differs(url, local_file):
+        return
 
-    shutil.rmtree(fonts_temp, ignore_errors=True)
+    ofm_dir = styles_dir / 'ofm'
+    shutil.rmtree(ofm_dir, ignore_errors=True)
+
+    subprocess.run(
+        ['tar', '-xzf', local_file, '-C', styles_dir],
+        check=True,
+    )
 
 
 def download_sprites(assets_dir: Path):
     """
-    Download and extract sprites if their file size differ.
+    Download and extract sprites if the version is not available
     """
 
     sprites_dir = assets_dir / 'sprites'
