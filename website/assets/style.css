@@ -49,7 +49,7 @@ button:-moz-focusring {
 /* --- start --- */
 
 body {
-  padding: 0 40px;
+  padding: 0 40px 100px;
 
   line-height: 1.5;
   font-size: 17px;

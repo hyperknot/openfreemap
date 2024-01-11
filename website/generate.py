@@ -4,10 +4,10 @@ import marko
 
 
 def generate():
-    licenses = open('../LICENSE.md').read().split('---')[0]
+    # licenses = open('../LICENSE.md').read().split('---')[0]
 
     text_md = open('text.md').read()
-    text_md = text_md.replace('{licenses}', licenses)
+    # text_md = text_md.replace('{licenses}', licenses)
 
     text_html = marko.convert(text_md)
 
