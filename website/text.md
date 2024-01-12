@@ -18,7 +18,7 @@ You can try self-hosting, but it requires a big server and a lot of time to get 
 
 ## Who is behind this project?
 
-I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I created [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
+I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
 
 ## How can I use it?
 
