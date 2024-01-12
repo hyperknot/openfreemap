@@ -145,6 +145,7 @@ button {
 
 .col-lbl {
   display: block;
+  cursor: pointer;
 }
 
 .col-chk {
@@ -158,6 +159,7 @@ button {
 
 .col-cnt {
   display: none;
+  margin: 1em 0 2em;
 }
 
 .col-chk:checked ~ .col-cnt {
