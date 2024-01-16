@@ -31,7 +31,6 @@ button {
   font-family: inherit;
   font-size: 100%;
   line-height: 1.15;
-  margin: 0;
   overflow: visible;
   text-transform: none;
   -webkit-appearance: button;
@@ -59,6 +58,11 @@ body {
   font-weight: normal;
 
   color: #000;
+}
+
+.static {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 h1,
@@ -96,7 +100,6 @@ a:hover {
 
 h1 {
   text-align: center;
-  margin: 0 auto;
 }
 
 .subtitle {
@@ -175,4 +178,11 @@ button {
 
 .col-chk:checked ~ .col-lbl:before {
   content: '▼';
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #555;
+  margin: 2em 0;
 }
