@@ -1,20 +1,10 @@
-# OpenFreeMap
-
 ## What is OpenFreeMap?
 
-OpenFreeMap is an open and free OpenStreetMap tile hosting service.
+OpenFreeMap allows you to display custom maps on your website and apps.
 
-It's truly free: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
+It's truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
 
-It's truly open-source: everything, including the full production setup, is on GitHub.
-
-## Why is this important?
-
-OpenStreetMap is one of the most significant collective projects in history. More than 2 million users have contributed to it over 19 years; 3 million edits are made each day.
-
-Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps did [\*](https://twitter.com/levelsio/status/1730659933232730443).
-
-You can try self-hosting, but it requires a big server and a lot of time to get it right.
+It's truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
 
 ## Who is behind this project?
 
@@ -26,13 +16,29 @@ I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyp
 
 ## How can I donate or support this project?
 
-...
+If this project helps you save on your map hosting costs, please subscribe to one of our support plans.
+
+<!--support plan-->
+
+The reason we are offering support plans rather than "Donate Now" buttons is that accounting for business donations can be very difficult for both sides. The aim of the subscription plans is to support this project by covering the server costs and the hours we put into it.
+
+As a bonus, on **Silver** level and above, we can offer personalised technical support by email.
+
+If we ever receive a **Diamond** level supporter, we'll put their logo on this page.
+
+Note: if you want to make a single donation, feel free to cancel after the first payment. However, please understand that the nature of this project needs recurring donations to cover the server costs.
 
 ## Is commercial usage allowed?
 
 Yes.
 
-## Why did you make this?
+## Why did you make this project?
+
+OpenStreetMap is one of the most important collective projects in history. It's soon 20 years old and 3 million edits are made each day.
+
+Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps did [\*](https://twitter.com/levelsio/status/1730659933232730443).
+
+You can try self-hosting, but it requires a big server and a lot of time to get it right.
 
 I waited for years for someone to offer this service but realized no one was going to make it. So, I thought I might use my map hosting experience and do it myself.
 
@@ -42,7 +48,7 @@ I'll share more about the reasons in a future [blog post](https://blog.hyperknot
 
 There is no technical reason why vector tile hosting should cost as much as it does today. Vector tiles are just static files. OK, serving 300 million files is not easy, but at the end of the day, they are just files.
 
-Financially, the plan is to keep renting Hetzner servers until they cover the bandwidth. I believe it can be self-sustainable if enough people subscribe to the support plans.
+Financially, the plan is to keep renting servers until they cover the bandwidth. I believe it can be self-sustainable if enough people subscribe to the support plans.
 
 If this project helps you save on your map hosting costs, please consider subscribing to a support plan!
 
@@ -72,7 +78,7 @@ There is no cloud, just dedicated servers at Hetzner.
 
 Currently, it is behind Cloudflare, but it has been designed so that it can be changed at any time.
 
-Moreover, a lot of work is going into customizing the styles at [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles).
+Moreover, a lot of work is going into customizing the [styles](https://github.com/hyperknot/openfreemap-styles).
 
 ## What about PMTiles?
 

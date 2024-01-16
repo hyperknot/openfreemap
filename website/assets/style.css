@@ -78,7 +78,7 @@ h6,
   font-weight: 700;
 }
 
-a {
+p a {
   color: #444;
   font-weight: 700;
   text-decoration: none;
@@ -97,6 +97,13 @@ a:hover {
 h1 {
   text-align: center;
   margin: 0 auto;
+}
+
+.subtitle {
+  text-align: center;
+  font-style: italic;
+  color: #444;
+  margin-top: 1em;
 }
 
 p {
