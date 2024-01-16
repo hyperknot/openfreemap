@@ -16,7 +16,7 @@ The only data we might collect are server logs. Technically, these are disabled 
 
 ## PRIVACY POLICY
 
-Your privacy is important to us, so Hyperknot Software Kft., a company based in the Hungary, has created the following Privacy Policy ("Policy") to let you know what information we collect when you visit our Site https://openfreemap.org/ ("Site"), why we collect it and how we use it.
+Your privacy is important to us, so Hyperknot Software Kft., a company based in Hungary, has created the following Privacy Policy ("Policy") to let you know what information we collect when you visit our Site https://openfreemap.org/ ("Site"), why we collect it and how we use it.
 
 The terms "You," "Your," "Yours" and "User" refer to the entity/person/organization using our Site.
 When this Policy mentions "We", "Us," and "Our" it refers to Hyperknot Software Kft. and its subsidiaries and affiliates.
