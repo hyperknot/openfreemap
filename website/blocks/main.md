@@ -6,10 +6,6 @@ It's truly **free**: there are no limits on the number of map views or requests 
 
 It's truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
 
-## Who is behind this project?
-
-I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
-
 ## How can I use it?
 
 <!--map_docs-->
@@ -32,9 +28,13 @@ Note: if you want to make a single donation, feel free to cancel after the first
 
 Yes.
 
+## Who is behind this project?
+
+I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
+
 ## Why did you make this project?
 
-OpenStreetMap is one of the most important collective projects in history. It's soon 20 years old and 3 million edits are made each day.
+OpenStreetMap is one of the most important collective projects in history. It started almost 20 years ago, and today 3 million edits are made each day!
 
 Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps did [\*](https://twitter.com/levelsio/status/1730659933232730443).
 
@@ -56,13 +56,7 @@ If this project helps you save on your map hosting costs, please consider subscr
 
 twitter: [hyperknot](https://twitter.com/hyperknot) and [OpenFreeMapOrg](https://twitter.com/OpenFreeMapOrg)
 
-The main repo is [hyperknot/openfreemap](https://github.com/hyperknot/openfreemap)
-
-Styles are at [hyperknot/openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
-
-mastodon zsolt https://elk.zone/sigmoid.social/@hyperknot/followers
-
-mastodon ofm TODO
+GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 
 ## What is the tech stack?
 
@@ -74,9 +68,9 @@ There is no tile server running, only BTRFS partition images with 300 million ha
 
 The server is nginx on Ubuntu.
 
-There is no cloud, just dedicated servers at Hetzner.
+There is no cloud, just dedicated servers.
 
-Currently, it is behind Cloudflare, but it has been designed so that it can be changed at any time.
+Currently, it is behind Cloudflare, but it has been designed so that this can be changed at any time.
 
 Moreover, a lot of work is going into customizing the [styles](https://github.com/hyperknot/openfreemap-styles).
 
