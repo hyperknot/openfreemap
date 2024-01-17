@@ -36,7 +36,7 @@ def copy_assets():
         'map.js',
         'favicon.ico',
         'github.svg',
-        'x-twitter.svg',
+        'x.svg',
     ]:
         shutil.copyfile(ASSETS_DIR / file, OUT_DIR / file)
 

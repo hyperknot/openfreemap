@@ -72,7 +72,7 @@ h4,
 h5,
 h6,
 .col-lbl {
-  color: #555;
+  color: #333;
   max-width: 600px;
   margin: 1em auto 0.5em;
   line-height: 1.2;
@@ -83,7 +83,7 @@ h6,
 }
 
 p a {
-  color: #444;
+  color: #333;
   font-weight: 700;
   text-decoration: none;
   box-shadow: 0 1px 0 #007cd7;
@@ -95,7 +95,7 @@ p a:hover {
 }
 
 strong {
-  color: #555;
+  color: #333;
 }
 
 .logo {
@@ -116,7 +116,7 @@ h1 {
 /*.subtitle {*/
 /*  text-align: center;*/
 /*  font-style: italic;*/
-/*  color: #444;*/
+/*  color: #333;*/
 /*  margin-top: 1em;*/
 /*}*/
 
