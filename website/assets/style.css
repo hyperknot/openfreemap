@@ -167,7 +167,7 @@ button {
 }
 
 .button-container {
-  margin: 0 auto;
+  margin: 0 auto 0.6em;
   max-width: 600px;
   display: flex;
   flex-wrap: nowrap;
