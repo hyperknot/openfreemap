@@ -74,7 +74,7 @@ Currently, it is behind Cloudflare, but it has been designed so that this can be
 
 Moreover, a lot of effort is being put into standardizing the [styles](https://github.com/hyperknot/openfreemap-styles).
 
-## What about PMTiles?
+**What about PMTiles?**
 
 I would have loved to use PMTiles; they are a brilliant idea!
 
