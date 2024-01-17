@@ -16,7 +16,7 @@ If this project helps you save on your map hosting costs, please subscribe to on
 
 <!--support_plans-->
 
-The reason we are offering support plans rather than "Donate Now" buttons is that accounting for business donations can be prohibitively difficult. With support plans, you get a business invoice for each of your payment.
+We offer support plans instead of 'Donate Now' buttons because accounting for business donations can be prohibitively difficult. When subscribing to a support plan, you receive a business invoice for each of your payments.
 
 As a bonus, on **Silver** level and above, we can offer personalised technical support by email.
 
@@ -72,7 +72,7 @@ There is no cloud, just dedicated servers.
 
 Currently, it is behind Cloudflare, but it has been designed so that this can be changed at any time.
 
-Moreover, a lot of work is going into customizing the [styles](https://github.com/hyperknot/openfreemap-styles).
+Moreover, a lot of effort is being put into standardizing the [styles](https://github.com/hyperknot/openfreemap-styles).
 
 ## What about PMTiles?
 
