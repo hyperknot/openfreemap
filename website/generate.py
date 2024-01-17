@@ -30,7 +30,14 @@ def generate():
 
 
 def copy_assets():
-    for file in ['style.css', 'logo.jpg', 'map.js', 'favicon.ico']:
+    for file in [
+        'style.css',
+        'logo.jpg',
+        'map.js',
+        'favicon.ico',
+        'github.svg',
+        'x-twitter.svg',
+    ]:
         shutil.copyfile(ASSETS_DIR / file, OUT_DIR / file)
 
 

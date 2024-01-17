@@ -90,12 +90,23 @@ p a {
   transition: box-shadow 200ms ease 0s;
 }
 
-a:hover {
+p a:hover {
   box-shadow: 0 2px 0 #007cd7;
+}
+
+strong {
+  color: #555;
 }
 
 .logo {
   margin: 0 auto;
+}
+
+.icons {
+  margin: 0 auto;
+  width: 80px;
+  display: flex;
+  justify-content: space-between;
 }
 
 h1 {
