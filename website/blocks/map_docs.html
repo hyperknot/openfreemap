@@ -2,13 +2,17 @@
 
 <p>
   Choose a style:
-  <button onclick="selectStyle('bright')">Bright</button>
-  <button onclick="selectStyle('liberty')">Liberty</button>
-  <button onclick="selectStyle('positron')">Positron</button>
+  <div class="button-container">
+    <button onclick="selectStyle('bright')">Bright</button>
+    <button onclick="selectStyle('liberty')">Liberty</button>
+    <button onclick="selectStyle('positron')">Positron</button>
+  </div>
 </p>
 <p style="margin-bottom: 2em">
   Use the following style in a MapLibre map:
-  <code id="style-url-code">https://tiles.openfreemap.org/styles/liberty</code>
+  <code id="style-url-code">
+    <span>https://tiles.openfreemap.org</span><span>/styles</span><span>/liberty</span>
+  </code>
 </p>
 
 <input type="checkbox" id="col1" class="col-chk" />

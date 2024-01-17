@@ -24,5 +24,6 @@ function selectStyle(style) {
   map.setPitch(0)
   map.setBearing(0)
 
-  document.getElementById('style-url-code').innerText = styleUrl
+  const spans = document.querySelectorAll('#style-url-code span')
+  spans[2].innerText = '/' + style
 }
