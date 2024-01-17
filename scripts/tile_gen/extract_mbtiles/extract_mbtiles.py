@@ -50,7 +50,7 @@ def write_metadata(c, *, dir_path):
 
     if 'openfreemap' not in metadata['attribution']:
         attr_str = (
-            '<a href="https://openfreemap.org/" target="_blank">OpenFreeMap</a> '
+            '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> '
             + metadata['attribution']
         )
         c.execute("UPDATE metadata SET value = ? WHERE name = 'attribution'", (attr_str,))

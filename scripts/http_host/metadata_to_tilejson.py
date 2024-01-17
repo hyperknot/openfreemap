@@ -38,7 +38,7 @@ def cli(metadata_path: Path, tilejson_path: Path, url_prefix: str, minify: bool)
 
     # overwriting new style OSM license, until fixed in tile_gen
     tilejson['attribution'] = (
-        '<a href="https://openfreemap.org/" target="_blank">OpenFreeMap</a> '
+        '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> '
         '<a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> '
         'Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
     )
