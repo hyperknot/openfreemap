@@ -7,7 +7,7 @@ requirements = [
     'nginxfmt',
     'python-dotenv',
     'ruff',
-    'marko'
+    'marko',
 ]
 
 
