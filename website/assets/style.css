@@ -102,11 +102,23 @@ h1 {
   text-align: center;
 }
 
-.subtitle {
-  text-align: center;
-  font-style: italic;
-  color: #444;
-  margin-top: 1em;
+/*.subtitle {*/
+/*  text-align: center;*/
+/*  font-style: italic;*/
+/*  color: #444;*/
+/*  margin-top: 1em;*/
+/*}*/
+
+.footer {
+  max-width: 600px;
+  margin: 3em auto 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.footer a {
+  color: #777;
+  text-decoration: none;
 }
 
 p {

@@ -25,6 +25,7 @@ def generate():
     open(OUT_DIR / 'index.html', 'w').write(index_html)
 
     make_static_page('privacy', 'Privacy Policy')
+    make_static_page('tos', 'Terms of Services')
     copy_assets()
 
 

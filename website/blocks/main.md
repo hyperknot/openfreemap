@@ -14,9 +14,9 @@ It's truly **open-source**: everything, including the full production setup, is 
 
 If this project helps you save on your map hosting costs, please subscribe to one of our support plans.
 
-<!--support plan-->
+<!--support_plans-->
 
-The reason we are offering support plans rather than "Donate Now" buttons is that accounting for business donations can be very difficult for both sides. The aim of the subscription plans is to support this project by covering the server costs and the hours we put into it.
+The reason we are offering support plans rather than "Donate Now" buttons is that accounting for business donations can be prohibitively difficult. With support plans, you get a business invoice for each of your payment.
 
 As a bonus, on **Silver** level and above, we can offer personalised technical support by email.
 
@@ -93,3 +93,5 @@ You do not need to display the OpenFreeMap part, but it is nice if you do.
 ## License
 
 The license of this project is [MIT](https://www.tldrlegal.com/license/mit-license). Map data is from [OpenStreetMap](https://www.openstreetmap.org/copyright). The licenses for included projects are listed in [LICENSE.md](https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md).
+
+### 
