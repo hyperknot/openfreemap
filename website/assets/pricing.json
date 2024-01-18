@@ -1,34 +1,42 @@
 [
   {
     "price": 10,
-    "name": "Iron"
+    "name": "Steel",
+    "icon": "🗡️"
   },
   {
     "price": 20,
-    "name": "Steel"
+    "name": "Copper",
+    "icon": "🥘"
   },
   {
     "price": 40,
-    "name": "Copper"
+    "name": "Bronze",
+    "icon": "🛎️"
   },
   {
     "price": 75,
-    "name": "Bronze"
+    "name": "Silver",
+    "icon": "🍴"
   },
   {
     "price": 150,
-    "name": "Silver"
+    "name": "Gold",
+    "icon": "🏆"
   },
   {
     "price": 250,
-    "name": "Gold"
+    "name": "Platinum",
+    "icon": "💿"
   },
   {
     "price": 500,
-    "name": "Platinum"
+    "name": "Sapphire",
+    "icon": "💍"
   },
   {
     "price": 1000,
-    "name": "Diamond"
+    "name": "Diamond",
+    "icon": "💎"
   }
 ]
