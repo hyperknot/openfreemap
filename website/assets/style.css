@@ -86,12 +86,12 @@ p a {
   color: #333;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 1px 0 #007cd7;
+  box-shadow: 0 1px 0 #adc2ee;
   transition: box-shadow 200ms ease 0s;
 }
 
 p a:hover {
-  box-shadow: 0 2px 0 #007cd7;
+  box-shadow: 0 2px 0 #adc2ee;
 }
 
 strong {
@@ -165,7 +165,7 @@ code {
 button {
   border: 0;
   border-radius: 0.25rem;
-  background: #007cd7;
+  background: #2f5f8b;
   color: white;
   font-family: -system-ui, sans-serif;
   font-size: 1rem;
@@ -191,6 +191,7 @@ button {
 .col-lbl {
   display: block;
   cursor: pointer;
+  color: #333;
 }
 
 .col-chk {
@@ -200,6 +201,8 @@ button {
 .col-lbl:before {
   content: '►';
   margin-right: 1em;
+  color: #555;
+  font-size: 0.8em;
 }
 
 .col-cnt {
@@ -250,8 +253,7 @@ hr {
   width: 100%;
   margin: 20px auto 40px;
   table-layout: fixed;
-    border-collapse: collapse;
-
+  border-collapse: collapse;
 }
 
 .plan-icon {

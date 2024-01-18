@@ -16,7 +16,7 @@ If this project helps you save on your map hosting costs, please subscribe to on
 
 <!--support_plans-->
 
-We offer support plans instead of 'Donate Now' buttons because accounting for business donations can be prohibitively difficult. When subscribing to a support plan, you receive a business invoice for each of your payments.
+When subscribing to a support plan, you receive a business invoice for each of your payments.
 
 As a bonus, on **Silver** level and above, we can offer personalised technical support by email.
 
