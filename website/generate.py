@@ -45,6 +45,8 @@ def copy_assets():
     ]:
         shutil.copyfile(ASSETS_DIR / file, OUT_DIR / file)
 
+    shutil.copyfile('subscribe.html', OUT_DIR / 'subscribe.html')
+
 
 def make_static_page(page_str, title):
     page_md = open(f'blocks/{page_str}.md').read()
