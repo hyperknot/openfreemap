@@ -8,7 +8,7 @@ It's truly **open-source**: everything, including the full production setup, is 
 
 ## How can I use it?
 
-<!--map_docs-->
+<!--map_howto-->
 
 ## How can I donate or support this project?
 

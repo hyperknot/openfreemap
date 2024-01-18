@@ -244,3 +244,38 @@ hr {
   max-width: 600px;
   margin: 50px auto;
 }
+
+.plan-table {
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto 40px;
+  table-layout: fixed;
+    border-collapse: collapse;
+
+}
+
+.plan-icon {
+  font-size: 30px;
+}
+
+.plan-name {
+  font-weight: 700;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: hsl(0, 0%, 98%);
+}
+
+/*tr:nth-child(odd) {*/
+/*  background-color: #ffffff;*/
+/*}*/
+
+tr:hover {
+  background-color: hsl(0, 0%, 96%);
+}
