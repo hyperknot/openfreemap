@@ -32,17 +32,17 @@ Yes.
 
 I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
 
-## Why did you make this project?
+## Why did you build this project?
 
-OpenStreetMap is one of the most important collective projects in history. It started almost 20 years ago, and today 3 million edits are made each day!
+OpenStreetMap is one of the most important collective projects in history. It began almost 20 years ago, and today, 3 million edits are made each day!
 
-Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, like Hoodmaps did [\*](https://twitter.com/levelsio/status/1730659933232730443)
+Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps [did](https://twitter.com/levelsio/status/1730659933232730443).
 
 You can try self-hosting, but it requires a big server and a lot of time to get it right.
 
-I waited for years for someone to offer this service but realized no one was going to make it. So, I thought I might use my map hosting experience and do it myself.
+I waited for years for someone to offer this service but realized that no one was going to do it. So, I thought I might use my map hosting experience and build it myself.
 
-I'll share more about the reasons in a future [blog post](https://blog.hyperknot.com/), feel free to subscribe.
+I'll share more about the reasons in a future [blog post](https://blog.hyperknot.com/). Feel free to subscribe.
 
 ## How can this work? How can a one-person project offer unlimited map hosting for free?
 
