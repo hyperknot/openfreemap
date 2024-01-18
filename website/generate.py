@@ -20,8 +20,8 @@ def generate():
 
     index_html = template.replace('{main}', main_html)
 
-    map_docs = open('blocks/map_docs.html').read()
-    index_html = index_html.replace('<!--map_docs-->', map_docs)
+    map_howto = open('blocks/map_howto.html').read()
+    index_html = index_html.replace('<!--map_howto-->', map_howto)
 
     support_plans = open('blocks/support_plans.html').read()
     index_html = index_html.replace('<!--support_plans-->', support_plans)
@@ -36,9 +36,9 @@ def generate():
 def copy_assets():
     for file in [
         'style.css',
-        'logo.jpg',
-        'map_docs.js',
+        'map_howto.js',
         'support_plans.js',
+        'logo.jpg',
         'favicon.ico',
         'github.svg',
         'x.svg',
