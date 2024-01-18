@@ -239,3 +239,8 @@ hr {
     max-width: 100%;
   }
 }
+
+#support-plans-slider {
+    max-width: 600px;
+  margin: 50px auto;
+}

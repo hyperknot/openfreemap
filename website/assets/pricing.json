@@ -1,0 +1,34 @@
+[
+  {
+    "price": 10,
+    "name": "Iron"
+  },
+  {
+    "price": 20,
+    "name": "Steel"
+  },
+  {
+    "price": 40,
+    "name": "Copper"
+  },
+  {
+    "price": 75,
+    "name": "Bronze"
+  },
+  {
+    "price": 150,
+    "name": "Silver"
+  },
+  {
+    "price": 250,
+    "name": "Gold"
+  },
+  {
+    "price": 500,
+    "name": "Platinum"
+  },
+  {
+    "price": 1000,
+    "name": "Diamond"
+  }
+]

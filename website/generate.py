@@ -20,8 +20,12 @@ def generate():
 
     index_html = template.replace('{main}', main_html)
 
-    style_selector = open('blocks/map_docs.html').read()
-    index_html = index_html.replace('<!--map_docs-->', style_selector)
+    map_docs = open('blocks/map_docs.html').read()
+    index_html = index_html.replace('<!--map_docs-->', map_docs)
+
+    support_plans = open('blocks/support_plans.html').read()
+    index_html = index_html.replace('<!--support_plans-->', support_plans)
+
     open(OUT_DIR / 'index.html', 'w').write(index_html)
 
     make_static_page('privacy', 'Privacy Policy')
@@ -33,7 +37,8 @@ def copy_assets():
     for file in [
         'style.css',
         'logo.jpg',
-        'map.js',
+        'map_docs.js',
+        'support_plans.js',
         'favicon.ico',
         'github.svg',
         'x.svg',
