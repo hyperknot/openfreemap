@@ -38,6 +38,7 @@ def copy_assets():
         'style.css',
         'map_howto.js',
         'support_plans.js',
+        'subscribe.js',
         'logo.jpg',
         'favicon.ico',
         'github.svg',
