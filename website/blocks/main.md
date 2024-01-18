@@ -18,7 +18,7 @@ If this project helps you save on your map hosting costs, please subscribe to on
 
 When subscribing to a support plan, you receive a business invoice for each of your payments.
 
-As a bonus, on **Silver** level and above, we can offer personalised technical support by email.
+As a bonus, on **Gold** level and above, we can offer personalised technical support by email.
 
 If we ever receive a **Diamond** level supporter, we'll put their logo on this page.
 
