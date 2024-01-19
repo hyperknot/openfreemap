@@ -70,7 +70,7 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
     location = /{area}/{version} {{     # no trailing slash
         alias {tilejson_path};          # no trailing slash
 
-        expires 1d;  # TODO target 1w
+        expires 1w;
         default_type application/json;
 
         add_header 'Access-Control-Allow-Origin' '*' always;
@@ -82,7 +82,7 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
         try_files $uri @empty_tile;
         add_header Content-Encoding gzip;
 
-        expires 1d;  # TODO target 10y
+        expires 10y;
 
         types {{
             application/vnd.mapbox-vector-tile pbf;
