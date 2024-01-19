@@ -11,6 +11,7 @@ function initMap() {
     boxZoom: false,
     doubleClickZoom: false,
     scrollZoom: false,
+    attributionControl: false,
   })
   window.map = map
 
@@ -23,6 +24,11 @@ function initMap() {
 
   let scale = new maplibregl.ScaleControl()
   map.addControl(scale)
+
+  let attrib = new maplibregl.AttributionControl({
+    compact: false,
+  })
+  map.addControl(attrib)
 
   new maplibregl.Marker().setLngLat([-0.119, 51.507]).addTo(map)
 }
