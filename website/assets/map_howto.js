@@ -8,9 +8,9 @@ function initMap() {
     bearing: 55.2,
     pitch: 60,
     container: mapDiv,
-    // boxZoom: false,
-    // doubleClickZoom: false,
-    // scrollZoom: false,
+    boxZoom: false,
+    doubleClickZoom: false,
+    scrollZoom: false,
   })
   window.map = map
 
