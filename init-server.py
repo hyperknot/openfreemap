@@ -40,7 +40,7 @@ def prepare_venv(c):
         permissions='755',
         owner='ofm',
     )
-    sudo_cmd(c, f'cd {OFM_DIR} && source prepare-virtualenv.sh', user='ofm')
+    sudo_cmd(c, f'cd {OFM_DIR} && source prepare-virtualenv.sh')
 
 
 def prepare_tile_gen(c):

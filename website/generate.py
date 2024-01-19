@@ -43,6 +43,7 @@ def copy_assets():
         'favicon.ico',
         'github.svg',
         'x.svg',
+        'mapbg.jpg',
     ]:
         shutil.copyfile(ASSETS_DIR / file, OUT_DIR / file)
 

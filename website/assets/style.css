@@ -162,6 +162,14 @@ code {
   margin-bottom: 2em;
 }
 
+#map:not(.maplibregl-map) {
+  background-image: url('mapbg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
 button {
   border: 0;
   border-radius: 0.25rem;
