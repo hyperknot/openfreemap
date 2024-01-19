@@ -40,14 +40,22 @@ const mapDiv = document.getElementById('map-container')
 
 initMap()
 
-function selectStyle(style) {
-  // initMap()
+function selectStyle(event, style) {
+  toggleButtonSelection(event.target)
 
   const styleUrl = 'https://tiles.openfreemap.org/styles/' + style
   map.setStyle(styleUrl)
   map.setPitch(0)
   map.setBearing(0)
+  map.setZoom(12.5)
 
-  const spans = document.querySelectorAll('#style-url-code span')
-  spans[2].innerText = '/' + style
+  document.getElementById('style-url-code').innerText = styleUrl
+}
+
+function toggleButtonSelection(clickedButton) {
+  clickedButton.classList.add('selected')
+
+  Array.from(clickedButton.parentElement.children)
+    .filter(child => child !== clickedButton)
+    .forEach(button => button.classList.remove('selected'))
 }

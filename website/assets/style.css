@@ -185,6 +185,10 @@ code {
   align-items: center;
 }
 
+.btn.selected {
+  background: #4892d9;
+}
+
 .button-container {
   margin: 0 auto 0.6em;
   max-width: 600px;

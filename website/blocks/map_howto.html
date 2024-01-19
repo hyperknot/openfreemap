@@ -4,21 +4,21 @@
 
 <p>Choose a style:</p>
 <div class="button-container">
-  <button onclick="selectStyle('bright')" class="btn">Bright</button>
-  <button onclick="selectStyle('liberty')" class="btn">Liberty</button>
-  <button onclick="selectStyle('positron')" class="btn">Positron</button>
+  <button onclick="selectStyle(event, 'bright')" class="btn">Bright</button>
+  <button onclick="selectStyle(event, 'liberty')" class="btn selected">Liberty</button>
+  <button onclick="selectStyle(event, 'positron')" class="btn">Positron</button>
 </div>
 
 <p>Use the following style in a MapLibre map:</p>
-<pre><code class="lang-uri">https://tiles.openfreemap.org/styles/liberty</code></pre>
+<pre><code class="lang-uri" id="style-url-code">https://tiles.openfreemap.org/styles/liberty</code></pre>
 
 <input type="checkbox" id="col1" class="col-chk" />
 <label for="col1" class="col-lbl">How to load MapLibre?</label>
 <div class="col-cnt">
   <p>
     Include
-    <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">MapLibre GL JS</a> in the
-    <code>&lt;head&gt;</code>. If you are using npm, you can install the
+    <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">MapLibre GL JS</a>
+    in the <code>&lt;head&gt;</code>. If you are using npm, you can install the
     <code>maplibre-gl</code> package. Make sure to import the CSS as well.
   </p>
   <pre><code class="lang-html">&lt;script src=&quot;https://unpkg.com/maplibre-gl/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;
