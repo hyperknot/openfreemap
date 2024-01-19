@@ -156,13 +156,13 @@ code {
   white-space: nowrap;
 }
 
-#map {
+#map-container {
   width: 100%;
   height: 500px;
   margin-bottom: 2em;
 }
 
-#map:not(.maplibregl-map) {
+#map-container:not(.maplibregl-map) {
   background-image: url('mapbg.jpg');
   background-size: cover;
   background-position: center;
