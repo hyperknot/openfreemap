@@ -14,6 +14,10 @@ function initMap() {
   })
   window.map = map
 
+  map.once('idle', () => {
+    document.getElementById('mapbg-image').remove()
+  })
+
   let nav = new maplibregl.NavigationControl({ showCompass: false })
   map.addControl(nav, 'top-right')
 
@@ -24,12 +28,14 @@ function initMap() {
 }
 
 const mapDiv = document.getElementById('map-container')
-mapDiv.onclick = function () {
-  initMap()
-}
+// mapDiv.onclick = function () {
+//   initMap()
+// }
+
+initMap()
 
 function selectStyle(style) {
-  initMap()
+  // initMap()
 
   const styleUrl = 'https://tiles.openfreemap.org/styles/' + style
   map.setStyle(styleUrl)
