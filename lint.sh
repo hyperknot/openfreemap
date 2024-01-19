@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-prettier -w .
+pnpm prettier -w .
 
 ruff check --fix .
 ruff format .
