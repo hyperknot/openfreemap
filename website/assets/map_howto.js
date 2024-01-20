@@ -9,7 +9,7 @@ function initMap() {
     pitch: 60,
     container: mapDiv,
     boxZoom: false,
-    doubleClickZoom: false,
+    // doubleClickZoom: false,
     scrollZoom: false,
     attributionControl: false,
   })
