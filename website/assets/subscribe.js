@@ -9,8 +9,8 @@ Paddle.Setup({
     settings: {
       displayMode: 'inline',
       frameTarget: 'checkout-container',
-      // frameInitialHeight: '450',
-      // frameStyle: 'width: 100%; min-width: 312px; background-color: transparent; border: none;',
+      frameInitialHeight: '450',
+      frameStyle: 'width: 100%; min-width: 312px; background-color: transparent; border: none;',
     },
   },
 })
