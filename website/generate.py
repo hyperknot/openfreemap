@@ -38,7 +38,6 @@ def copy_assets():
         'style.css',
         'map_howto.js',
         'support_plans.js',
-        'subscribe.js',
         'logo.jpg',
         'favicon.ico',
         'github.svg',
@@ -46,8 +45,6 @@ def copy_assets():
         'mapbg.jpg',
     ]:
         shutil.copyfile(ASSETS_DIR / file, OUT_DIR / file)
-
-    shutil.copyfile('subscribe.html', OUT_DIR / 'subscribe.html')
 
 
 def make_static_page(page_str, title):

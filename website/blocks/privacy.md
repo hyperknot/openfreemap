@@ -58,7 +58,7 @@ Please do not send, upload, or provide us any sensitive data and contact us usin
 
 ## 6. PAYMENT INFORMATION
 
-To order and use our services we may require you to provide certain financial information to facilitate the processing of payments. We will not store or collect your payment card details. That information is provided directly to our third-party payment processors whose use of your Personal information is governed by their Privacy Policy. All payment data is stored by Paddle, Lemon Squeezy. You may find their privacy policy link(s) here: [https://www.paddle.com/legal/privacy](https://www.paddle.com/legal/privacy) [https://www.lemonsqueezy.com/privacy](https://www.lemonsqueezy.com/privacy).
+To order and use our services we may require you to provide certain financial information to facilitate the processing of payments. We will not store or collect your payment card details. That information is provided directly to our third-party payment processors whose use of your Personal information is governed by their Privacy Policy. All payment data is stored by Paddle and Lemon Squeezy. You may find their privacy policy link(s) here: [https://www.paddle.com/legal/privacy](https://www.paddle.com/legal/privacy) [https://www.lemonsqueezy.com/privacy](https://www.lemonsqueezy.com/privacy).
 
 ## 7. RETENTION
 
