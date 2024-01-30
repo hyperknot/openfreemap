@@ -15,10 +15,10 @@ Paddle.Setup({
   },
 })
 
-Paddle.Checkout.open({
-  items: [
-    {
-      priceId: ITEM_ID,
-    },
-  ],
-})
+// Paddle.Checkout.open({
+//   items: [
+//     {
+//       priceId: ITEM_ID,
+//     },
+//   ],
+// })
