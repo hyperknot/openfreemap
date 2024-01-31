@@ -1,8 +1,7 @@
 const pricingList = '__PRICING_JSON__'
-const pricingObj = Object.fromEntries(pricingList.map(item => [item.price, item]))
 const priceNumbers = pricingList.map(i => i.price)
 
-const slider = document.getElementById('support-plans-slider')
+const sliderDiv = document.getElementById('support-plans-slider')
 
 const tooltipFormat = {
   to: function (value) {
@@ -12,7 +11,7 @@ const tooltipFormat = {
         <div class="plan-name">${price.name} Plan</div>
         <div>$${price.price}/month</div>
         <div>
-          <a class="plan-link" href="${url}">Subscribe</a>
+          <a class="plan-link" href="${url}" target="_blank">Subscribe</a>
         </div>
         `
   },
@@ -24,7 +23,7 @@ const pipFormat = {
   },
 }
 
-const pricingSlider = noUiSlider.create(slider, {
+const pricingSlider = noUiSlider.create(sliderDiv, {
   start: 3,
   range: { min: 0, max: priceNumbers.length - 1 },
   step: 1,
@@ -33,11 +32,19 @@ const pricingSlider = noUiSlider.create(slider, {
 })
 
 pricingSlider.on('update', function (values, _) {
-  for (const e of slider.querySelectorAll('.noUi-value')) {
+  for (const e of sliderDiv.querySelectorAll('.noUi-value')) {
     e.classList.remove('active')
   }
 
   const value = parseInt(values[0])
-  const el = slider.querySelector('.noUi-value[data-value="' + value + '"]')
+  const el = sliderDiv.querySelector('.noUi-value[data-value="' + value + '"]')
   el.classList.add('active')
 })
+
+const pips = sliderDiv.querySelectorAll('.noUi-value')
+for (const pip of pips) {
+  pip.addEventListener('click', e => {
+    const v = e.target.getAttribute('data-value')
+    pricingSlider.set(v)
+  })
+}

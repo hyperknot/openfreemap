@@ -259,14 +259,15 @@ hr {
 
 #support-plans-slider {
   max-width: 600px;
-  margin: 150px auto;
+  margin: 200px auto 150px;
 }
 
 .noUi-value {
   line-height: 0;
   margin-top: 32px;
-  font-size: 20px;
+  font-size: 30px;
   transition: font-size 0.3s ease;
+  cursor: pointer;
 }
 
 .noUi-value.active {

@@ -3,48 +3,48 @@
     "price": 10,
     "name": "Steel",
     "icon": "🗡️",
-    "lm_url": "fca57eab-a133-4fc4-96f5-3c1746e9db2b"
+    "lm_url": "af5553c6-f5fe-4253-b5d5-eb5531f8dcdf"
   },
   {
     "price": 20,
     "name": "Copper",
     "icon": "🥘",
-    "lm_url": "e2ff53fc-54c8-434a-a964-fe5d7b2f4529"
+    "lm_url": "9d2b0961-d8d2-4b10-94fc-5d7497baef40"
   },
   {
     "price": 40,
     "name": "Bronze",
     "icon": "🛎️",
-    "lm_url": "7f3453c2-213b-4e68-bce6-52dbadd1703c"
+    "lm_url": "76d47d46-9ffa-411c-b6c3-96dd491631bc"
   },
   {
     "price": 75,
     "name": "Silver",
     "icon": "🍴",
-    "lm_url": "3f693a5e-456e-45b8-98bb-2ee75df67fb7"
+    "lm_url": "df45c1e6-49dc-4494-9bdf-071d85e254a5"
   },
   {
     "price": 150,
     "name": "Gold",
     "icon": "🏆",
-    "lm_url": "a6f020b9-883b-49a8-8ebd-5cd377824b7d"
+    "lm_url": "30bf66e8-c9ff-4642-bb39-17a1dfe278f2"
   },
   {
     "price": 250,
     "name": "Platinum",
     "icon": "💿",
-    "lm_url": "3a325b51-ca94-4906-95fb-26233a45fb59"
+    "lm_url": "c837df35-eb23-4206-a0b5-024a236077cb"
   },
   {
     "price": 500,
     "name": "Sapphire",
     "icon": "💍",
-    "lm_url": "3e40dd53-071b-4b37-8fbd-1e22fb9e5c92"
+    "lm_url": "5e5f0b42-b885-4bb6-a981-642d1e40d9ac"
   },
   {
     "price": 1000,
     "name": "Diamond",
     "icon": "💎",
-    "lm_url": "a8c91555-7beb-466f-ba82-112aeebda1ce"
+    "lm_url": "5c24c85b-cd08-42ff-9515-743e46f3e825"
   }
 ]

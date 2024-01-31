@@ -16,7 +16,7 @@ If this project helps you save on your map hosting costs, please subscribe to on
 
 <!--support_plans-->
 
-When subscribing to a support plan, you receive a business invoice for each of your payments.
+When subscribing to a support plan, you receive an invoice for each of your payments.
 
 On **Gold** level and above, we offer personalised technical support by email.
 
