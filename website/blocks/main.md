@@ -1,6 +1,6 @@
 ## What is OpenFreeMap?
 
-OpenFreeMap allows you to display custom maps on your website and apps.
+OpenFreeMap provides free map hosting so you can display custom maps on your website and apps.
 
 It's truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
 
@@ -16,11 +16,11 @@ If this project helps you save on your map hosting costs, please subscribe to on
 
 <!--support_plans-->
 
-When subscribing to a support plan, you receive an invoice for each of your payments.
-
-On **Gold** level and above, we offer personalised technical support by email.
+On **Gold** level and above, we offer personalised technical support by email. Otherwise, support is via GitHub [Discussions](https://github.com/hyperknot/openfreemap/discussions).
 
 If we ever receive a **Diamond** level supporter, we'll put their logo on this page.
+
+When subscribing to a support plan, you receive an invoice for each of your payments.
 
 Note: if you want to make a single donation, feel free to cancel after the first payment. However, please understand that the nature of this project needs recurring donations to cover the server costs.
 

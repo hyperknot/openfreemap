@@ -1,12 +1,12 @@
 <a href="https://openfreemap.org/"><img src="website/assets/logo.jpg" alt="logo" height="200" class="logo" /></a>
+
 # OpenFreeMap
 
 [openfreemap.org](https://openfreemap.org)
 
-
 ## Preface: what this is and what this isn't
 
-*Google has more than 7000 people on the Maps team (and that's a [14 year old](https://www.businessinsider.com/apple-has-7000-fewer-people-working-on-maps-than-google-2012-9) number). Mapbox has raised over $500M in funding rounds. It seems like every open-source map company either goes bankrupt or changes to closed-source model.*
+_Google has more than 7000 people on the Maps team (and that's a [14 year old](https://www.businessinsider.com/apple-has-7000-fewer-people-working-on-maps-than-google-2012-9) number). Mapbox has raised over $500M in funding rounds. It seems like every open-source map company either goes bankrupt or changes to closed-source model._
 
 How can this project work?
 
@@ -14,7 +14,7 @@ The only way this project can possibly work is to be super focused about what it
 
 #### 1.
 
-OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles),  [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker).
+OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker).
 
 OFM does not want to be an alternative to any of these projects. If the community decides, we can change a building block if it is deemed production-ready. If issues are opened in the scope of these projects, they will be closed and pointed to the right repos.
 
@@ -22,7 +22,7 @@ OFM does not want to be an alternative to any of these projects. If the communit
 
 OFM is providing **full planet vector tile hosting** for displaying maps on websites or mobile apps.
 
-OFM is not about: 
+OFM is not about:
 
 - search or geocoding
 
@@ -54,8 +54,6 @@ OFM does not guarantee **automatic updates** for self-hosters. Only enable the c
 
 This repo is not something which has to be **constantly updated**, improved, version-bumped. The dream, the ultimate success of this repo is when there are no commits, yet everything works: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
 
-
-
 ## How to run?
 
 Python 3.10/11
@@ -73,15 +71,9 @@ There are two server tasks:
 - `--http-host` - Downloads full planet tiles from the public buckets and serves them over HTTPS. Probably the one you want.
 - `--tile-gen` - If you have a beefy machine and you want to generate tiles yourself. Not needed for self-hosting.
 
-
-
-
-
 ### Buckets
 
 ...
-
-
 
 ### HTTPS
 
@@ -89,13 +81,9 @@ The current HTTPS system is made to use long term Cloudflare origin certificates
 
 Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the forum.
 
-
-
 ### Warning
 
 This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
-
-
 
 ## Domains and Cloudflare
 
@@ -105,8 +93,6 @@ The general public only interacts with the .org domain. It has been designed so 
 
 The .com domain hosts the R2 buckets, which are required to be on Cloudflare. This domain will always remain on CF.
 
-
-
 ## FAQ
 
 ### System requirements
@@ -115,15 +101,11 @@ Ubuntu 22+
 
 Disk space: about 240 GB for hosting a single run, 500 GB for tile gen.
 
-
-
 **What about PMTiles?**
 
 I would have loved to use PMTiles; they are a brilliant idea!
 
 Unfortunately, making range requests in 80 GB files just doesn't work in production. It is fine for files smaller than 500 MB, but it has terrible latency and caching issues for full planet datasets.
-
-
 
 ## Roadmap
 
@@ -133,15 +115,6 @@ v0.2 - load balancing using Round-Robin DNS on Cloudflare. 2+ servers for HTTP h
 
 v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
 
-
-
-
-
 ## License
 
 The license of this project is [MIT](https://www.tldrlegal.com/license/mit-license). Map data is from [OpenStreetMap](https://www.openstreetmap.org/copyright). The licenses for included projects are listed in [LICENSE.md](https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md).
-
-
-
-
-

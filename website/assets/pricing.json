@@ -7,14 +7,14 @@
   },
   {
     "price": 20,
-    "name": "Copper",
-    "icon": "🥘",
+    "name": "Bronze",
+    "icon": "🗽",
     "lm_url": "9d2b0961-d8d2-4b10-94fc-5d7497baef40"
   },
   {
     "price": 40,
-    "name": "Bronze",
-    "icon": "🛎️",
+    "name": "Copper",
+    "icon": "🎷",
     "lm_url": "76d47d46-9ffa-411c-b6c3-96dd491631bc"
   },
   {
@@ -32,7 +32,7 @@
   {
     "price": 250,
     "name": "Platinum",
-    "icon": "💿",
+    "icon": "🛰",
     "lm_url": "c837df35-eb23-4206-a0b5-024a236077cb"
   },
   {
@@ -44,7 +44,7 @@
   {
     "price": 1000,
     "name": "Diamond",
-    "icon": "💎",
+    "icon": "👑",
     "lm_url": "5c24c85b-cd08-42ff-9515-743e46f3e825"
   }
 ]
