@@ -45,10 +45,10 @@ pricingSlider.on('update', function (values, _) {
   tooltip.classList.remove('last')
 
   if (document.documentElement.clientWidth < 500) {
-    if (value === 0) {
+    if (value <= 1) {
       tooltip.classList.add('first')
     }
-    if (value === priceNumbers.length - 1) {
+    if (value >= priceNumbers.length - 2) {
       tooltip.classList.add('last')
     }
   }
