@@ -44,7 +44,7 @@ pricingSlider.on('update', function (values, _) {
   tooltip.classList.remove('first')
   tooltip.classList.remove('last')
 
-  if (screen.width < 500) {
+  if (document.documentElement.clientWidth < 500) {
     if (value === 0) {
       tooltip.classList.add('first')
     }
