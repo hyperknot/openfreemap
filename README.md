@@ -14,7 +14,7 @@ The only way this project can possibly work is to be super focused about what it
 
 #### 1.
 
-OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles),  [Planetiler](https://github.com/onthegomap/planetiler) (and soon [tilemaker]()), [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/).
+OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles),  [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker).
 
 OFM does not want to be an alternative to any of these projects. If the community decides, we can change a building block if it is deemed production-ready. If issues are opened in the scope of these projects, they will be closed and pointed to the right repos.
 
@@ -42,13 +42,13 @@ OFM is not about:
 
 OFM is not something you can install on your dev machine. The only tool you run locally is `init-server.py`.
 
-OFM is a **deploy script** specifically made to set up clean Ubuntu 22+ dedicated servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready OFM server, both for tile hosting and generation.
+OFM is a **deploy script** specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready OFM server, both for tile hosting and generation.
 
 This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
 #### 4.
 
-OFM does not guarantee **automatic updates** for self-hosters. Only enable the cron job if you keep a close eye on this repo. If you just want a trouble-free self-hosting experience, set up a clean server, run the script once, without enabling the cron job and don't touch that machine.
+OFM does not guarantee **automatic updates** for self-hosters. Only enable the cron job if you keep a close eye on this repo. If you just want a trouble-free self-hosting experience, set up a clean server without the cron job and don't touch that machine.
 
 #### 5.
 
@@ -58,13 +58,17 @@ This repo is not something which has to be **constantly updated**, improved, ver
 
 ## How to run?
 
+Python 3.10/11
+
 `source prepare-virtualenv.sh`
+
+Config folder ...
 
 You run the script against an SSH server, like this
 
 `./init-server.py HOSTNAME --help`
 
-There are two tasks:
+There are two server tasks:
 
 - `--http-host` - Downloads full planet tiles from the public buckets and serves them over HTTPS. Probably the one you want.
 - `--tile-gen` - If you have a beefy machine and you want to generate tiles yourself. Not needed for self-hosting.
@@ -79,7 +83,11 @@ There are two tasks:
 
 
 
+### HTTPS
 
+The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the server. This is only possible because CF certs are valid for 15 years.
+
+Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the forum.
 
 
 
@@ -119,7 +127,9 @@ Unfortunately, making range requests in 80 GB files just doesn't work in product
 
 ## Roadmap
 
-v0.2 - load balancing using Round-Robin DNS. 2+ servers for HTTP host
+v0.x - load balancing on Let's Encrypt
+
+v0.2 - load balancing using Round-Robin DNS on Cloudflare. 2+ servers for HTTP host
 
 v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
 
