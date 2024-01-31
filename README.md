@@ -92,7 +92,7 @@ Create virtualenv using: `source prepare-virtualenv.sh`
 
 It's recommended to use [direnv](https://direnv.net/), to have automatic venv activation.
 
-##### 1. prepare config folder
+##### 1. Prepare config folder
 
 1. copy the .sample files and change the values
 
@@ -114,7 +114,7 @@ After this, go for a walk and by the time you come back it should be up and runn
 
 When it's finished it's a good idea to delete the cron job with `rm /etc/cron.d/ofm_http_host` , see warning below.
 
-##### 3. Deploy tile gen server
+##### 3. Deploy tile gen server (optional)
 
 - If you have a beefy machine and you want to generate tiles yourselfm you can run the same script with `--tile-gen`. Not needed for self-hosting.
 
