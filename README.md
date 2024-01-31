@@ -1,9 +1,7 @@
+<a href="https://openfreemap.org/"><img src="website/assets/logo.jpg" alt="logo" height="200" class="logo" /></a>
 # OpenFreeMap
 
-[openfreemap.org](https://openfreemap.org/)
-
-<a href="https://openfreemap.org/"><img src="website/assets/logo.jpg" alt="logo" height="200" class="logo" /></a>
-
+[openfreemap.org](https://openfreemap.org)
 
 
 ## Preface: what it is and what it isn't
