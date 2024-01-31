@@ -239,27 +239,16 @@ hr {
   margin: 2em 0;
 }
 
-@media (max-width: 550px) {
-  body {
-    padding: 0 20px 40px;
-  }
-
-  .static,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .col-lbl,
-  p {
-    max-width: 100%;
-  }
-}
-
 #support-plans-slider {
   max-width: 600px;
   margin: 200px auto 150px;
+}
+
+@media (max-width: 550px) {
+  #support-plans-slider {
+    max-width: 98%;
+    margin: 170px auto 120px;
+  }
 }
 
 .noUi-connects {
@@ -292,6 +281,17 @@ hr {
   padding: 10px;
 }
 
+.noUi-tooltip.first {
+  left: 0;
+  transform: unset;
+}
+
+.noUi-tooltip.last {
+  right: 0;
+  left: unset;
+  transform: unset;
+}
+
 .plan-name {
   font-weight: bold;
   margin-bottom: 10px;
@@ -317,4 +317,22 @@ hr {
 .plan-link:hover,
 .plan-link:focus {
   background-color: #fdb900;
+}
+
+@media (max-width: 550px) {
+  body {
+    padding: 0 20px 40px;
+  }
+
+  .static,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .col-lbl,
+  p {
+    max-width: 100%;
+  }
 }

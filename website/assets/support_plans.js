@@ -39,6 +39,19 @@ pricingSlider.on('update', function (values, _) {
   const value = parseInt(values[0])
   const el = sliderDiv.querySelector('.noUi-value[data-value="' + value + '"]')
   el.classList.add('active')
+
+  const tooltip = sliderDiv.querySelector('.noUi-tooltip')
+  tooltip.classList.remove('first')
+  tooltip.classList.remove('last')
+
+  if (screen.width < 500) {
+    if (value === 0) {
+      tooltip.classList.add('first')
+    }
+    if (value === priceNumbers.length - 1) {
+      tooltip.classList.add('last')
+    }
+  }
 })
 
 const pips = sliderDiv.querySelectorAll('.noUi-value')

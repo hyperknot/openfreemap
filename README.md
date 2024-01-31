@@ -80,8 +80,6 @@ You can run `./host_manager.py --help` to see which options are available. Some 
 
 #### styles, fonts, icons, compare tool - in separate [styles repo](https://github.com/hyperknot/openfreemap-styles)
 
-
-
 ## How to run?
 
 Use Python 3.10/3.11.
@@ -96,7 +94,7 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 2. SSH_PASSWD is only needed if you don't use SSH keys.
 
-3. rclone.conf is only needed for uploading. For http_host  there is no need for this file.
+3. rclone.conf is only needed for uploading. For http_host there is no need for this file.
 
 4. certs - these are the certs for nginx. If you put a cert here, it'll be uploaded to `/data/nginx/certs`.
 
@@ -166,8 +164,6 @@ future
 
 - support tilemaker in addition to planetiler
 - automatic tile-gen and upload
-
-
 
 ## License
 
