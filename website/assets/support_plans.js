@@ -6,7 +6,7 @@ const sliderDiv = document.getElementById('support-plans-slider')
 const tooltipFormat = {
   to: function (value) {
     const price = pricingList[value]
-    const url = `https://support.openfreemap.org/checkout/buy/${price.lm_url}?media=0&desc=0&discount=0`
+    const url = `https://support.openfreemap.org/checkout/buy/${price.lm_url}?media=1&desc=0&discount=0`
     return `
         <div class="plan-name">${price.name} Plan</div>
         <div>$${price.price}/month</div>
