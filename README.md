@@ -54,36 +54,87 @@ OFM does not guarantee **automatic updates** for self-hosters. Only enable the c
 
 This repo is not something which has to be **constantly updated**, improved, version-bumped. The dream, the ultimate success of this repo is when there are no commits, yet everything works: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
 
+## Structure
+
+The project has the following parts
+
+#### ssh_lib and init-server.py - deploy server
+
+This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH. You specify `--tile-gen` and/or `--http-host` at startup.
+
+#### tile_gen - tile generation
+
+The `tile_gen` scripts download a full planet OSM extract and run it through Planetiler (and soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
+
+The created .mbtiles file is then extracted into a BTRFS partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
+
+Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
+
+#### http_host - HTTP host
+
+Inside `http_host`, all work is done by `host_manager.py`. It checks the most up-to-date files in the public buckets and downloads/extracts them locally, if needed.
+
+It mounts the downloaded BTRFS images in `/mnt/ofm`, creates the correct TileJSON creates and updates nginx with the correct config.
+
+You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
+
+#### styles, fonts, icons, compare tool - in separate [styles repo](https://github.com/hyperknot/openfreemap-styles)
+
+
+
 ## How to run?
 
-Python 3.10/11
+Use Python 3.10/3.11.
 
-`source prepare-virtualenv.sh`
+Create virtualenv using: `source prepare-virtualenv.sh`
 
-Config folder ...
+Recommend using [direnv](https://direnv.net/), to automate activations.
 
-You run the script against an SSH server, like this
+##### 1. prepare config folder
 
-`./init-server.py HOSTNAME --help`
+1. copy the .sample files and change the values
 
-There are two server tasks:
+2. SSH_PASSWD is only needed if you don't use SSH keys.
 
-- `--http-host` - Downloads full planet tiles from the public buckets and serves them over HTTPS. Probably the one you want.
-- `--tile-gen` - If you have a beefy machine and you want to generate tiles yourself. Not needed for self-hosting.
+3. rclone.conf is only needed for uploading. For http_host  there is no need for this file.
+
+4. certs - these are the certs for nginx. If you put a cert here, it'll be uploaded to `/data/nginx/certs`.
+
+   Currently the nginx config is hard coded to use for `openfreemap.org.cert` and `openfreemap.org.key`.
+
+##### 2. Deploy a HTTP host
+
+You run the deploy script locally, and it'll connect to an SSH server, like this
+
+`./init-server.py HOSTNAME --http-host`
+
+After this, go for a walk and by the time you come back it should be up and running.
+
+When it's finished it's a good idea to run `rm /etc/cron.d/ofm_http_host` , see warning below.
+
+##### 3. Deploy tile gen server
+
+- If you have a beefy machine and you want to generate tiles yourselfm you can run the same script with `--tile-gen`. Not needed for self-hosting.
+
+
 
 ### Buckets
 
-...
+- assets - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
+- planet - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
+- monaco - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
 
-### HTTPS
+### HTTPS certs
 
 The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the server. This is only possible because CF certs are valid for 15 years.
 
-Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the forum.
+Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the Discussions.
 
 ### Warning
 
 This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
+
+
 
 ## Domains and Cloudflare
 
@@ -110,6 +161,8 @@ Unfortunately, making range requests in 80 GB files just doesn't work in product
 ## Roadmap
 
 v0.x - load balancing on Let's Encrypt
+
+v0.x - support tilemaker in addition to planetiler
 
 v0.2 - load balancing using Round-Robin DNS on Cloudflare. 2+ servers for HTTP host
 
