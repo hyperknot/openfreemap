@@ -30,7 +30,7 @@ Yes.
 
 ## Who is behind this project?
 
-I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
+I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/), [email](mailto:zsolt@hyperknot.com)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
 
 ## Why did you build this project?
 

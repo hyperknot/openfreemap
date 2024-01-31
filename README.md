@@ -14,15 +14,9 @@ The only way this project can possibly work is to be super focused about what it
 
 #### 1.
 
-OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker).
-
-OFM does not want to be an alternative to any of these projects. If the community decides, we can change a building block if it is deemed production-ready. If issues are opened in the scope of these projects, they will be closed and pointed to the right repos.
-
-#### 2.
-
 OFM is providing **full planet vector tile hosting** for displaying maps on websites or mobile apps.
 
-OFM is not about:
+OFM is not providing:
 
 - search or geocoding
 
@@ -38,6 +32,12 @@ OFM is not about:
 
 - custom tile or dataset hosting
 
+#### 2.
+
+OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker).
+
+OFM does not want to be an alternative to any of these projects. If the community decides, we can change a project if it is deemed production-ready. If issues are opened in the scope of these projects on OFM, they will be closed and pointed to the right repos.
+
 #### 3.
 
 OFM is not something you can install on your dev machine. The only tool you run locally is `init-server.py`.
@@ -52,7 +52,7 @@ OFM does not guarantee **automatic updates** for self-hosters. Only enable the c
 
 #### 5.
 
-This repo is not something which has to be **constantly updated**, improved, version-bumped. The dream, the ultimate success of this repo is when there are no commits, yet everything works: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
+This repo is not something which has to be constantly updated, improved, version-bumped. The dream, the ultimate success of this repo is when there are **no commits, yet everything works**: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
 
 ## Structure
 
@@ -62,7 +62,7 @@ The project has the following parts
 
 This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH. You specify `--tile-gen` and/or `--http-host` at startup.
 
-#### tile_gen - tile generation
+#### scripts/tile_gen - tile generation
 
 The `tile_gen` scripts download a full planet OSM extract and run it through Planetiler (and soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
 
@@ -70,11 +70,11 @@ The created .mbtiles file is then extracted into a BTRFS partition image using t
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
-#### http_host - HTTP host
+#### scripts/http_host - HTTP host
 
 Inside `http_host`, all work is done by `host_manager.py`. It checks the most up-to-date files in the public buckets and downloads/extracts them locally, if needed.
 
-It mounts the downloaded BTRFS images in `/mnt/ofm`, creates the correct TileJSON creates and updates nginx with the correct config.
+It mounts the downloaded BTRFS images in `/mnt/ofm`, creates the correct TileJSON file and updates nginx with the correct config.
 
 You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
 
@@ -88,7 +88,7 @@ Use Python 3.10/3.11.
 
 Create virtualenv using: `source prepare-virtualenv.sh`
 
-Recommend using [direnv](https://direnv.net/), to automate activations.
+It's recommended to use [direnv](https://direnv.net/), to have automatic venv activation.
 
 ##### 1. prepare config folder
 
@@ -110,31 +110,27 @@ You run the deploy script locally, and it'll connect to an SSH server, like this
 
 After this, go for a walk and by the time you come back it should be up and running.
 
-When it's finished it's a good idea to run `rm /etc/cron.d/ofm_http_host` , see warning below.
+When it's finished it's a good idea to delete the cron job with `rm /etc/cron.d/ofm_http_host` , see warning below.
 
 ##### 3. Deploy tile gen server
 
 - If you have a beefy machine and you want to generate tiles yourselfm you can run the same script with `--tile-gen`. Not needed for self-hosting.
 
+#### Warning
 
+This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
 
-### Buckets
+## Buckets
 
 - assets - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
 - planet - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
 - monaco - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
 
-### HTTPS certs
+## HTTPS certs
 
 The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the server. This is only possible because CF certs are valid for 15 years.
 
 Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the Discussions.
-
-### Warning
-
-This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
-
-
 
 ## Domains and Cloudflare
 
@@ -152,7 +148,7 @@ Ubuntu 22+
 
 Disk space: about 240 GB for hosting a single run, 500 GB for tile gen.
 
-**What about PMTiles?**
+### What about PMTiles?
 
 I would have loved to use PMTiles; they are a brilliant idea!
 
@@ -160,13 +156,18 @@ Unfortunately, making range requests in 80 GB files just doesn't work in product
 
 ## Roadmap
 
-v0.x - load balancing on Let's Encrypt
-
-v0.x - support tilemaker in addition to planetiler
+v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
 
 v0.2 - load balancing using Round-Robin DNS on Cloudflare. 2+ servers for HTTP host
 
-v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
+future
+
+- load balancing on Let's Encrypt
+
+- support tilemaker in addition to planetiler
+- automatic tile-gen and upload
+
+
 
 ## License
 
