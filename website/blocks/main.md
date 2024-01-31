@@ -54,7 +54,7 @@ If this project helps you save on your map hosting costs, please consider subscr
 
 ## How can I follow this project?
 
-twitter: [hyperknot](https://twitter.com/hyperknot) (more details) and [OpenFreeMapOrg](https://twitter.com/OpenFreeMapOrg) (announcements)
+twitter: [hyperknot](https://twitter.com/hyperknot) (details) and [OpenFreeMapOrg](https://twitter.com/OpenFreeMapOrg) (announcements)
 
 GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 

@@ -70,6 +70,10 @@ The created .mbtiles file is then extracted into a BTRFS partition image using t
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
+*Note: Perhaps the most original aspect of this repository is the use of partition images and hard links. I experimented with ext4 first, but BTRFS proved to be a better fit for the job, with much smaller resulting images. I wrote extract_mbtiles and shrink_btrfs scripts for this very purpose.*
+
+
+
 #### scripts/http_host - HTTP host
 
 Inside `http_host`, all work is done by `host_manager.py`. It checks the most up-to-date files in the public buckets and downloads/extracts them locally, if needed.
