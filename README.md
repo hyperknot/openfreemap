@@ -4,7 +4,7 @@
 [openfreemap.org](https://openfreemap.org)
 
 
-## Preface: what it is and what it isn't
+## Preface: what this is and what this isn't
 
 *Google has more than 7000 people on the Maps team (and that's a [14 year old](https://www.businessinsider.com/apple-has-7000-fewer-people-working-on-maps-than-google-2012-9) number). Mapbox has raised over $500M in funding rounds. It seems like every open-source map company either goes bankrupt or changes to closed-source model.*
 
