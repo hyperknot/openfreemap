@@ -12,7 +12,7 @@ It's truly **open-source**: everything, including the full production setup, is 
 
 ## How can I donate or support this project?
 
-If this project helps you save on your map hosting costs, please subscribe to one of our support plans.
+If this project helps you save on your map hosting costs, please subscribe to one of our support plans here:
 
 <!--support_plans-->
 

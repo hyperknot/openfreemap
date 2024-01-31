@@ -79,12 +79,12 @@ h6,
 
   font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro,
     sans-serif;
-  font-weight: 700;
+  font-weight: bold;
 }
 
 p a {
   color: #333;
-  font-weight: 700;
+  font-weight: bold;
   text-decoration: none;
   box-shadow: 0 1px 0 #adc2ee;
   transition: box-shadow 200ms ease 0s;
@@ -143,7 +143,7 @@ pre {
   max-width: 600px;
   margin: 0 auto 0.6em !important;
   overflow: scroll;
-  font-weight: 700;
+  font-weight: bold;
 }
 
 code {
@@ -259,39 +259,57 @@ hr {
 
 #support-plans-slider {
   max-width: 600px;
-  margin: 50px auto;
+  margin: 150px auto;
 }
 
-.plan-table {
-  max-width: 600px;
-  width: 100%;
-  margin: 20px auto 40px;
-  table-layout: fixed;
-  border-collapse: collapse;
+.noUi-value {
+  line-height: 0;
+  margin-top: 32px;
+  font-size: 20px;
+  transition: font-size 0.3s ease;
 }
 
-.plan-icon {
-  font-size: 30px;
+.noUi-value.active {
+  font-size: 40px;
+}
+
+.noUi-marker-horizontal.noUi-marker-large {
+  height: 5px;
+}
+.noUi-marker-horizontal.noUi-marker {
+  margin-left: 0;
+  width: 1px;
+}
+
+.noUi-tooltip {
+  border-color: #ccc;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .plan-name {
-  font-weight: 700;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
+.plan-link {
+  display: block;
+  text-decoration: none;
+
+  color: white;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
+  font-size: 15px;
+
+  border-radius: 20px;
+  padding: 6px 16px;
+  margin-top: 15px;
+
+  background: linear-gradient(32deg, #03a9f4, transparent) #f441a5;
+  transition: background-color 1s;
 }
 
-tr:nth-child(even) {
-  background-color: hsl(0, 0%, 98%);
-}
-
-/*tr:nth-child(odd) {*/
-/*  background-color: #ffffff;*/
-/*}*/
-
-tr:hover {
-  background-color: hsl(0, 0%, 96%);
+.plan-link:hover,
+.plan-link:focus {
+  background-color: #fdb900;
 }

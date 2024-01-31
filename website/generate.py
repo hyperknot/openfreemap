@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json
 import shutil
 from pathlib import Path
 
@@ -28,6 +29,13 @@ def generate():
 
     open(OUT_DIR / 'index.html', 'w').write(index_html)
 
+    pricing_json = json.load(open('assets/pricing.json'))
+    support_plans_js = open('assets/support_plans.js').read()
+    support_plans_js = support_plans_js.replace(
+        "'__PRICING_JSON__'", json.dumps(pricing_json, ensure_ascii=False)
+    )
+    open(OUT_DIR / 'support_plans.js', 'w').write(support_plans_js)
+
     make_static_page('privacy', 'Privacy Policy')
     make_static_page('tos', 'Terms of Services')
     copy_assets()
@@ -37,7 +45,6 @@ def copy_assets():
     for file in [
         'style.css',
         'map_howto.js',
-        'support_plans.js',
         'logo.jpg',
         'favicon.ico',
         'github.svg',
