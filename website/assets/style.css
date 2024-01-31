@@ -173,7 +173,7 @@ code {
 .btn {
   border: 0;
   border-radius: 0.25rem;
-  background: #2f5f8b;
+  background: #4892d9;
   color: white;
   font-size: 1rem;
   white-space: nowrap;
@@ -186,7 +186,7 @@ code {
 }
 
 .btn.selected {
-  background: #4892d9;
+  background: #2f5f8b;
 }
 
 .button-container {
@@ -197,7 +197,7 @@ code {
 }
 
 .btn:hover {
-  background: #4892d9;
+  background: #2f5f8b;
 }
 /*button:focus { }*/
 /*button:active { }*/
