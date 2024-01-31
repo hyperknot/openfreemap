@@ -64,9 +64,9 @@ The map schema is [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), 
 
 There is no tile server running, only BTRFS partition images with 300 million hard-linked files. I haven't heard anyone else doing this in production, but it works really well.
 
-There is no cloud, just dedicated servers. The HTTP server is nginx on Ubuntu. 
+There is no cloud, just dedicated servers. The HTTP server is nginx on Ubuntu.
 
-Currently, it is behind Cloudflare, but it has been designed so that this can be changed at any time.
+Currently, it is behind Cloudflare.
 
 ## Attribution
 

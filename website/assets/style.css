@@ -262,6 +262,10 @@ hr {
   margin: 200px auto 150px;
 }
 
+.noUi-connects {
+  cursor: pointer;
+}
+
 .noUi-value {
   line-height: 0;
   margin-top: 32px;
