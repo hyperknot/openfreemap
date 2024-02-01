@@ -168,7 +168,7 @@ Unfortunately, making range requests in 80 GB files just doesn't work in product
 
 If PMTiles implements splitting to <10 MB files, it can be a valid alternative to running servers.
 
-## Contributors
+## Contributing
 
 Contributors welcome!
 
@@ -187,7 +187,7 @@ Bigger tasks:
 Tasks outside the scope of this project:
 
 - Make a successor for the OpenMapTiles schema. Maptiler went proprietary and the repo is abandoned now. If there is a community supported successor, I'm happy to change.
-- 
+- Docker image for running this self-hosted on any machine. Make this a separate repo, I'd love to link to it.
 
 
 
