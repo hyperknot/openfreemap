@@ -132,8 +132,8 @@ There are three public buckets:
 
 You can directly download the processed full planet runs on the following URLs:
 
-https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // standard mbtiles file
-https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // BTRFS partition image
+https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // 84 GB, mbtiles file
+https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // 81 GB, BTRFS partition image
 
 Replace the `20231221_134737_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
 
@@ -168,11 +168,34 @@ Unfortunately, making range requests in 80 GB files just doesn't work in product
 
 If PMTiles implements splitting to <10 MB files, it can be a valid alternative to running servers.
 
+## Contributors
+
+Contributors welcome!
+
+Smaller tasks:
+
+- Add tilemaker as well, so we see the difference between planetiler and tilemaker and they can both validate their output based on this comparison.
+- Figure out Let's Encrypt for Round Robin DNS. I mean we have multiple servers under the same subdomain, how do you handle the certs.
+- Cloudflare worker for indexing the public buckets, instead of manually generating index.txt files.
+- Some of the POI icons are missing in the styles.
+
+Bigger tasks:
+
+- Split the styles to blocks and build it up from there. For example, there should only be one, reference implementation of all the road layers, and all styles should use this.
+- Automate tile-gen, uploading, testing and setting versions. Need
+
+Tasks outside the scope of this project:
+
+- Make a successor for the OpenMapTiles schema. Maptiler went proprietary and the repo is abandoned now. If there is a community supported successor, I'm happy to change.
+- 
+
+
+
 ## Roadmap
 
 v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
 
-v0.2 - load balancing using Round-Robin DNS on Cloudflare. 2+ servers for HTTP host
+v0.2 - load balancing using Round-Robin DNS on Cloudflare.
 
 future
 
