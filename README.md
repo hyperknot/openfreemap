@@ -72,8 +72,6 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 *Note: Perhaps the most original aspect of this repository is the use of partition images and hard links. I experimented with ext4 first, but BTRFS proved to be a better fit for the job, with much smaller resulting images. I wrote extract_mbtiles and shrink_btrfs scripts for this very purpose.*
 
-
-
 #### scripts/http_host - HTTP host
 
 Inside `http_host`, all work is done by `host_manager.py`. It checks the most up-to-date files in the public buckets and downloads/extracts them locally, if needed.
@@ -122,11 +120,23 @@ When it's finished it's a good idea to delete the cron job with `rm /etc/cron.d/
 
 This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
 
-## Buckets
+## Downloads and buckets
 
-- assets - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
-- planet - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
-- monaco - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
+There are three public buckets:
+
+- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
+- https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
+- https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
+
+#### Full planet downloads
+
+You can directly download the processed full planet runs on the following URLs:
+
+https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // standard mbtiles file
+https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // BTRFS partition image
+
+Replace the `20231221_134737_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
+
 
 ## HTTPS certs
 
@@ -155,6 +165,8 @@ Disk space: about 240 GB for hosting a single run, 500 GB for tile gen.
 I would have loved to use PMTiles; they are a brilliant idea!
 
 Unfortunately, making range requests in 80 GB files just doesn't work in production. It is fine for files smaller than 500 MB, but it has terrible latency and caching issues for full planet datasets.
+
+If PMTiles implements splitting to <10 MB files, it can be a valid alternative to running servers.
 
 ## Roadmap
 
