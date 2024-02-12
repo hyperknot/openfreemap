@@ -4,65 +4,52 @@
 
 [openfreemap.org](https://openfreemap.org)
 
-## Preface: what this is and what this isn't
+## What is OpenFreeMap?
 
-_Google has more than 7000 people on the Maps team (and that's a [14 year old](https://www.businessinsider.com/apple-has-7000-fewer-people-working-on-maps-than-google-2012-9) number). Mapbox has raised over $500M in funding rounds. It seems like every open-source map company either goes bankrupt or changes to closed-source model._
+OpenFreeMap (OFM) provides free map hosting so you can display custom maps on your website and apps.
 
-How can this project work?
+It is truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
 
-The only way this project can possibly work is to be super focused about what it is and what it isn't.
+It is truly **open-source**: everything, including the full production setup, is in this repo. Map data is from OpenStreetMap.
 
-#### 1.
+## Goals of this project
 
-OFM is providing **full planet vector tile hosting** for displaying maps on websites or mobile apps.
+The goal of this project is to provide free, production-quality vector-tile hosting using existing tools. 
 
-OFM is not providing:
+Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker). OFM does not want to be an alternative to any of these projects. If the community decides, we can replace any of these tools.
 
-- search or geocoding
+The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything keeps working: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
 
-- route calculation, navigation or directions
+The [styles repo](https://github.com/hyperknot/openfreemap-styles) - on the other hand - is a possibly never ending development. Contributions are more than welcome!
 
-- static image generation
+### Limitations of this project
 
-- raster tile hosting
+The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design.
 
-- satellite image hosting
+1. OFM is not providing:
+   - search or geocoding
+   - route calculation, navigation or directions
+   - static image generation
+   - raster tile hosting
+   - satellite image hosting
+   - elevation lookup
+   - custom tile or dataset hosting
 
-- elevation lookup
+2. OFM is not something you can install on your dev machine. OFM is a deploy script specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready OFM server, both for tile hosting and generation.
 
-- custom tile or dataset hosting
+   This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
-#### 2.
+3. OFM does not promise worry-free automatic updates for self-hosters. Only enable the cron job if you keep a close eye on this repo.
 
-OFM chooses **building blocks**, which are currently: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker).
-
-OFM does not want to be an alternative to any of these projects. If the community decides, we can change a project if it is deemed production-ready. If issues are opened in the scope of these projects on OFM, they will be closed and pointed to the right repos.
-
-#### 3.
-
-OFM is not something you can install on your dev machine. The only tool you run locally is `init-server.py`.
-
-OFM is a **deploy script** specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready OFM server, both for tile hosting and generation.
-
-This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
-
-#### 4.
-
-OFM does not guarantee **automatic updates** for self-hosters. Only enable the cron job if you keep a close eye on this repo. If you just want a trouble-free self-hosting experience, set up a clean server without the cron job and don't touch that machine.
-
-#### 5.
-
-This repo is not something which has to be constantly updated, improved, version-bumped. The dream, the ultimate success of this repo is when there are **no commits, yet everything works**: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
-
-## Structure
+## Code structure
 
 The project has the following parts
 
-#### ssh_lib and init-server.py - deploy server
+#### deploy server - ssh_lib and init-server.py
 
 This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH. You specify `--tile-gen` and/or `--http-host` at startup.
 
-#### scripts/tile_gen - tile generation
+#### tile generation - scripts/tile_gen
 
 The `tile_gen` scripts download a full planet OSM extract and run it through Planetiler (and soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
 
@@ -72,7 +59,7 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 *Note: Perhaps the most original aspect of this repository is the use of partition images and hard links. I experimented with ext4 first, but BTRFS proved to be a better fit for the job, with much smaller resulting images. I wrote extract_mbtiles and shrink_btrfs scripts for this very purpose.*
 
-#### scripts/http_host - HTTP host
+#### HTTP host - scripts/http_host
 
 Inside `http_host`, all work is done by `host_manager.py`. It checks the most up-to-date files in the public buckets and downloads/extracts them locally, if needed.
 
@@ -80,7 +67,11 @@ It mounts the downloaded BTRFS images in `/mnt/ofm`, creates the correct TileJSO
 
 You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
 
-#### styles, fonts, icons, compare tool - in separate [styles repo](https://github.com/hyperknot/openfreemap-styles)
+#### styles - [styles repo](https://github.com/hyperknot/openfreemap-styles)
+
+A very important part, probably needs the most work in the long term future.
+
+
 
 ## How to run?
 
@@ -114,7 +105,7 @@ When it's finished it's a good idea to delete the cron job with `rm /etc/cron.d/
 
 ##### 3. Deploy tile gen server (optional)
 
-- If you have a beefy machine and you want to generate tiles yourselfm you can run the same script with `--tile-gen`. Not needed for self-hosting.
+- If you have a beefy machine and you want to generate tiles yourselfm you can run the same script with `--tile-gen`. You generally don't need this since we provide already processed tile downloads for free.
 
 #### Warning
 
@@ -174,35 +165,26 @@ Contributors welcome!
 
 Smaller tasks:
 
-- Add tilemaker as well, so we see the difference between planetiler and tilemaker and they can both validate their output based on this comparison.
-- Figure out Let's Encrypt for Round Robin DNS. I mean we have multiple servers under the same subdomain, how do you handle the certs.
+- Add tilemaker, so we see the difference between planetiler and tilemaker and they can both validate their output based on this comparison.
+- Figure out how to use Let's Encrypt on multiple servers with Round Robin DNS.
 - Cloudflare worker for indexing the public buckets, instead of manually generating index.txt files.
 - Some of the POI icons are missing in the styles.
 
 Bigger tasks:
 
-- Split the styles to blocks and build it up from there. For example, there should only be one, reference implementation of all the road layers, and all styles should use this.
-- Automate tile-gen, uploading, testing and setting versions. Need
+- Split the styles to blocks and build them up from blocks. For example, there should be a POI block, a label block, a road-style related block.
+- Implement automatic updates for tile gen, uploading, testing and setting versions.
 
 Tasks outside the scope of this project:
 
-- Make a successor for the OpenMapTiles schema. Maptiler went proprietary and the repo is abandoned now. If there is a community supported successor, I'm happy to change.
-- Docker image for running this self-hosted on any machine. Make this a separate repo, I'd love to link to it.
+- Make a successor for the OpenMapTiles schema.
+- Docker image for running this self-hosted on any machine.
 
-
-
-## Roadmap
+## Changelog
 
 v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
 
-v0.2 - load balancing using Round-Robin DNS on Cloudflare.
 
-future
-
-- load balancing on Let's Encrypt
-
-- support tilemaker in addition to planetiler
-- automatic tile-gen and upload
 
 ## License
 

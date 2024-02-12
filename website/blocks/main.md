@@ -2,9 +2,9 @@
 
 OpenFreeMap provides free map hosting so you can display custom maps on your website and apps.
 
-It's truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
+It is truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
 
-It's truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
+It is truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
 
 ## How can I use it?
 
@@ -70,9 +70,9 @@ Currently, it is behind Cloudflare.
 
 ## Attribution
 
-If you are using MapLibre, attributions are automatically added.
+Attribution is required. If you are using MapLibre, they are automatically added, you have nothing to do.
 
-If you are using this in printed media or video, please attribute:
+If you are using alternative clients, are using this in printed media or video, you have to add the following attribution:
 
 <a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>
 
