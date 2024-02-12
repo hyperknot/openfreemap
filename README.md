@@ -24,7 +24,7 @@ The [styles repo](https://github.com/hyperknot/openfreemap-styles) - on the othe
 
 Contributions are more than welcome!
 
-### Limitations of this project
+## Limitations of this project
 
 The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design.
 
