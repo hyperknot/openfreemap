@@ -1,6 +1,8 @@
 ### wrk localhost
 
-clean cache after nginx restart
+Real world usage, 500k requests replayed from server log.
+
+clean cache after nginx restart. 
 
 ```
 service nginx restart

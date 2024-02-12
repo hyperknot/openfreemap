@@ -72,7 +72,7 @@ Currently, it is behind Cloudflare.
 
 Attribution is required. If you are using MapLibre, they are automatically added, you have nothing to do.
 
-If you are using alternative clients, are using this in printed media or video, you have to add the following attribution:
+If you are using alternative clients, or if you are using this in printed media or video, you must add the following attribution:
 
 <a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>
 

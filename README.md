@@ -18,9 +18,11 @@ The goal of this project is to provide free, production-quality vector-tile host
 
 Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker). OFM does not want to be an alternative to any of these projects. If the community decides, we can replace any of these tools.
 
-The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything keeps working: the map tiles are automatically generated, HTTP servers are automatically updated and load balancing takes care of failing servers.
+The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything keeps working: the map tiles are automatically generated, servers are automatically updated and load balancing takes care of failing servers.
 
-The [styles repo](https://github.com/hyperknot/openfreemap-styles) - on the other hand - is a possibly never ending development. Contributions are more than welcome!
+The [styles repo](https://github.com/hyperknot/openfreemap-styles) - on the other hand - is a possibly never ending development. 
+
+Contributions are more than welcome!
 
 ### Limitations of this project
 
@@ -51,13 +53,11 @@ This sets up everything on a clean Ubuntu server. You run it locally and it sets
 
 #### tile generation - scripts/tile_gen
 
-The `tile_gen` scripts download a full planet OSM extract and run it through Planetiler (and soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
+The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler (or soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
 
 The created .mbtiles file is then extracted into a BTRFS partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
-
-*Note: Perhaps the most original aspect of this repository is the use of partition images and hard links. I experimented with ext4 first, but BTRFS proved to be a better fit for the job, with much smaller resulting images. I wrote extract_mbtiles and shrink_btrfs scripts for this very purpose.*
 
 #### HTTP host - scripts/http_host
 
@@ -70,8 +70,6 @@ You can run `./host_manager.py --help` to see which options are available. Some 
 #### styles - [styles repo](https://github.com/hyperknot/openfreemap-styles)
 
 A very important part, probably needs the most work in the long term future.
-
-
 
 ## How to run?
 
@@ -105,43 +103,25 @@ When it's finished it's a good idea to delete the cron job with `rm /etc/cron.d/
 
 ##### 3. Deploy tile gen server (optional)
 
-- If you have a beefy machine and you want to generate tiles yourselfm you can run the same script with `--tile-gen`. You generally don't need this since we provide already processed tile downloads for free.
+- If you have a beefy machine and you want to generate tiles yourself, you can run the same script with `--tile-gen`. You generally don't need this since we provide already processed tile downloads for free.
 
 #### Warning
 
 This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
 
-## Downloads and buckets
-
-There are three public buckets:
-
-- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
-- https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
-- https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
-
-#### Full planet downloads
-
-You can directly download the processed full planet runs on the following URLs:
-
-https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // 84 GB, mbtiles file
-https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // 81 GB, BTRFS partition image
-
-Replace the `20231221_134737_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
 
 
-## HTTPS certs
+## BTRFS images
 
-The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the server. This is only possible because CF certs are valid for 15 years.
+Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the Discussions.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from BTRFS partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/extract_mbtiles) and [shrink_btrfs](scripts/tile_gen/shrink_btrfs) scripts for this very purpose.
 
-## Domains and Cloudflare
+This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
-The project has two domains: .org and .com. Currently, both are on Cloudflare.
+I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server, the aim was to saturate a gigabit connection. At the end, it was able to serve 30 Gbit on localhost, on a cold nginx cache.
 
-The general public only interacts with the .org domain. It has been designed so that this domain can be migrated away from Cloudflare if needed.
 
-The .com domain hosts the R2 buckets, which are required to be on Cloudflare. This domain will always remain on CF.
 
 ## FAQ
 
@@ -151,6 +131,37 @@ Ubuntu 22+
 
 Disk space: about 240 GB for hosting a single run, 500 GB for tile gen.
 
+### Full planet downloads
+
+You can directly download the processed full planet runs on the following URLs:
+
+https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // 84 GB, mbtiles file
+https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // 81 GB, BTRFS partition image
+
+Replace the `20231221_134737_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
+
+### HTTPS certs
+
+The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the server. This is only possible because CF certs are valid for 15 years.
+
+Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the Discussions.
+
+### Domains and Cloudflare
+
+The project has two domains: .org and .com. Currently, both are on Cloudflare.
+
+The general public only interacts with the .org domain. It has been designed so that this domain can be migrated away from Cloudflare if needed.
+
+The .com domain hosts the R2 buckets, which are required to be on Cloudflare. This domain will always remain on CF.
+
+### Public buckets
+
+There are three public buckets:
+
+- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
+- https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
+- https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
+
 ### What about PMTiles?
 
 I would have loved to use PMTiles; they are a brilliant idea!
@@ -158,6 +169,8 @@ I would have loved to use PMTiles; they are a brilliant idea!
 Unfortunately, making range requests in 80 GB files just doesn't work in production. It is fine for files smaller than 500 MB, but it has terrible latency and caching issues for full planet datasets.
 
 If PMTiles implements splitting to <10 MB files, it can be a valid alternative to running servers.
+
+
 
 ## Contributing
 
@@ -180,11 +193,23 @@ Tasks outside the scope of this project:
 - Make a successor for the OpenMapTiles schema.
 - Docker image for running this self-hosted on any machine.
 
+
+
 ## Changelog
 
 v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
 
 
+
+## Attribution
+
+Attribution is required. If you are using MapLibre, they are automatically added, you have nothing to do.
+
+If you are using alternative clients, or if you are using this in printed media or video, you must add the following attribution:
+
+<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>
+
+You do not need to display the OpenFreeMap part, but it is nice if you do.
 
 ## License
 
