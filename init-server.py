@@ -139,27 +139,7 @@ def debug_tmp(c):
     # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
-@click.command()
-@click.argument('hostname')
-@click.option('--port', type=int, help='SSH port (if not in .ssh/config)')
-@click.option('--user', help='SSH user (if not in .ssh/config)')
-@click.option('--tile-gen', is_flag=True, help='Install tile-gen task')
-@click.option('--http-host', is_flag=True, help='Install http-host task')
-@click.option('--debug', is_flag=True)
-@click.option(
-    '--skip-shared', is_flag=True, help='Skip the shared installtion step (useful for development)'
-)
-@click.option('--skip-cron', is_flag=True, help='Skip the cronjob (useful for development)')
-def main(hostname, user, port, tile_gen, http_host, skip_shared, skip_cron, debug):
-    if not debug and not click.confirm(f'Run script on {hostname}?'):
-        return
-
-    if not tile_gen and not http_host and not debug:
-        tile_gen = click.confirm('Would you like to install tile-gen task?')
-        http_host = click.confirm('Would you like to install http-host task?')
-        if not tile_gen and not http_host:
-            return
-
+def get_connection(hostname, user, port):
     ssh_passwd = dotenv_values(f'{CONFIG_DIR}/.env').get('SSH_PASSWD')
 
     if ssh_passwd:
@@ -177,19 +157,58 @@ def main(hostname, user, port, tile_gen, http_host, skip_shared, skip_cron, debu
             port=port,
         )
 
-    if debug:
-        debug_tmp(c)
-        sys.exit()
+    return c
 
-    if not skip_shared:
-        prepare_shared(c)
 
-    if tile_gen:
-        prepare_tile_gen(c)
+def common_options(func):
+    """Decorator to define common options."""
+    func = click.argument('hostname')(func)
+    func = click.option('--port', type=int, help='SSH port (if not in .ssh/config)')(func)
+    func = click.option('--user', help='SSH user (if not in .ssh/config)')(func)
+    return func
 
-    if http_host:
-        prepare_http_host(c, skip_cron=skip_cron)
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@common_options
+def http_host_once(hostname, user, port):
+    if not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    c = get_connection(hostname, user, port)
+    prepare_http_host(c, True)
+
+
+@cli.command()
+@common_options
+def http_host_autoupdate(hostname, user, port):
+    if not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    c = get_connection(hostname, user, port)
+    prepare_http_host(c, False)
+
+
+@cli.command()
+@common_options
+def tile_gen(hostname, user, port):
+    if not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    c = get_connection(hostname, user, port)
+    prepare_tile_gen(c)
+
+
+@cli.command()
+@common_options
+def debug(hostname, user, port):
+    c = get_connection(hostname, user, port)
+    print(c)
 
 
 if __name__ == '__main__':
-    main()
+    cli()
