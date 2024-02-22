@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 
 import click
 from dotenv import dotenv_values
@@ -12,7 +11,7 @@ from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import planetiler
 from ssh_lib.rclone import rclone
-from ssh_lib.utils import add_user, enable_sudo, put, put_dir, reboot, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, put_dir, sudo_cmd
 
 
 def prepare_shared(c):
@@ -88,7 +87,7 @@ def prepare_tile_gen(c):
     c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
 
 
-def prepare_http_host(c, skip_cron: bool):
+def prepare_http_host(c):
     nginx(c)
     certbot(c)
 
@@ -105,9 +104,15 @@ def prepare_http_host(c, skip_cron: bool):
 
     c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
 
-    # always last
-    if not skip_cron:
-        put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+
+def add_http_host_cron(c):
+    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+
+
+def run_http_host_sync(c):
+    sudo_cmd(
+        c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py sync', user='ofm'
+    )
 
 
 def upload_https_host_files(c):
@@ -132,11 +137,6 @@ def upload_certificates(c):
 def install_benchmark(c):
     c1000k(c)
     wrk(c)
-
-
-def debug_tmp(c):
-    upload_https_host_files(c)
-    # put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 def get_connection(hostname, user, port):
@@ -180,7 +180,10 @@ def http_host_once(hostname, user, port):
         return
 
     c = get_connection(hostname, user, port)
-    prepare_http_host(c, True)
+
+    prepare_shared(c)
+
+    prepare_http_host(c)
 
 
 @cli.command()
@@ -190,7 +193,11 @@ def http_host_autoupdate(hostname, user, port):
         return
 
     c = get_connection(hostname, user, port)
-    prepare_http_host(c, False)
+
+    prepare_shared(c)
+
+    prepare_http_host(c)
+    add_http_host_cron(c)
 
 
 @cli.command()
@@ -200,6 +207,9 @@ def tile_gen(hostname, user, port):
         return
 
     c = get_connection(hostname, user, port)
+
+    prepare_shared(c)
+
     prepare_tile_gen(c)
 
 
@@ -207,7 +217,8 @@ def tile_gen(hostname, user, port):
 @common_options
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
-    print(c)
+
+    run_http_host_sync(c)
 
 
 if __name__ == '__main__':
