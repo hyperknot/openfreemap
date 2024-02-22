@@ -179,6 +179,9 @@ def sync(ctx):
     print('running sync')
     print(datetime.datetime.now(tz=datetime.timezone.utc))
 
+    assert_linux()
+    assert_sudo()
+
     download_done = False
     download_done += ctx.invoke(download_tileset, area='monaco')
     download_done += ctx.invoke(download_tileset, area='planet')

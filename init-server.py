@@ -110,9 +110,7 @@ def add_http_host_cron(c):
 
 
 def run_http_host_sync(c):
-    sudo_cmd(
-        c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py sync', user='ofm'
-    )
+    sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py sync')
 
 
 def upload_https_host_files(c):
@@ -218,6 +216,7 @@ def tile_gen(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
+    upload_https_host_files(c)
     run_http_host_sync(c)
 
 
