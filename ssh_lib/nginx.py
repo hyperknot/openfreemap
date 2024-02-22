@@ -46,16 +46,12 @@ def nginx(c):
         )
 
     put(c, f'{ASSETS_DIR}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{ASSETS_DIR}/nginx/mime.types', '/etc/nginx/')
     put(c, f'{ASSETS_DIR}/nginx/default_disable.conf', '/data/nginx/sites')
     put(c, f'{ASSETS_DIR}/nginx/cloudflare.conf', '/data/nginx/config')
 
     c.sudo('nginx -t')
     c.sudo('service nginx restart')
-
-
-def mime_types(c):
-    # TODO
-    pass
 
 
 def certbot(c):

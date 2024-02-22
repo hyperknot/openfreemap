@@ -6,7 +6,7 @@
 
 ## What is OpenFreeMap?
 
-OpenFreeMap (OFM) provides free map hosting so you can display custom maps on your website and apps.
+OpenFreeMap provides free map hosting so you can display custom maps on your website and apps.
 
 It is truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
 
@@ -20,13 +20,13 @@ Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyrig
 
 The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything keeps working: the map tiles are automatically generated, servers are automatically updated and load balancing takes care of failing servers.
 
-The [styles repo](https://github.com/hyperknot/openfreemap-styles) - on the other hand - is a possibly never ending development. 
+The [styles repo](https://github.com/hyperknot/openfreemap-styles), on the other hand, is continuously being developed.
 
 Contributions are more than welcome!
 
 ## Limitations of this project
 
-The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design.
+The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design:
 
 1. OFM is not providing:
    - search or geocoding
@@ -51,7 +51,24 @@ The project has the following parts
 
 This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH. You specify `--tile-gen` and/or `--http-host` at startup.
 
+#### HTTP host - scripts/http_host
+
+Inside `http_host`, all work is done by `host_manager.py`. 
+
+It does the following:
+
+- checks the most up-to-date files in the public buckets
+- downloads/extracts them locally, if needed
+- mounts the downloaded BTRFS images in `/mnt/ofm`
+- creates the correct TileJSON file
+- creates the correct nginx config
+- reloads nginx
+
+You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
+
 #### tile generation - scripts/tile_gen
+
+*note: Tile generation is 100% optional, as we are providing the processed full planet files for public download.*
 
 The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler (or soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
 
@@ -59,25 +76,23 @@ The created .mbtiles file is then extracted into a BTRFS partition image using t
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
-#### HTTP host - scripts/http_host
-
-Inside `http_host`, all work is done by `host_manager.py`. It checks the most up-to-date files in the public buckets and downloads/extracts them locally, if needed.
-
-It mounts the downloaded BTRFS images in `/mnt/ofm`, creates the correct TileJSON file and updates nginx with the correct config.
-
-You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
-
 #### styles - [styles repo](https://github.com/hyperknot/openfreemap-styles)
 
 A very important part, probably needs the most work in the long term future.
 
 ## How to run?
 
-Use Python 3.10/3.11.
+*note: For most users, **you don't need to run anything**! The tiles are provided free of charge, without registration. Read the "How can I use it?" section on https://openfreemap.org*
+
+The instructions below are intended only for those who have a large server and would like to self-host.
+
+Use Python 3.10/3.11. 
 
 Create virtualenv using: `source prepare-virtualenv.sh`
 
 It's recommended to use [direnv](https://direnv.net/), to have automatic venv activation.
+
+*note: Currently the domains are hard coded, so you'll need to edit the nginx templates using a text editor or sed.*
 
 ##### 1. Prepare config folder
 
@@ -85,11 +100,10 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 2. SSH_PASSWD is only needed if you don't use SSH keys.
 
-3. rclone.conf is only needed for uploading. For http_host there is no need for this file.
+3. rclone.conf is only needed for tile generation. For http_host there is no need for this file.
 
-4. certs - these are the certs for nginx. If you put a cert here, it'll be uploaded to `/data/nginx/certs`.
+4. certs - used by nginx for HTTPS, they are uploaded to `/data/nginx/certs`.
 
-   Currently the nginx config is hard coded to use for `openfreemap.org.cert` and `openfreemap.org.key`.
 
 ##### 2. Deploy a HTTP host
 
@@ -142,7 +156,7 @@ Replace the `20231221_134737_pt` part with any newer run, from the [index file](
 
 ### HTTPS certs
 
-The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the server. This is only possible because CF certs are valid for 15 years.
+The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the servers. This is only possible because CF certs are valid for 15 years.
 
 Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the Discussions.
 
@@ -180,7 +194,7 @@ Smaller tasks:
 
 - Add tilemaker, so we see the difference between planetiler and tilemaker and they can both validate their output based on this comparison.
 - Figure out how to use Let's Encrypt on multiple servers with Round Robin DNS.
-- Cloudflare worker for indexing the public buckets, instead of manually generating index.txt files.
+- Cloudflare worker for indexing the public buckets, instead of generating index.txt files.
 - Some of the POI icons are missing in the styles.
 
 Bigger tasks:
