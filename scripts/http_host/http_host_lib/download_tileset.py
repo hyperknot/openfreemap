@@ -40,6 +40,7 @@ def download_and_extract_tileset(area: str, version: str, runs_dir: Path) -> boo
     target_file = temp_dir / 'tiles.btrfs.gz'
     download_file_aria2(url, target_file)
 
+    print('Uncompressing...')
     subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'], check=True)
     btrfs_src = temp_dir / 'tiles.btrfs'
 

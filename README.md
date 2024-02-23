@@ -41,7 +41,7 @@ The only way this project can possibly work is to be super focused about what it
 
    This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
-3. OFM does not promise worry-free automatic updates for self-hosters. Only enable the cron job if you keep a close eye on this repo.
+3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate command if you keep a close eye on this repo.
 
 ## Code structure
 
@@ -70,7 +70,7 @@ You can run `./host_manager.py --help` to see which options are available. Some 
 
 *note: Tile generation is 100% optional, as we are providing the processed full planet files for public download.*
 
-The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler (or soon tilemaker). Currently a run is triggered manually, by running `planetiler_{area}.sh`.
+The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler (or soon tilemaker).
 
 The created .mbtiles file is then extracted into a BTRFS partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
 
@@ -80,48 +80,11 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 A very important part, probably needs the most work in the long term future.
 
-## How to run?
-
-*note: For most users, **you don't need to run anything**! The tiles are provided free of charge, without registration. Read the "How can I use it?" section on https://openfreemap.org*
-
-The instructions below are intended only for those who have a large server and would like to self-host.
-
-Use Python 3.10/3.11. 
-
-Create virtualenv using: `source prepare-virtualenv.sh`
-
-It's recommended to use [direnv](https://direnv.net/), to have automatic venv activation.
-
-*note: Currently the domains are hard coded, so you'll need to edit the nginx templates using a text editor or sed.*
-
-##### 1. Prepare config folder
-
-1. copy the .sample files and change the values
-
-2. SSH_PASSWD is only needed if you don't use SSH keys.
-
-3. rclone.conf is only needed for tile generation. For http_host there is no need for this file.
-
-4. certs - used by nginx for HTTPS, they are uploaded to `/data/nginx/certs`.
 
 
-##### 2. Deploy a HTTP host
+## Self hosting
 
-You run the deploy script locally, and it'll connect to an SSH server, like this
-
-`./init-server.py HOSTNAME --http-host`
-
-After this, go for a walk and by the time you come back it should be up and running.
-
-When it's finished it's a good idea to delete the cron job with `rm /etc/cron.d/ofm_http_host` , see warning below.
-
-##### 3. Deploy tile gen server (optional)
-
-- If you have a beefy machine and you want to generate tiles yourself, you can run the same script with `--tile-gen`. You generally don't need this since we provide already processed tile downloads for free.
-
-#### Warning
-
-This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
+See [self hosting docs](docs/self_hosting.md).
 
 
 
@@ -139,12 +102,6 @@ I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server,
 
 ## FAQ
 
-### System requirements
-
-Ubuntu 22+
-
-Disk space: about 240 GB for hosting a single run, 500 GB for tile gen.
-
 ### Full planet downloads
 
 You can directly download the processed full planet runs on the following URLs:
@@ -153,6 +110,14 @@ https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // 84 GB, mbtile
 https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // 81 GB, BTRFS partition image
 
 Replace the `20231221_134737_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
+
+### Public buckets
+
+There are three public buckets:
+
+- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
+- https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
+- https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
 
 ### HTTPS certs
 
@@ -167,14 +132,6 @@ The project has two domains: .org and .com. Currently, both are on Cloudflare.
 The general public only interacts with the .org domain. It has been designed so that this domain can be migrated away from Cloudflare if needed.
 
 The .com domain hosts the R2 buckets, which are required to be on Cloudflare. This domain will always remain on CF.
-
-### Public buckets
-
-There are three public buckets:
-
-- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
-- https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
-- https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
 
 ### What about PMTiles?
 

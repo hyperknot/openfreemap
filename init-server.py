@@ -141,6 +141,8 @@ def get_connection(hostname, user, port):
     ssh_passwd = dotenv_values(f'{CONFIG_DIR}/.env').get('SSH_PASSWD')
 
     if ssh_passwd:
+        print('Using SSH password')
+
         c = Connection(
             host=hostname,
             user=user,
@@ -178,10 +180,10 @@ def http_host_once(hostname, user, port):
         return
 
     c = get_connection(hostname, user, port)
-
     prepare_shared(c)
 
     prepare_http_host(c)
+    run_http_host_sync(c)
 
 
 @cli.command()
@@ -191,7 +193,6 @@ def http_host_autoupdate(hostname, user, port):
         return
 
     c = get_connection(hostname, user, port)
-
     prepare_shared(c)
 
     prepare_http_host(c)
@@ -205,7 +206,6 @@ def tile_gen(hostname, user, port):
         return
 
     c = get_connection(hostname, user, port)
-
     prepare_shared(c)
 
     prepare_tile_gen(c)
@@ -215,9 +215,9 @@ def tile_gen(hostname, user, port):
 @common_options
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
-
-    upload_https_host_files(c)
-    run_http_host_sync(c)
+    c.run('pwd')
+    # upload_https_host_files(c)
+    # run_http_host_sync(c)
 
 
 if __name__ == '__main__':
