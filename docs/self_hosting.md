@@ -12,6 +12,8 @@ When self-hosting, there are two tasks you can set up on a server (see details i
 
 note: Tile generation is 100% optional, as we are providing the processed full planet files for public download. It also requires a beefy machine, see below.
 
+
+
 ### System requirements
 
 ##### Disk space
@@ -34,7 +36,7 @@ note: Tile generation is 100% optional, as we are providing the processed full p
 
 ### Limitations
 
-There is two limitation in the current beta version:
+There are two limitations in the current beta version:
 
 - You have to set up Let's Encrypt manually or supply your certs.
 
@@ -67,9 +69,11 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 #### 2. Certs and domains
 
-Currently the domain is hard coded to `tiles.openfreemap.org`. Please search & replace for this string to your custom one.
+Currently the domain is hard coded to `tiles.openfreemap.org`. Please search & replace this.
 
-The script is made with long expiry CloudFlare origin certificates in mind, which are placed in the `config/certs` folder. For self-hosting you may want to use Let's Encrypt or similar automated tool. The support for this is coming later.
+The script is made with long expiry CloudFlare origin certificates in mind, which are placed in the `config/certs` folder. For self-hosting you may want to use Let's Encrypt or similar automated tool. 
+
+If you know how to make Let's Encrypt work with Round Robin DNS, please comment in the Discussions.
 
 
 #### 3. Deploy a http-host

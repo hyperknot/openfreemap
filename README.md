@@ -41,7 +41,7 @@ The only way this project can possibly work is to be super focused about what it
 
    This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
-3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate command if you keep a close eye on this repo.
+3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate  version of http-host if you keep a close eye on this repo.
 
 ## Code structure
 
@@ -49,7 +49,7 @@ The project has the following parts
 
 #### deploy server - ssh_lib and init-server.py
 
-This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH. You specify `--tile-gen` and/or `--http-host` at startup.
+This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH.
 
 #### HTTP host - scripts/http_host
 
@@ -163,6 +163,10 @@ Tasks outside the scope of this project:
 
 - Make a successor for the OpenMapTiles schema.
 - Docker image for running this self-hosted on any machine.
+
+### Dev setup
+
+See [dev setup docs](docs/dev_setup.md).
 
 
 
