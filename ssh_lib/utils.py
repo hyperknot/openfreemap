@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 def put(
-    c, local_path, remote_path, permissions=None, owner='root', group=None, create_parent_dir=False
+    c, local_path, remote_path, permissions=None, user='root', group=None, create_parent_dir=False
 ):
     tmp_path = f'/tmp/fabtmp_{random_string(8)}'
     c.put(local_path, tmp_path)
@@ -13,7 +13,7 @@ def put(
     if create_parent_dir:
         dirname = os.path.dirname(remote_path)
         c.sudo(f'mkdir -p {dirname}')
-        set_permission(c, dirname, owner=owner, group=group)
+        set_permission(c, dirname, user=user, group=group)
 
     if is_dir(c, remote_path):
         if not remote_path.endswith('/'):
@@ -25,7 +25,7 @@ def put(
     c.sudo(f"mv '{tmp_path}' '{remote_path}'")
     c.sudo(f"rm -rf '{tmp_path}'")
 
-    set_permission(c, remote_path, permissions=permissions, owner=owner, group=group)
+    set_permission(c, remote_path, permissions=permissions, user=user, group=group)
 
 
 def put_dir(
@@ -34,7 +34,7 @@ def put_dir(
     remote_dir,
     dir_permissions=None,
     file_permissions=None,
-    owner='root',
+    user='root',
     group=None,
     exclude_set=None,
 ):
@@ -49,11 +49,11 @@ def put_dir(
         files = [f for f in files if f.name not in exclude_set]
 
     c.sudo(f'mkdir -p "{remote_dir}"')
-    set_permission(c, remote_dir, permissions=dir_permissions, owner=owner, group=group)
+    set_permission(c, remote_dir, permissions=dir_permissions, user=user, group=group)
 
     for file in files:
         print(f'uploading {remote_dir}/{file.name}')
-        put(c, file, f'{remote_dir}/{file.name}', file_permissions, owner, group)
+        put(c, file, f'{remote_dir}/{file.name}', file_permissions, user, group)
 
 
 def put_str(c, remote_path, str_):
@@ -77,11 +77,11 @@ def sudo_cmd(c, cmd, *, user=None):
     c.sudo(f'bash -c "{cmd}"', user=user)
 
 
-def set_permission(c, path, *, permissions=None, owner=None, group=None):
-    if owner:
+def set_permission(c, path, *, permissions=None, user=None, group=None):
+    if user:
         if not group:
-            group = owner
-        c.sudo(f"chown {owner}:{group} '{path}'")
+            group = user
+        c.sudo(f"chown {user}:{group} '{path}'")
 
     if permissions:
         c.sudo(f"chmod {permissions} '{path}'")
@@ -157,5 +157,5 @@ def enable_sudo(c, username, nopasswd=False):
     c.sudo(f'usermod -aG sudo {username}')
     if nopasswd:
         put_str(c, '/etc/sudoers.d/tmp.', f'{username} ALL=(ALL) NOPASSWD:ALL')
-        set_permission(c, '/etc/sudoers.d/tmp.', permissions='440', owner='root')
+        set_permission(c, '/etc/sudoers.d/tmp.', permissions='440', user='root')
         c.sudo(f'mv /etc/sudoers.d/tmp. /etc/sudoers.d/{username}')

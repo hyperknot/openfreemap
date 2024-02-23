@@ -37,7 +37,7 @@ def prepare_venv(c):
         SCRIPTS_DIR / 'prepare-virtualenv.sh',
         OFM_DIR,
         permissions='755',
-        owner='ofm',
+        user='ofm',
     )
     sudo_cmd(c, f'cd {OFM_DIR} && source prepare-virtualenv.sh')
 
@@ -80,7 +80,7 @@ def prepare_tile_gen(c):
             CONFIG_DIR / 'rclone.conf',
             f'{REMOTE_CONFIG}/rclone.conf',
             permissions='600',
-            owner='ofm',
+            user='ofm',
         )
 
     c.sudo('chown ofm:ofm /data/ofm/tile_gen')
