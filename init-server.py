@@ -104,7 +104,7 @@ def upload_http_host_config(c):
             not (CONFIG_DIR / 'certs' / 'cf.key').exists()
             or not (CONFIG_DIR / 'certs' / 'cf.cert').exists()
         ):
-            sys.exit('When using DOMAIN_CF, please place cf.key and cf.cert in config/certs')
+            sys.exit('When using DOMAIN_CF, please put cf.key and cf.cert files in config/certs')
 
     host_config = {
         'domain_direct': domain_direct,
