@@ -164,7 +164,7 @@ Tasks outside the scope of this project:
 - Make a successor for the OpenMapTiles schema.
 - Docker image for running this self-hosted on any machine.
 
-### Dev setup
+#### Dev setup
 
 See [dev setup docs](docs/dev_setup.md).
 

@@ -23,7 +23,8 @@ def download_fonts(assets_dir: Path):
     ofm_dir = fonts_dir / 'ofm'
     ofm_dir_bak = fonts_dir / 'ofm.bak'
     shutil.rmtree(ofm_dir_bak, ignore_errors=True)
-    ofm_dir.rename(ofm_dir_bak)
+    if ofm_dir.exists():
+        ofm_dir.rename(ofm_dir_bak)
 
     subprocess.run(
         ['tar', '-xzf', local_file, '-C', fonts_dir],
@@ -47,7 +48,8 @@ def download_styles(assets_dir: Path):
     ofm_dir = styles_dir / 'ofm'
     ofm_dir_bak = styles_dir / 'ofm.bak'
     shutil.rmtree(ofm_dir_bak, ignore_errors=True)
-    ofm_dir.rename(ofm_dir_bak)
+    if ofm_dir.exists():
+        ofm_dir.rename(ofm_dir_bak)
 
     subprocess.run(
         ['tar', '-xzf', local_file, '-C', styles_dir],
