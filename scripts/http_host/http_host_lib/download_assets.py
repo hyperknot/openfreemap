@@ -7,59 +7,36 @@ import requests
 from http_host_lib.utils import download_file_aria2, download_if_size_differs
 
 
-def download_fonts(assets_dir: Path):
+def download_and_extract_asset_tar_gz(assets_dir, asset_kind):
     """
-    Download and extract font assets if their file size differ.
+    Download and extract asset.tgz if the file size differ or not available locally
     """
 
-    fonts_dir = assets_dir / 'fonts'
-    fonts_dir.mkdir(exist_ok=True, parents=True)
+    print(f'Downloading asset {asset_kind}')
 
-    url = 'https://assets.openfreemap.com/fonts/ofm.tar.gz'
-    local_file = fonts_dir / 'ofm.tar.gz'
+    asset_dir = assets_dir / asset_kind
+    asset_dir.mkdir(exist_ok=True, parents=True)
+
+    url = f'https://assets.openfreemap.com/{asset_kind}/ofm.tar.gz'
+    local_file = asset_dir / 'ofm.tar.gz'
     if not download_if_size_differs(url, local_file):
         return
 
-    ofm_dir = fonts_dir / 'ofm'
-    ofm_dir_bak = fonts_dir / 'ofm.bak'
+    ofm_dir = asset_dir / 'ofm'
+    ofm_dir_bak = asset_dir / 'ofm.bak'
     shutil.rmtree(ofm_dir_bak, ignore_errors=True)
     if ofm_dir.exists():
         ofm_dir.rename(ofm_dir_bak)
 
     subprocess.run(
-        ['tar', '-xzf', local_file, '-C', fonts_dir],
-        check=True,
-    )
-
-
-def download_styles(assets_dir: Path):
-    """
-    Download and extract style assets if their file size differ.
-    """
-
-    styles_dir = assets_dir / 'styles'
-    styles_dir.mkdir(exist_ok=True, parents=True)
-
-    url = 'https://assets.openfreemap.com/styles/ofm.tar.gz'
-    local_file = styles_dir / 'ofm.tar.gz'
-    if not download_if_size_differs(url, local_file):
-        return
-
-    ofm_dir = styles_dir / 'ofm'
-    ofm_dir_bak = styles_dir / 'ofm.bak'
-    shutil.rmtree(ofm_dir_bak, ignore_errors=True)
-    if ofm_dir.exists():
-        ofm_dir.rename(ofm_dir_bak)
-
-    subprocess.run(
-        ['tar', '-xzf', local_file, '-C', styles_dir],
+        ['tar', '-xzf', local_file, '-C', asset_dir],
         check=True,
     )
 
 
 def download_sprites(assets_dir: Path):
     """
-    Download and extract sprites if a version is not available locally
+    Sprites are special assets, as we have to keep the old versions indefinitely
     """
 
     sprites_dir = assets_dir / 'sprites'
@@ -85,26 +62,3 @@ def download_sprites(assets_dir: Path):
             check=True,
         )
         local_file.unlink()
-
-
-def download_natural_earth(assets_dir: Path):
-    ne_dir = assets_dir / 'natural_earth'
-
-    if (ne_dir / 'tiles' / 'natural_earth_2_shaded_relief.raster' / '0' / '0' / '0.png').exists():
-        return
-
-    ne_dir.mkdir(exist_ok=True, parents=True)
-
-    subprocess.run(
-        [
-            'git',
-            'clone',
-            '--depth=1',
-            '-b',
-            'gh-pages',
-            'https://github.com/lukasmartinelli/naturalearthtiles.git',
-            ne_dir,
-        ]
-    )
-
-    shutil.rmtree(ne_dir / '.git')

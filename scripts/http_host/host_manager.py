@@ -9,6 +9,7 @@ import click
 import requests
 from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, MNT_DIR
 from http_host_lib.download_assets import (
+    download_and_extract_asset_tar_gz,
     download_fonts,
     download_natural_earth,
     download_sprites,
@@ -99,11 +100,11 @@ def download_assets(assets_dir: Path):
     if not assets_dir.parent.exists():
         sys.exit("asset dir's parent doesn't exist")
 
-    download_fonts(assets_dir)
-    download_styles(assets_dir)
-    download_sprites(assets_dir)
+    download_and_extract_asset_tar_gz(assets_dir, 'fonts')
+    download_and_extract_asset_tar_gz(assets_dir, 'styles')
+    download_and_extract_asset_tar_gz(assets_dir, 'natural_earth')
 
-    download_natural_earth(assets_dir)
+    download_sprites(assets_dir)
 
 
 @cli.command()
