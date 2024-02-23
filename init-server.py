@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import json
+import sys
 
 import click
 from dotenv import dotenv_values
@@ -11,7 +13,7 @@ from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import planetiler
 from ssh_lib.rclone import rclone
-from ssh_lib.utils import add_user, enable_sudo, put, put_dir, sudo_cmd
+from ssh_lib.utils import add_user, enable_sudo, put, put_dir, put_str, sudo_cmd
 
 
 def prepare_shared(c):
@@ -87,6 +89,26 @@ def prepare_tile_gen(c):
     c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
 
 
+def upload_http_host_config(c):
+    domain_direct = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_DIRECT1', '').strip()
+    domain_cf = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_CF', '').strip()
+    skip_planet = (
+        dotenv_values(f'{CONFIG_DIR}/.env').get('SKIP_PLANET', '').lower().strip() == 'true'
+    )
+
+    if not (domain_direct or domain_cf):
+        sys.exit('Please specify DOMAIN_DIRECT or DOMAIN_CF in config/.env')
+
+    host_config = {
+        'domain_direct': domain_direct,
+        'domain_cf': domain_cf,
+        'skip_planet': skip_planet,
+    }
+
+    host_config_str = json.dumps(host_config, indent=2, ensure_ascii=False)
+    put_str(c, '/data/ofm/config/http_host.json', host_config_str)
+
+
 def prepare_http_host(c):
     nginx(c)
     certbot(c)
@@ -141,7 +163,7 @@ def install_benchmark(c):
 
 
 def get_connection(hostname, user, port):
-    ssh_passwd = dotenv_values(f'{CONFIG_DIR}/.env').get('SSH_PASSWD')
+    ssh_passwd = dotenv_values(f'{CONFIG_DIR}/.env').get('SSH_PASSWD', '').strip()
 
     if ssh_passwd:
         print('Using SSH password')
@@ -185,7 +207,9 @@ def http_host_once(hostname, user, port):
     c = get_connection(hostname, user, port)
     prepare_shared(c)
 
+    upload_http_host_config(c)
     prepare_http_host(c)
+
     run_http_host_sync(c)
 
 
@@ -198,7 +222,9 @@ def http_host_autoupdate(hostname, user, port):
     c = get_connection(hostname, user, port)
     prepare_shared(c)
 
+    upload_http_host_config(c)
     prepare_http_host(c)
+
     add_http_host_cron(c)
 
 
@@ -218,9 +244,11 @@ def tile_gen(hostname, user, port):
 @common_options
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
-    install_benchmark(c)
-    # upload_https_host_files(c)
-    # run_http_host_sync(c)
+    prepare_http_host(c)
+
+    upload_http_host_config(c)
+    upload_https_host_files(c)
+    run_http_host_sync(c)
 
 
 if __name__ == '__main__':

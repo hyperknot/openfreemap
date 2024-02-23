@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import datetime
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -184,7 +185,9 @@ def sync(ctx):
 
     download_done = False
     download_done += ctx.invoke(download_tileset, area='monaco')
-    download_done += ctx.invoke(download_tileset, area='planet')
+
+    if not host_config.get('skip_planet'):
+        download_done += ctx.invoke(download_tileset, area='planet')
 
     if download_done:
         ctx.invoke(mount)
@@ -198,4 +201,11 @@ def sync(ctx):
 
 
 if __name__ == '__main__':
+    try:
+        with open('/data/ofm/config/http_host.json') as fp:
+            host_config = json.load(fp)
+    except Exception:
+        host_config = {}
+
+    print(host_config)
     cli()
