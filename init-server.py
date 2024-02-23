@@ -90,7 +90,7 @@ def prepare_tile_gen(c):
 
 
 def upload_http_host_config(c):
-    domain_direct = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_DIRECT1', '').strip()
+    domain_direct = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_DIRECT', '').strip()
     domain_cf = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_CF', '').strip()
     skip_planet = (
         dotenv_values(f'{CONFIG_DIR}/.env').get('SKIP_PLANET', '').lower().strip() == 'true'
@@ -99,6 +99,13 @@ def upload_http_host_config(c):
     if not (domain_direct or domain_cf):
         sys.exit('Please specify DOMAIN_DIRECT or DOMAIN_CF in config/.env')
 
+    if domain_cf:
+        if (
+            not (CONFIG_DIR / 'certs' / 'cf.key').exists()
+            or not (CONFIG_DIR / 'certs' / 'cf.cert').exists()
+        ):
+            sys.exit('When using DOMAIN_CF, please place cf.key and cf.cert in config/certs')
+
     host_config = {
         'domain_direct': domain_direct,
         'domain_cf': domain_cf,
@@ -106,6 +113,7 @@ def upload_http_host_config(c):
     }
 
     host_config_str = json.dumps(host_config, indent=2, ensure_ascii=False)
+    print(host_config_str)
     put_str(c, '/data/ofm/config/http_host.json', host_config_str)
 
 
@@ -246,6 +254,7 @@ def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
     upload_http_host_config(c)
+
     upload_https_host_files(c)
     run_http_host_sync(c)
 

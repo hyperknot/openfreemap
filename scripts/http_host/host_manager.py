@@ -10,10 +10,7 @@ import requests
 from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, MNT_DIR
 from http_host_lib.download_assets import (
     download_and_extract_asset_tar_gz,
-    download_fonts,
-    download_natural_earth,
     download_sprites,
-    download_styles,
 )
 from http_host_lib.download_tileset import download_and_extract_tileset
 from http_host_lib.mount import clean_up_mounts, create_fstab
