@@ -244,7 +244,6 @@ def tile_gen(hostname, user, port):
 @common_options
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
-    prepare_http_host(c)
 
     upload_http_host_config(c)
     upload_https_host_files(c)
