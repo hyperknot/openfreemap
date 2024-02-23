@@ -133,6 +133,9 @@ def upload_certificates(c):
 
 
 def install_benchmark(c):
+    """
+    Read docs/quick_notes/http_benchmark.md
+    """
     c1000k(c)
     wrk(c)
 
@@ -215,7 +218,7 @@ def tile_gen(hostname, user, port):
 @common_options
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
-    c.run('pwd')
+    install_benchmark(c)
     # upload_https_host_files(c)
     # run_http_host_sync(c)
 
