@@ -69,6 +69,8 @@ def certbot(c):
 
     apt_get_purge(c, 'certbot')
     c.sudo('snap install --classic certbot', warn=True)
+    c.sudo('snap set certbot trust-plugin-with-root=ok', warn=True)
+    c.sudo('snap install certbot-dns-cloudflare', warn=True)
 
 
 def lego(c):
