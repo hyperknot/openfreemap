@@ -15,8 +15,11 @@ def write_nginx_config():
 
         cf_template = cf_template.replace('__LOCATION_BLOCKS__', location_str)
         cf_template = cf_template.replace('__DOMAIN__', HOST_CONFIG['domain_cf'])
+        cf_template = cf_template.replace('__LOCAL__', 'ofm_cf')
 
-        curl_text_mix += curl_text.replace('__DOMAIN__', HOST_CONFIG['domain_cf'])
+        curl_text_mix += curl_text.replace('__DOMAIN__', HOST_CONFIG['domain_cf']).replace(
+            '__LOCAL__', 'ofm_cf'
+        )
 
         with open('/data/nginx/sites/cf.conf', 'w') as fp:
             fp.write(cf_template)
@@ -41,7 +44,7 @@ def create_location_blocks():
         if not curl_text:
             curl_text = (
                 '\ntest with:\n'
-                f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
+                f'curl -H "Host: __LOCAL__" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
                 f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
             )
 

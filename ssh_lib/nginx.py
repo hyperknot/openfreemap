@@ -50,6 +50,8 @@ def nginx(c):
     put(c, f'{ASSETS_DIR}/nginx/default_disable.conf', '/data/nginx/sites')
     put(c, f'{ASSETS_DIR}/nginx/cloudflare.conf', '/data/nginx/config')
 
+    sudo_cmd(c, 'curl https://ssl-config.mozilla.org/ffdhe2048.txt -o /etc/nginx/ffdhe2048.txt')
+
     c.sudo('nginx -t')
     c.sudo('service nginx restart')
 

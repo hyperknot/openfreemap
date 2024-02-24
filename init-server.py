@@ -253,7 +253,7 @@ def tile_gen(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
-    upload_http_host_config(c)
+    # upload_http_host_config(c)
 
     upload_https_host_files(c)
     # run_http_host_sync(c)
