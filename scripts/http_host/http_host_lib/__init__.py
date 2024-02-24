@@ -10,6 +10,8 @@ DEFAULT_ASSETS_DIR = Path('/data/ofm/http_host/assets')
 MNT_DIR = Path('/mnt/ofm')
 OFM_CONFIG_DIR = Path('/data/ofm/config')
 
+CERTS_DIR = Path('/data/nginx/certs')
+
 try:
     with open('/data/ofm/config/http_host.json') as fp:
         HOST_CONFIG = json.load(fp)

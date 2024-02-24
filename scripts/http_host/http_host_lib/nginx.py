@@ -1,19 +1,75 @@
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-from http_host_lib import DEFAULT_RUNS_DIR, HOST_CONFIG, MNT_DIR, NGINX_DIR, OFM_CONFIG_DIR
+from http_host_lib import (
+    CERTS_DIR,
+    DEFAULT_RUNS_DIR,
+    HOST_CONFIG,
+    MNT_DIR,
+    NGINX_DIR,
+    OFM_CONFIG_DIR,
+)
 
 
 def write_nginx_config():
     curl_text_mix = ''
 
-    if HOST_CONFIG['domain_cf']:
+    domain_cf = HOST_CONFIG['domain_cf']
+    domain_le = HOST_CONFIG['domain_le']
+
+    # processing Cloudflare config
+    if domain_cf:
+        if not (CERTS_DIR / 'cf.cert').exists() or not (CERTS_DIR / 'cf.key').exists():
+            sys.exit('cf.cert or cf.key missing')
+
         curl_text_mix += create_nginx_conf(
             template_path=NGINX_DIR / 'cf.conf',
             local='ofm_cf',
-            domain=HOST_CONFIG['domain_cf'],
+            domain=domain_cf,
         )
+
+    # processing Let's Encrypt config
+    if domain_le:
+        le_cert = CERTS_DIR / 'le.cert'
+        le_key = CERTS_DIR / 'le.key'
+
+        if not (CERTS_DIR / 'le.cert').exists() or not (CERTS_DIR / 'le.key').exists():
+            shutil.copyfile(Path('/etc/nginx/ssl/dummy.crt'), le_cert)
+            shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), le_key)
+
+        curl_text_mix += create_nginx_conf(
+            template_path=NGINX_DIR / 'le.conf',
+            local='ofm_le',
+            domain=domain_le,
+        )
+
+        subprocess.run(['nginx', '-t'], check=True)
+        subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
+
+        subprocess.run(
+            [
+                'lego',
+                '--accept-tos',
+                '--email',
+                HOST_CONFIG['le_email'],
+                '--http',
+                '--http.webroot=/data/nginx/acme-challenges/',
+                '--domains',
+                domain_le,
+                '--http-timeout=30',
+                '--path=/data/nginx/lego/',
+                'run',
+            ],
+            check=True,
+        )
+
+        # link lego certs to nginx dir
+        le_cert.unlink()
+        le_key.unlink()
+        le_cert.symlink_to(Path(f'/data/nginx/lego/certificates/{domain_le}.crt'))
+        le_key.symlink_to(Path(f'/data/nginx/lego/certificates/{domain_le}.key'))
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)

@@ -1,9 +1,11 @@
 import os
 import secrets
 import string
+import sys
 from pathlib import Path
 
 import requests
+from invoke import UnexpectedExit
 
 
 def put(
@@ -76,7 +78,22 @@ def append_str(c, remote_path, str_):
 
 def sudo_cmd(c, cmd, *, user=None):
     cmd = cmd.replace('"', '\\"')
-    c.sudo(f'bash -c "{cmd}"', user=user)
+
+    try:
+        c.sudo(f'bash -c "{cmd}"', user=user)
+    except UnexpectedExit as e:
+        print(f'Command failed: {e.result.command}')
+        print(f'Error: {e.result.stderr}')
+        sys.exit(1)
+
+
+def run_nice(c, cmd):
+    try:
+        c.run(cmd)
+    except UnexpectedExit as e:
+        print(f'Command failed: {e.result.command}')
+        print(f'Error: {e.result.stderr}')
+        sys.exit(1)
 
 
 def set_permission(c, path, *, permissions=None, user=None, group=None):

@@ -81,6 +81,8 @@ def lego(c):
         f'wget -q "{url}" -O /tmp/lego/out.tar.gz',
     )
     c.run('tar xzvf /tmp/lego/out.tar.gz -C /tmp/lego')
-    c.run('mv /tmp/lego/lego /usr/bin')
-    c.run('chmod +x /usr/bin/lego')
+    c.run('chmod +x /tmp/lego/lego')
+    c.run('mv /tmp/lego/lego /usr/local/bin')
     c.run('rm -rf /tmp/lego*')
+
+    c.run('mkdir -p /data/nginx/acme-challenges/')
