@@ -21,8 +21,8 @@ def write_nginx_config():
 
     # processing Cloudflare config
     if domain_cf:
-        if not (CERTS_DIR / 'cf.cert').exists() or not (CERTS_DIR / 'cf.key').exists():
-            sys.exit('cf.cert or cf.key missing')
+        if not (CERTS_DIR / 'ofm_cf.cert').is_file() or not (CERTS_DIR / 'ofm_cf.key').is_file():
+            sys.exit('ofm_cf.cert or ofm_cf.key missing')
 
         curl_text_mix += create_nginx_conf(
             template_path=NGINX_DIR / 'cf.conf',
@@ -32,10 +32,10 @@ def write_nginx_config():
 
     # processing Let's Encrypt config
     if domain_le:
-        le_cert = CERTS_DIR / 'le.cert'
-        le_key = CERTS_DIR / 'le.key'
+        le_cert = CERTS_DIR / 'ofm_le.cert'
+        le_key = CERTS_DIR / 'ofm_le.key'
 
-        if not (CERTS_DIR / 'le.cert').exists() or not (CERTS_DIR / 'le.key').exists():
+        if not le_cert.is_file() or not le_key.is_file():
             shutil.copyfile(Path('/etc/nginx/ssl/dummy.crt'), le_cert)
             shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), le_key)
 
@@ -50,26 +50,33 @@ def write_nginx_config():
 
         subprocess.run(
             [
-                'lego',
-                '--accept-tos',
-                '--email',
+                'certbot',
+                'certonly',
+                '--webroot',
+                '--webroot-path=/data/nginx/acme-challenges',
+                '--noninteractive',
+                '-m',
                 HOST_CONFIG['le_email'],
-                '--http',
-                '--http.webroot=/data/nginx/acme-challenges/',
-                '--domains',
+                '--agree-tos',
+                '--cert-name=ofm_le',
+                '--deploy-hook',
+                'nginx -t && service nginx reload',
+                '-d',
                 domain_le,
-                '--http-timeout=30',
-                '--path=/data/nginx/lego/',
-                'run',
             ],
             check=True,
         )
 
-        # link lego certs to nginx dir
+        # link certs to nginx dir
         le_cert.unlink()
         le_key.unlink()
-        le_cert.symlink_to(Path(f'/data/nginx/lego/certificates/{domain_le}.crt'))
-        le_key.symlink_to(Path(f'/data/nginx/lego/certificates/{domain_le}.key'))
+
+        etc_cert = Path('/etc/letsencrypt/live/ofm_le/fullchain.pem')
+        etc_key = Path('/etc/letsencrypt/live/ofm_le/privkey.pem')
+        assert etc_cert.is_file()
+        assert etc_key.is_file()
+        le_cert.symlink_to(etc_cert)
+        le_key.symlink_to(etc_key)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
@@ -189,7 +196,7 @@ def create_latest_locations() -> str:
 
         run_dir = DEFAULT_RUNS_DIR / area / version
         tilejson_path = run_dir / 'tilejson-tiles-org.json'
-        assert tilejson_path.exists()
+        assert tilejson_path.is_file()
 
         location_str += f"""
         location = /{area} {{          # no trailing slash

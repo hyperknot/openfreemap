@@ -36,6 +36,7 @@ def nginx(c):
     c.sudo('mkdir -p /data/nginx/logs')
 
     c.sudo('mkdir -p /data/nginx/sites')
+    c.sudo('mkdir -p /data/nginx/acme-challenges')
 
     if not exists(c, '/etc/nginx/ssl/dummy.crt'):
         c.sudo('mkdir -p /etc/nginx/ssl')
@@ -75,14 +76,12 @@ def lego(c):
 
     url = f'https://github.com/go-acme/lego/releases/download/{lego_version}/lego_{lego_version}_linux_amd64.tar.gz'
 
-    c.run('rm -rf /tmp/lego*')
-    c.run('mkdir -p /tmp/lego')
-    c.run(
+    c.sudo('rm -rf /tmp/lego*')
+    c.sudo('mkdir -p /tmp/lego')
+    c.sudo(
         f'wget -q "{url}" -O /tmp/lego/out.tar.gz',
     )
-    c.run('tar xzvf /tmp/lego/out.tar.gz -C /tmp/lego')
-    c.run('chmod +x /tmp/lego/lego')
-    c.run('mv /tmp/lego/lego /usr/local/bin')
-    c.run('rm -rf /tmp/lego*')
-
-    c.run('mkdir -p /data/nginx/acme-challenges/')
+    c.sudo('tar xzvf /tmp/lego/out.tar.gz -C /tmp/lego')
+    c.sudo('chmod +x /tmp/lego/lego')
+    c.sudo('mv /tmp/lego/lego /usr/local/bin')
+    c.sudo('rm -rf /tmp/lego*')

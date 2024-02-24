@@ -109,10 +109,15 @@ def upload_http_host_config(c):
 
     if domain_cf:
         if (
-            not (CONFIG_DIR / 'certs' / 'cf.key').exists()
-            or not (CONFIG_DIR / 'certs' / 'cf.cert').exists()
+            not (CONFIG_DIR / 'certs' / 'ofm_cf.key').exists()
+            or not (CONFIG_DIR / 'certs' / 'ofm_cf.cert').exists()
         ):
-            sys.exit('When using DOMAIN_CF, please put cf.key and cf.cert files in config/certs')
+            sys.exit(
+                'When using DOMAIN_CF, please put ofm_cf.key and ofm_cf.cert files in config/certs'
+            )
+
+    if domain_le and not le_email:
+        sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
 
     host_config = {
         'domain_le': domain_le,
