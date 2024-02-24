@@ -1,14 +1,12 @@
 # wrk benchmarks
 
-Real world usage, 500k requests replayed from server log. 
-
-
+Real world usage, 500k requests replayed from server log.
 
 ### Hetnzer dedicated server with NVME ssd
 
 #### localhost
 
-clean cache after nginx restart. 
+clean cache after nginx restart.
 
 ```
 service nginx restart
@@ -44,8 +42,6 @@ Realistically this is the max over Gigabit connection.
 
 ---
 
-
-
 ### BuyVM KVM machine with 1 TB BuyVM Block Storage Slab
 
 Advertisement: 40Gbit+ InfiniBand RDMA Storage Fabric giving near local storage performance.
@@ -73,8 +69,3 @@ Transfer/sec:     23.07MB
 ```
 
 Abandoned the idea of using BuyVM, even though their unlimited bandwidth is quite unique in this price range in USA.
-
-
-
-
-

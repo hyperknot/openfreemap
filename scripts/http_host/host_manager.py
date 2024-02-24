@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 import datetime
-import json
 import subprocess
 import sys
 from pathlib import Path
 
 import click
 import requests
-from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, MNT_DIR
+from http_host_lib import DEFAULT_ASSETS_DIR, DEFAULT_RUNS_DIR, HOST_CONFIG, MNT_DIR
 from http_host_lib.download_assets import (
     download_and_extract_asset_tar_gz,
     download_sprites,
@@ -184,7 +183,7 @@ def sync(ctx):
     download_done = False
     download_done += ctx.invoke(download_tileset, area='monaco')
 
-    if not host_config.get('skip_planet'):
+    if not HOST_CONFIG.get('skip_planet'):
         download_done += ctx.invoke(download_tileset, area='planet')
 
     if download_done:
@@ -199,11 +198,5 @@ def sync(ctx):
 
 
 if __name__ == '__main__':
-    try:
-        with open('/data/ofm/config/http_host.json') as fp:
-            host_config = json.load(fp)
-    except Exception:
-        host_config = {}
-
-    print(host_config)
+    print(HOST_CONFIG)
     cli()

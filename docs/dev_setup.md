@@ -1,7 +1,5 @@
 # dev setup
 
-
-
 ### macOS
 
 On macOS, I recommend [OrbStack](https://orbstack.dev/).
@@ -30,4 +28,3 @@ Then I run commands like the following:
 ./init-server.py http-host-once orb_my
 ./init-server.py debug orb_my
 ```
-

@@ -1,8 +1,6 @@
 # Self-hosting Howto
 
-*note: For most users, **you don't need to run anything**! The tiles are hosted free of charge, without registration. Read the "How can I use it?" section on https://openfreemap.org*
-
-
+_note: For most users, **you don't need to run anything**! The tiles are hosted free of charge, without registration. Read the "How can I use it?" section on https://openfreemap.org_
 
 When self-hosting, there are two tasks you can set up on a server (see details in the repo README).
 
@@ -12,27 +10,23 @@ When self-hosting, there are two tasks you can set up on a server (see details i
 
 note: Tile generation is 100% optional, as we are providing the processed full planet files for public download. It also requires a beefy machine, see below.
 
-
-
 ### System requirements
 
 ##### Disk space
 
-​	**http-host**: 300 GB for hosting a single run
+​ **http-host**: 300 GB for hosting a single run
 
-​	**tile-gen**: 500 GB for 
+​ **tile-gen**: 500 GB for
 
 ##### RAM
 
-​	**http-host**: 4 GB
+​ **http-host**: 4 GB
 
-​	**tile-gen**: 64 GB+ RAM.
+​ **tile-gen**: 64 GB+ RAM.
 
 ##### OS
 
-​	**Ubuntu 22+**
-
-
+​ **Ubuntu 22+**
 
 ### Limitations
 
@@ -42,8 +36,6 @@ There are two limitations in the current beta version:
 
 - The domain is hard-coded to `tiles.openfreemap.org` - you have to edit this.
 
-
-
 ---
 
 ### Warning
@@ -52,12 +44,9 @@ This project is made to run on clean servers or virtual machines dedicated for t
 
 ---
 
-
-
-
 ## Instructions
 
-Create virtualenv using: `source prepare-virtualenv.sh` 
+Create virtualenv using: `source prepare-virtualenv.sh`
 
 It's recommended to use [direnv](https://direnv.net/), to have automatic venv activation.
 
@@ -71,10 +60,9 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 Currently the domain is hard coded to `tiles.openfreemap.org`. Please search & replace this.
 
-The script is made with long expiry CloudFlare origin certificates in mind, which are placed in the `config/certs` folder. For self-hosting you may want to use Let's Encrypt or similar automated tool. 
+The script is made with long expiry CloudFlare origin certificates in mind, which are placed in the `config/certs` folder. For self-hosting you may want to use Let's Encrypt or similar automated tool.
 
 If you know how to make Let's Encrypt work with Round Robin DNS, please comment in the Discussions.
-
 
 #### 3. Deploy a http-host
 
@@ -86,13 +74,9 @@ After this, go for a walk and by the time you come back it should be up and runn
 
 #### 4. Deploy tile-gen server (optional)
 
-If you have a really beefy machine (see above) and you want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`. 
+If you have a really beefy machine (see above) and you want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`.
 
 Trigger a run manually, by running `planetiler_{area}.sh`. Recommended to use tmux or similar, as it can take days.
-
-
-
-
 
 ### HTTPS certs
 

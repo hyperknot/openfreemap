@@ -150,8 +150,8 @@ def upload_https_host_files(c):
     put_dir(c, SCRIPTS_DIR / 'http_host' / 'http_host_lib', f'{HTTP_HOST_BIN}/http_host_lib')
     put_dir(
         c,
-        SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'templates',
-        f'{HTTP_HOST_BIN}/http_host_lib/templates',
+        SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'nginx',
+        f'{HTTP_HOST_BIN}/http_host_lib/nginx',
     )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
@@ -256,7 +256,9 @@ def debug(hostname, user, port):
     upload_http_host_config(c)
 
     upload_https_host_files(c)
-    run_http_host_sync(c)
+    # run_http_host_sync(c)
+
+    sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
 
 
 if __name__ == '__main__':

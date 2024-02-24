@@ -14,7 +14,7 @@ It is truly **open-source**: everything, including the full production setup, is
 
 ## Goals of this project
 
-The goal of this project is to provide free, production-quality vector-tile hosting using existing tools. 
+The goal of this project is to provide free, production-quality vector-tile hosting using existing tools.
 
 Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker). OFM does not want to be an alternative to any of these projects. If the community decides, we can replace any of these tools.
 
@@ -29,6 +29,7 @@ Contributions are more than welcome!
 The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design:
 
 1. OFM is not providing:
+
    - search or geocoding
    - route calculation, navigation or directions
    - static image generation
@@ -41,7 +42,7 @@ The only way this project can possibly work is to be super focused about what it
 
    This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
-3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate  version of http-host if you keep a close eye on this repo.
+3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of http-host if you keep a close eye on this repo.
 
 ## Code structure
 
@@ -53,7 +54,7 @@ This sets up everything on a clean Ubuntu server. You run it locally and it sets
 
 #### HTTP host - scripts/http_host
 
-Inside `http_host`, all work is done by `host_manager.py`. 
+Inside `http_host`, all work is done by `host_manager.py`.
 
 It does the following:
 
@@ -68,7 +69,7 @@ You can run `./host_manager.py --help` to see which options are available. Some 
 
 #### tile generation - scripts/tile_gen
 
-*note: Tile generation is 100% optional, as we are providing the processed full planet files for public download.*
+_note: Tile generation is 100% optional, as we are providing the processed full planet files for public download._
 
 The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler (or soon tilemaker).
 
@@ -80,13 +81,9 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 A very important part, probably needs the most work in the long term future.
 
-
-
 ## Self hosting
 
 See [self hosting docs](docs/self_hosting.md).
-
-
 
 ## BTRFS images
 
@@ -97,8 +94,6 @@ The original idea of this project is to avoid using tile servers altogether. Ins
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
 I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server, the aim was to saturate a gigabit connection. At the end, it was able to serve 30 Gbit on localhost, on a cold nginx cache.
-
-
 
 ## FAQ
 
@@ -141,8 +136,6 @@ Unfortunately, making range requests in 80 GB files just doesn't work in product
 
 If PMTiles implements splitting to <10 MB files, it can be a valid alternative to running servers.
 
-
-
 ## Contributing
 
 Contributors welcome!
@@ -168,13 +161,9 @@ Tasks outside the scope of this project:
 
 See [dev setup docs](docs/dev_setup.md).
 
-
-
 ## Changelog
 
 v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
-
-
 
 ## Attribution
 

@@ -2,13 +2,33 @@ import subprocess
 import sys
 from pathlib import Path
 
-from http_host_lib import DEFAULT_RUNS_DIR, MNT_DIR, OFM_CONFIG_DIR, TEMPLATES_DIR
+from http_host_lib import DEFAULT_RUNS_DIR, HOST_CONFIG, MNT_DIR, NGINX_DIR, OFM_CONFIG_DIR
 
 
 def write_nginx_config():
-    with open(TEMPLATES_DIR / 'nginx_cf.conf') as fp:
-        nginx_template = fp.read()
+    location_str, curl_text = create_location_blocks()
+    curl_text_mix = ''
 
+    if HOST_CONFIG['domain_cf']:
+        with open(NGINX_DIR / 'cf.conf') as fp:
+            cf_template = fp.read()
+
+        cf_template = cf_template.replace('__LOCATION_BLOCKS__', location_str)
+        cf_template = cf_template.replace('__DOMAIN__', HOST_CONFIG['domain_cf'])
+
+        curl_text_mix += curl_text.replace('__DOMAIN__', HOST_CONFIG['domain_cf'])
+
+        with open('/data/nginx/sites/cf.conf', 'w') as fp:
+            fp.write(cf_template)
+            print('  nginx config written')
+
+    subprocess.run(['nginx', '-t'], check=True)
+    subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
+
+    print(curl_text_mix)
+
+
+def create_location_blocks():
     location_str = ''
     curl_text = ''
 
@@ -22,21 +42,15 @@ def write_nginx_config():
             curl_text = (
                 '\ntest with:\n'
                 f'curl -H "Host: ofm" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
-                f'curl -I https://tiles.openfreemap.org/{area}/{version}/14/8529/5975.pbf'
+                f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
             )
 
     location_str += create_latest_locations()
 
-    nginx_template = nginx_template.replace('___LOCATION_BLOCKS___', location_str)
+    with open(NGINX_DIR / 'location_static.conf') as fp:
+        location_str += '\n' + fp.read()
 
-    with open('/data/nginx/sites/ofm-tiles-org.conf', 'w') as fp:
-        fp.write(nginx_template)
-        print('  nginx config written')
-
-    subprocess.run(['nginx', '-t'], check=True)
-    subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
-
-    print(curl_text)
+    return location_str, curl_text
 
 
 def create_version_location(area: str, version: str, subdir: Path) -> str:
