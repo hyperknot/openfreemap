@@ -114,12 +114,6 @@ There are three public buckets:
 - https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
 - https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
 
-### HTTPS certs
-
-The current HTTPS system is made to use long term Cloudflare origin certificates. The same certificates are uploaded to all the servers. This is only possible because CF certs are valid for 15 years.
-
-Once Load Balancing on CF is working, next step will be to integrate Let's Encrypt. If you know how to do this, please comment in the Discussions.
-
 ### Domains and Cloudflare
 
 The project has two domains: .org and .com. Currently, both are on Cloudflare.
@@ -143,7 +137,7 @@ Contributors welcome!
 Smaller tasks:
 
 - Add tilemaker, so we see the difference between planetiler and tilemaker and they can both validate their output based on this comparison.
-- Figure out how to use Let's Encrypt on multiple servers with Round Robin DNS.
+- Round Robin load balancer
 - Cloudflare worker for indexing the public buckets, instead of generating index.txt files.
 - Some of the POI icons are missing in the styles.
 
@@ -163,7 +157,7 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
-v0.1 - everything works. 1 server for tile gen, 1 server for HTTP host. <- we are here!
+v0.1 - everything works. 1 server for tile gen, 2 servers for HTTP host. <- we are here!
 
 ## Attribution
 

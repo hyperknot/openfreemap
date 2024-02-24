@@ -193,11 +193,14 @@ def setup_le_dns_manager(c):
         permissions=400,
     )
 
+    # TODO change to /data/ofm/config, owner root
+
     sudo_cmd(
         c,
         'certbot certonly '
         '--dns-cloudflare '
         '--dns-cloudflare-credentials /root/.secrets/ofm_le_dns_cloudflare.ini '
+        '--dns-cloudflare-propagation-seconds 60 '
         '--staging '
         f'--noninteractive -m {le_email} '
         f'--agree-tos '
