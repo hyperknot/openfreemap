@@ -6,29 +6,39 @@ from http_host_lib import DEFAULT_RUNS_DIR, HOST_CONFIG, MNT_DIR, NGINX_DIR, OFM
 
 
 def write_nginx_config():
-    location_str, curl_text = create_location_blocks()
     curl_text_mix = ''
 
     if HOST_CONFIG['domain_cf']:
-        with open(NGINX_DIR / 'cf.conf') as fp:
-            cf_template = fp.read()
-
-        cf_template = cf_template.replace('__LOCATION_BLOCKS__', location_str)
-        cf_template = cf_template.replace('__DOMAIN__', HOST_CONFIG['domain_cf'])
-        cf_template = cf_template.replace('__LOCAL__', 'ofm_cf')
-
-        curl_text_mix += curl_text.replace('__DOMAIN__', HOST_CONFIG['domain_cf']).replace(
-            '__LOCAL__', 'ofm_cf'
+        curl_text_mix += create_nginx_conf(
+            template_path=NGINX_DIR / 'cf.conf',
+            local='ofm_cf',
+            domain=HOST_CONFIG['domain_cf'],
         )
-
-        with open('/data/nginx/sites/cf.conf', 'w') as fp:
-            fp.write(cf_template)
-            print('  nginx config written')
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
     print(curl_text_mix)
+
+
+def create_nginx_conf(*, template_path, local, domain):
+    location_str, curl_text = create_location_blocks()
+
+    with open(template_path) as fp:
+        template = fp.read()
+
+    template = template.replace('__LOCATION_BLOCKS__', location_str)
+    template = template.replace('__LOCAL__', local)
+    template = template.replace('__DOMAIN__', domain)
+
+    curl_text = curl_text.replace('__LOCAL__', local)
+    curl_text = curl_text.replace('__DOMAIN__', domain)
+
+    with open(f'/data/nginx/sites/{local}.conf', 'w') as fp:
+        fp.write(template)
+        print(f'  nginx config written: {domain} {local}')
+
+    return curl_text
 
 
 def create_location_blocks():

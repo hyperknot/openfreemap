@@ -90,14 +90,14 @@ def prepare_tile_gen(c):
 
 
 def upload_http_host_config(c):
-    domain_direct = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_DIRECT', '').strip()
+    domain_le = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_LE', '').strip()
     domain_cf = dotenv_values(f'{CONFIG_DIR}/.env').get('DOMAIN_CF', '').strip()
     skip_planet = (
         dotenv_values(f'{CONFIG_DIR}/.env').get('SKIP_PLANET', '').lower().strip() == 'true'
     )
 
-    if not (domain_direct or domain_cf):
-        sys.exit('Please specify DOMAIN_DIRECT or DOMAIN_CF in config/.env')
+    if not (domain_le or domain_cf):
+        sys.exit('Please specify DOMAIN_LE or DOMAIN_CF in config/.env')
 
     if domain_cf:
         if (
@@ -107,7 +107,7 @@ def upload_http_host_config(c):
             sys.exit('When using DOMAIN_CF, please put cf.key and cf.cert files in config/certs')
 
     host_config = {
-        'domain_direct': domain_direct,
+        'domain_le': domain_le,
         'domain_cf': domain_cf,
         'skip_planet': skip_planet,
     }
