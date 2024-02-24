@@ -1,0 +1,3 @@
+# --- Let's Encrypt DNS challange, not needed for self-hosting
+
+dns_cloudflare_api_token = xxx

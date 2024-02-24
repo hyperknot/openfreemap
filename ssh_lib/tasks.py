@@ -181,15 +181,23 @@ def install_benchmark(c):
 def setup_le_dns_manager(c):
     le_email = dotenv_val('LE_EMAIL').lower()
     domain_le_dns = dotenv_val('DOMAIN_LE_DNS').lower()
-
     assert le_email
     assert domain_le_dns
+
+    c.sudo('mkdir -p /root/.secrets')
+
+    put(
+        c,
+        CONFIG_DIR / 'cloudflare.ini',
+        '/root/.secrets/ofm_le_dns_cloudflare.ini',
+        permissions=400,
+    )
 
     sudo_cmd(
         c,
         'certbot certonly '
         '--dns-cloudflare '
-        '--dns-cloudflare-credentials ~/.secrets/certbot/cloudflare.ini '
+        '--dns-cloudflare-credentials /root/.secrets/ofm_le_dns_cloudflare.ini '
         '--staging '
         f'--noninteractive -m {le_email} '
         f'--agree-tos '
