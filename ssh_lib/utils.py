@@ -3,6 +3,8 @@ import secrets
 import string
 from pathlib import Path
 
+import requests
+
 
 def put(
     c, local_path, remote_path, permissions=None, user='root', group=None, create_parent_dir=False
@@ -159,3 +161,14 @@ def enable_sudo(c, username, nopasswd=False):
         put_str(c, '/etc/sudoers.d/tmp.', f'{username} ALL=(ALL) NOPASSWD:ALL')
         set_permission(c, '/etc/sudoers.d/tmp.', permissions='440', user='root')
         c.sudo(f'mv /etc/sudoers.d/tmp. /etc/sudoers.d/{username}')
+
+
+def get_latest_release_github(user, repo):
+    url = f'https://api.github.com/repos/{user}/{repo}/releases/latest'
+    r = requests.get(url)
+    r.raise_for_status()
+
+    data = r.json()
+    assert data['tag_name'] == data['name']
+
+    return data['tag_name']

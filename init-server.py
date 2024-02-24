@@ -9,11 +9,18 @@ from fabric import Config, Connection
 from ssh_lib import CONFIG_DIR, HTTP_HOST_BIN, OFM_DIR, REMOTE_CONFIG, SCRIPTS_DIR, TILE_GEN_BIN
 from ssh_lib.benchmark import c1000k, wrk
 from ssh_lib.kernel import kernel_tweaks_ofm
-from ssh_lib.nginx import certbot, nginx
+from ssh_lib.nginx import lego, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import planetiler
 from ssh_lib.rclone import rclone
-from ssh_lib.utils import add_user, enable_sudo, put, put_dir, put_str, sudo_cmd
+from ssh_lib.utils import (
+    add_user,
+    enable_sudo,
+    put,
+    put_dir,
+    put_str,
+    sudo_cmd,
+)
 
 
 def prepare_shared(c):
@@ -119,7 +126,7 @@ def upload_http_host_config(c):
 
 def prepare_http_host(c):
     nginx(c)
-    certbot(c)
+    lego(c)
 
     c.sudo('rm -rf /data/ofm/http_host/logs')
     c.sudo('mkdir -p /data/ofm/http_host/logs')
@@ -253,12 +260,14 @@ def tile_gen(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
+    lego(c)
+
     # upload_http_host_config(c)
 
-    upload_https_host_files(c)
+    # upload_https_host_files(c)
     # run_http_host_sync(c)
 
-    sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
+    # sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
 
 
 if __name__ == '__main__':

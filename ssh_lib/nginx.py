@@ -4,6 +4,7 @@ from ssh_lib.utils import (
     apt_get_purge,
     apt_get_update,
     exists,
+    get_latest_release_github,
     put,
     put_str,
     sudo_cmd,
@@ -67,3 +68,19 @@ def certbot(c):
 
     apt_get_purge(c, 'certbot')
     c.sudo('snap install --classic certbot', warn=True)
+
+
+def lego(c):
+    lego_version = get_latest_release_github('go-acme', 'lego')
+
+    url = f'https://github.com/go-acme/lego/releases/download/{lego_version}/lego_{lego_version}_linux_amd64.tar.gz'
+
+    c.run('rm -rf /tmp/lego*')
+    c.run('mkdir -p /tmp/lego')
+    c.run(
+        f'wget -q "{url}" -O /tmp/lego/out.tar.gz',
+    )
+    c.run('tar xzvf /tmp/lego/out.tar.gz -C /tmp/lego')
+    c.run('mv /tmp/lego/lego /usr/bin')
+    c.run('chmod +x /usr/bin/lego')
+    c.run('rm -rf /tmp/lego*')
