@@ -85,7 +85,7 @@ def write_nginx_config():
 
 
 def create_nginx_conf(*, template_path, local, domain):
-    location_str, curl_text = create_location_blocks()
+    location_str, curl_text = create_location_blocks(local=local, domain=domain)
 
     with open(template_path) as fp:
         template = fp.read()
@@ -104,7 +104,7 @@ def create_nginx_conf(*, template_path, local, domain):
     return curl_text
 
 
-def create_location_blocks():
+def create_location_blocks(*, local, domain):
     location_str = ''
     curl_text = ''
 
@@ -112,7 +112,9 @@ def create_location_blocks():
         if not subdir.is_dir():
             continue
         area, version = subdir.name.split('-')
-        location_str += create_version_location(area, version, subdir)
+        location_str += create_version_location(
+            area=area, version=version, subdir=subdir, local=local, domain=domain
+        )
 
         if not curl_text:
             curl_text = (
@@ -121,7 +123,7 @@ def create_location_blocks():
                 f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
             )
 
-    location_str += create_latest_locations()
+    location_str += create_latest_locations(local=local, domain=domain)
 
     with open(NGINX_DIR / 'location_static.conf') as fp:
         location_str += '\n' + fp.read()
@@ -129,20 +131,22 @@ def create_location_blocks():
     return location_str, curl_text
 
 
-def create_version_location(area: str, version: str, subdir: Path) -> str:
+def create_version_location(
+    *, area: str, version: str, subdir: Path, local: str, domain: str
+) -> str:
     run_dir = DEFAULT_RUNS_DIR / area / version
     if not run_dir.is_dir():
         print(f"  {run_dir} doesn't exists, skipping")
         return ''
 
-    tilejson_path = run_dir / 'tilejson-tiles-org.json'
+    tilejson_path = run_dir / f'tilejson-{local}.json'
 
     metadata_path = subdir / 'metadata.json'
     if not metadata_path.is_file():
         print(f"  {metadata_path} doesn't exists, skipping")
         return ''
 
-    url_prefix = f'https://tiles.openfreemap.org/{area}/{version}'
+    url_prefix = f'https://{domain}/{area}/{version}'
 
     subprocess.run(
         [
@@ -184,7 +188,7 @@ def create_version_location(area: str, version: str, subdir: Path) -> str:
     """
 
 
-def create_latest_locations() -> str:
+def create_latest_locations(*, local: str, domain: str) -> str:
     location_str = ''
 
     local_version_files = OFM_CONFIG_DIR.glob('tileset_version_*.txt')
@@ -195,7 +199,7 @@ def create_latest_locations() -> str:
         print(f'  setting latest version for {area}: {version}')
 
         run_dir = DEFAULT_RUNS_DIR / area / version
-        tilejson_path = run_dir / 'tilejson-tiles-org.json'
+        tilejson_path = run_dir / f'tilejson-{local}.json'
         assert tilejson_path.is_file()
 
         location_str += f"""
