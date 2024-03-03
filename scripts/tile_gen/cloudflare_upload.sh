@@ -30,7 +30,7 @@ rclone sync \
   --stats-one-line \
   --log-file logs/rclone.log \
   --exclude 'logs/**' \
-  . "cf:ofm-$AREA/$VERSION"
+  . "remote:ofm-$AREA/$VERSION"
 
 
 bash "$SCRIPT_DIR/cloudflare_index.sh"

@@ -10,7 +10,7 @@ from ssh_lib.tasks import (
     prepare_shared,
     prepare_tile_gen,
     run_http_host_sync,
-    setup_ledns_manager,
+    setup_ledns_writer,
     upload_http_host_config,
 )
 from ssh_lib.utils import (
@@ -98,13 +98,14 @@ def tile_gen(hostname, user, port):
 
 @cli.command()
 @common_options
-def ledns_manager(hostname, user, port):
+def ledns_writer(hostname, user, port):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
 
-    setup_ledns_manager(c)
+    setup_ledns_writer(c)
+
 
 
 @cli.command()

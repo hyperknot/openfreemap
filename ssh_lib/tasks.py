@@ -30,8 +30,8 @@ def prepare_shared(c):
     kernel_tweaks_ofm(c)
 
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
-    c.sudo('chown ofm:ofm /data/ofm/config')
-    c.sudo('chown ofm:ofm /data/ofm')
+    c.sudo(f'chown ofm:ofm {REMOTE_CONFIG}')
+    c.sudo(f'chown ofm:ofm {OFM_DIR}')
 
     prepare_venv(c)
 
@@ -178,11 +178,24 @@ def install_benchmark(c):
     wrk(c)
 
 
-def setup_ledns_manager(c):
+def setup_ledns_writer(c):
     le_email = dotenv_val('LE_EMAIL').lower()
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     assert le_email
     assert domain_ledns
+    assert (CONFIG_DIR / 'rclone.conf').exists()
+
+    rclone(c)
+    c.sudo(f'mkdir -p {REMOTE_CONFIG}')
+
+    put(
+        c,
+        CONFIG_DIR / 'rclone.conf',
+        f'{REMOTE_CONFIG}/rclone.conf',
+        permissions='600',
+    )
+
+    return
 
     c.sudo('mkdir -p /root/.secrets')
 

@@ -1,4 +1,4 @@
-[cf]
+[remote]
 type = s3
 provider = Cloudflare
 access_key_id = xxx

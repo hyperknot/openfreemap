@@ -14,15 +14,15 @@ for AREA in "${AREAS[@]}"; do
     --fast-list \
     --exclude dirs.txt \
     --exclude index.txt \
-    "cf:ofm-$AREA" > index/index.txt
+    "remote:ofm-$AREA" > index/index.txt
 
   rclone lsf -R \
     --dirs-only \
     --dir-slash=false \
     --fast-list \
-    "cf:ofm-$AREA" > index/dirs.txt
+    "remote:ofm-$AREA" > index/dirs.txt
 
-  rclone copy index "cf:ofm-$AREA"
+  rclone copy index "remote:ofm-$AREA"
 done
 
 rm -rf index
