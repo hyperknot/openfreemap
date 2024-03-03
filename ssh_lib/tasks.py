@@ -186,37 +186,43 @@ def setup_ledns_writer(c):
     assert (CONFIG_DIR / 'rclone.conf').exists()
 
     rclone(c)
+    certbot(c)
+
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
 
     put(
         c,
         CONFIG_DIR / 'rclone.conf',
         f'{REMOTE_CONFIG}/rclone.conf',
-        permissions='600',
+        permissions=400,
     )
-
-    return
-
-    c.sudo('mkdir -p /root/.secrets')
 
     put(
         c,
         CONFIG_DIR / 'cloudflare.ini',
-        '/root/.secrets/ofm_ledns_cloudflare.ini',
+        f'{REMOTE_CONFIG}/cloudflare.ini',
         permissions=400,
     )
 
-    # TODO change to /data/ofm/config, owner root
-
-    sudo_cmd(
+    put(
         c,
-        'certbot certonly '
-        '--dns-cloudflare '
-        '--dns-cloudflare-credentials /root/.secrets/ofm_ledns_cloudflare.ini '
-        '--dns-cloudflare-propagation-seconds 60 '
-        '--staging '
-        f'--noninteractive -m {le_email} '
-        f'--agree-tos '
-        f'--cert-name=ofm_ledns '
-        f'-d {domain_ledns}',
+        SCRIPTS_DIR / 'ledns' / 'rclone_write.sh',
+        '/data/ofm/ledns/rclone_write.sh',
+        create_parent_dir=True,
+        permissions=500,
     )
+
+    #
+    # sudo_cmd(
+    #     c,
+    #     'certbot certonly '
+    #     '--dns-cloudflare '
+    #     f'--dns-cloudflare-credentials {REMOTE_CONFIG}/cloudflare.ini '
+    #     '--dns-cloudflare-propagation-seconds 20 '
+    #     '--staging '
+    #     f'--noninteractive -m {le_email} '
+    #     f'--agree-tos '
+    #     f'--cert-name=ofm_ledns '
+    #     f'--deploy-hook /data/ofm/ledns/rclone_write.sh '
+    #     f'-d {domain_ledns}',
+    # )

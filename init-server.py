@@ -107,7 +107,6 @@ def ledns_writer(hostname, user, port):
     setup_ledns_writer(c)
 
 
-
 @cli.command()
 @common_options
 def debug(hostname, user, port):
