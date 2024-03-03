@@ -204,6 +204,8 @@ def setup_ledns_writer(c):
         permissions=400,
     )
 
+    c.sudo('rm -rf /data/ofm/ledns')
+
     put(
         c,
         SCRIPTS_DIR / 'ledns' / 'rclone_write.sh',
@@ -212,17 +214,18 @@ def setup_ledns_writer(c):
         permissions=500,
     )
 
-    #
-    # sudo_cmd(
-    #     c,
-    #     'certbot certonly '
-    #     '--dns-cloudflare '
-    #     f'--dns-cloudflare-credentials {REMOTE_CONFIG}/cloudflare.ini '
-    #     '--dns-cloudflare-propagation-seconds 20 '
-    #     '--staging '
-    #     f'--noninteractive -m {le_email} '
-    #     f'--agree-tos '
-    #     f'--cert-name=ofm_ledns '
-    #     f'--deploy-hook /data/ofm/ledns/rclone_write.sh '
-    #     f'-d {domain_ledns}',
-    # )
+    c.sudo('certbot delete --cert-name ofm_ledns')
+
+    sudo_cmd(
+        c,
+        'certbot certonly '
+        '--dns-cloudflare '
+        f'--dns-cloudflare-credentials {REMOTE_CONFIG}/cloudflare.ini '
+        '--dns-cloudflare-propagation-seconds 20 '
+        f'--non-interactive '
+        f'-m {le_email} '
+        f'--agree-tos '
+        f'--cert-name=ofm_ledns '
+        f'--deploy-hook /data/ofm/ledns/rclone_write.sh '
+        f'-d {domain_ledns}',
+    )
