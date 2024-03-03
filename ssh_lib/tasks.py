@@ -214,7 +214,8 @@ def setup_ledns_writer(c):
         permissions=500,
     )
 
-    c.sudo('certbot delete --cert-name ofm_ledns')
+    # only use with --staging
+    # c.sudo('certbot delete --noninteractive --cert-name ofm_ledns', warn=True)
 
     sudo_cmd(
         c,
@@ -222,7 +223,7 @@ def setup_ledns_writer(c):
         '--dns-cloudflare '
         f'--dns-cloudflare-credentials {REMOTE_CONFIG}/cloudflare.ini '
         '--dns-cloudflare-propagation-seconds 20 '
-        f'--non-interactive '
+        f'--noninteractive '
         f'-m {le_email} '
         f'--agree-tos '
         f'--cert-name=ofm_ledns '
