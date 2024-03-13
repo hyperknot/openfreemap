@@ -26,6 +26,7 @@ def prepare_shared(c):
 
     pkg_upgrade(c)
     pkg_base(c)
+    rclone(c)
 
     kernel_tweaks_ofm(c)
 
@@ -49,7 +50,6 @@ def prepare_venv(c):
 
 def prepare_tile_gen(c):
     planetiler(c)
-    rclone(c)
 
     for file in [
         'extract_btrfs.sh',
@@ -95,6 +95,7 @@ def prepare_tile_gen(c):
 def upload_http_host_config(c):
     domain_le = dotenv_val('DOMAIN_LE').lower()
     domain_cf = dotenv_val('DOMAIN_CF').lower()
+    domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
     le_email = dotenv_val('LE_EMAIL').lower()
 
@@ -116,6 +117,7 @@ def upload_http_host_config(c):
     host_config = {
         'domain_le': domain_le,
         'domain_cf': domain_cf,
+        'domain_ledns': domain_ledns,
         'skip_planet': skip_planet,
         'le_email': le_email,
     }
@@ -123,6 +125,15 @@ def upload_http_host_config(c):
     host_config_str = json.dumps(host_config, indent=2, ensure_ascii=False)
     print(host_config_str)
     put_str(c, '/data/ofm/config/http_host.json', host_config_str)
+
+    if domain_ledns:
+        assert (CONFIG_DIR / 'rclone.conf').exists()
+        put(
+            c,
+            CONFIG_DIR / 'rclone.conf',
+            f'{REMOTE_CONFIG}/rclone.conf',
+            permissions=400,
+        )
 
 
 def prepare_http_host(c):
@@ -137,7 +148,7 @@ def prepare_http_host(c):
     c.sudo('mkdir -p /data/ofm/http_host/logs_nginx')
     c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
 
-    upload_https_host_files(c)
+    upload_http_host_files(c)
     upload_certificates(c)
 
     c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
@@ -151,7 +162,7 @@ def run_http_host_sync(c):
     sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py sync')
 
 
-def upload_https_host_files(c):
+def upload_http_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     put_dir(c, SCRIPTS_DIR / 'http_host', HTTP_HOST_BIN, file_permissions='755')

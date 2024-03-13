@@ -7,6 +7,7 @@ from http_host_lib import (
     CERTS_DIR,
     DEFAULT_RUNS_DIR,
     HOST_CONFIG,
+    HTTP_HOST_BIN_DIR,
     MNT_DIR,
     NGINX_DIR,
     OFM_CONFIG_DIR,
@@ -18,6 +19,7 @@ def write_nginx_config():
 
     domain_cf = HOST_CONFIG['domain_cf']
     domain_le = HOST_CONFIG['domain_le']
+    domain_ledns = HOST_CONFIG['domain_ledns']
 
     # processing Cloudflare config
     if domain_cf:
@@ -28,6 +30,21 @@ def write_nginx_config():
             template_path=NGINX_DIR / 'cf.conf',
             local='ofm_cf',
             domain=domain_cf,
+        )
+
+    # processing Cloudflare config
+    if domain_ledns:
+        if not (OFM_CONFIG_DIR / 'rclone.conf').is_file():
+            sys.exit('rclone.conf missing')
+
+        # download the ledns certificate from bucket using rclone
+        write_ledns_reader_script(domain_ledns)
+        subprocess.run(['bash', HTTP_HOST_BIN_DIR / 'ledns_reader.sh'], check=True)
+
+        curl_text_mix += create_nginx_conf(
+            template_path=NGINX_DIR / 'ledns.conf',
+            local='ofm_ledns',
+            domain=domain_ledns,
         )
 
     # processing Let's Encrypt config
@@ -59,6 +76,7 @@ def write_nginx_config():
                 HOST_CONFIG['le_email'],
                 '--agree-tos',
                 '--cert-name=ofm_le',
+                # '--staging',
                 '--deploy-hook',
                 'nginx -t && service nginx reload',
                 '-d',
@@ -215,3 +233,15 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         """
 
     return location_str
+
+
+def write_ledns_reader_script(domain_ledns):
+    script = f"""
+#!/usr/bin/env bash
+export RCLONE_CONFIG=/data/ofm/config/rclone.conf
+rclone copyto -v "remote:ofm-private/ledns/{domain_ledns}/ofm_ledns.cert" /data/nginx/certs/ofm_ledns.cert
+rclone copyto -v "remote:ofm-private/ledns/{domain_ledns}/ofm_ledns.key" /data/nginx/certs/ofm_ledns.key
+    """.strip()
+
+    with open(HTTP_HOST_BIN_DIR / 'ledns_reader.sh', 'w') as fp:
+        fp.write(script)

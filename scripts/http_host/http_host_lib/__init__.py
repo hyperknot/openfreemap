@@ -9,6 +9,7 @@ DEFAULT_ASSETS_DIR = Path('/data/ofm/http_host/assets')
 
 MNT_DIR = Path('/mnt/ofm')
 OFM_CONFIG_DIR = Path('/data/ofm/config')
+HTTP_HOST_BIN_DIR = Path('/data/ofm/http_host/bin')
 
 CERTS_DIR = Path('/data/nginx/certs')
 

@@ -12,6 +12,7 @@ from ssh_lib.tasks import (
     run_http_host_sync,
     setup_ledns_writer,
     upload_http_host_config,
+    upload_http_host_files,
 )
 from ssh_lib.utils import (
     sudo_cmd,
@@ -112,12 +113,8 @@ def ledns_writer(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
-    prepare_shared(c)
     upload_http_host_config(c)
-
-    prepare_http_host(c)
-
-    run_http_host_sync(c)
+    upload_http_host_files(c)
     sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
 
 
