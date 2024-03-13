@@ -134,6 +134,7 @@ def upload_http_host_config(c):
             f'{REMOTE_CONFIG}/rclone.conf',
             permissions=400,
         )
+        put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_ledns_reader', '/etc/cron.d/')
 
 
 def prepare_http_host(c):
@@ -152,10 +153,6 @@ def prepare_http_host(c):
     upload_certificates(c)
 
     c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
-
-
-def add_http_host_cron(c):
-    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 def run_http_host_sync(c):

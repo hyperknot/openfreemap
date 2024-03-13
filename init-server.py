@@ -3,9 +3,8 @@
 import click
 from fabric import Config, Connection
 
-from ssh_lib import dotenv_val
+from ssh_lib import SCRIPTS_DIR, dotenv_val
 from ssh_lib.tasks import (
-    add_http_host_cron,
     prepare_http_host,
     prepare_shared,
     prepare_tile_gen,
@@ -15,6 +14,7 @@ from ssh_lib.tasks import (
     upload_http_host_files,
 )
 from ssh_lib.utils import (
+    put,
     sudo_cmd,
 )
 
@@ -67,6 +67,7 @@ def http_host_once(hostname, user, port):
     upload_http_host_config(c)
 
     prepare_http_host(c)
+
     run_http_host_sync(c)
 
 
@@ -82,7 +83,8 @@ def http_host_autoupdate(hostname, user, port):
     upload_http_host_config(c)
 
     prepare_http_host(c)
-    add_http_host_cron(c)
+
+    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 @cli.command()
