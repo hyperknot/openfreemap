@@ -1,4 +1,2 @@
 # once per day
-2 34 * * * ofm     sudo bash /data/ofm/http_host/bin/ledns_reader.sh >> /data/ofm/http_host/logs/ledns_reader.log 2>&1'
-
-
+2 34 * * * ofm     sudo /usr/bin/bash /data/ofm/http_host/bin/ledns_reader.sh >> /data/ofm/http_host/logs/ledns_reader.log 2>&1
