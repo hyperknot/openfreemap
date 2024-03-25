@@ -7,6 +7,7 @@ It is truly **free**: there are no limits on the number of map views or requests
 It is truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
 
 ## How can I use it?
+(Click below, it's interactive!)
 
 <!--map_howto-->
 
