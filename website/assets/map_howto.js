@@ -34,13 +34,14 @@ function initMap() {
 }
 
 const mapDiv = document.getElementById('map-container')
-// mapDiv.onclick = function () {
-//   initMap()
-// }
+mapDiv.onclick = function () {
+  initMap()
+}
 
-initMap()
+// initMap()
 
 function selectStyle(event, style) {
+  initMap()
   toggleButtonSelection(event.target)
 
   const styleUrl = 'https://tiles.openfreemap.org/styles/' + style
