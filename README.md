@@ -16,7 +16,7 @@ It is truly **open-source**: everything, including the full production setup, is
 
 The goal of this project is to provide free, production-quality vector-tile hosting using existing tools.
 
-Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/) and soon [tilemaker](https://github.com/systemed/tilemaker). OFM does not want to be an alternative to any of these projects. If the community decides, we can replace any of these tools.
+Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/). OFM does not want to be an alternative to any of these projects. If the community decides, we can replace any of these tools.
 
 The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything keeps working: the map tiles are automatically generated, servers are automatically updated and load balancing takes care of failing servers.
 
@@ -71,7 +71,7 @@ You can run `./host_manager.py --help` to see which options are available. Some 
 
 _note: Tile generation is 100% optional, as we are providing the processed full planet files for public download._
 
-The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler (or soon tilemaker).
+The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler.
 
 The created .mbtiles file is then extracted into a BTRFS partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
 
@@ -136,7 +136,6 @@ Contributors welcome!
 
 Smaller tasks:
 
-- Add tilemaker, so we see the difference between planetiler and tilemaker and they can both validate their output based on this comparison.
 - Round Robin load balancer
 - Cloudflare worker for indexing the public buckets, instead of generating index.txt files.
 - Some of the POI icons are missing in the styles.
