@@ -4,6 +4,7 @@ import click
 from fabric import Config, Connection
 
 from ssh_lib import SCRIPTS_DIR, dotenv_val
+from ssh_lib.planetiler import planetiler
 from ssh_lib.tasks import (
     prepare_http_host,
     prepare_shared,
@@ -115,9 +116,11 @@ def ledns_writer(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
-    upload_http_host_config(c)
-    upload_http_host_files(c)
-    sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
+    # upload_http_host_config(c)
+    # upload_http_host_files(c)
+    # sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
+
+    planetiler(c)
 
 
 if __name__ == '__main__':

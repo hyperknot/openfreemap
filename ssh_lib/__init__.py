@@ -9,6 +9,7 @@ SCRIPTS_DIR = Path(__file__).parent.parent / 'scripts'
 
 OFM_DIR = '/data/ofm'
 REMOTE_CONFIG = '/data/ofm/config'
+TILE_GEN_SRC = '/data/ofm/tile_gen/src'
 TILE_GEN_BIN = '/data/ofm/tile_gen/bin'
 HTTP_HOST_BIN = '/data/ofm/http_host/bin'
 
