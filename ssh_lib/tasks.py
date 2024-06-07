@@ -66,7 +66,7 @@ def prepare_tile_gen(c):
             user='ofm',
         )
 
-    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/http_host/bin')
+    c.sudo(f'{VENV_BIN}/pip install -e {TILE_GEN_BIN}')
 
     c.sudo('chown ofm:ofm /data/ofm/tile_gen')
     c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
@@ -132,11 +132,11 @@ def prepare_http_host(c):
     upload_http_host_files(c)
     upload_certificates(c)
 
-    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/http_host/bin')
+    c.sudo(f'{VENV_BIN}/pip install -e {HTTP_HOST_BIN}')
 
 
 def run_http_host_sync(c):
-    sudo_cmd(c, f'{VENV_BIN}/python -u /data/ofm/http_host/bin/host_manager.py sync')
+    sudo_cmd(c, f'{VENV_BIN}/python -u {HTTP_HOST_BIN}/host_manager.py sync')
 
 
 def upload_http_host_files(c):

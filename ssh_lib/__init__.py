@@ -9,10 +9,10 @@ SCRIPTS_DIR = Path(__file__).parent.parent / 'scripts'
 
 OFM_DIR = '/data/ofm'
 REMOTE_CONFIG = '/data/ofm/config'
+VENV_BIN = '/data/ofm/venv/bin'
 TILE_GEN_SRC = '/data/ofm/tile_gen/src'
 TILE_GEN_BIN = '/data/ofm/tile_gen/bin'
 HTTP_HOST_BIN = '/data/ofm/http_host/bin'
-VENV_BIN = '/data/ofm/venv/bin'
 
 DOTENV_VALUES = dotenv_values(f'{CONFIG_DIR}/.env')
 
