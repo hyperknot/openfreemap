@@ -3,7 +3,7 @@
 import click
 from fabric import Config, Connection
 
-from ssh_lib import SCRIPTS_DIR, dotenv_val
+from ssh_lib import SCRIPTS_DIR, VENV_BIN, dotenv_val
 from ssh_lib.planetiler import planetiler
 from ssh_lib.tasks import (
     prepare_http_host,
@@ -118,7 +118,7 @@ def debug(hostname, user, port):
 
     # upload_http_host_config(c)
     # upload_http_host_files(c)
-    # sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
+    # sudo_cmd(c, f'{VENV_BIN}/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
 
     planetiler(c)
 

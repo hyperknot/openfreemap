@@ -1,5 +1,5 @@
 from ssh_lib import TILE_GEN_BIN, TILE_GEN_SRC
-from ssh_lib.utils import apt_get_install, apt_get_update, sudo_cmd
+from ssh_lib.utils import apt_get_install, apt_get_update, exists, sudo_cmd
 
 
 PLANETILER_COMMIT = 'cf6c55'
@@ -7,6 +7,10 @@ PLANETILER_PATH = f'{TILE_GEN_BIN}/planetiler.jar'
 
 
 def planetiler(c):
+    if exists(c, TILE_GEN_BIN):
+        print('planetiler exists, skipping')
+        return
+
     apt_get_update(c)
     apt_get_install(c, 'openjdk-21-jre-headless')
 

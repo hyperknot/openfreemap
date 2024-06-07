@@ -8,6 +8,7 @@ from ssh_lib import (
     REMOTE_CONFIG,
     SCRIPTS_DIR,
     TILE_GEN_BIN,
+    VENV_BIN,
     dotenv_val,
 )
 from ssh_lib.benchmark import c1000k, wrk
@@ -51,33 +52,10 @@ def prepare_venv(c):
 def prepare_tile_gen(c):
     planetiler(c)
 
-    for file in [
-        'extract_btrfs.sh',
-        'planetiler_monaco.sh',
-        'planetiler_planet.sh',
-        'cloudflare_index.sh',
-        'cloudflare_upload.sh',
-    ]:
-        put(
-            c,
-            SCRIPTS_DIR / 'tile_gen' / file,
-            TILE_GEN_BIN,
-            permissions='755',
-        )
+    put_dir(c, SCRIPTS_DIR / 'tile_gen', TILE_GEN_BIN, file_permissions='755')
 
-    put(
-        c,
-        SCRIPTS_DIR / 'tile_gen' / 'extract_mbtiles' / 'extract_mbtiles.py',
-        f'{TILE_GEN_BIN}/extract_mbtiles/extract_mbtiles.py',
-        create_parent_dir=True,
-    )
-
-    put(
-        c,
-        SCRIPTS_DIR / 'tile_gen' / 'shrink_btrfs' / 'shrink_btrfs.py',
-        f'{TILE_GEN_BIN}/shrink_btrfs/shrink_btrfs.py',
-        create_parent_dir=True,
-    )
+    for dirname in ['tile_gen_lib', 'extract_mbtiles', 'shrink_btrfs']:
+        put_dir(c, SCRIPTS_DIR / 'tile_gen' / dirname, f'{TILE_GEN_BIN}/{dirname}')
 
     if (CONFIG_DIR / 'rclone.conf').exists():
         put(
@@ -87,6 +65,8 @@ def prepare_tile_gen(c):
             permissions='600',
             user='ofm',
         )
+
+    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/http_host/bin')
 
     c.sudo('chown ofm:ofm /data/ofm/tile_gen')
     c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
@@ -152,11 +132,11 @@ def prepare_http_host(c):
     upload_http_host_files(c)
     upload_certificates(c)
 
-    c.sudo('/data/ofm/venv/bin/pip install -e /data/ofm/http_host/bin')
+    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/http_host/bin')
 
 
 def run_http_host_sync(c):
-    sudo_cmd(c, '/data/ofm/venv/bin/python -u /data/ofm/http_host/bin/host_manager.py sync')
+    sudo_cmd(c, f'{VENV_BIN}/python -u /data/ofm/http_host/bin/host_manager.py sync')
 
 
 def upload_http_host_files(c):
