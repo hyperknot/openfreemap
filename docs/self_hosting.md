@@ -14,19 +14,19 @@ note: Tile generation is 100% optional, as we are providing the processed full p
 
 ##### Disk space
 
- **http-host**: 300 GB for hosting a single run
+- **http-host**: 300 GB for hosting a single run
 
- **tile-gen**: 500 GB for
+- **tile-gen**: 500 GB
 
 ##### RAM
 
- **http-host**: 4 GB
+- **http-host**: 4 GB
 
- **tile-gen**: 64 GB+ RAM.
+- **tile-gen**: 64 GB+
 
 ##### OS
 
- **Ubuntu 22+**
+- **Ubuntu 22+**
 
 ---
 
@@ -44,7 +44,7 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 #### 1. Prepare `config` folder
 
-1. Copy `.env.sample` to `.env` and set the values. 
+1. Copy `.env.sample` to `.env` and set the values.
 
    DOMAIN_LE - Use this to specify a domain to be used with Let's Encrypt. Recommended.
 
@@ -64,5 +64,4 @@ After this, go for a walk and by the time you come back it should be up and runn
 
 If you have a really beefy machine (see above) and you want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`.
 
-Trigger a run manually, by running `planetiler_{area}.sh`. Recommended to use tmux or similar, as it can take days.
-
+Trigger a run manually, by running `planetiler_{area}.sh`. Recommended to use tmux or similar, as it can take days to complete.

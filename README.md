@@ -16,9 +16,11 @@ It is truly **open-source**: everything, including the full production setup, is
 
 The goal of this project is to provide free, production-quality vector-tile hosting using existing tools.
 
-Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler) , [MapLibre](https://maplibre.org/) and [Natural Earth](https://www.naturalearthdata.com/). OFM does not want to be an alternative to any of these projects. If the community decides, we can replace any of these tools.
+Currently these tools are: [OpenStreetMap](https://www.openstreetmap.org/copyright), [OpenMapTiles](https://github.com/openmaptiles/openmaptiles), [Planetiler](https://github.com/onthegomap/planetiler), [MapLibre](https://maplibre.org/), [Natural Earth](https://www.naturalearthdata.com/) and [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page).
 
-The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything keeps working: the map tiles are automatically generated, servers are automatically updated and load balancing takes care of failing servers.
+Special thanks go to [Michael Barry](https://github.com/msbarry) for developing [Planetiler](https://github.com/onthegomap/planetiler). It made it possible to generate the tiles in 5 hours instead of 5 weeks.
+
+The scope of this repo is limited (see below). Once we figure out the technical details, ideally, there should be few commits here, while everything continues to work: the map tiles are automatically generated, servers are automatically updated and load balancing takes care of any downtime.
 
 The [styles repo](https://github.com/hyperknot/openfreemap-styles), on the other hand, is continuously being developed.
 
@@ -101,10 +103,10 @@ I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server,
 
 You can directly download the processed full planet runs on the following URLs:
 
-https://planet.openfreemap.com/20231221_134737_pt/tiles.mbtiles // 84 GB, mbtiles file
-https://planet.openfreemap.com/20231221_134737_pt/tiles.btrfs.gz // 81 GB, BTRFS partition image
+https://planet.openfreemap.com/20240607_232801_pt/tiles.mbtiles // 89 GB, mbtiles file
+https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB, BTRFS partition image
 
-Replace the `20231221_134737_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
+Replace the `20240607_232801_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
 
 ### Public buckets
 
@@ -116,11 +118,12 @@ There are three public buckets:
 
 ### Domains and Cloudflare
 
-The project has two domains: .org and .com. Currently, both are on Cloudflare.
+Tiles are currently available on:
 
-The general public only interacts with the .org domain. It has been designed so that this domain can be migrated away from Cloudflare if needed.
+- tiles.openfreemap.org - Cloudflare proxied
+- direct.openfreemap.org - direct connection, Round-Robin DNS
 
-The .com domain hosts the R2 buckets, which are required to be on Cloudflare. This domain will always remain on CF.
+The project has been designed in such a way that we can migrate away from Cloudflare if needed. This is the reason why there are a .com and a .org domain: the .com will always stay on Cloudflare to host the R2 buckets, while the .org domain is independent.
 
 ### What about PMTiles?
 
@@ -142,7 +145,7 @@ Smaller tasks:
 
 Bigger tasks:
 
-- Split the styles to blocks and build them up from blocks. For example, there should be a POI block, a label block, a road-style related block.
+- Split the styles to building blocks. For example, there should be a POI block, a label block, a road-style related block.
 - Implement automatic updates for tile gen, uploading, testing and setting versions.
 
 Tasks outside the scope of this project:

@@ -8,7 +8,7 @@ There are no user accounts, email lists, API keys, cookies or databases.
 
 This page is a static HTML hosted on GitHub pages.
 
-We do not send newsletters. Please follow us on Twitter or GitHub for updates.
+We do not send newsletters. Please follow us on X or GitHub for updates.
 
 The only data we might collect are server logs. Technically, these are disabled by default and are only enabled temporarily to investigate problems with our service.
 

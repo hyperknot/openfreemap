@@ -7,6 +7,7 @@ It is truly **free**: there are no limits on the number of map views or requests
 It is truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
 
 ## How can I use it?
+
 (Click below, it's interactive!)
 
 <!--map_howto-->
@@ -31,13 +32,13 @@ Yes.
 
 ## Who is behind this project?
 
-I'm Zsolt Ero ([twitter](https://twitter.com/hyperknot), [blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfreemap.org)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
+I'm Zsolt Ero ([X](https://x.com/hyperknot), [blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfreemap.org)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
 
 ## Why did you build this project?
 
 OpenStreetMap is one of the most important collective projects in history. It began almost 20 years ago, and today, 3 million edits are made each day!
 
-Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps [did](https://twitter.com/levelsio/status/1730659933232730443).
+Unfortunately, when you want to use the map on your website or app, you need to look for a commercial map tile provider and hope your site doesn't become too popular. Otherwise, you might end up with a $10,000 bill in a single day, as Hoodmaps [did](https://x.com/levelsio/status/1730659933232730443).
 
 You can try self-hosting, but it requires a big server and a lot of time to get it right.
 
@@ -55,7 +56,7 @@ If this project helps you save on your map hosting costs, please consider subscr
 
 ## How can I follow this project?
 
-twitter: [hyperknot](https://twitter.com/hyperknot) (details) and [OpenFreeMapOrg](https://twitter.com/OpenFreeMapOrg) (announcements)
+X: [hyperknot](https://x.com/hyperknot) (details) and [OpenFreeMapOrg](https://x.com/OpenFreeMapOrg) (announcements)
 
 GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 
