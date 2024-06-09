@@ -155,5 +155,43 @@ def index():
     make_indexes()
 
 
+@cli.command()
+def set_latest_versions():
+    """
+    Sets the latest version as the deployed one
+    """
+
+    for area in AREAS:
+        print(f'setting latest version for {area}')
+
+        p = subprocess.run(
+            [
+                'rclone',
+                'cat',
+                f'remote:ofm-{area}/dirs.txt',
+            ],
+            env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        versions = [l.strip() for l in p.stdout.strip().splitlines()]
+        versions.sort(reverse=True)
+
+        latest_version = versions[0]
+        print(latest_version)
+
+        subprocess.run(
+            [
+                'rclone',
+                'rcat',
+                f'remote:ofm-assets/versions/deployed_{area}.txt',
+            ],
+            env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
+            check=True,
+            input=latest_version.encode(),
+        )
+
+
 if __name__ == '__main__':
     cli()
