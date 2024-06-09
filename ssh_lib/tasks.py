@@ -222,12 +222,20 @@ def setup_ledns_writer(c):
 
 
 def setup_loadbalancer(c):
+    domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     load_balance_host_list = [
         h.strip() for h in dotenv_val('LOAD_BALANCE_HOST_LIST').split(',') if h.strip()
     ]
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
-    c.sudo(f'mkdir -p {REMOTE_CONFIG}')
+    config = {
+        'domain_ledns': domain_ledns,
+        'load_balance_host_list': load_balance_host_list,
+    }
+
+    config_str = json.dumps(config, indent=2, ensure_ascii=False)
+    print(config_str)
+    put_str(c, f'{REMOTE_CONFIG}/loadbalancer.json', config_str)
 
     put(
         c,
@@ -236,8 +244,12 @@ def setup_loadbalancer(c):
         permissions=400,
     )
 
-
     c.sudo('rm -rf /data/ofm/loadbalancer')
     put_dir(c, SCRIPTS_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
+    put_dir(
+        c,
+        SCRIPTS_DIR / 'loadbalancer' / 'loadbalancer_lib',
+        '/data/ofm/loadbalancer/loadbalancer_lib',
+    )
 
     c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer')

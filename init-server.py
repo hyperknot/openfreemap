@@ -15,6 +15,7 @@ from ssh_lib.tasks import (
 )
 from ssh_lib.utils import (
     put,
+    put_dir,
 )
 
 
@@ -130,7 +131,13 @@ def debug(hostname, user, port):
     # upload_http_host_files(c)
     # sudo_cmd(c, f'{VENV_BIN}/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
 
-    put(c, SCRIPTS_DIR / 'tile_gen' / 'upload_manager.py', f'{TILE_GEN_BIN}')
+    # put(c, SCRIPTS_DIR / 'tile_gen' / 'upload_manager.py', f'{TILE_GEN_BIN}')
+    put_dir(c, SCRIPTS_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
+    put_dir(
+        c,
+        SCRIPTS_DIR / 'loadbalancer' / 'loadbalancer_lib',
+        '/data/ofm/loadbalancer/loadbalancer_lib',
+    )
 
 
 if __name__ == '__main__':
