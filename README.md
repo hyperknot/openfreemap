@@ -83,6 +83,14 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 A very important part, probably needs the most work in the long term future.
 
+#### load balancer script - scripts/loadbalancer
+
+Round Robin DNS based load balancer, script for health checking and updating records.
+
+Pushed warnings to a Telegram bot.
+
+Currently it's running in warning-only mode, DNS updates need manual confirmation.
+
 ## Self hosting
 
 See [self hosting docs](docs/self_hosting.md).
@@ -139,7 +147,6 @@ Contributors welcome!
 
 Smaller tasks:
 
-- Round Robin load balancer
 - Cloudflare worker for indexing the public buckets, instead of generating index.txt files.
 - Some of the POI icons are missing in the styles.
 
