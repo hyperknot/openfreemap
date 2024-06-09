@@ -223,14 +223,14 @@ def setup_ledns_writer(c):
 
 def setup_loadbalancer(c):
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
-    load_balance_host_list = [
-        h.strip() for h in dotenv_val('LOAD_BALANCE_HOST_LIST').split(',') if h.strip()
-    ]
+    http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
     config = {
         'domain_ledns': domain_ledns,
-        'load_balance_host_list': load_balance_host_list,
+        'http_host_list': http_host_list,
+        'telegram_bot_token': dotenv_val('TELEGRAM_BOT_TOKEN'),
+        'telegram_bot_chat_id': dotenv_val('TELEGRAM_BOT_CHAT_ID'),
     }
 
     config_str = json.dumps(config, indent=2, ensure_ascii=False)

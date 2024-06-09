@@ -5,6 +5,7 @@ import json
 import click
 import requests
 from loadbalancer_lib.curl import pycurl_get, pycurl_status
+from loadbalancer_lib.telegram_ import telegram_send_message
 
 
 AREAS = ['planet', 'monaco']
@@ -25,7 +26,7 @@ def run():
 
     with open('/data/ofm/config/loadbalancer.json') as fp:
         c = json.load(fp)
-    print(c)
+    # print(c)
 
     try:
         results_by_ip = {}
@@ -37,12 +38,14 @@ def run():
 
         for host_ip, host_ok in results_by_ip.items():
             if not host_ok:
-                print(f'{host_ip} ERROR')
-                # TODO send message
+                message = f'ERROR with host: {host_ip}'
+                print(message)
+                telegram_send_message(message, c['telegram_bot_token'], c['telegram_chat_id'])
 
     except Exception as e:
-        print(e)
-        # TODO send message
+        message = f'ERROR with loadbalancer: {e}'
+        print(message)
+        telegram_send_message(message, c['telegram_bot_token'], c['telegram_chat_id'])
 
 
 def run_area(c, area):
@@ -52,7 +55,7 @@ def run_area(c, area):
 
     results = dict()
 
-    for host_ip in c['load_balance_host_list']:
+    for host_ip in c['http_host_list']:
         try:
             check_host(c['domain_ledns'], host_ip, area, deployed_version)
             results[host_ip] = True
