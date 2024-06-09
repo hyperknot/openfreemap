@@ -222,11 +222,13 @@ def setup_ledns_writer(c):
 
 
 def setup_loadbalancer(c):
+    domain_cf = dotenv_val('DOMAIN_CF').lower()
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
     config = {
+        'domain_cf': domain_cf,
         'domain_ledns': domain_ledns,
         'http_host_list': http_host_list,
         'telegram_token': dotenv_val('TELEGRAM_TOKEN'),
@@ -234,7 +236,7 @@ def setup_loadbalancer(c):
     }
 
     config_str = json.dumps(config, indent=2, ensure_ascii=False)
-    print(config_str)
+    # print(config_str)
     put_str(c, f'{REMOTE_CONFIG}/loadbalancer.json', config_str)
 
     put(
@@ -253,3 +255,8 @@ def setup_loadbalancer(c):
     )
 
     c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer')
+
+    c.sudo('mkdir -p /data/ofm/loadbalancer/logs')
+    put(c, SCRIPTS_DIR / 'loadbalancer' / 'cron.d' / 'ofm_loadbalancer', '/etc/cron.d/')
+
+    c.sudo('chown -R ofm:ofm /data/ofm/loadbalancer')

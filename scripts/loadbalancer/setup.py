@@ -5,6 +5,7 @@ requirements = [
     'click',
     'requests',
     'pycurl',
+    'python-dotenv',
 ]
 
 
