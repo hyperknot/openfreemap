@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import pathlib
+import shutil
 import subprocess
 
 import click
@@ -33,6 +34,72 @@ def upload_rclone(area, run):
         env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
         check=True,
     )
+
+
+def make_indexes():
+    for area in AREAS:
+        print(f'creating index {area}')
+
+        # files
+        p = subprocess.run(
+            [
+                'rclone',
+                'lsf',
+                '-R',
+                '--files-only',
+                '--fast-list',
+                '--exclude',
+                'dirs.txt',
+                '--exclude',
+                'index.txt',
+                f'remote:ofm-{area}',
+            ],
+            env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        index_str = p.stdout
+
+        subprocess.run(
+            [
+                'rclone',
+                'rcat',
+                f'remote:ofm-{area}/index.txt',
+            ],
+            env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
+            check=True,
+            input=index_str.encode(),
+        )
+
+        # directories
+        p = subprocess.run(
+            [
+                'rclone',
+                'lsf',
+                '-R',
+                '--dirs-only',
+                '--dir-slash=false',
+                '--fast-list',
+                f'remote:ofm-{area}',
+            ],
+            env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        index_str = p.stdout
+
+        subprocess.run(
+            [
+                'rclone',
+                'rcat',
+                f'remote:ofm-{area}/dirs.txt',
+            ],
+            env=dict(RCLONE_CONFIG='/data/ofm/config/rclone.conf'),
+            check=True,
+            input=index_str.encode(),
+        )
 
 
 @click.group()
@@ -75,6 +142,17 @@ def upload_runs():
         for run in runs_to_upload:
             print(f'uploading {area} {run}')
             upload_rclone(area, run)
+
+    make_indexes()
+
+
+@cli.command()
+def index():
+    """
+    Run index on Cloudflare buckets
+    """
+
+    make_indexes()
 
 
 if __name__ == '__main__':
