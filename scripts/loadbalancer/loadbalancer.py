@@ -27,9 +27,22 @@ def run():
         c = json.load(fp)
     print(c)
 
-    for area in AREAS:
-        results = run_area(c, area)
-        print(results)
+    try:
+        results_by_ip = {}
+
+        for area in AREAS:
+            for host_ip, host_ok in run_area(c, area).items():
+                results_by_ip.setdefault(host_ip, True)
+                results_by_ip[host_ip] &= host_ok
+
+        for host_ip, host_ok in results_by_ip.items():
+            if not host_ok:
+                print(f'{host_ip} ERROR')
+                # TODO send message
+
+    except Exception as e:
+        print(e)
+        # TODO send message
 
 
 def run_area(c, area):
