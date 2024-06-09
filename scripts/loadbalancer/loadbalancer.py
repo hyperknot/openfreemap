@@ -40,24 +40,24 @@ def run():
             if not host_ok:
                 message = f'ERROR with host: {host_ip}'
                 print(message)
-                telegram_send_message(message, c['telegram_bot_token'], c['telegram_chat_id'])
+                telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
 
     except Exception as e:
         message = f'ERROR with loadbalancer: {e}'
         print(message)
-        telegram_send_message(message, c['telegram_bot_token'], c['telegram_chat_id'])
+        telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
 
 
 def run_area(c, area):
-    deployed_version = get_deployed_version(area)
+    target_version = get_target_version(area)
 
-    print(f'deployed version: {area}: {deployed_version}')
+    print(f'target version: {area}: {target_version}')
 
     results = dict()
 
     for host_ip in c['http_host_list']:
         try:
-            check_host(c['domain_ledns'], host_ip, area, deployed_version)
+            check_host(c['domain_ledns'], host_ip, area, target_version)
             results[host_ip] = True
         except Exception:
             results[host_ip] = False
@@ -79,7 +79,7 @@ def check_host(domain, host_ip, area, version):
     assert pycurl_status(url, domain, host_ip) == 200
 
 
-def get_deployed_version(area):
+def get_target_version(area):
     url = f'https://assets.openfreemap.com/versions/deployed_{area}.txt'
     response = requests.get(url)
     response.raise_for_status()

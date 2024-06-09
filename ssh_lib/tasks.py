@@ -229,8 +229,8 @@ def setup_loadbalancer(c):
     config = {
         'domain_ledns': domain_ledns,
         'http_host_list': http_host_list,
-        'telegram_bot_token': dotenv_val('TELEGRAM_BOT_TOKEN'),
-        'telegram_bot_chat_id': dotenv_val('TELEGRAM_BOT_CHAT_ID'),
+        'telegram_token': dotenv_val('TELEGRAM_TOKEN'),
+        'telegram_chat_id': dotenv_val('TELEGRAM_CHAT_ID'),
     }
 
     config_str = json.dumps(config, indent=2, ensure_ascii=False)
