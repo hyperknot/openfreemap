@@ -3,20 +3,18 @@
 import click
 from fabric import Config, Connection
 
-from ssh_lib import SCRIPTS_DIR, TILE_GEN_BIN, VENV_BIN, dotenv_val
-from ssh_lib.planetiler import planetiler
+from ssh_lib import SCRIPTS_DIR, TILE_GEN_BIN, dotenv_val
 from ssh_lib.tasks import (
     prepare_http_host,
     prepare_shared,
     prepare_tile_gen,
     run_http_host_sync,
     setup_ledns_writer,
+    setup_loadbalancer,
     upload_http_host_config,
-    upload_http_host_files,
 )
 from ssh_lib.utils import (
     put,
-    sudo_cmd,
 )
 
 
@@ -109,6 +107,18 @@ def ledns_writer(hostname, user, port):
     c = get_connection(hostname, user, port)
 
     setup_ledns_writer(c)
+
+
+@cli.command()
+@common_options
+def loadbalancer(hostname, user, port):
+    if not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    c = get_connection(hostname, user, port)
+    prepare_shared(c)
+
+    setup_loadbalancer(c)
 
 
 @cli.command()

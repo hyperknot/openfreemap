@@ -29,8 +29,6 @@ def prepare_shared(c):
     pkg_base(c)
     rclone(c)
 
-    kernel_tweaks_ofm(c)
-
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {OFM_DIR}')
@@ -118,6 +116,8 @@ def upload_http_host_config(c):
 
 
 def prepare_http_host(c):
+    kernel_tweaks_ofm(c)
+
     nginx(c)
     certbot(c)
 
@@ -172,6 +172,7 @@ def setup_ledns_writer(c):
     assert le_email
     assert domain_ledns
     assert (CONFIG_DIR / 'rclone.conf').exists()
+    assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
     rclone(c)
     certbot(c)
@@ -218,3 +219,25 @@ def setup_ledns_writer(c):
         f'--deploy-hook /data/ofm/ledns/rclone_write.sh '
         f'-d {domain_ledns}',
     )
+
+
+def setup_loadbalancer(c):
+    load_balance_host_list = [
+        h.strip() for h in dotenv_val('LOAD_BALANCE_HOST_LIST').split(',') if h.strip()
+    ]
+    assert (CONFIG_DIR / 'cloudflare.ini').exists()
+
+    c.sudo(f'mkdir -p {REMOTE_CONFIG}')
+
+    put(
+        c,
+        CONFIG_DIR / 'cloudflare.ini',
+        f'{REMOTE_CONFIG}/cloudflare.ini',
+        permissions=400,
+    )
+
+
+    c.sudo('rm -rf /data/ofm/loadbalancer')
+    put_dir(c, SCRIPTS_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
+
+    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer')
