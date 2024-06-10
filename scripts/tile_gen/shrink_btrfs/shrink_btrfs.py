@@ -19,8 +19,8 @@ SMALLEST_SIZE = 256 * 1024 * 1024
 )
 def cli(btrfs_img: Path):
     """
-    Shrinks a BTRFS image
-    // I cannot believe that BTRFS is over 15 years old,
+    Shrinks a Btrfs image
+    // I cannot believe that Btrfs is over 15 years old,
     // yet there is no resize2fs tool which can shrink a disk image
     // to minimum size.
     // It cannot even tell you how much should be the right size,

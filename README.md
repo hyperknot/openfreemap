@@ -62,7 +62,7 @@ It does the following:
 
 - checks the most up-to-date files in the public buckets
 - downloads/extracts them locally, if needed
-- mounts the downloaded BTRFS images in `/mnt/ofm`
+- mounts the downloaded Btrfs images in `/mnt/ofm`
 - creates the correct TileJSON file
 - creates the correct nginx config
 - reloads nginx
@@ -75,7 +75,7 @@ _note: Tile generation is 100% optional, as we are providing the processed full 
 
 The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler.
 
-The created .mbtiles file is then extracted into a BTRFS partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
+The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
@@ -95,11 +95,11 @@ Currently it's running in warning-only mode, DNS updates need manual confirmatio
 
 See [self hosting docs](docs/self_hosting.md).
 
-## BTRFS images
+## Btrfs images
 
 Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from BTRFS partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/extract_mbtiles) and [shrink_btrfs](scripts/tile_gen/shrink_btrfs) scripts for this very purpose.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/extract_mbtiles) and [shrink_btrfs](scripts/tile_gen/shrink_btrfs) scripts for this very purpose.
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
@@ -112,7 +112,7 @@ I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server,
 You can directly download the processed full planet runs on the following URLs:
 
 https://planet.openfreemap.com/20240607_232801_pt/tiles.mbtiles // 89 GB, mbtiles file
-https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB, BTRFS partition image
+https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB, Btrfs partition image
 
 Replace the `20240607_232801_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
 

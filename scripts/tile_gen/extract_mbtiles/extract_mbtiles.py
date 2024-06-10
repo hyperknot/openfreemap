@@ -112,7 +112,7 @@ def write_tile_files(c, *, dir_path):
             tile_path.hardlink_to(dedupl_path_fixed)
             print(f'hard link created {i}/{total} {i / total * 100:.1f}%: {tile_path}')
         except OSError as e:
-            # fixing BTRFS's 64k max link limit
+            # fixing Btrfs's 64k max link limit
             if e.errno == 31:
                 bug_fix_dict.setdefault(dedupl_path, 0)
                 bug_fix_dict[dedupl_path] += 1
