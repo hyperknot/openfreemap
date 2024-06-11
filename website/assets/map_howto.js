@@ -1,6 +1,8 @@
 function initMap() {
   if (window.map) return
 
+  document.getElementById('mapbg-image').style.opacity = '0.2'
+
   const map = new maplibregl.Map({
     style: 'https://tiles.openfreemap.org/styles/liberty',
     center: [-0.114, 51.506],

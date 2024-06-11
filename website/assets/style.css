@@ -168,6 +168,29 @@ code {
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
+  transition: opacity 3s;
+}
+
+.mapbg-attrib {
+  font:
+    12px / 20px Helvetica Neue,
+    Arial,
+    Helvetica,
+    sans-serif;
+  background-color: hsla(0, 0%, 100%, 0.5);
+  padding: 0 5px;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+.mapbg-attrib a {
+  color: rgba(0, 0, 0, 0.75);
+  text-decoration: none;
+}
+
+.mapbg-attrib a:hover {
+  text-decoration: underline;
 }
 
 .btn {
