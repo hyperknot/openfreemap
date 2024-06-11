@@ -73,7 +73,7 @@ You can run `./host_manager.py --help` to see which options are available. Some 
 
 _note: Tile generation is 100% optional, as we are providing the processed full planet files for public download._
 
-The `tile_gen` scripts downloads a full planet OSM extract and runs it through Planetiler.
+The `tile_gen` script downloads a full planet OSM extract and runs it through Planetiler.
 
 The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
 
@@ -87,9 +87,9 @@ A very important part, probably needs the most work in the long term future.
 
 Round Robin DNS based load balancer, script for health checking and updating records.
 
-Pushed warnings to a Telegram bot.
+Pushes warnings to a Telegram bot.
 
-Currently it's running in warning-only mode, DNS updates need manual confirmation.
+Currently it's running in read-only mode, DNS updates need manual confirmation.
 
 ## Self hosting
 
@@ -103,7 +103,7 @@ The original idea of this project is to avoid using tile servers altogether. Ins
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
-I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server, the aim was to saturate a gigabit connection. At the end, it was able to serve 30 Gbit on localhost, on a cold nginx cache.
+I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server, the aim was to saturate a gigabit connection. At the end, it was able to serve 30 Gbit on loopback interface, on cold nginx cache.
 
 ## FAQ
 
@@ -158,7 +158,6 @@ Bigger tasks:
 Tasks outside the scope of this project:
 
 - Make a successor for the OpenMapTiles schema.
-- Docker image for running this self-hosted on any machine.
 
 #### Dev setup
 
@@ -166,7 +165,9 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
-v0.1 - everything works. 1 server for tile gen, 2 servers for HTTP host. <- we are here!
+##### v0.1
+
+Everything works. 1 server for tile gen, 2 servers for HTTP host. Load-balancing script is running in a read-only mode.
 
 ## Attribution
 

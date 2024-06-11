@@ -100,7 +100,7 @@ def delete_record(zone_id, *, id_: str, cloudflare_api_token: str):
     res = requests.delete(
         f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{id_}',
         headers=headers,
-        json=dict(),
+        json={},
     )
     res.raise_for_status()
     data = res.json()
