@@ -61,19 +61,19 @@ body {
 }
 
 .static,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .col-lbl,
-  p,
-  .button-container,
-  #support-plans-slider {
-    margin-left: 40px;
-    margin-right: 40px;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.col-lbl,
+p,
+.button-container,
+#support-plans-slider {
+  margin-left: 40px;
+  margin-right: 40px;
+}
 
 .static {
   max-width: 600px;

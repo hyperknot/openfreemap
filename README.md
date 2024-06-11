@@ -46,6 +46,22 @@ The only way this project can possibly work is to be super focused about what it
 
 3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of http-host if you keep a close eye on this repo.
 
+## What is the tech stack?
+
+There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well.
+
+There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
+
+## Btrfs images
+
+Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
+
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/extract_mbtiles) and [shrink_btrfs](scripts/tile_gen/shrink_btrfs) scripts for this very purpose.
+
+This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
+
+I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server, the aim was to saturate a gigabit connection. At the end, it was able to serve 30 Gbit on loopback interface, on cold nginx cache.
+
 ## Code structure
 
 The project has the following parts
@@ -85,25 +101,13 @@ A very important part, probably needs the most work in the long term future.
 
 #### load balancer script - scripts/loadbalancer
 
-Round Robin DNS based load balancer, script for health checking and updating records.
-
-Pushes warnings to a Telegram bot.
+Round Robin DNS based load balancer, script for health checking and updating records. It pushes status messages to a Telegram bot.
 
 Currently it's running in read-only mode, DNS updates need manual confirmation.
 
 ## Self hosting
 
 See [self hosting docs](docs/self_hosting.md).
-
-## Btrfs images
-
-Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
-
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/extract_mbtiles) and [shrink_btrfs](scripts/tile_gen/shrink_btrfs) scripts for this very purpose.
-
-This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
-
-I run some [benchmarks](docs/quick_notes/http_benchmark.md) on a Hetzner server, the aim was to saturate a gigabit connection. At the end, it was able to serve 30 Gbit on loopback interface, on cold nginx cache.
 
 ## FAQ
 
@@ -126,10 +130,8 @@ There are three public buckets:
 
 ### Domains and Cloudflare
 
-Tiles are currently available on:
-
-- tiles.openfreemap.org - Cloudflare proxied
-- direct.openfreemap.org - direct connection, Round-Robin DNS
+- `tiles.openfreemap.org` - Cloudflare proxied
+- `direct.openfreemap.org` - direct connection, Round-Robin DNS
 
 The project has been designed in such a way that we can migrate away from Cloudflare if needed. This is the reason why there are a .com and a .org domain: the .com will always stay on Cloudflare to host the R2 buckets, while the .org domain is independent.
 

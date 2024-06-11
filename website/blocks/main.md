@@ -62,7 +62,7 @@ GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap
 
 ## What is the tech stack?
 
-There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well.
+There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well. (You can read more about it on [GitHub](https://github.com/hyperknot/openfreemap).
 
 There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
 
