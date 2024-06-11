@@ -48,7 +48,7 @@ button:-moz-focusring {
 /* --- start --- */
 
 body {
-  padding: 0 40px 100px;
+  padding-bottom: 100px;
 
   line-height: 1.5;
   font-size: 17px;
@@ -59,6 +59,21 @@ body {
 
   color: #000;
 }
+
+.static,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .col-lbl,
+  p,
+  .button-container,
+  #support-plans-slider {
+    margin-left: 40px;
+    margin-right: 40px;
+  }
 
 .static {
   max-width: 600px;
@@ -344,7 +359,7 @@ hr {
 
 @media (max-width: 550px) {
   body {
-    padding: 0 0 40px;
+    padding-bottom: 40px;
   }
 
   .static,
