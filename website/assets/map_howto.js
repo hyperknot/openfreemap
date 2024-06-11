@@ -40,15 +40,22 @@ mapDiv.onclick = function () {
 
 // initMap()
 
+let movedTo2d = false
+
 function selectStyle(event, style) {
   initMap()
   toggleButtonSelection(event.target)
 
   const styleUrl = 'https://tiles.openfreemap.org/styles/' + style
   map.setStyle(styleUrl)
-  map.setPitch(0)
-  map.setBearing(0)
-  map.setZoom(12.5)
+
+  if (!movedTo2d) {
+    map.setCenter({ lng: 13.388, lat: 52.517 })
+    map.setPitch(0)
+    map.setBearing(0)
+    map.setZoom(9.5)
+    movedTo2d = true
+  }
 
   document.getElementById('style-url-code').innerText = styleUrl
 }

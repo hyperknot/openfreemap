@@ -66,7 +66,7 @@ There is no tile server running; only Btrfs partition images with 300 million ha
 
 There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
 
-Special thanks go to [Michael Barry](https://github.com/msbarry) for developing [Planetiler](https://github.com/onthegomap/planetiler). It made it possible to generate the tiles in 5 hours instead of 5 weeks. The map schema is [OpenMapTiles](https://github.com/openmaptiles/openmaptiles). 
+Special thanks go to [Michael Barry](https://github.com/msbarry) for developing [Planetiler](https://github.com/onthegomap/planetiler). It made it possible to generate the tiles in 5 hours instead of 5 weeks. The map schema is [OpenMapTiles](https://github.com/openmaptiles/openmaptiles).
 
 The [styles](https://github.com/hyperknot/openfreemap-styles) are forked and heavily modified.
 

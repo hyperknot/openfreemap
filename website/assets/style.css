@@ -321,7 +321,7 @@ hr {
 
 @media (max-width: 550px) {
   body {
-    padding: 0 20px 40px;
+    padding: 0 0 40px;
   }
 
   .static,
@@ -332,7 +332,15 @@ hr {
   h5,
   h6,
   .col-lbl,
-  p {
+  p,
+  .button-container,
+  #support-plans-slider {
     max-width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  #map-container {
+    height: 300px;
   }
 }
