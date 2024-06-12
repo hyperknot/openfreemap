@@ -48,7 +48,7 @@ I'll share more about the reasons in a future [blog post](https://blog.hyperknot
 
 ## How can this work? How can a one-person project offer unlimited map hosting for free?
 
-There is no technical reason why map hosting costs as much as it does today. Vector tiles are just static files. OK, serving 300 million files is not easy, but at the end of the day, they are just files.
+There is no technical reason why map hosting costs as much as it does today. Vector tiles are just static files. Sure, serving 300 million files is not easy, but at the end of the day, they are just files.
 
 Financially, the plan is to keep renting servers until they cover the bandwidth. I believe it can be self-sustainable if enough people subscribe to the support plans.
 
@@ -72,7 +72,7 @@ The [styles](https://github.com/hyperknot/openfreemap-styles) are forked and hea
 
 ## Domains
 
-`tiles.openfreemap.org` - Cloudflare proxied  
+`tiles.openfreemap.org` - Cloudflare proxied
 `direct.openfreemap.org` - direct connection, Round-Robin DNS
 
 ## Attribution
