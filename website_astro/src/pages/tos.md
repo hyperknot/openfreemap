@@ -1,5 +1,5 @@
 ---
-layout: '../layouts/Static.astro'
+layout: '../layouts/Layout.astro'
 title: 'Terms of Services'
 ---
 

@@ -15,7 +15,7 @@ const berlin = {
 function initMap() {
   if (window.map) return
 
-  document.getElementById('mapbg-image').style.opacity = '0.2'
+  document.getElementById('mapbg-image').style.opacity = '0.5'
 
   const map = new maplibregl.Map({
     style: 'https://tiles.openfreemap.org/styles/liberty',
@@ -49,19 +49,7 @@ function initMap() {
   new maplibregl.Marker().setLngLat([-0.119, 51.507]).addTo(map)
 }
 
-const mapDiv = document.getElementById('map-container')
-mapDiv.onclick = function () {
-  initMap()
-}
-
-// initMap()
-
-// let movedTo2d = false
-
-function selectStyle(event, style) {
-  initMap()
-  toggleButtonSelection(event.target)
-
+function selectStyle(style) {
   const styleUrl = 'https://tiles.openfreemap.org/styles/' + style.split('-')[0]
   map.setStyle(styleUrl)
 
@@ -77,13 +65,22 @@ function selectStyle(event, style) {
     map.setZoom(berlin.zoom)
   }
 
-  document.getElementById('style-url-code').innerText = styleUrl
+  // document.getElementById('style-url-code').innerText = styleUrl
 }
 
-function toggleButtonSelection(clickedButton) {
-  clickedButton.classList.add('selected')
+// --- start
 
-  Array.from(clickedButton.parentElement.children)
-    .filter(child => child !== clickedButton)
-    .forEach(button => button.classList.remove('selected'))
-}
+const mapDiv = document.getElementById('map-container')
+initMap()
+
+const buttons = document.querySelectorAll('.button-container .btn')
+
+buttons.forEach(button => {
+  button.addEventListener('click', function (event) {
+    buttons.forEach(button => button.classList.remove('selected'))
+    button.classList.add('selected')
+
+    const style = event.target.getAttribute('data-style')
+    selectStyle(style)
+  })
+})

@@ -20,15 +20,14 @@ import '../styles/global.css'
     />
     <meta name="generator" content={Astro.generator} />
 
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
     <!--    <meta property="og:title" content="" />-->
     <!--    <meta property="og:type" content="" />-->
     <!--    <meta property="og:url" content="" />-->
     <!--    <meta property="og:image" content="" />-->
 
-    <!--    <link rel="icon" href="/favicon.ico" sizes="any" />-->
-    <!--<link rel="icon" type="image/svg+xml" href="/favicon.svg" />-->
-
-    <!--<link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />-->
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
     <!--<link href="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.css" rel="stylesheet" />-->
     <!--<link href="https://unpkg.com/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />-->
   </head>
@@ -37,8 +36,8 @@ import '../styles/global.css'
     <slot />
 
     <div class="footer">
-      <a href="privacy">Privacy Policy</a>
-      <a href="tos">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/tos">Terms of Service</a>
     </div>
   </body>
 </html>

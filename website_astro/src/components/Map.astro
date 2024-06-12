@@ -2,6 +2,12 @@
 
 ---
 
+<p>Use the following style in a MapLibre map:</p>
+<pre><code id="style-url-code">https://tiles.openfreemap.org/styles/liberty</code></pre>
+
+<h2>How can I use it?</h2>
+<!--<p>(Click below, it's interactive!)</p>-->
+
 <div id="map-container">
   <div id="mapbg-image">
     <div class="mapbg-attrib">
@@ -12,13 +18,15 @@
   </div>
 </div>
 
-<p>Choose a style:</p>
 <div class="button-container">
-  <button onclick="selectStyle(event, 'positron')" class="btn">Positron</button>
-  <button onclick="selectStyle(event, 'bright')" class="btn">Bright</button>
-  <button onclick="selectStyle(event, 'liberty')" class="btn selected">Liberty</button>
-  <button onclick="selectStyle(event, 'liberty-3d')" class="btn">3D</button>
+  <button data-style="positron" class="btn">Positron</button>
+  <button data-style="bright" class="btn">Bright</button>
+  <button data-style="liberty" class="btn selected">Liberty</button>
+  <button data-style="liberty-3d" class="btn">3D</button>
 </div>
 
-<p>Use the following style in a MapLibre map:</p>
-<pre><code class="lang-uri" id="style-url-code">https://tiles.openfreemap.org/styles/liberty</code></pre>
+<p>You use OpenFreeMap by adding it to a website or mobile app.</p>
+<p><a href="#">How to use in detail</a></p>
+
+<script is:inline src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+<script is:inline src="/scripts/map.js"></script>

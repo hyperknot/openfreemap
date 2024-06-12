@@ -178,7 +178,7 @@ code {
   height: 100%;
   position: absolute;
   z-index: 1;
-  background-image: url('berlin.webp');
+  background-image: url('/berlin.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
