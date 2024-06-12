@@ -49,7 +49,7 @@ def copy_assets():
         'favicon.ico',
         'github.svg',
         'x.svg',
-        'mapbg.jpg',
+        'berlin.webp',
     ]:
         shutil.copyfile(ASSETS_DIR / file, OUT_DIR / file)
 

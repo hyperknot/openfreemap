@@ -169,7 +169,7 @@ code {
 #map-container {
   width: 100%;
   height: 500px;
-  margin-bottom: 2em;
+  margin-bottom: 24px;
   position: relative;
 }
 
@@ -178,7 +178,7 @@ code {
   height: 100%;
   position: absolute;
   z-index: 1;
-  background-image: url('mapbg.jpg');
+  background-image: url('berlin.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
