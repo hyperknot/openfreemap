@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+
+import '../styles/global.css'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="Open and free custom maps for your website and apps, based on OpenStreetMap."
+    />
+    <meta name="generator" content={Astro.generator} />
+
+    <!--    <meta property="og:title" content="" />-->
+    <!--    <meta property="og:type" content="" />-->
+    <!--    <meta property="og:url" content="" />-->
+    <!--    <meta property="og:image" content="" />-->
+
+    <!--    <link rel="icon" href="/favicon.ico" sizes="any" />-->
+    <!--<link rel="icon" type="image/svg+xml" href="/favicon.svg" />-->
+
+    <!--<link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />-->
+    <!--<link href="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.css" rel="stylesheet" />-->
+    <!--<link href="https://unpkg.com/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />-->
+  </head>
+
+  <body>
+    <slot />
+
+    <div class="footer">
+      <a href="privacy">Privacy Policy</a>
+      <a href="tos">Terms of Service</a>
+    </div>
+  </body>
+</html>

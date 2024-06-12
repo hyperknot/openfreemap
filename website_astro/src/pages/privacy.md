@@ -1,3 +1,8 @@
+---
+layout: '../layouts/Static.astro'
+title: 'Privacy Policy'
+---
+
 # OpenFreeMap and your data
 
 Version: 16th of Jan, 2024

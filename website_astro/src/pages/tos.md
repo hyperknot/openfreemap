@@ -1,3 +1,8 @@
+---
+layout: '../layouts/Static.astro'
+title: 'Terms of Services'
+---
+
 # TERMS OF SERVICES
 
 Version: 16th of Jan, 2024
