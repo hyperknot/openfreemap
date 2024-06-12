@@ -8,44 +8,55 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="Open and free custom maps for your website and apps, based on OpenStreetMap."
+    />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
+
+    <!--    <meta property="og:title" content="" />-->
+    <!--    <meta property="og:type" content="" />-->
+    <!--    <meta property="og:url" content="" />-->
+    <!--    <meta property="og:image" content="" />-->
+
+    <!--    <link rel="icon" href="/favicon.ico" sizes="any" />-->
+
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+		<!--<link rel="icon" type="image/svg+xml" href="/favicon.svg" />-->
+
+  </head>
+
+  <body>
+    <img src="logo.jpg" alt="logo" height="200" class="logo" />
+    <h1>OpenFreeMap</h1>
+    <div class="icons">
+      <a href="https://github.com/hyperknot/openfreemap" target="_blank"
+        ><img src="github.svg" alt="github" height="28"
+      /></a>
+      <a href="https://x.com/hyperknot" target="_blank"><img src="x.svg" alt="x" height="28" /></a>
+    </div>
+
 		<slot />
-	</body>
+
+    <div class="footer">
+      <a href="privacy">Privacy Policy</a>
+      <a href="tos">Terms of Service</a>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.js"></script>
+
+    <script src="map_howto.js"></script>
+    <script src="support_plans.js"></script>
+
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
 </html>
-<style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-		background-size: 224px;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
-</style>
