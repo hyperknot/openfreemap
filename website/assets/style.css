@@ -251,10 +251,9 @@ code {
 }
 
 .col-lbl:before {
-  content: '►';
+  /* Triangle pointing right */
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 180 180" id="U+25B6"><path d="m20,15v150l130-75" fill="%23555"/></svg>');
   margin-right: 1em;
-  color: #555;
-  font-size: 0.8em;
 }
 
 .col-cnt {
@@ -267,7 +266,8 @@ code {
 }
 
 .col-chk:checked ~ .col-lbl:before {
-  content: '▼';
+  /* Triangle pointing down */
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 180 180" id="U+25BC"><path d="m90,150 75-130H15" fill="%23555"/></svg>');
 }
 
 hr {
