@@ -154,17 +154,19 @@ p {
 
 pre {
   /*background: #efefef;*/
-  font-size: 14px;
   max-width: 600px;
   margin: 0 auto 0.6em;
+  font-size: 14px;
   /*overflow: scroll;*/
   /*font-weight: bold;*/
 }
 
-/*code {*/
-/*  font-family: 'Nimbus Mono PS', 'Courier New', monospace !important;*/
+
+code {
+  font-size: 14px;
+  /*font-family: 'Nimbus Mono PS', 'Courier New', monospace !important;*/
 /*  background: #efefef;*/
-/*}*/
+}
 
 #map-container {
   width: 100%;

@@ -1,6 +1,6 @@
 ## How to load MapLibre?
 
-Include [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) in the `<head>`. If you are using npm, you can install the `maplibre-gl` package. Make sure to import the CSS as well.
+Include <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">MapLibre GL JS</a> in the `<head>`. If you are using npm, you can install the `maplibre-gl` package. Make sure to import the CSS as well.
 
 ```html
 <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
