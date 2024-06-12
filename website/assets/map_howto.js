@@ -1,3 +1,17 @@
+const london3d = {
+  center: [-0.114, 51.506],
+  zoom: 14.2,
+  bearing: 55.2,
+  pitch: 60,
+}
+
+const berlin = {
+  center: [13.388, 52.517],
+  zoom: 9.5,
+  bearing: 0,
+  pitch: 0,
+}
+
 function initMap() {
   if (window.map) return
 
@@ -5,10 +19,10 @@ function initMap() {
 
   const map = new maplibregl.Map({
     style: 'https://tiles.openfreemap.org/styles/liberty',
-    center: [-0.114, 51.506],
-    zoom: 14.2,
-    bearing: 55.2,
-    pitch: 60,
+    center: berlin.center,
+    zoom: berlin.zoom,
+    bearing: berlin.bearing,
+    pitch: berlin.pitch,
     container: mapDiv,
     boxZoom: false,
     // doubleClickZoom: false,
@@ -42,21 +56,25 @@ mapDiv.onclick = function () {
 
 // initMap()
 
-let movedTo2d = false
+// let movedTo2d = false
 
 function selectStyle(event, style) {
   initMap()
   toggleButtonSelection(event.target)
 
-  const styleUrl = 'https://tiles.openfreemap.org/styles/' + style
+  const styleUrl = 'https://tiles.openfreemap.org/styles/' + style.split('-')[0]
   map.setStyle(styleUrl)
 
-  if (!movedTo2d) {
-    map.setCenter({ lng: 13.388, lat: 52.517 })
-    map.setPitch(0)
-    map.setBearing(0)
-    map.setZoom(9.5)
-    movedTo2d = true
+  if (style === 'liberty-3d') {
+    map.setCenter(london3d.center)
+    map.setPitch(london3d.pitch)
+    map.setBearing(london3d.bearing)
+    map.setZoom(london3d.zoom)
+  } else if (map.getBearing() !== 0) {
+    map.setCenter(berlin.center)
+    map.setPitch(berlin.pitch)
+    map.setBearing(berlin.bearing)
+    map.setZoom(berlin.zoom)
   }
 
   document.getElementById('style-url-code').innerText = styleUrl
