@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Map from '../components/Map.astro'
+import Logo from '../components/Logo.astro'
 
 import { Content as WhatIs } from '../content/index/whatis.md'
 import { Content as Pricing } from '../content/index/pricing.md'
@@ -8,15 +9,7 @@ import { Content as Rest } from '../content/index/rest.md'
 ---
 
 <Layout title="OpenFreeMap">
-  <img src="/logo.jpg" alt="logo" height="200" class="logo" />
-  <h1>OpenFreeMap</h1>
-  <div class="icons">
-    <a href="https://github.com/hyperknot/openfreemap" target="_blank"
-      ><img src="/github.svg" alt="github" height="28" /></a
-    >
-    <a href="https://x.com/hyperknot" target="_blank"><img src="/x.svg" alt="x" height="28" /></a>
-  </div>
-
+  <Logo />
   <WhatIs />
   <Map />
 
