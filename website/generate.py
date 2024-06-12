@@ -14,49 +14,31 @@ def generate():
     shutil.rmtree(OUT_DIR, ignore_errors=True)
     OUT_DIR.mkdir()
 
-    make_index_html()
-    make_howto_use()
-    make_js()
+    template = open('template.html').read()
 
-    make_static_page('privacy', 'Privacy Policy')
-    make_static_page('tos', 'Terms of Services')
-
-    copy_assets()
-
-
-def make_index_html():
-    template = open('template_index.html').read()
-
-    main_md = open('blocks/index.md').read()
+    main_md = open('blocks/main.md').read()
     main_html = marko.convert(main_md)
 
-    template = template.replace('{body}', main_html)
+    index_html = template.replace('{main}', main_html)
 
-    map_howto = open('blocks/map.html').read()
-    template = template.replace('<!--map_howto-->', map_howto)
+    map_howto = open('blocks/map_howto.html').read()
+    index_html = index_html.replace('<!--map_howto-->', map_howto)
 
     support_plans = open('blocks/support_plans.html').read()
-    template = template.replace('<!--support_plans-->', support_plans)
+    index_html = index_html.replace('<!--support_plans-->', support_plans)
 
-    open(OUT_DIR / 'index.html', 'w').write(template)
+    open(OUT_DIR / 'index.html', 'w').write(index_html)
 
-
-def make_howto_use():
-    template = open('template_howto_use.html').read()
-
-    map_howto = open('blocks/map.html').read()
-    template = template.replace('<!--map_howto-->', map_howto)
-
-    open(OUT_DIR / 'howto_use.html', 'w').write(template)
-
-
-def make_js():
     pricing_json = json.load(open('assets/pricing.json'))
     support_plans_js = open('assets/support_plans.js').read()
     support_plans_js = support_plans_js.replace(
         "'__PRICING_JSON__'", json.dumps(pricing_json, ensure_ascii=False)
     )
     open(OUT_DIR / 'support_plans.js', 'w').write(support_plans_js)
+
+    make_static_page('privacy', 'Privacy Policy')
+    make_static_page('tos', 'Terms of Services')
+    copy_assets()
 
 
 def copy_assets():
