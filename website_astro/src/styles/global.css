@@ -153,18 +153,18 @@ p {
 }
 
 pre {
-  background: #efefef;
-  font-size: 14px !important;
+  /*background: #efefef;*/
+  font-size: 14px;
   max-width: 600px;
-  margin: 0 auto 0.6em !important;
-  overflow: scroll;
-  font-weight: bold;
+  margin: 0 auto 0.6em;
+  /*overflow: scroll;*/
+  /*font-weight: bold;*/
 }
 
-code {
-  font-family: 'Nimbus Mono PS', 'Courier New', monospace !important;
-  background: #efefef;
-}
+/*code {*/
+/*  font-family: 'Nimbus Mono PS', 'Courier New', monospace !important;*/
+/*  background: #efefef;*/
+/*}*/
 
 #map-container {
   width: 100%;

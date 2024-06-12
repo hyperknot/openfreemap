@@ -1,5 +1,5 @@
 ---
-import { Content as Pricing } from '../content/pricing.md'
+import { Content as DonateText } from '../content/index/donate.md'
 ---
 
 <h2>How can I donate or support this project?</h2>
@@ -10,6 +10,7 @@ import { Content as Pricing } from '../content/pricing.md'
 
 <div id="support-plans-slider"></div>
 
-<Pricing />
+<DonateText />
 
-<!--<script src="support_plans.js"></script>-->
+<script is:inline src="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.js"></script>
+<script is:inline src="/scripts/donate.js"></script>

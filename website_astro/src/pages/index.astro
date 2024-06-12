@@ -4,18 +4,16 @@ import Map from '../components/Map.astro'
 import Logo from '../components/Logo.astro'
 import Donate from '../components/Donate.astro'
 
-import { Content as WhatIs } from '../content/index/whatis.md'
-import { Content as Rest } from '../content/index/rest.md'
+import { Content as WhatisText } from '../content/index/whatis.md'
+import { Content as RestText } from '../content/index/rest.md'
 ---
 
 <Layout title="OpenFreeMap">
   <Logo />
-  <WhatIs />
+  <WhatisText />
   <Map />
   <Donate />
-  <Rest />
-
-  <!--<script src="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.js"></script>-->
+  <RestText />
 
   <!--<script src="https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script>-->
   <!--<script src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>-->

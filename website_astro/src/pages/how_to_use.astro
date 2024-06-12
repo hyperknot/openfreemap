@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+import { Content as MaplibreText } from '../content/how_to_use/maplibre.md'
+import { Content as MapboxText } from '../content/how_to_use/mapbox.md'
+import { Content as LeafletText } from '../content/how_to_use/leaflet.md'
+import { Content as MobileText } from '../content/how_to_use/mobile.md'
+import { Content as CustomStylesText } from '../content/how_to_use/custom_styles.md'
+---
+
+<Layout title="How to use OpenFreeMap in your website or app">
+  <h1>How to use OpenFreeMap in your website or app</h1>
+
+  <!--<input type="checkbox" id="col1" class="col-chk" />-->
+  <!--<label for="col1" class="col-lbl">How to load MapLibre?</label>-->
+  <MaplibreText />
+  <MapboxText />
+  <LeafletText />
+  <MobileText />
+  <CustomStylesText />
+</Layout>
