@@ -4,8 +4,8 @@ You can customize the styles using the [Maputnik](https://maputnik.github.io/) e
 
 When you use a customized style, you need to host the style JSON yourself and use its URL in MapLibre.
 
-[Customize Bright](https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/bright)
+<a href="https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/bright" target="_blank">Customize Bright</a>
 
-[Customize Liberty](https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/liberty)
+<a href="https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/liberty" target="_blank">Customize Liberty</a>
 
-[Customize Positron](https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/positron)
+<a href="https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/positron" target="_blank">Customize Positron</a>

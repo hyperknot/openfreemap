@@ -65,7 +65,7 @@ function selectStyle(style) {
     map.setZoom(berlin.zoom)
   }
 
-  // document.getElementById('style-url-code').innerText = styleUrl
+  document.getElementById('style-url-code').innerText = styleUrl
 }
 
 // --- start

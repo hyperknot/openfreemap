@@ -14,8 +14,8 @@ Initialize it to a div like this:
 <script>
   const map = new maplibregl.Map({
     style: 'https://tiles.openfreemap.org/styles/liberty',
-    center: [-0.114, 51.506],
-    zoom: 14.2,
+    center: [13.388, 52.517],
+    zoom: 9.5,
     container: 'map',
   })
 </script>
