@@ -1,0 +1,99 @@
+---
+import { Content as DonateText } from '../content/index/donate.md'
+---
+
+<h2>How can I donate or support this project?</h2>
+<p>
+  If this project helps you save on your map hosting costs, please subscribe to one of our support
+  plans here:
+</p>
+
+<div id="support-plans-slider"></div>
+
+<DonateText />
+
+<script is:inline src="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.js"></script>
+<script is:inline src="/scripts/donate.js"></script>
+
+<style>
+  #support-plans-slider {
+    max-width: 600px;
+    margin: 200px auto 150px;
+  }
+
+  @media (max-width: 550px) {
+    #support-plans-slider {
+      max-width: 98%;
+      margin: 170px auto 120px;
+    }
+  }
+
+  .noUi-connects {
+    cursor: pointer;
+  }
+
+  .noUi-value {
+    line-height: 0;
+    margin-top: 32px;
+    font-size: 30px;
+    transition: font-size 0.3s ease;
+    cursor: pointer;
+  }
+
+  .noUi-value.active {
+    font-size: 45px;
+  }
+
+  .noUi-marker-horizontal.noUi-marker-large {
+    height: 5px;
+  }
+
+  .noUi-marker-horizontal.noUi-marker {
+    margin-left: 0;
+    width: 1px;
+  }
+
+  .noUi-tooltip {
+    border-color: #ccc;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .noUi-tooltip.first {
+    left: 0;
+    transform: unset;
+  }
+
+  .noUi-tooltip.last {
+    right: 0;
+    left: unset;
+    transform: unset;
+  }
+
+  .plan-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .plan-link {
+    display: block;
+    text-decoration: none;
+
+    color: white;
+    font-weight: bold;
+    letter-spacing: 0.05rem;
+    font-size: 15px;
+
+    border-radius: 20px;
+    padding: 6px 16px;
+    margin-top: 15px;
+
+    background: linear-gradient(32deg, #03a9f4, transparent) #f441a5;
+    transition: background-color 1s;
+  }
+
+  .plan-link:hover,
+  .plan-link:focus {
+    background-color: #fdb900;
+  }
+</style>

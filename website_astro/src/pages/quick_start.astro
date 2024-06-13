@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Map from '../components/Map.astro'
+
+import { Content as MaplibreText } from '../content/how_to_use/maplibre.md'
+import { Content as MapboxText } from '../content/how_to_use/mapbox.md'
+import { Content as LeafletText } from '../content/how_to_use/leaflet.md'
+import { Content as MobileText } from '../content/how_to_use/mobile.md'
+import { Content as CustomStylesText } from '../content/how_to_use/custom_styles.md'
+import { Content as SelfHostingText } from '../content/how_to_use/self_hosting.md'
+import Logo from '../components/Logo.astro'
+---
+
+<Layout title="OpenFreeMap Quick Start Guide">
+  <Logo title="OpenFreeMap Quick Start Guide" />
+
+  <div style="margin-top:30px; margin-bottom: 30px;">
+    <p>
+      This guide provides step-by-step instructions for integrating OpenFreeMap into your website or
+      mobile application.
+    </p><p>
+      To get started, choose a style from the default styles provided below. Later, there'll be
+      options to use custom styles as well.
+    </p>
+    <p>(You can navigate the map, it's interactive!)</p>
+  </div>
+
+  <Map showStyleURL={true} />
+
+  <MaplibreText />
+  <MapboxText />
+  <LeafletText />
+  <MobileText />
+  <CustomStylesText />
+  <SelfHostingText />
+</Layout>
+
+<style>
+  .col-lbl {
+    display: block;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .col-chk {
+    display: none;
+  }
+
+  .col-lbl:before {
+    content: '►';
+    margin-right: 1em;
+    color: #555;
+    font-size: 0.8em;
+  }
+
+  .col-cnt {
+    display: none;
+    margin: 1em 0 2em;
+  }
+
+  .col-chk:checked ~ .col-cnt {
+    display: block;
+  }
+
+  .col-chk:checked ~ .col-lbl:before {
+    content: '▼';
+  }
+</style>

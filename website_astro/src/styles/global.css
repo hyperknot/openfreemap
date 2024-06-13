@@ -1,0 +1,185 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* normalize.css */
+
+button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  overflow: visible;
+  text-transform: none;
+  -webkit-appearance: button;
+}
+
+button::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+button:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/* --- start --- */
+
+body {
+  padding-bottom: 100px;
+  line-height: 1.5;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
+  font-weight: normal;
+  color: #000;
+}
+
+.static,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.col-lbl,
+p,
+.button-container,
+#support-plans-slider {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.static {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.col-lbl {
+  color: #333;
+  max-width: 600px;
+  margin: 1em auto 0.5em;
+  line-height: 1.2;
+  font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+  font-weight: bold;
+}
+
+p a {
+  color: #333;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 1px 0 #adc2ee;
+  transition: box-shadow 200ms ease 0s;
+}
+
+p a:hover {
+  box-shadow: 0 2px 0 #adc2ee;
+}
+
+strong {
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+}
+
+/*.subtitle {*/
+/*  text-align: center;*/
+/*  font-style: italic;*/
+/*  color: #333;*/
+/*  margin-top: 1em;*/
+/*}*/
+
+.footer {
+  max-width: 600px;
+  margin: 3em auto 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.footer a {
+  color: #777;
+  text-decoration: none;
+}
+
+p,
+ul {
+  max-width: 600px;
+  margin: 0 auto 0.6em;
+}
+
+pre {
+  max-width: 600px;
+  margin: 0 auto 0.6em;
+  font-size: 14px;
+  padding: 7px 14px;
+}
+
+code {
+  font-size: 14px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #555;
+  margin: 2em 0;
+}
+
+@media (max-width: 550px) {
+  body {
+    padding-bottom: 40px;
+  }
+
+  .static,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .col-lbl,
+  p,
+  .button-container,
+  #support-plans-slider {
+    max-width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  #map-container {
+    height: 300px;
+  }
+}

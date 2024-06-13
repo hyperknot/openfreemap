@@ -1,38 +1,14 @@
-## What is OpenFreeMap?
-
-OpenFreeMap provides free map hosting so you can display custom maps on your website and apps.
-
-It is truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
-
-It is truly **open-source**: everything, including the full production setup, is on [GitHub](https://github.com/hyperknot/openfreemap). Map data is from OpenStreetMap.
-
-## How can I use it?
-
-(Click below, it's interactive!)
-
-<!--map_howto-->
-
-## How can I donate or support this project?
-
-If this project helps you save on your map hosting costs, please subscribe to one of our support plans here:
-
-<!--support_plans-->
-
-On **Gold** level and above, we offer personalised technical support by email. Otherwise, support is via GitHub [Discussions](https://github.com/hyperknot/openfreemap/discussions).
-
-If we ever receive a **Diamond** level supporter, we'll put their logo on this page.
-
-When subscribing to a support plan, you receive an invoice for each of your payments.
-
-Note: if you want to make a single donation, feel free to cancel after the first payment. However, please understand that the nature of this project needs recurring donations to cover the server costs.
-
 ## Is commercial usage allowed?
 
-Yes.
+Yes
 
-## Who is behind this project?
+## Who is behind this project and how can I follow it?
 
 I'm Zsolt Ero ([X](https://x.com/hyperknot), [blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfreemap.org)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
+
+X: [hyperknot](https://x.com/hyperknot) and [OpenFreeMapOrg](https://x.com/OpenFreeMapOrg)
+
+GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 
 ## Why did you build this project?
 
@@ -48,21 +24,15 @@ I'll share more about the reasons in a future [blog post](https://blog.hyperknot
 
 ## How can this work? How can a one-person project offer unlimited map hosting for free?
 
-There is no technical reason why map hosting costs as much as it does today. Vector tiles are just static files. Sure, serving 300 million files is not easy, but at the end of the day, they are just files.
+There is no technical reason why map hosting costs as much as it does today. Vector tiles are just static files. It's true that serving hundreds of millions of files is not easy, but at the end of the day, they are just files.
 
 Financially, the plan is to keep renting servers until they cover the bandwidth. I believe it can be self-sustainable if enough people subscribe to the support plans.
 
 If this project helps you save on your map hosting costs, please consider subscribing to a support plan.
 
-## How can I follow this project?
-
-X: [hyperknot](https://x.com/hyperknot) and [OpenFreeMapOrg](https://x.com/OpenFreeMapOrg)
-
-GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
-
 ## What is the tech stack?
 
-There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well. (You can read more about it on [GitHub](https://github.com/hyperknot/openfreemap).
+There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well. (You can read more about it on [GitHub](https://github.com/hyperknot/openfreemap).)
 
 There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
 
@@ -73,6 +43,7 @@ The [styles](https://github.com/hyperknot/openfreemap-styles) are forked and hea
 ## Domains
 
 `tiles.openfreemap.org` - Cloudflare proxied
+
 `direct.openfreemap.org` - direct connection, Round-Robin DNS
 
 ## Attribution

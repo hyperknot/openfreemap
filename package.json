@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "prettier-plugin-astro": "^0.14.0"
   }
 }

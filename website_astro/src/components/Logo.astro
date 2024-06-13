@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<img src="/logo.jpg" alt="logo" height="200" class="logo" />
+
+<h1>{title}</h1>
+
+<div class="icons">
+  <a href="https://github.com/hyperknot/openfreemap" target="_blank"
+    ><img src="/github.svg" alt="github" height="28" /></a
+  >
+  <a href="https://x.com/hyperknot" target="_blank"><img src="/x.svg" alt="x" height="28" /></a>
+</div>
+
+<style>
+  .logo {
+    margin: 0 auto;
+  }
+
+  .icons {
+    margin: 0 auto;
+    width: 80px;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>

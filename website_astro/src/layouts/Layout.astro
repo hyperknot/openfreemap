@@ -1,51 +1,43 @@
 ---
 interface Props {
-	title: string;
+  title: string
 }
 
-const { title } = Astro.props;
+const { title } = Astro.props
+
+import '../styles/global.css'
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="Open and free custom maps for your website and apps, based on OpenStreetMap."
+    />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <!--    <meta property="og:title" content="" />-->
+    <!--    <meta property="og:type" content="" />-->
+    <!--    <meta property="og:url" content="" />-->
+    <!--    <meta property="og:image" content="" />-->
+
+    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.css" rel="stylesheet" />
+    <!--<link href="https://unpkg.com/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />-->
+  </head>
+
+  <body>
+    <slot />
+
+    <div class="footer">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/tos">Terms of Service</a>
+    </div>
+  </body>
 </html>
-<style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-		background-size: 224px;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
-</style>
