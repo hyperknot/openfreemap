@@ -16,7 +16,8 @@ body {
 
 .container {
   max-width: 600px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0 20px;
 }
 
@@ -25,14 +26,23 @@ h2,
 h3,
 h4,
 h5,
-h6,
-.col-lbl {
+h6 {
   color: #333;
   margin-top: 1em;
   margin-bottom: 0.5em;
   line-height: 1.2;
   font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
   font-weight: bold;
+}
+
+p,
+ul,
+pre {
+  margin-bottom: 0.6em;
+}
+
+h1 {
+  text-align: center;
 }
 
 p a {
@@ -51,28 +61,7 @@ strong {
   color: #333;
 }
 
-h1 {
-  text-align: center;
-}
-
-.footer {
-  margin-top: 3em;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.footer a {
-  color: #777;
-  text-decoration: none;
-}
-
-p,
-ul {
-  margin-bottom: 0.6em;
-}
-
 pre {
-  margin-bottom: 0.6em;
   font-size: 14px;
   padding: 7px 14px;
 }
@@ -86,6 +75,17 @@ hr {
   height: 1px;
   background-color: #555;
   margin: 2em 0;
+}
+
+.footer {
+  margin-top: 3em;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.footer a {
+  color: #777;
+  text-decoration: none;
 }
 
 .logo {
