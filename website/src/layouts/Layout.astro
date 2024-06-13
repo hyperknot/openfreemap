@@ -1,6 +1,6 @@
 ---
 const { frontmatter } = Astro.props || {}
-const { title, container } = frontmatter || Astro.props
+const { title } = frontmatter || Astro.props
 
 import '../styles/_style.css'
 ---
@@ -30,15 +30,15 @@ import '../styles/_style.css'
 
   <body>
     {
-      container && (
+      frontmatter && (
         <div class="container">
           <slot />
         </div>
       )
     }
-    {!container && <slot />}
+    {!frontmatter && <slot />}
 
-    <div class="footer">
+    <div class="footer container">
       <a href="/privacy">Privacy Policy</a>
       <a href="/tos">Terms of Service</a>
     </div>

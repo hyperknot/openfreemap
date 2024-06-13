@@ -1,3 +1,5 @@
 @import "reset.css";
-@import "donate.css";
 @import "global.css";
+/* */
+@import "map.css";
+@import "donate.css";

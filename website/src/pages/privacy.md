@@ -1,7 +1,6 @@
 ---
 layout: '../layouts/Layout.astro'
 title: 'Privacy Policy'
-container: true
 ---
 
 # OpenFreeMap and your data

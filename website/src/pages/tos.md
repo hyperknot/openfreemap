@@ -1,7 +1,6 @@
 ---
 layout: '../layouts/Layout.astro'
 title: 'Terms of Services'
-container: true
 ---
 
 # TERMS OF SERVICES

@@ -13,7 +13,7 @@ const { showStyleURL } = Astro.props
   </div>
 </div>
 
-<div class="button-container">
+<div class="button-container container">
   <button data-style="positron" class="btn">Positron</button>
   <button data-style="bright" class="btn">Bright</button>
   <button data-style="liberty" class="btn selected">Liberty</button>
@@ -24,83 +24,3 @@ const { showStyleURL } = Astro.props
 
 <script is:inline src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
 <script is:inline src="/scripts/map.js"></script>
-
-<style>
-  #map-container {
-    width: 100%;
-    height: 500px;
-    margin-bottom: 24px;
-    position: relative;
-  }
-
-  @media (max-width: 550px) {
-    #map-container {
-      height: 300px;
-    }
-  }
-
-  #mapbg-image {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 1;
-    background-image: url('/berlin.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    transition: opacity 3s;
-  }
-
-  .mapbg-attrib {
-    font:
-      12px / 20px Helvetica Neue,
-      Arial,
-      Helvetica,
-      sans-serif;
-    background-color: hsla(0, 0%, 100%, 0.5);
-    padding: 0 5px;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-  }
-
-  .mapbg-attrib a {
-    color: rgba(0, 0, 0, 0.75);
-    text-decoration: none;
-  }
-
-  .mapbg-attrib a:hover {
-    text-decoration: underline;
-  }
-
-  .button-container {
-    margin: 0 auto 20px;
-    max-width: 600px;
-    display: flex;
-    flex-wrap: nowrap;
-  }
-
-  .btn {
-    border: 0;
-    border-radius: 0.25rem;
-    background: #2f5f8b;
-    color: white;
-    font-size: 1rem;
-    white-space: nowrap;
-    text-decoration: none;
-    padding: 0.25rem 0.5rem;
-    margin-right: 0.5rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .btn.selected {
-    background: #4892d9;
-  }
-
-  .btn:hover {
-    background: #4892d9;
-  }
-</style>
