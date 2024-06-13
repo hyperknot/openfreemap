@@ -134,7 +134,8 @@ h1 {
   text-decoration: none;
 }
 
-p {
+p,
+ul {
   max-width: 600px;
   margin: 0 auto 0.6em;
 }
