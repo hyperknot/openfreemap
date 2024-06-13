@@ -11,16 +11,21 @@ import { Content as RestText } from '../content/index/rest.md'
 <Layout title="OpenFreeMap">
   <Logo title="OpenFreeMap" />
 
-  <WhatisText />
+  <div class="container">
+    <WhatisText />
+    <h2>How can I use it?</h2>
+  </div>
 
-  <h2>How can I use it?</h2>
   <Map />
-  <p>
-    Have a look at the default styles and read more about how to integrate it to your website or app
-    here:
-  </p>
-  <p style="margin: 20px auto;"><a href="/quick_start">Quick Start Guide</a></p>
 
-  <Donate />
-  <RestText />
+  <div class="container">
+    <p>
+      Have a look at the default styles and read more about how to integrate it to your website or
+      app here:
+    </p>
+    <p style="margin: 20px auto;"><a href="/quick_start">Quick Start Guide</a></p>
+
+    <Donate />
+    <RestText />
+  </div>
 </Layout>

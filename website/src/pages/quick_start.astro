@@ -15,7 +15,7 @@ import Donate from '../components/Donate.astro'
 <Layout title="OpenFreeMap Quick Start Guide">
   <Logo title="OpenFreeMap Quick Start Guide" />
 
-  <div style="margin-top:30px; margin-bottom: 30px;">
+  <div class="container" style="margin-top:30px; margin-bottom: 30px;">
     <p>
       This guide provides step-by-step instructions for integrating OpenFreeMap into your website or
       mobile application.
@@ -28,44 +28,46 @@ import Donate from '../components/Donate.astro'
 
   <Map showStyleURL={true} />
 
-  <MaplibreText />
-  <MapboxText />
-  <LeafletText />
-  <MobileText />
-  <CustomStylesText />
-  <SelfHostingText />
+  <div class="container">
+    <MaplibreText />
+    <MapboxText />
+    <LeafletText />
+    <MobileText />
+    <CustomStylesText />
+    <SelfHostingText />
 
-  <Donate />
+    <Donate />
+  </div>
 </Layout>
 
-<style>
-  .col-lbl {
-    display: block;
-    cursor: pointer;
-    color: #333;
-  }
+<!--<style>-->
+<!--  .col-lbl {-->
+<!--    display: block;-->
+<!--    cursor: pointer;-->
+<!--    color: #333;-->
+<!--  }-->
 
-  .col-chk {
-    display: none;
-  }
+<!--  .col-chk {-->
+<!--    display: none;-->
+<!--  }-->
 
-  .col-lbl:before {
-    content: '►';
-    margin-right: 1em;
-    color: #555;
-    font-size: 0.8em;
-  }
+<!--  .col-lbl:before {-->
+<!--    content: '►';-->
+<!--    margin-right: 1em;-->
+<!--    color: #555;-->
+<!--    font-size: 0.8em;-->
+<!--  }-->
 
-  .col-cnt {
-    display: none;
-    margin: 1em 0 2em;
-  }
+<!--  .col-cnt {-->
+<!--    display: none;-->
+<!--    margin: 1em 0 2em;-->
+<!--  }-->
 
-  .col-chk:checked ~ .col-cnt {
-    display: block;
-  }
+<!--  .col-chk:checked ~ .col-cnt {-->
+<!--    display: block;-->
+<!--  }-->
 
-  .col-chk:checked ~ .col-lbl:before {
-    content: '▼';
-  }
-</style>
+<!--  .col-chk:checked ~ .col-lbl:before {-->
+<!--    content: '▼';-->
+<!--  }-->
+<!--</style>-->

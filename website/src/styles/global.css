@@ -8,24 +8,16 @@ body {
   color: #000;
 }
 
-.static,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.col-lbl,
-p,
-.button-container,
-#support-plans-slider {
-  margin-left: 40px;
-  margin-right: 40px;
+@media (max-width: 550px) {
+  body {
+    padding-bottom: 40px;
+  }
 }
 
-.static {
+.container {
   max-width: 600px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 h1,
@@ -36,8 +28,8 @@ h5,
 h6,
 .col-lbl {
   color: #333;
-  max-width: 600px;
-  margin: 1em auto 0.5em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
   line-height: 1.2;
   font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
   font-weight: bold;
@@ -63,16 +55,9 @@ h1 {
   text-align: center;
 }
 
-/*.subtitle {*/
-/*  text-align: center;*/
-/*  font-style: italic;*/
-/*  color: #333;*/
-/*  margin-top: 1em;*/
-/*}*/
-
 .footer {
   max-width: 600px;
-  margin: 3em auto 0;
+  margin-top: 3em;
   display: flex;
   justify-content: space-evenly;
 }
@@ -85,12 +70,12 @@ h1 {
 p,
 ul {
   max-width: 600px;
-  margin: 0 auto 0.6em;
+  margin-bottom: 0.6em;
 }
 
 pre {
   max-width: 600px;
-  margin: 0 auto 0.6em;
+  margin-bottom: 0.6em;
   font-size: 14px;
   padding: 7px 14px;
 }
@@ -106,29 +91,19 @@ hr {
   margin: 2em 0;
 }
 
-@media (max-width: 550px) {
-  body {
-    padding-bottom: 40px;
-  }
-
-  .static,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .col-lbl,
-  p,
-  .button-container,
-  #support-plans-slider {
-    max-width: 100%;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
-  #map-container {
-    height: 300px;
-  }
-}
+/*@media (max-width: 620px) {*/
+/*  .static,*/
+/*  h1,*/
+/*  h2,*/
+/*  h3,*/
+/*  h4,*/
+/*  h5,*/
+/*  h6,*/
+/*  p,*/
+/*  .button-container {*/
+/*    max-width: 100%;*/
+/*    margin-left: 20px;*/
+/*    margin-right: 20px;*/
+/*  }*/
+/*}*/
 

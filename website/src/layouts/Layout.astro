@@ -1,9 +1,6 @@
 ---
-interface Props {
-  title: string
-}
-
-const { title } = Astro.props
+const { frontmatter } = Astro.props || {}
+const { title, container } = frontmatter || Astro.props
 
 import '../styles/_style.css'
 ---
@@ -32,7 +29,14 @@ import '../styles/_style.css'
   </head>
 
   <body>
-    <slot />
+    {
+      container && (
+        <div class="container">
+          <slot />
+        </div>
+      )
+    }
+    {!container && <slot />}
 
     <div class="footer">
       <a href="/privacy">Privacy Policy</a>

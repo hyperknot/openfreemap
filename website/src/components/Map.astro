@@ -33,6 +33,12 @@ const { showStyleURL } = Astro.props
     position: relative;
   }
 
+  @media (max-width: 550px) {
+    #map-container {
+      height: 300px;
+    }
+  }
+
   #mapbg-image {
     width: 100%;
     height: 100%;
