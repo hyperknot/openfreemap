@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 20px;
@@ -28,7 +28,7 @@ h4,
 h5,
 h6 {
   color: #333;
-  margin-top: 1em;
+  margin-top: 3em;
   margin-bottom: 0.5em;
   line-height: 1.2;
   font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
@@ -43,6 +43,7 @@ pre {
 
 h1 {
   text-align: center;
+  margin-top: 1em;
 }
 
 p a {
