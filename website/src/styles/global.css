@@ -1,17 +1,10 @@
 body {
-  padding-bottom: 100px;
   line-height: 1.5;
   font-size: 17px;
   -webkit-font-smoothing: antialiased;
   font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
   font-weight: normal;
   color: #000;
-}
-
-@media (max-width: 550px) {
-  body {
-    padding-bottom: 40px;
-  }
 }
 
 .container {
@@ -46,16 +39,18 @@ h1 {
   margin-top: 1em;
 }
 
-p a {
-  color: #333;
-  font-weight: bold;
-  text-decoration: none;
-  box-shadow: 0 1px 0 #adc2ee;
-  transition: box-shadow 200ms ease 0s;
-}
+p {
+  a {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 1px 0 #adc2ee;
+    transition: box-shadow 200ms ease 0s;
 
-p a:hover {
-  box-shadow: 0 2px 0 #adc2ee;
+    &:hover {
+      box-shadow: 0 2px 0 #adc2ee;
+    }
+  }
 }
 
 strong {
@@ -79,14 +74,15 @@ hr {
 }
 
 .footer {
-  margin-top: 3em;
+  margin-top: 6em;
+  margin-bottom: 4em;
   display: flex;
   justify-content: space-evenly;
-}
 
-.footer a {
-  color: #777;
-  text-decoration: none;
+  a {
+    color: #777;
+    text-decoration: none;
+  }
 }
 
 .logo {
@@ -106,3 +102,23 @@ hr {
   font-weight: bold;
   overflow-x: auto;
 }
+
+.quick-start-button {
+  /*display: block;*/
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
+  font-size: 15px;
+  border-radius: 20px;
+  padding: 6px 16px;
+  margin-top: 15px;
+  background: linear-gradient(32deg, #03a9f4, transparent) #f441a5;
+  transition: background-color 1s;
+
+  &:hover,
+  &:focus {
+    background-color: #fdb900;
+  }
+}
+

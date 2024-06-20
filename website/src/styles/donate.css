@@ -1,9 +1,7 @@
 #support-plans-slider {
   margin: 200px auto 150px;
-}
 
-@media (max-width: 550px) {
-  #support-plans-slider {
+  @media (max-width: 550px) {
     max-width: 98%;
     margin: 170px auto 120px;
   }
@@ -26,12 +24,14 @@
   margin-top: 15px;
   background: linear-gradient(32deg, #03a9f4, transparent) #f441a5;
   transition: background-color 1s;
+
+  &:hover,
+  &:focus {
+    background-color: #fdb900;
+  }
 }
 
-.plan-link:hover,
-.plan-link:focus {
-  background-color: #fdb900;
-}
+
 
 /* noUI slider customizations */
 
@@ -45,35 +45,36 @@
   font-size: 30px;
   transition: font-size 0.3s ease;
   cursor: pointer;
+
+  &.active {
+    font-size: 45px;
+  }
 }
 
-.noUi-value.active {
-  font-size: 45px;
-}
+.noUi-marker-horizontal {
+  &.noUi-marker-large {
+    height: 5px;
+  }
 
-.noUi-marker-horizontal.noUi-marker-large {
-  height: 5px;
-}
-
-.noUi-marker-horizontal.noUi-marker {
-  margin-left: 0;
-  width: 1px;
+  &.noUi-marker {
+    margin-left: 0;
+    width: 1px;
+  }
 }
 
 .noUi-tooltip {
   border-color: #ccc;
   border-radius: 10px;
   padding: 10px;
-}
 
-.noUi-tooltip.first {
-  left: 0;
-  transform: unset;
-}
+  &.first {
+    left: 0;
+    transform: unset;
+  }
 
-.noUi-tooltip.last {
-  right: 0;
-  left: unset;
-  transform: unset;
+  &.last {
+    right: 0;
+    left: unset;
+    transform: unset;
+  }
 }
-

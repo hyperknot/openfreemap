@@ -31,15 +31,15 @@
   bottom: 0;
   right: 0;
   position: absolute;
-}
 
-.mapbg-attrib a {
-  color: rgba(0, 0, 0, 0.75);
-  text-decoration: none;
-}
+  a {
+    color: rgba(0, 0, 0, 0.75);
+    text-decoration: none;
 
-.mapbg-attrib a:hover {
-  text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .button-container {
@@ -61,12 +61,12 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-}
 
-.btn.selected {
-  background: #4892d9;
-}
+  &.selected {
+    background: #4892d9;
+  }
 
-.btn:hover {
-  background: #4892d9;
+  &:hover {
+    background: #4892d9;
+  }
 }
