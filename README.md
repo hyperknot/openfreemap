@@ -101,9 +101,7 @@ A very important part, probably needs the most work in the long term future.
 
 #### load balancer script - scripts/loadbalancer
 
-Round Robin DNS based load balancer, script for health checking and updating records. It pushes status messages to a Telegram bot.
-
-Currently it's running in read-only mode, DNS updates need manual confirmation.
+A Round Robin DNS based load balancer script for health checking and updating records. It pushes status messages to a Telegram bot.
 
 ## Self hosting
 
@@ -166,6 +164,10 @@ Tasks outside the scope of this project:
 See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
+
+##### v0.2
+
+Load-balancing script is running in write mode, updating records when needed.
 
 ##### v0.1
 

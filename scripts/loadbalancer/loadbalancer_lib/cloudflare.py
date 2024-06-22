@@ -55,7 +55,7 @@ def set_records_round_robin(
     proxied: bool,
     comment: str = None,
     cloudflare_api_token: str,
-):
+) -> bool:
     headers = {'Authorization': f'Bearer {cloudflare_api_token}'}
 
     dns_records = get_dns_records_round_robin(zone_id, cloudflare_api_token=cloudflare_api_token)
@@ -64,7 +64,7 @@ def set_records_round_robin(
     current_ips = {r['content'] for r in current_records}
     if current_ips == host_ip_set:
         print(f'No need to update records: {name} currently set: {sorted(current_ips)}')
-        return
+        return False
 
     # changing records
 
@@ -91,6 +91,8 @@ def set_records_round_robin(
         res.raise_for_status()
         data = res.json()
         assert data['success'] is True
+
+    return True
 
 
 def delete_record(zone_id, *, id_: str, cloudflare_api_token: str):

@@ -76,7 +76,15 @@ def check_or_fix(fix=False):
         if not working_hosts:
             working_hosts = set(c['http_host_list'])
 
-        update_records(c, working_hosts)
+            message = 'OFM loadbalancer FIX found no working hosts, reverting to full list!'
+            print(message)
+            telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
+
+        updated = update_records(c, working_hosts)
+        if updated:
+            message = f'OFM loadbalancer FIX modified records, new records: {working_hosts}'
+            print(message)
+            telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
 
 
 def run_area(c, area):
@@ -117,14 +125,16 @@ def get_target_version(area):
     return response.text.strip()
 
 
-def update_records(c, working_hosts):
+def update_records(c, working_hosts) -> bool:
     config = dotenv_values('/data/ofm/config/cloudflare.ini')
     cloudflare_api_token = config['dns_cloudflare_api_token']
 
     domain = '.'.join(c['domain_ledns'].split('.')[-2:])
     zone_id = get_zone_id(domain, cloudflare_api_token=cloudflare_api_token)
 
-    set_records_round_robin(
+    updated = False
+
+    updated |= set_records_round_robin(
         zone_id=zone_id,
         name=c['domain_ledns'],
         host_ip_set=working_hosts,
@@ -134,7 +144,7 @@ def update_records(c, working_hosts):
         cloudflare_api_token=cloudflare_api_token,
     )
 
-    set_records_round_robin(
+    updated |= set_records_round_robin(
         zone_id=zone_id,
         name=c['domain_cf'],
         host_ip_set=working_hosts,
@@ -142,6 +152,8 @@ def update_records(c, working_hosts):
         comment='domain_cf',
         cloudflare_api_token=cloudflare_api_token,
     )
+
+    return updated
 
 
 if __name__ == '__main__':
