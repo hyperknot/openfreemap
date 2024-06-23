@@ -104,21 +104,23 @@ hr {
 }
 
 .quick-start-button {
-  /*display: block;*/
+  display: block;
   text-decoration: none;
   color: white;
   font-weight: bold;
-  letter-spacing: 0.05rem;
-  font-size: 15px;
+  letter-spacing: 0.1rem;
+  font-size: 20px;
   border-radius: 20px;
-  padding: 6px 16px;
-  margin-top: 15px;
-  background: linear-gradient(32deg, #03a9f4, transparent) #f441a5;
+  padding: 20px 0;
+  margin: 5em auto;
+  width: 300px;
+  text-align: center;
+  background: linear-gradient(32deg, #fdb900, transparent) #f441a5;
   transition: background-color 1s;
 
   &:hover,
   &:focus {
-    background-color: #fdb900;
+    background-color: #03a9f4;
   }
 }
 
