@@ -108,19 +108,19 @@ hr {
   text-decoration: none;
   color: white;
   font-weight: bold;
-  letter-spacing: 0.1rem;
-  font-size: 20px;
+  letter-spacing: 0.05rem;
+  font-size: 18px;
   border-radius: 20px;
-  padding: 20px 0;
-  margin: 5em auto;
-  width: 300px;
+  padding: 15px 0;
+  margin: 2em auto 5em;
+  width: 230px;
   text-align: center;
-  background: linear-gradient(32deg, #fdb900, transparent) #f441a5;
+  background: linear-gradient(32deg, #0070a2, transparent) #59c15a;
   transition: background-color 1s;
 
   &:hover,
   &:focus {
-    background-color: #03a9f4;
+    background-color: #dea31d;
   }
 }
 

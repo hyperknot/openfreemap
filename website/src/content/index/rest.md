@@ -22,7 +22,7 @@ I waited for years for someone to offer this service but realized that no one wa
 
 I'll share more about the reasons in a future [blog post](https://blog.hyperknot.com/). Feel free to subscribe.
 
-## How can this work? How can a one-person project offer unlimited map hosting for free?
+## How can this work (both financially and technically)?
 
 There is no technical reason why map hosting costs as much as it does today. Vector tiles are just static files. It's true that serving hundreds of millions of files is not easy, but at the end of the day, they are just files.
 

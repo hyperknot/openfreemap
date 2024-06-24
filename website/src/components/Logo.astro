@@ -4,7 +4,7 @@ const { title } = Astro.props
 
 <img src="/logo.jpg" alt="logo" height="200" class="logo" />
 
-<h1>{title}</h1>
+<h1 set:html={title} />
 
 <div class="icons">
   <a href="https://github.com/hyperknot/openfreemap" target="_blank"
