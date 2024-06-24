@@ -1,4 +1,5 @@
 from io import BytesIO
+from pathlib import Path
 
 import pycurl
 
@@ -11,7 +12,11 @@ def pycurl_status(url, domain, host_ip):
 
     c = pycurl.Curl()
     c.setopt(c.URL, url)
-    c.setopt(c.CAINFO, '/etc/ssl/certs/ca-certificates.crt')
+
+    # linux needs CA certs specified manually
+    if Path('/etc/ssl/certs/ca-certificates.crt').exists():
+        c.setopt(c.CAINFO, '/etc/ssl/certs/ca-certificates.crt')
+
     c.setopt(c.RESOLVE, [f'{domain}:443:{host_ip}'])
     c.setopt(c.NOBODY, True)
     c.setopt(c.TIMEOUT, 5)
@@ -31,7 +36,11 @@ def pycurl_get(url, domain, host_ip):
     buffer = BytesIO()
     c = pycurl.Curl()
     c.setopt(c.URL, url)
-    c.setopt(c.CAINFO, '/etc/ssl/certs/ca-certificates.crt')
+
+    # linux needs CA certs specified manually
+    if Path('/etc/ssl/certs/ca-certificates.crt').exists():
+        c.setopt(c.CAINFO, '/etc/ssl/certs/ca-certificates.crt')
+
     c.setopt(c.RESOLVE, [f'{domain}:443:{host_ip}'])
     c.setopt(c.WRITEDATA, buffer)
     c.setopt(c.TIMEOUT, 5)

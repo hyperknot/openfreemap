@@ -5,6 +5,7 @@ import json
 import click
 import requests
 from dotenv import dotenv_values
+from loadbalancer_lib import OFM_CONFIG_DIR
 from loadbalancer_lib.cloudflare import get_zone_id, set_records_round_robin
 from loadbalancer_lib.curl import pycurl_get, pycurl_status
 from loadbalancer_lib.telegram_ import telegram_send_message
@@ -41,9 +42,17 @@ def fix():
 
 
 def check_or_fix(fix=False):
-    with open('/data/ofm/config/loadbalancer.json') as fp:
+    with open(OFM_CONFIG_DIR / 'loadbalancer.json') as fp:
         c = json.load(fp)
         # print(c)
+
+    if not c['http_host_list']:
+        telegram_send_message(
+            'OFM loadbalancer no hosts found on list, terminating',
+            c['telegram_token'],
+            c['telegram_chat_id'],
+        )
+        return
 
     try:
         results_by_ip = {}
@@ -56,15 +65,13 @@ def check_or_fix(fix=False):
 
         for host_ip, host_is_ok in results_by_ip.items():
             if not host_is_ok:
-                message = f'OFM ERROR with host: {host_ip}'
-                print(message)
+                message = f'OFM loadbalancer ERROR with host: {host_ip}'
                 telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
             else:
                 working_hosts.add(host_ip)
 
     except Exception as e:
-        message = f'OFM ERROR with loadbalancer: {e}'
-        print(message)
+        message = f'OFM loadbalancer ERROR with loadbalancer: {e}'
         telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
         return
 
@@ -77,13 +84,11 @@ def check_or_fix(fix=False):
             working_hosts = set(c['http_host_list'])
 
             message = 'OFM loadbalancer FIX found no working hosts, reverting to full list!'
-            print(message)
             telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
 
         updated = update_records(c, working_hosts)
         if updated:
             message = f'OFM loadbalancer FIX modified records, new records: {working_hosts}'
-            print(message)
             telegram_send_message(message, c['telegram_token'], c['telegram_chat_id'])
 
 
@@ -98,8 +103,9 @@ def run_area(c, area):
         try:
             check_host(c['domain_ledns'], host_ip, area, target_version)
             results[host_ip] = True
-        except Exception:
+        except Exception as e:
             results[host_ip] = False
+            print(e)
 
     return results
 
@@ -126,7 +132,7 @@ def get_target_version(area):
 
 
 def update_records(c, working_hosts) -> bool:
-    config = dotenv_values('/data/ofm/config/cloudflare.ini')
+    config = dotenv_values(OFM_CONFIG_DIR / 'cloudflare.ini')
     cloudflare_api_token = config['dns_cloudflare_api_token']
 
     domain = '.'.join(c['domain_ledns'].split('.')[-2:])
