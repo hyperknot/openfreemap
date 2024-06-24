@@ -101,7 +101,7 @@ def tile_gen(hostname, user, port):
 
 @cli.command()
 @common_options
-def ledns_writer(hostname, user, port):
+def ledns(hostname, user, port):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 
