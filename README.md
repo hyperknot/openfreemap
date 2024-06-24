@@ -158,6 +158,12 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
+##### v0.3
+
+Lot of performance related problems with Cloudflare when using Round-Robin DNS. Works much better without any Cloudflare proxying, the browsers actually do a great job of client-side failover and selecting the best host.
+
+Load-balancing script running in check mode again.
+
 ##### v0.2
 
 Load-balancing script is running in write mode, updating records when needed.
