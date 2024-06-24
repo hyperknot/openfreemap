@@ -72,29 +72,18 @@ def prepare_tile_gen(c):
 
 def upload_http_host_config(c):
     domain_le = dotenv_val('DOMAIN_LE').lower()
-    domain_cf = dotenv_val('DOMAIN_CF').lower()
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
     le_email = dotenv_val('LE_EMAIL').lower()
 
-    if not (domain_le or domain_cf):
-        sys.exit('Please specify DOMAIN_LE or DOMAIN_CF in config/.env')
-
-    if domain_cf:
-        if (
-            not (CONFIG_DIR / 'certs' / 'ofm_cf.key').exists()
-            or not (CONFIG_DIR / 'certs' / 'ofm_cf.cert').exists()
-        ):
-            sys.exit(
-                'When using DOMAIN_CF, please put ofm_cf.key and ofm_cf.cert files in config/certs'
-            )
+    if not (domain_le or domain_ledns):
+        sys.exit('Please specify DOMAIN_LE or DOMAIN_LEDNS in config/.env')
 
     if domain_le and not le_email:
         sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
 
     host_config = {
         'domain_le': domain_le,
-        'domain_cf': domain_cf,
         'domain_ledns': domain_ledns,
         'skip_planet': skip_planet,
         'le_email': le_email,
@@ -222,13 +211,11 @@ def setup_ledns_writer(c):
 
 
 def setup_loadbalancer(c):
-    domain_cf = dotenv_val('DOMAIN_CF').lower()
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
     config = {
-        'domain_cf': domain_cf,
         'domain_ledns': domain_ledns,
         'http_host_list': http_host_list,
         'telegram_token': dotenv_val('TELEGRAM_TOKEN'),

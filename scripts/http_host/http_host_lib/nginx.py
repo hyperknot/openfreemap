@@ -17,20 +17,8 @@ from http_host_lib import (
 def write_nginx_config():
     curl_text_mix = ''
 
-    domain_cf = HOST_CONFIG['domain_cf']
     domain_le = HOST_CONFIG['domain_le']
     domain_ledns = HOST_CONFIG['domain_ledns']
-
-    # processing Cloudflare config
-    if domain_cf:
-        if not (CERTS_DIR / 'ofm_cf.cert').is_file() or not (CERTS_DIR / 'ofm_cf.key').is_file():
-            sys.exit('ofm_cf.cert or ofm_cf.key missing')
-
-        curl_text_mix += create_nginx_conf(
-            template_path=NGINX_DIR / 'cf.conf',
-            local='ofm_cf',
-            domain=domain_cf,
-        )
 
     # processing Cloudflare config
     if domain_ledns:

@@ -46,9 +46,7 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 1. Copy `.env.sample` to `.env` and set the values.
 
-   DOMAIN_LE - Use this to specify a domain to be used with Let's Encrypt. Recommended.
-
-   DOMAIN_CF - Use this if you want to use long term CloudFlare Origin certificates. You have to upload the certs into `config/certs`
+   DOMAIN_LE - Use this to specify a domain to be used with Let's Encrypt.
 
 1. If you want to run tile generation and upload via rclone, you can copy the `rclone.conf.sample` file as well. For simple self-hosting there is no need for this.
 

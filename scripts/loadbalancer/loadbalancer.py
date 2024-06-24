@@ -150,15 +150,6 @@ def update_records(c, working_hosts) -> bool:
         cloudflare_api_token=cloudflare_api_token,
     )
 
-    updated |= set_records_round_robin(
-        zone_id=zone_id,
-        name=c['domain_cf'],
-        host_ip_set=working_hosts,
-        proxied=True,
-        comment='domain_cf',
-        cloudflare_api_token=cloudflare_api_token,
-    )
-
     return updated
 
 
