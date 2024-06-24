@@ -40,12 +40,6 @@ Special thanks go to [Michael Barry](https://github.com/msbarry) for developing 
 
 The [styles](https://github.com/hyperknot/openfreemap-styles) are forked and heavily modified.
 
-## Domains
-
-`tiles.openfreemap.org` - Cloudflare proxied
-
-`direct.openfreemap.org` - direct connection, Round-Robin DNS
-
 ## Attribution
 
 Attribution is required. If you are using MapLibre, they are automatically added, you have nothing to do.

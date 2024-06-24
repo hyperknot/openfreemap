@@ -20,7 +20,7 @@ def write_nginx_config():
     domain_le = HOST_CONFIG['domain_le']
     domain_ledns = HOST_CONFIG['domain_ledns']
 
-    # processing Cloudflare config
+    # processing Round Robin DNS config
     if domain_ledns:
         if not (OFM_CONFIG_DIR / 'rclone.conf').is_file():
             sys.exit('rclone.conf missing')

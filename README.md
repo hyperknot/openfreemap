@@ -126,13 +126,6 @@ There are three public buckets:
 - https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
 - https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
 
-### Domains and Cloudflare
-
-- `tiles.openfreemap.org` - Cloudflare proxied
-- `direct.openfreemap.org` - direct connection, Round-Robin DNS
-
-The project has been designed in such a way that we can migrate away from Cloudflare if needed. This is the reason why there are a .com and a .org domain: the .com will always stay on Cloudflare to host the R2 buckets, while the .org domain is independent.
-
 ### What about PMTiles?
 
 I would have loved to use PMTiles; they are a brilliant idea!
