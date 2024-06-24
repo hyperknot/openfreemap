@@ -198,5 +198,5 @@ def sync(ctx):
 
 
 if __name__ == '__main__':
-    print(HOST_CONFIG)
+    # print(HOST_CONFIG)
     cli()

@@ -20,6 +20,13 @@ def write_nginx_config():
     domain_le = HOST_CONFIG['domain_le']
     domain_ledns = HOST_CONFIG['domain_ledns']
 
+    # remove old configs and certs
+    for file in Path('/data/nginx/sites').glob('ofm_*.conf'):
+        file.unlink()
+
+    for file in Path('/data/nginx/certs').glob('ofm_*'):
+        file.unlink()
+
     # processing Round Robin DNS config
     if domain_ledns:
         if not (OFM_CONFIG_DIR / 'rclone.conf').is_file():

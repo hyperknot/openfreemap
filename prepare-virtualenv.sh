@@ -13,6 +13,8 @@ pip install -U pip wheel setuptools
 pip install -e .
 pip install -e scripts/http_host
 pip install -e scripts/tile_gen
+pip install -e scripts/loadbalancer
+pip install -e scripts/setversion
 
 
 

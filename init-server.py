@@ -3,7 +3,7 @@
 import click
 from fabric import Config, Connection
 
-from ssh_lib import SCRIPTS_DIR, TILE_GEN_BIN, dotenv_val
+from ssh_lib import SCRIPTS_DIR, dotenv_val
 from ssh_lib.tasks import (
     prepare_http_host,
     prepare_shared,
