@@ -49,6 +49,6 @@ def pycurl_get(url, domain, host_ip):
     c.close()
 
     if status_code != 200:
-        raise ValueError('non-200')
+        raise ValueError(f'status code: {status_code}')
 
     return buffer.getvalue().decode('utf8')
