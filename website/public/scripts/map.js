@@ -38,8 +38,8 @@ function initMap() {
   let nav = new maplibregl.NavigationControl({ showCompass: false })
   map.addControl(nav, 'top-right')
 
-  let scale = new maplibregl.ScaleControl()
-  map.addControl(scale)
+  // let scale = new maplibregl.ScaleControl()
+  // map.addControl(scale)
 
   let attrib = new maplibregl.AttributionControl({
     compact: false,
