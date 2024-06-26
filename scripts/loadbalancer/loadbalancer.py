@@ -59,7 +59,8 @@ def check_or_fix(fix=False):
         working_hosts = set()
 
         for area in AREAS:
-            for host_ip, host_is_ok in run_area(c, area).items():
+            results = run_area(c, area)
+            for host_ip, host_is_ok in results.items():
                 results_by_ip.setdefault(host_ip, True)
                 results_by_ip[host_ip] &= host_is_ok
 
@@ -121,6 +122,10 @@ def check_host(domain, host_ip, area, version):
 
     # check actual vector tile
     url = f'https://{domain}/{area}/{version}/14/8529/5975.pbf'
+    assert pycurl_status(url, domain, host_ip) == 200
+
+    # check style
+    url = f'https://{domain}/styles/bright'
     assert pycurl_status(url, domain, host_ip) == 200
 
 
