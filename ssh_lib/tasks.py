@@ -207,6 +207,8 @@ def setup_ledns_writer(c):
         f'--cert-name=ofm_ledns '
         f'--deploy-hook /data/ofm/ledns/rclone_write.sh '
         f'-d {domain_ledns}',
+        # f'-d {domain2_ledns}',
+        # f'-d {domain2_ledns}',
     )
 
 
