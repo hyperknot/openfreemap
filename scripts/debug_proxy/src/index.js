@@ -25,14 +25,15 @@ async function sendTelegramMessage(message, botToken, chatId) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url)
+    const userIP = request.headers.get('CF-Connecting-IP')
 
     if (url.pathname === '/b') {
       url.pathname = '/styles/bright'
     }
 
     // no failure, just warning
-    if (request.method !== 'GET2') {
-      const warningMessage = `Non-GET request ${request.method} ${url.pathname}`
+    if (request.method !== 'GET') {
+      const warningMessage = `Non-GET request ${request.method} ${url.pathname} ${userIP}`
       console.error(warningMessage)
       await sendTelegramMessage(warningMessage, env.TELEGRAM_TOKEN, env.TELEGRAM_CHAT_ID)
     }
@@ -48,7 +49,7 @@ export default {
       const response = await fetch(proxyUrl)
 
       if (response.status !== 200) {
-        const errorMessage = `Proxy error: Bad status ${response.status} ${url.pathname}`
+        const errorMessage = `Proxy error: Bad status ${response.status} ${url.pathname} ${userIP}`
         console.error(errorMessage)
         await sendTelegramMessage(errorMessage, env.TELEGRAM_TOKEN, env.TELEGRAM_CHAT_ID)
         return new Response('Proxy error: Bad status', { status: 500 })
@@ -56,7 +57,7 @@ export default {
 
       return response
     } catch (error) {
-      const errorMessage = `Proxy error: ${error.message} ${url.pathname}`
+      const errorMessage = `Proxy error: ${error.message} ${url.pathname} ${userIP}`
       console.error(errorMessage)
       await sendTelegramMessage(errorMessage, env.TELEGRAM_TOKEN, env.TELEGRAM_CHAT_ID)
       return new Response('Proxy error: Fetch failed', { status: 500 })
