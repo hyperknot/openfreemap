@@ -15,7 +15,7 @@ This page is a static HTML hosted on GitHub pages.
 
 We do not send newsletters. Please follow us on X or GitHub for updates.
 
-The only data we might collect are server logs. Technically, these are disabled by default and are only enabled temporarily to investigate problems with our service.
+The only data we might collect are server logs. The IP addresses are not included in these logs, but we reserve the right to temporarily enable them to investigate problems or misuse of our services.
 
 ---
 
