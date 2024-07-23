@@ -30,6 +30,13 @@ export default {
       url.pathname = '/styles/bright'
     }
 
+    // no failure, just warning
+    if (request.method !== 'GET2') {
+      const warningMessage = `Non-GET request ${request.method} ${url.pathname}`
+      console.error(warningMessage)
+      await sendTelegramMessage(warningMessage, env.TELEGRAM_TOKEN, env.TELEGRAM_CHAT_ID)
+    }
+
     if (!url.pathname.startsWith('/styles')) {
       const errorMessage = 'Bad path'
       return new Response(errorMessage, { status: 500 })
