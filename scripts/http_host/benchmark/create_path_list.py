@@ -1,7 +1,7 @@
 import json
 
 
-with open('access.log') as fp:
+with open('access.jsonl') as fp:
     json_lines = fp.readlines()
 
 paths = []
