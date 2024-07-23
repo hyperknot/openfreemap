@@ -125,7 +125,7 @@ def prepare_http_host(c):
 
 
 def run_http_host_sync(c):
-    sudo_cmd(c, f'{VENV_BIN}/python -u {HTTP_HOST_BIN}/host_manager.py sync')
+    sudo_cmd(c, f'{VENV_BIN}/python -u {HTTP_HOST_BIN}/host_manager.py sync --force')
 
 
 def upload_http_host_files(c):

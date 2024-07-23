@@ -84,6 +84,8 @@ def http_host_autoupdate(hostname, user, port):
 
     prepare_http_host(c)
 
+    run_http_host_sync(c)
+
     put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 

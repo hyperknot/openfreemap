@@ -166,8 +166,9 @@ def nginx_sync():
 
 
 @cli.command()
+@click.option('--force', is_flag=True, help='Force nginx sync run')
 @click.pass_context
-def sync(ctx):
+def sync(ctx, force):
     """
     Runs the sync task, normally called by cron every minute
     On a new server this also takes care of everything, no need to run anything manually.
@@ -193,7 +194,7 @@ def sync(ctx):
 
     deploy_done = ctx.invoke(set_latest_versions)
 
-    if download_done or deploy_done:
+    if download_done or deploy_done or force:
         ctx.invoke(nginx_sync)
 
 
