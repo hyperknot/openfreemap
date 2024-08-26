@@ -15,7 +15,7 @@ from ssh_lib.benchmark import c1000k, wrk
 from ssh_lib.kernel import kernel_tweaks_ofm
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
-from ssh_lib.planetiler import planetiler
+from ssh_lib.planetiler import install_planetiler
 from ssh_lib.rclone import rclone
 from ssh_lib.utils import add_user, enable_sudo, put, put_dir, put_str, sudo_cmd
 
@@ -48,11 +48,13 @@ def prepare_venv(c):
 
 
 def prepare_tile_gen(c):
-    planetiler(c)
+    install_planetiler(c)
+
+    c.sudo(f'rm -rf {TILE_GEN_BIN}')
 
     put_dir(c, SCRIPTS_DIR / 'tile_gen', TILE_GEN_BIN, file_permissions='755')
 
-    for dirname in ['tile_gen_lib', 'extract_mbtiles', 'shrink_btrfs']:
+    for dirname in ['tile_gen_lib', 'scripts']:
         put_dir(c, SCRIPTS_DIR / 'tile_gen' / dirname, f'{TILE_GEN_BIN}/{dirname}')
 
     if (CONFIG_DIR / 'rclone.conf').exists():
@@ -64,10 +66,10 @@ def prepare_tile_gen(c):
             user='ofm',
         )
 
-    c.sudo(f'{VENV_BIN}/pip install -e {TILE_GEN_BIN}')
+    c.sudo(f'{VENV_BIN}/pip install -e {TILE_GEN_BIN} --use-pep517')
 
     c.sudo('chown ofm:ofm /data/ofm/tile_gen')
-    c.sudo('chown ofm:ofm -R /data/ofm/tile_gen/bin')
+    c.sudo(f'chown ofm:ofm -R {TILE_GEN_BIN}')
 
 
 def upload_http_host_config(c):
@@ -121,7 +123,7 @@ def prepare_http_host(c):
     upload_http_host_files(c)
     upload_certificates(c)
 
-    c.sudo(f'{VENV_BIN}/pip install -e {HTTP_HOST_BIN}')
+    c.sudo(f'{VENV_BIN}/pip install -e {HTTP_HOST_BIN} --use-pep517')
 
 
 def run_http_host_sync(c):
@@ -243,7 +245,7 @@ def setup_loadbalancer(c):
         '/data/ofm/loadbalancer/loadbalancer_lib',
     )
 
-    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer')
+    c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer --use-pep517')
 
     c.sudo('mkdir -p /data/ofm/loadbalancer/logs')
     put(c, SCRIPTS_DIR / 'loadbalancer' / 'cron.d' / 'ofm_loadbalancer', '/etc/cron.d/')

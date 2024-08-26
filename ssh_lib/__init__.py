@@ -8,11 +8,16 @@ CONFIG_DIR = Path(__file__).parent.parent / 'config'
 SCRIPTS_DIR = Path(__file__).parent.parent / 'scripts'
 
 OFM_DIR = '/data/ofm'
-REMOTE_CONFIG = '/data/ofm/config'
-VENV_BIN = '/data/ofm/venv/bin'
-TILE_GEN_SRC = '/data/ofm/tile_gen/src'
-TILE_GEN_BIN = '/data/ofm/tile_gen/bin'
-HTTP_HOST_BIN = '/data/ofm/http_host/bin'
+REMOTE_CONFIG = f'{OFM_DIR}/config'
+VENV_BIN = f'{OFM_DIR}/venv/bin'
+
+TILE_GEN_DIR = f'{OFM_DIR}/tile_gen'
+TILE_GEN_BIN = f'{TILE_GEN_DIR}/bin'
+
+PLANETILER_SRC = f'{TILE_GEN_DIR}/planetiler_src'
+PLANETILER_BIN = f'{TILE_GEN_DIR}/planetiler'
+
+HTTP_HOST_BIN = f'{OFM_DIR}/http_host/bin'
 
 DOTENV_VALUES = dotenv_values(f'{CONFIG_DIR}/.env')
 

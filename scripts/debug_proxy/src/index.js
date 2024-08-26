@@ -31,12 +31,12 @@ export default {
       url.pathname = '/styles/bright'
     }
 
-    // no failure, just warning
-    if (request.method !== 'GET') {
-      const warningMessage = `Non-GET request ${request.method} ${url.pathname} ${userIP}`
-      console.error(warningMessage)
-      await sendTelegramMessage(warningMessage, env.TELEGRAM_TOKEN, env.TELEGRAM_CHAT_ID)
-    }
+    // // no failure, just warning
+    // if (request.method !== 'GET') {
+    //   const warningMessage = `Non-GET request ${request.method} ${url.pathname} ${userIP}`
+    //   console.error(warningMessage)
+    //   await sendTelegramMessage(warningMessage, env.TELEGRAM_TOKEN, env.TELEGRAM_CHAT_ID)
+    // }
 
     if (!url.pathname.startsWith('/styles')) {
       const errorMessage = 'Bad path'
