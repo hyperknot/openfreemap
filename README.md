@@ -56,7 +56,7 @@ There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
 
 Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/extract_mbtiles) and [shrink_btrfs](scripts/tile_gen/shrink_btrfs) scripts for this very purpose.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/scripts/extract_mbtiles.py) and [shrink_btrfs](scripts/tile_gen/scripts/shrink_btrfs.py) scripts for this very purpose.
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
@@ -91,7 +91,7 @@ _note: Tile generation is 100% optional, as we are providing the processed full 
 
 The `tile_gen` script downloads a full planet OSM extract and runs it through Planetiler.
 
-The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](scripts/tile_gen/extract_mbtiles) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/shrink_btrfs) script.
+The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](scripts/tile_gen/scripts/extract_mbtiles.py) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/scripts/shrink_btrfs.py) script.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
@@ -111,10 +111,9 @@ See [self hosting docs](docs/self_hosting.md).
 
 ### Full planet downloads
 
-You can directly download the processed full planet runs on the following URLs:
+You can directly download the processed full planet runs on the following URL patterns:
 
-https://planet.openfreemap.com/20240607_232801_pt/tiles.mbtiles // 89 GB, mbtiles file
-https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB, Btrfs partition image
+https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB
 
 Replace the `20240607_232801_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
 

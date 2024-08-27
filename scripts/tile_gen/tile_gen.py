@@ -25,8 +25,9 @@ def make_tiles(area):
     Generate tiles for a given area
     """
 
-    # run_planetiler(area)
-    make_btrfs(Path('/data/ofm/tile_gen/runs/monaco/20240826_230406_pt'))
+    run_folder = run_planetiler(area)
+    make_btrfs(run_folder)
+    # make_btrfs(Path('/data/ofm/tile_gen/runs/monaco/20240826_230406_pt'))
 
 
 @cli.command()

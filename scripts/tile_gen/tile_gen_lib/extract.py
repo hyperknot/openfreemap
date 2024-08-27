@@ -66,6 +66,8 @@ def make_btrfs(run_folder: Path):
             stderr=err,
         )
 
+    os.unlink('tiles.mbtiles')
+
     shutil.copy('mnt_rw/extract/osm_date', '.')
 
     # process logs
@@ -122,15 +124,13 @@ def make_btrfs(run_folder: Path):
     os.unlink('image.btrfs')
     shutil.move('image2.btrfs', 'tiles.btrfs')
 
-    # parallel gzip
+    # parallel gzip (pigz)
     subprocess.run(['pigz', 'tiles.btrfs', '--fast'], check=True)
 
-    # logs
+    # move logs
     Path('logs').mkdir()
     for pattern in ['*.log', '*.txt']:
         for file in Path().glob(pattern):
             shutil.move(file, 'logs')
 
     print('extract_btrfs.py DONE')
-
-    return run_folder
