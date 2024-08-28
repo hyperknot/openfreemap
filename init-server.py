@@ -12,6 +12,7 @@ from ssh_lib.tasks import (
     setup_ledns_writer,
     setup_loadbalancer,
     upload_http_host_config,
+    upload_http_host_files,
 )
 from ssh_lib.utils import (
     put,
@@ -129,6 +130,9 @@ def loadbalancer(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
+    upload_http_host_files(c)
+    run_http_host_sync(c)
+
     # upload_http_host_config(c)
     # upload_http_host_files(c)
     # sudo_cmd(c, f'{VENV_BIN}/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
@@ -141,7 +145,7 @@ def debug(hostname, user, port):
     #     '/data/ofm/loadbalancer/loadbalancer_lib',
     # )
 
-    prepare_tile_gen(c)
+    # prepare_tile_gen(c)
 
 
 if __name__ == '__main__':

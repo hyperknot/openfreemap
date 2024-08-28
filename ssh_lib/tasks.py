@@ -140,7 +140,10 @@ def upload_http_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     put_dir(c, SCRIPTS_DIR / 'http_host', HTTP_HOST_BIN, file_permissions='755')
-    put_dir(c, SCRIPTS_DIR / 'http_host' / 'http_host_lib', f'{HTTP_HOST_BIN}/http_host_lib')
+
+    for dirname in ['http_host_lib', 'scripts']:
+        put_dir(c, SCRIPTS_DIR / 'http_host' / dirname, f'{HTTP_HOST_BIN}/{dirname}')
+
     put_dir(
         c,
         SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'nginx',
