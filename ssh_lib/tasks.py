@@ -48,6 +48,8 @@ def prepare_venv(c):
 
 
 def prepare_tile_gen(c):
+    c.sudo('rm -f /etc/cron.d/ofm_tile_gen')
+
     install_planetiler(c)
 
     c.sudo(f'rm -rf {TILE_GEN_BIN}')
@@ -69,10 +71,11 @@ def prepare_tile_gen(c):
     c.sudo(f'{VENV_BIN}/pip install -e {TILE_GEN_BIN} --use-pep517')
 
     c.sudo('mkdir -p /data/ofm/tile_gen/logs')
-    put(c, SCRIPTS_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
 
     c.sudo('chown ofm:ofm /data/ofm/tile_gen/{,*}')
     c.sudo(f'chown ofm:ofm -R {TILE_GEN_BIN}')
+
+    put(c, SCRIPTS_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
 
 
 def upload_http_host_config(c):
