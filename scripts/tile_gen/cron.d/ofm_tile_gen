@@ -1,0 +1,8 @@
+# every hour, make a monaco run
+10 * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-tiles monaco --upload >> /data/ofm/tile_gen/logs/monaco-cron.log 2>&1
+
+
+
+# debug, once per minute create indexes
+# * * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-indexes >> /data/ofm/tile_gen/logs/debug-cron.log 2>&1
+
