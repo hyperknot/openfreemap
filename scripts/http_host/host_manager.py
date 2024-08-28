@@ -7,12 +7,12 @@ from pathlib import Path
 
 import click
 import requests
-from http_host_lib.config import config
-from http_host_lib.download_assets import (
+from http_host_lib.assets import (
     download_and_extract_asset_tar_gz,
     download_sprites,
 )
-from http_host_lib.download_tileset import download_and_extract_tileset
+from http_host_lib.btrfs import download_and_extract_tileset
+from http_host_lib.config import config
 from http_host_lib.mount import clean_up_mounts, create_fstab
 from http_host_lib.nginx import write_nginx_config
 from http_host_lib.set_tileset_versions import set_tileset_versions
