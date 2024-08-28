@@ -2,7 +2,7 @@ from pathlib import Path
 
 import requests
 
-from http_host_lib import OFM_CONFIG_DIR
+from http_host_lib.config import config
 
 
 def set_tileset_versions():
@@ -14,7 +14,7 @@ def set_tileset_versions():
         remote_version = r.text.strip()
         print(f'  remote version for {area}: {remote_version}')
 
-        local_version_file = OFM_CONFIG_DIR / f'tileset_version_{area}.txt'
+        local_version_file = config.ofm_config_dir / f'tileset_version_{area}.txt'
 
         if not local_version_file.exists():
             local_version_start = None

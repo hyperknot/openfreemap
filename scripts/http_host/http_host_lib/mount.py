@@ -1,14 +1,14 @@
 import subprocess
 from pathlib import Path
 
-from http_host_lib import DEFAULT_RUNS_DIR, MNT_DIR
+from http_host_lib.config import config
 
 
 def create_fstab():
     fstab_new = []
 
     for area in ['planet', 'monaco']:
-        area_dir = (DEFAULT_RUNS_DIR / area).resolve()
+        area_dir = (config.default_runs_dir / area).resolve()
         if not area_dir.exists():
             continue
 
@@ -19,14 +19,14 @@ def create_fstab():
             if not btrfs_file.is_file():
                 continue
 
-            mnt_folder = MNT_DIR / f'{area}-{version_str}'
+            mnt_folder = config.mnt_dir / f'{area}-{version_str}'
             mnt_folder.mkdir(exist_ok=True, parents=True)
 
             fstab_new.append(f'{btrfs_file} {mnt_folder} btrfs loop,ro 0 0\n')
             print(f'  created fstab entry for {btrfs_file} -> {mnt_folder}')
 
     with open('/etc/fstab') as fp:
-        fstab_orig = [l for l in fp.readlines() if f'{MNT_DIR}/' not in l]
+        fstab_orig = [l for l in fp.readlines() if f'{config.mnt_dir}/' not in l]
 
     with open('/etc/fstab', 'w') as fp:
         fp.writelines(fstab_orig + fstab_new)
