@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from tile_gen_lib.config import config
+from tile_gen_lib.btrfs import cleanup_folder
 
 
 def run_planetiler(area: str) -> Path:
@@ -12,14 +13,23 @@ def run_planetiler(area: str) -> Path:
 
     date = datetime.now(tz=timezone.utc).strftime('%Y%m%d_%H%M%S')
 
-    # delete all previous runs for the given area
-    shutil.rmtree(config.runs_dir / area, ignore_errors=True)
+    area_dir = config.runs_dir / area
 
-    run_folder = config.runs_dir / area / f'{date}_pt'
+    # delete all previous runs for the given area
+    for subdir in area_dir.iterdir():
+        cleanup_folder(subdir)
+
+    print('running rmtree')
+    shutil.rmtree(area_dir, ignore_errors=True)
+    print('rmtree done')
+
+    run_folder = area_dir / f'{date}_pt'
     run_folder.mkdir(parents=True, exist_ok=True)
 
     os.chdir(run_folder)
 
+    # link to discussion about why exactly 30 GB
+    # https://github.com/onthegomap/planetiler/discussions/690#discussioncomment-7756397
     java_memory_gb = 30 if area == 'planet' else 1
 
     command = [
@@ -39,7 +49,9 @@ def run_planetiler(area: str) -> Path:
     ]
 
     if area == 'planet':
-        command += '--bounds=planet'
+        command.append('--bounds=planet')
+
+    print(command)
 
     out_path = run_folder / 'planetiler.out'
     err_path = run_folder / 'planetiler.err'

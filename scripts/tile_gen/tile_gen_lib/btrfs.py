@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 from tile_gen_lib.config import config
@@ -14,16 +13,7 @@ IMAGE_SIZE = '200G'
 def make_btrfs(run_folder: Path):
     os.chdir(run_folder)
 
-    # cleanup
-    for mount in ['mnt_rw', 'mnt_rw2']:
-        subprocess.run(['sudo', 'umount', mount], capture_output=True)
-
-    for pattern in ['mnt_rw*', 'tmp_*', '*.btrfs', '*.gz', '*.log', '*.txt', 'logs', 'osm_date']:
-        for item in Path().glob(pattern):
-            if item.is_dir():
-                shutil.rmtree(item)
-            else:
-                item.unlink()
+    cleanup_folder(run_folder)
 
     # make an empty file that's definitely bigger then the current OSM output
     for image in ['image.btrfs', 'image2.btrfs']:
@@ -134,3 +124,17 @@ def make_btrfs(run_folder: Path):
             shutil.move(file, 'logs')
 
     print('extract_btrfs.py DONE')
+
+
+def cleanup_folder(run_folder: Path):
+    print(f'cleaning up {run_folder}')
+
+    for mount in ['mnt_rw', 'mnt_rw2']:
+        subprocess.run(['sudo', 'umount', run_folder / mount], capture_output=True)
+
+    for pattern in ['mnt_rw*', 'tmp_*', '*.btrfs', '*.gz', '*.log', '*.txt', 'logs', 'osm_date']:
+        for item in run_folder.glob(pattern):
+            if item.is_dir():
+                shutil.rmtree(item)
+            else:
+                item.unlink()
