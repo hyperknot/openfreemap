@@ -1,7 +1,6 @@
 import os
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 import requests
@@ -57,3 +56,14 @@ def download_file_aria2(url: str, local_file: Path):
         ],
         check=True,
     )
+
+
+def python_venv_executable() -> Path:
+    venv_path = os.environ.get('VIRTUAL_ENV')
+
+    if venv_path:
+        return Path(venv_path) / 'bin' / 'python'
+    elif sys.prefix != sys.base_prefix:
+        return Path(sys.prefix) / 'bin' / 'python'
+    else:
+        return Path(sys.executable)

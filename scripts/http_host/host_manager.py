@@ -70,7 +70,7 @@ def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Pat
         selected_version = version
 
     if not runs_dir:
-        runs_dir = config.default_runs_dir
+        runs_dir = config.runs_dir
 
     if not runs_dir.parent.exists():
         sys.exit("runs dir's parent doesn't exist")
@@ -92,7 +92,7 @@ def download_assets(assets_dir: Path):
     print('running download_assets')
 
     if not assets_dir:
-        assets_dir = config.default_assets_dir
+        assets_dir = config.assets_dir
 
     if not assets_dir.parent.exists():
         sys.exit("asset dir's parent doesn't exist")
@@ -116,7 +116,7 @@ def mount():
     assert_linux()
     assert_sudo()
 
-    if not config.default_runs_dir.exists():
+    if not config.runs_dir.exists():
         sys.exit('  download_tileset needs to be run first')
 
     clean_up_mounts(config.mnt_dir)

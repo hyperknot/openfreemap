@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 from http_host_lib.config import config
+from http_host_lib.utils import python_venv_executable
 
 
 def write_nginx_config():
@@ -29,7 +30,7 @@ def write_nginx_config():
         subprocess.run(['bash', config.http_host_bin / 'ledns_reader.sh'], check=True)
 
         curl_text_mix += create_nginx_conf(
-            template_path=config.nginx_dir / 'ledns.conf',
+            template_path=config.nginx_confs / 'ledns.conf',
             local='ofm_ledns',
             domain=domain_ledns,
         )
@@ -44,7 +45,7 @@ def write_nginx_config():
             shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), le_key)
 
         curl_text_mix += create_nginx_conf(
-            template_path=config.nginx_dir / 'le.conf',
+            template_path=config.nginx_confs / 'le.conf',
             local='ofm_le',
             domain=domain_le,
         )
@@ -130,7 +131,7 @@ def create_location_blocks(*, local, domain):
 
     location_str += create_latest_locations(local=local, domain=domain)
 
-    with open(config.nginx_dir / 'location_static.conf') as fp:
+    with open(config.nginx_confs / 'location_static.conf') as fp:
         location_str += '\n' + fp.read()
 
     return location_str, curl_text
@@ -139,7 +140,7 @@ def create_location_blocks(*, local, domain):
 def create_version_location(
     *, area: str, version: str, subdir: Path, local: str, domain: str
 ) -> str:
-    run_dir = config.default_runs_dir / area / version
+    run_dir = config.runs_dir / area / version
     if not run_dir.is_dir():
         print(f"  {run_dir} doesn't exists, skipping")
         return ''
@@ -155,8 +156,8 @@ def create_version_location(
 
     subprocess.run(
         [
-            sys.executable,
-            Path(__file__).parent.parent / 'metadata_to_tilejson.py',
+            python_venv_executable(),
+            config.http_host_scripts_dir / 'metadata_to_tilejson.py',
             '--minify',
             metadata_path,
             tilejson_path,
@@ -203,7 +204,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
             version = fp.read().strip()
         print(f'  setting latest version for {area}: {version}')
 
-        run_dir = config.default_runs_dir / area / version
+        run_dir = config.runs_dir / area / version
         tilejson_path = run_dir / f'tilejson-{local}.json'
         assert tilejson_path.is_file()
 

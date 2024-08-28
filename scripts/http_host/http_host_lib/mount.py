@@ -8,7 +8,7 @@ def create_fstab():
     fstab_new = []
 
     for area in ['planet', 'monaco']:
-        area_dir = (config.default_runs_dir / area).resolve()
+        area_dir = (config.runs_dir / area).resolve()
         if not area_dir.exists():
             continue
 

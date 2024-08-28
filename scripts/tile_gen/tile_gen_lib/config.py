@@ -12,7 +12,8 @@ class Configuration:
 
     runs_dir = tile_gen_dir / 'runs'
 
-    rclone_config = Path('/data/ofm/config/rclone.conf')
+    ofm_config_dir = Path('/data/ofm/config')
+    rclone_config = ofm_config_dir / 'rclone.conf'
 
     areas = ['planet', 'monaco']
 

@@ -133,6 +133,7 @@ def prepare_http_host(c):
 
 
 def run_http_host_sync(c):
+    print('Running host_manager.py sync --force')
     sudo_cmd(c, f'{VENV_BIN}/python -u {HTTP_HOST_BIN}/host_manager.py sync --force')
 
 
@@ -146,8 +147,8 @@ def upload_http_host_files(c):
 
     put_dir(
         c,
-        SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'nginx',
-        f'{HTTP_HOST_BIN}/http_host_lib/nginx',
+        SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'nginx_confs',
+        f'{HTTP_HOST_BIN}/http_host_lib/nginx_confs',
     )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')

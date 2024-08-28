@@ -5,19 +5,20 @@ from pathlib import Path
 class Configuration:
     http_host_dir = Path('/data/ofm/http_host')
 
-    nginx_dir = Path(__file__).parent / 'nginx'
+    http_host_bin = http_host_dir / 'bin'
+    http_host_scripts_dir = http_host_bin / 'scripts'
 
-    default_runs_dir = http_host_dir / 'runs'
-    default_assets_dir = http_host_dir / 'assets'
+    runs_dir = http_host_dir / 'runs'
+    assets_dir = http_host_dir / 'assets'
 
     mnt_dir = Path('/mnt/ofm')
     ofm_config_dir = Path('/data/ofm/config')
-    http_host_bin = http_host_dir / 'bin'
 
     certs_dir = Path('/data/nginx/certs')
+    nginx_confs = Path(__file__).parent / 'nginx_confs'
 
     try:
-        with open('/data/ofm/config/http_host.json') as fp:
+        with open(ofm_config_dir / 'http_host.json') as fp:
             host_config = json.load(fp)
     except Exception:
         host_config = {}
