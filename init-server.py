@@ -58,7 +58,7 @@ def cli():
 
 @cli.command()
 @common_options
-def http_host_once(hostname, user, port):
+def http_host_static(hostname, user, port):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 

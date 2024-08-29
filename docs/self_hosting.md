@@ -54,7 +54,7 @@ It's recommended to use [direnv](https://direnv.net/), to have automatic venv ac
 
 You run the deploy script locally. It'll connect to an SSH server, like this
 
-`./init-server.py http-host-once HOSTNAME`
+`./init-server.py http-host-static HOSTNAME`
 
 After this, go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
 
