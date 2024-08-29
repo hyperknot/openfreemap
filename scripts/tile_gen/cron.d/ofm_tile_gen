@@ -3,6 +3,6 @@
 
 
 
-# debug, once per minute create indexes
-#* * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-indexes >> /data/ofm/tile_gen/logs/debug-cron.log 2>&1
+# once per minute, create indexes
+* * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-indexes >> /data/ofm/tile_gen/logs/make-indexes-cron.log 2>&1
 

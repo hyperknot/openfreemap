@@ -4,17 +4,26 @@ from pathlib import Path
 
 import requests
 
+from http_host_lib.config import config
 from http_host_lib.utils import download_file_aria2, download_if_size_differs
 
 
-def download_and_extract_asset_tar_gz(assets_dir, asset_kind):
+def download_assets():
+    download_and_extract_asset_tar_gz('fonts')
+    download_and_extract_asset_tar_gz('styles')
+    download_and_extract_asset_tar_gz('natural_earth')
+
+    download_sprites()
+
+
+def download_and_extract_asset_tar_gz(asset_kind):
     """
     Download and extract asset.tgz if the file size differ or not available locally
     """
 
     print(f'Downloading asset {asset_kind}')
 
-    asset_dir = assets_dir / asset_kind
+    asset_dir = config.assets_dir / asset_kind
     asset_dir.mkdir(exist_ok=True, parents=True)
 
     url = f'https://assets.openfreemap.com/{asset_kind}/ofm.tar.gz'
@@ -34,15 +43,15 @@ def download_and_extract_asset_tar_gz(assets_dir, asset_kind):
     )
 
 
-def download_sprites(assets_dir: Path):
+def download_sprites():
     """
     Sprites are special assets, as we have to keep the old versions indefinitely
     """
 
-    sprites_dir = assets_dir / 'sprites'
+    sprites_dir = config.assets_dir / 'sprites'
     sprites_dir.mkdir(exist_ok=True, parents=True)
 
-    r = requests.get('https://assets.openfreemap.com/index.txt', timeout=30)
+    r = requests.get('https://assets.openfreemap.com/files.txt', timeout=30)
     r.raise_for_status()
 
     sprites_remote = [l for l in r.text.splitlines() if l.startswith('sprites/')]

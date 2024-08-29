@@ -44,7 +44,7 @@ def make_indexes():
     Make indexes for all buckets
     """
 
-    for bucket in ['ofm-btrfs']:
+    for bucket in ['ofm-btrfs', 'ofm-assets']:
         make_indexes_for_bucket(bucket)
 
 

@@ -80,6 +80,8 @@ def http_host_autoupdate(hostname, user, port):
 
     c = get_connection(hostname, user, port)
 
+    c.sudo('rm -f /etc/cron.d/ofm_http_host')
+
     prepare_shared(c)
     upload_http_host_config(c)
 

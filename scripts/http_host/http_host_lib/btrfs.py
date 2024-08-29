@@ -9,8 +9,6 @@ from http_host_lib.utils import download_file_aria2, get_remote_file_size
 
 
 def download_area_version(area: str, version: str):
-    print('running download_btrfs')
-
     if area not in config.areas:
         sys.exit(f'  please specify area: {config.areas}')
 
@@ -42,7 +40,7 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
     returns True if download successful, False if skipped
     """
 
-    print(f'downloading {area} {version}')
+    print(f'downloading and extracting btrfs for: {area} {version}')
 
     version_dir = config.runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
