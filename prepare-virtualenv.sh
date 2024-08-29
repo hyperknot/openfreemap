@@ -11,10 +11,10 @@ source venv/bin/activate
 pip install -U pip wheel setuptools
 
 pip install -e .
-pip install -e scripts/http_host
-pip install -e scripts/tile_gen
-pip install -e scripts/loadbalancer
-pip install -e scripts/setversion
+pip install -e modules/http_host
+pip install -e modules/tile_gen
+pip install -e modules/loadbalancer
+pip install -e modules/set_version
 
 
 

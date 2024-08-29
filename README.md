@@ -56,7 +56,7 @@ There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
 
 Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](scripts/tile_gen/scripts/extract_mbtiles.py) and [shrink_btrfs](scripts/tile_gen/scripts/shrink_btrfs.py) scripts for this very purpose.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](modules/tile_gen/scripts/extract_mbtiles.py) and [shrink_btrfs](modules/tile_gen/scripts/shrink_btrfs.py) scripts for this very purpose.
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
@@ -70,7 +70,7 @@ The project has the following parts
 
 This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH.
 
-#### HTTP host - scripts/http_host
+#### HTTP host - modules/http_host
 
 Inside `http_host`, all work is done by `host_manager.py`.
 
@@ -85,13 +85,13 @@ It does the following:
 
 You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
 
-#### tile generation - scripts/tile_gen
+#### tile generation - modules/tile_gen
 
 _note: Tile generation is 100% optional, as we are providing the processed full planet files for public download._
 
 The `tile_gen` script downloads a full planet OSM extract and runs it through Planetiler.
 
-The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](scripts/tile_gen/scripts/extract_mbtiles.py) script. The partition is shrunk using the [shrink_btrfs](scripts/tile_gen/scripts/shrink_btrfs.py) script.
+The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](modules/tile_gen/scripts/extract_mbtiles.py) script. The partition is shrunk using the [shrink_btrfs](modules/tile_gen/scripts/shrink_btrfs.py) script.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
@@ -99,7 +99,7 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 A very important part, probably needs the most work in the long term future.
 
-#### load balancer script - scripts/loadbalancer
+#### load balancer script - modules/loadbalancer
 
 A Round Robin DNS based load balancer script for health checking and updating records. It pushes status messages to a Telegram bot.
 

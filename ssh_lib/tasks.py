@@ -6,7 +6,7 @@ from ssh_lib import (
     HTTP_HOST_BIN,
     OFM_DIR,
     REMOTE_CONFIG,
-    SCRIPTS_DIR,
+    MODULES_DIR,
     TILE_GEN_BIN,
     VENV_BIN,
     dotenv_val,
@@ -39,7 +39,7 @@ def prepare_shared(c):
 def prepare_venv(c):
     put(
         c,
-        SCRIPTS_DIR / 'prepare-virtualenv.sh',
+        MODULES_DIR / 'prepare-virtualenv.sh',
         OFM_DIR,
         permissions='755',
         user='ofm',
@@ -54,10 +54,10 @@ def prepare_tile_gen(c):
 
     c.sudo(f'rm -rf {TILE_GEN_BIN}')
 
-    put_dir(c, SCRIPTS_DIR / 'tile_gen', TILE_GEN_BIN, file_permissions='755')
+    put_dir(c, MODULES_DIR / 'tile_gen', TILE_GEN_BIN, file_permissions='755')
 
     for dirname in ['tile_gen_lib', 'scripts']:
-        put_dir(c, SCRIPTS_DIR / 'tile_gen' / dirname, f'{TILE_GEN_BIN}/{dirname}')
+        put_dir(c, MODULES_DIR / 'tile_gen' / dirname, f'{TILE_GEN_BIN}/{dirname}')
 
     if (CONFIG_DIR / 'rclone.conf').exists():
         put(
@@ -75,7 +75,7 @@ def prepare_tile_gen(c):
     c.sudo('chown ofm:ofm /data/ofm/tile_gen/{,*}')
     c.sudo(f'chown ofm:ofm -R {TILE_GEN_BIN}')
 
-    put(c, SCRIPTS_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
+    put(c, MODULES_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
 
 
 def upload_http_host_config(c):
@@ -109,7 +109,7 @@ def upload_http_host_config(c):
             f'{REMOTE_CONFIG}/rclone.conf',
             permissions=400,
         )
-        put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_ledns_reader', '/etc/cron.d/')
+        put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_ledns_reader', '/etc/cron.d/')
 
 
 def prepare_http_host(c):
@@ -140,14 +140,14 @@ def run_http_host_sync(c):
 def upload_http_host_files(c):
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
-    put_dir(c, SCRIPTS_DIR / 'http_host', HTTP_HOST_BIN, file_permissions='755')
+    put_dir(c, MODULES_DIR / 'http_host', HTTP_HOST_BIN, file_permissions='755')
 
     for dirname in ['http_host_lib', 'scripts']:
-        put_dir(c, SCRIPTS_DIR / 'http_host' / dirname, f'{HTTP_HOST_BIN}/{dirname}')
+        put_dir(c, MODULES_DIR / 'http_host' / dirname, f'{HTTP_HOST_BIN}/{dirname}')
 
     put_dir(
         c,
-        SCRIPTS_DIR / 'http_host' / 'http_host_lib' / 'nginx_confs',
+        MODULES_DIR / 'http_host' / 'http_host_lib' / 'nginx_confs',
         f'{HTTP_HOST_BIN}/http_host_lib/nginx_confs',
     )
 
@@ -198,7 +198,7 @@ def setup_ledns_writer(c):
 
     put(
         c,
-        SCRIPTS_DIR / 'ledns' / 'rclone_write.sh',
+        MODULES_DIR / 'ledns' / 'rclone_write.sh',
         '/data/ofm/ledns/rclone_write.sh',
         create_parent_dir=True,
         permissions=500,
@@ -248,16 +248,16 @@ def setup_loadbalancer(c):
     )
 
     c.sudo('rm -rf /data/ofm/loadbalancer')
-    put_dir(c, SCRIPTS_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
+    put_dir(c, MODULES_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
     put_dir(
         c,
-        SCRIPTS_DIR / 'loadbalancer' / 'loadbalancer_lib',
+        MODULES_DIR / 'loadbalancer' / 'loadbalancer_lib',
         '/data/ofm/loadbalancer/loadbalancer_lib',
     )
 
     c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer --use-pep517')
 
     c.sudo('mkdir -p /data/ofm/loadbalancer/logs')
-    put(c, SCRIPTS_DIR / 'loadbalancer' / 'cron.d' / 'ofm_loadbalancer', '/etc/cron.d/')
+    put(c, MODULES_DIR / 'loadbalancer' / 'cron.d' / 'ofm_loadbalancer', '/etc/cron.d/')
 
     c.sudo('chown -R ofm:ofm /data/ofm/loadbalancer')

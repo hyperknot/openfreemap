@@ -9,6 +9,10 @@ from http_host_lib.utils import download_file_aria2, get_remote_file_size
 
 
 def download_area_version(area: str, version: str):
+    """
+    Downloads and uncompresses tiles.btrfs files from the btrfs bucket
+    """
+
     if area not in config.areas:
         sys.exit(f'  please specify area: {config.areas}')
 

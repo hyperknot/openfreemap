@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 
 ASSETS_DIR = Path(__file__).parent / 'assets'
 CONFIG_DIR = Path(__file__).parent.parent / 'config'
-SCRIPTS_DIR = Path(__file__).parent.parent / 'scripts'
+MODULES_DIR = Path(__file__).parent.parent / 'modules'
 
 OFM_DIR = '/data/ofm'
 REMOTE_CONFIG = f'{OFM_DIR}/config'

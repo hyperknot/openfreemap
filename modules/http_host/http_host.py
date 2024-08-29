@@ -1,24 +1,18 @@
 #!/usr/bin/env python3
 
 import datetime
-import subprocess
 import sys
-from pathlib import Path
 
 import click
-import requests
 from http_host_lib.assets import (
-    download_and_extract_asset_tar_gz,
     download_assets,
-    download_sprites,
 )
 from http_host_lib.btrfs import (
-    download_and_extract_btrfs,
     download_area_version,
     get_versions_for_area,
 )
 from http_host_lib.config import config
-from http_host_lib.mount import clean_up_mounts, create_fstab
+from http_host_lib.mount import auto_mount_unmount
 from http_host_lib.nginx import write_nginx_config
 from http_host_lib.set_tileset_versions import set_tileset_versions
 from http_host_lib.utils import assert_linux, assert_sudo
@@ -28,8 +22,8 @@ from http_host_lib.utils import assert_linux, assert_sudo
 def cli():
     """
     Manages OpenFreeMap HTTP hosts, including:\n
+    - Downloading btrfs images\n
     - Downloading assets\n
-    - Downloading tilesets\n
     - Mounting directories\n
     - Updating nginx config\n
     - Getting the deployed versions of tilesets\n
@@ -68,21 +62,7 @@ def mount():
     When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
     """
 
-    print('running mount')
-
-    assert_linux()
-    assert_sudo()
-
-    if not config.runs_dir.exists():
-        sys.exit('  download_tileset needs to be run first')
-
-    clean_up_mounts(config.mnt_dir)
-    create_fstab()
-
-    print('  running mount -a')
-    subprocess.run(['mount', '-a'], check=True)
-
-    clean_up_mounts(config.mnt_dir)
+    auto_mount_unmount()
 
 
 @cli.command()
@@ -140,10 +120,10 @@ def sync(ctx, force):
     assert_sudo()
 
     download_done = False
-    download_done += ctx.invoke(download_tileset, area='monaco')
+    download_done += ctx.invoke(download_btrfs, area='monaco')
 
     if not config.host_config.get('skip_planet'):
-        download_done += ctx.invoke(download_tileset, area='planet')
+        download_done += ctx.invoke(download_btrfs, area='planet')
 
     if download_done:
         ctx.invoke(mount)

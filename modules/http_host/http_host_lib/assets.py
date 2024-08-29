@@ -8,6 +8,10 @@ from http_host_lib.utils import download_file_aria2, download_if_size_differs
 
 
 def download_assets():
+    """
+    Downloads and extracts assets
+    """
+
     download_and_extract_asset_tar_gz('fonts')
     download_and_extract_asset_tar_gz('styles')
     download_and_extract_asset_tar_gz('natural_earth')

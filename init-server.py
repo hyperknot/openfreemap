@@ -3,7 +3,7 @@
 import click
 from fabric import Config, Connection
 
-from ssh_lib import SCRIPTS_DIR, dotenv_val
+from ssh_lib import MODULES_DIR, dotenv_val
 from ssh_lib.tasks import (
     prepare_http_host,
     prepare_shared,
@@ -89,7 +89,7 @@ def http_host_autoupdate(hostname, user, port):
 
     run_http_host_sync(c)
 
-    put(c, SCRIPTS_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+    put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 @cli.command()
