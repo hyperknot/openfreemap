@@ -3,6 +3,8 @@ from pathlib import Path
 
 
 class Configuration:
+    areas = ['planet', 'monaco']
+
     http_host_dir = Path('/data/ofm/http_host')
 
     http_host_bin = http_host_dir / 'bin'

@@ -2,6 +2,8 @@ from pathlib import Path
 
 
 class Configuration:
+    areas = ['planet', 'monaco']
+
     tile_gen_dir = Path('/data/ofm/tile_gen')
 
     tile_gen_bin = tile_gen_dir / 'bin'
@@ -14,8 +16,6 @@ class Configuration:
 
     ofm_config_dir = Path('/data/ofm/config')
     rclone_config = ofm_config_dir / 'rclone.conf'
-
-    areas = ['planet', 'monaco']
 
 
 config = Configuration()

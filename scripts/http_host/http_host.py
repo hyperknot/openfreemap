@@ -11,7 +11,11 @@ from http_host_lib.assets import (
     download_and_extract_asset_tar_gz,
     download_sprites,
 )
-from http_host_lib.btrfs import download_and_extract_tileset
+from http_host_lib.btrfs import (
+    download_and_extract_btrfs,
+    download_area_version,
+    get_versions_for_area,
+)
 from http_host_lib.config import config
 from http_host_lib.mount import clean_up_mounts, create_fstab
 from http_host_lib.nginx import write_nginx_config
@@ -27,7 +31,7 @@ def cli():
     - Downloading tilesets\n
     - Mounting directories\n
     - Updating nginx config\n
-    - Setting the latest versions of tilesets\n
+    - Getting the deployed versions of tilesets\n
     - Running the sync cron task (called every minute)
     """
 
@@ -35,47 +39,13 @@ def cli():
 @cli.command()
 @click.argument('area', required=False)
 @click.option('--version', default='latest', help='Version string, like "20231227_043106_pt"')
-@click.option(
-    '--runs-dir',
-    help='Specify runs directory',
-    type=click.Path(dir_okay=True, file_okay=False, path_type=Path),
-)
-@click.option('--list-versions', is_flag=True, help='List all versions in an area and terminate')
-def download_tileset(area: str, version: str, list_versions: bool, runs_dir: Path):
+def download_btrfs(area: str, version: str):
     """
-    Downloads and extracts the latest tiles.btrfs file from the public bucket.
-    Version can also be specified.
+    Downloads and extracts tiles.btrfs file from the btrfs bucket
+    Version can be "latest" or specified
     """
 
-    print('running download_tileset')
-
-    if area not in {'planet', 'monaco'}:
-        sys.exit('  please specify area: "planet" or "monaco"')
-
-    r = requests.get(f'https://{area}.openfreemap.com/dirs.txt', timeout=30)
-    r.raise_for_status()
-
-    versions = sorted(r.text.splitlines())
-
-    all_versions_str = '\n'.join(versions)
-    if list_versions:
-        print(all_versions_str)
-        return
-
-    if version == 'latest':
-        selected_version = versions[-1]
-    else:
-        if version not in versions:
-            sys.exit(f'Requested version is not available. Available versions:\n{all_versions_str}')
-        selected_version = version
-
-    if not runs_dir:
-        runs_dir = config.runs_dir
-
-    if not runs_dir.parent.exists():
-        sys.exit("runs dir's parent doesn't exist")
-
-    return download_and_extract_tileset(area, selected_version, runs_dir)
+    return download_area_version(area, version)
 
 
 @cli.command()
@@ -197,6 +167,12 @@ def sync(ctx, force):
 
     if download_done or deploy_done or force:
         ctx.invoke(nginx_sync)
+
+
+@cli.command()
+def debug():
+    versions = get_versions_for_area('monaco')
+    print(versions)
 
 
 if __name__ == '__main__':
