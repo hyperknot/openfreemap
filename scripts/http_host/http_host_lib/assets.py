@@ -1,6 +1,5 @@
 import shutil
 import subprocess
-from pathlib import Path
 
 import requests
 
@@ -29,6 +28,7 @@ def download_and_extract_asset_tar_gz(asset_kind):
     url = f'https://assets.openfreemap.com/{asset_kind}/ofm.tar.gz'
     local_file = asset_dir / 'ofm.tar.gz'
     if not download_if_size_differs(url, local_file):
+        print(f'  skipping asset: {asset_kind}')
         return
 
     ofm_dir = asset_dir / 'ofm'
@@ -42,11 +42,15 @@ def download_and_extract_asset_tar_gz(asset_kind):
         check=True,
     )
 
+    print(f'  downloaded asset: {asset_kind}')
+
 
 def download_sprites():
     """
     Sprites are special assets, as we have to keep the old versions indefinitely
     """
+
+    print('Downloading sprites')
 
     sprites_dir = config.assets_dir / 'sprites'
     sprites_dir.mkdir(exist_ok=True, parents=True)
@@ -60,6 +64,7 @@ def download_sprites():
         sprite_name = sprite.split('/')[1].replace('.tar.gz', '')
 
         if (sprites_dir / sprite_name).is_dir():
+            print(f'  skipping sprite version: {sprite_name}')
             continue
 
         url = f'https://assets.openfreemap.com/sprites/{sprite_name}.tar.gz'
@@ -71,3 +76,4 @@ def download_sprites():
             check=True,
         )
         local_file.unlink()
+        print(f'  downloaded sprite version: {sprite_name}')

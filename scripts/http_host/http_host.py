@@ -9,6 +9,7 @@ import click
 import requests
 from http_host_lib.assets import (
     download_and_extract_asset_tar_gz,
+    download_assets,
     download_sprites,
 )
 from http_host_lib.btrfs import (
@@ -38,40 +39,26 @@ def cli():
 
 @cli.command()
 @click.argument('area', required=False)
-@click.option('--version', default='latest', help='Version string, like "20231227_043106_pt"')
+@click.option(
+    '--version', default='latest', help='Optional version string, like "20231227_043106_pt"'
+)
 def download_btrfs(area: str, version: str):
     """
-    Downloads and extracts tiles.btrfs file from the btrfs bucket
-    Version can be "latest" or specified
+    Downloads and uncompresses tiles.btrfs files from the btrfs bucket
+    Version can be "latest" (default) or specified, like "20231227_043106_pt"
+    Use --version=1 to list all available versions
     """
 
     return download_area_version(area, version)
 
 
-@cli.command()
-@click.option(
-    '--assets-dir',
-    help='Specify assets directory',
-    type=click.Path(dir_okay=True, file_okay=False, path_type=Path),
-)
-def download_assets(assets_dir: Path):
+@cli.command(name='download-assets')
+def download_assets_():
     """
     Downloads and extracts assets
     """
 
-    print('running download_assets')
-
-    if not assets_dir:
-        assets_dir = config.assets_dir
-
-    if not assets_dir.parent.exists():
-        sys.exit("asset dir's parent doesn't exist")
-
-    download_and_extract_asset_tar_gz(assets_dir, 'fonts')
-    download_and_extract_asset_tar_gz(assets_dir, 'styles')
-    download_and_extract_asset_tar_gz(assets_dir, 'natural_earth')
-
-    download_sprites(assets_dir)
+    download_assets()
 
 
 @cli.command()
