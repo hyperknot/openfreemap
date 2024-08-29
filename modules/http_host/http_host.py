@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import datetime
-import sys
-
 import click
 from http_host_lib.assets import (
     download_assets,
@@ -11,11 +8,9 @@ from http_host_lib.btrfs import (
     download_area_version,
     get_versions_for_area,
 )
-from http_host_lib.config import config
 from http_host_lib.mount import auto_mount_unmount
-from http_host_lib.nginx import write_nginx_config
-from http_host_lib.set_tileset_versions import set_tileset_versions
-from http_host_lib.utils import assert_linux, assert_sudo
+from http_host_lib.sync import full_sync
+from http_host_lib.versions import sync_version_files
 
 
 @click.group()
@@ -25,9 +20,8 @@ def cli():
     - Downloading btrfs images\n
     - Downloading assets\n
     - Mounting directories\n
-    - Updating nginx config\n
     - Getting the deployed versions of tilesets\n
-    - Running the sync cron task (called every minute)
+    - Running the sync cron task (called every minute with http-host-autoupdate)
     """
 
 
@@ -43,7 +37,7 @@ def download_btrfs(area: str, version: str):
     Use --version=1 to list all available versions
     """
 
-    return download_area_version(area, version)
+    download_area_version(area, version)
 
 
 @cli.command(name='download-assets')
@@ -65,75 +59,25 @@ def mount():
     auto_mount_unmount()
 
 
-@cli.command()
-def set_latest_versions():
+@cli.command(name='sync-version-files')
+def sync_version_files_():
     """
-    Sets the latest version of the tilesets to the version specified by
-    https://assets.openfreemap.com/versions/deployed_planet.txt
-
-    1. Checks if the given version is present on the disk and is mounted
-    2. Writes to a version file
+    Syncs the version files from remote to local.
+    Remove versions are specified by https://assets.openfreemap.com/versions/deployed_{area}.txt
     """
 
-    print('running set_latest_versions')
-
-    assert_linux()
-    assert_sudo()
-
-    if not config.mnt_dir.exists():
-        sys.exit('  mount needs to be run first')
-
-    return set_tileset_versions()
-
-
-@cli.command()
-def nginx_sync():
-    """
-    Syncs the nginx config to the state of the system
-    """
-
-    print('running nginx_sync')
-
-    assert_linux()
-    assert_sudo()
-
-    if not config.mnt_dir.exists():
-        sys.exit('  mount needs to be run first')
-
-    write_nginx_config()
+    sync_version_files()
 
 
 @cli.command()
 @click.option('--force', is_flag=True, help='Force nginx sync run')
-@click.pass_context
-def sync(ctx, force):
+def sync(force):
     """
     Runs the sync task, normally called by cron every minute
     On a new server this also takes care of everything, no need to run anything manually.
     """
 
-    print('---')
-    print('running sync')
-    print(datetime.datetime.now(tz=datetime.timezone.utc))
-
-    assert_linux()
-    assert_sudo()
-
-    download_done = False
-    download_done += ctx.invoke(download_btrfs, area='monaco')
-
-    if not config.host_config.get('skip_planet'):
-        download_done += ctx.invoke(download_btrfs, area='planet')
-
-    if download_done:
-        ctx.invoke(mount)
-
-    ctx.invoke(download_assets)
-
-    deploy_done = ctx.invoke(set_latest_versions)
-
-    if download_done or deploy_done or force:
-        ctx.invoke(nginx_sync)
+    full_sync(force)
 
 
 @cli.command()

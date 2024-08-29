@@ -15,6 +15,7 @@ class Configuration:
 
     mnt_dir = Path('/mnt/ofm')
     ofm_config_dir = Path('/data/ofm/config')
+    deployed_versions_dir = ofm_config_dir / 'deployed_versions'
 
     certs_dir = Path('/data/nginx/certs')
     nginx_confs = Path(__file__).parent / 'nginx_confs'

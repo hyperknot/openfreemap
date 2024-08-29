@@ -4,9 +4,9 @@ import sys
 from ssh_lib import (
     CONFIG_DIR,
     HTTP_HOST_BIN,
+    MODULES_DIR,
     OFM_DIR,
     REMOTE_CONFIG,
-    MODULES_DIR,
     TILE_GEN_BIN,
     VENV_BIN,
     dotenv_val,
@@ -138,6 +138,7 @@ def run_http_host_sync(c):
 
 
 def upload_http_host_files(c):
+    c.sudo(f'rm -rf {HTTP_HOST_BIN}')
     c.sudo(f'mkdir -p {HTTP_HOST_BIN}')
 
     put_dir(c, MODULES_DIR / 'http_host', HTTP_HOST_BIN, file_permissions='755')

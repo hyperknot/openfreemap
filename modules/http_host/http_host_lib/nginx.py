@@ -8,6 +8,9 @@ from http_host_lib.utils import python_venv_executable
 
 
 def write_nginx_config():
+    if not config.mnt_dir.exists():
+        sys.exit('  mount needs to be run first')
+
     curl_text_mix = ''
 
     domain_le = config.host_config['domain_le']
