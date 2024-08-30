@@ -18,8 +18,18 @@ def download_area_version(area: str, version: str) -> bool:
 
     versions = get_versions_for_area(area)
 
+    # latest version
     if version == 'latest':
         selected_version = versions[-1]
+
+    # deployed version
+    elif version == 'deployed':
+        try:
+            selected_version = (config.deployed_versions_dir / f'{area}.txt').read_text().strip()
+        except Exception:
+            return False
+
+    # specific version
     else:
         if version not in versions:
             available_versions_str = '\n'.join(versions)
@@ -44,7 +54,7 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
     returns True if download successful, False if skipped
     """
 
-    print(f'downloading and extracting btrfs for: {area} {version}')
+    print(f'downloading btrfs: {area} {version}')
 
     version_dir = config.runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
@@ -62,11 +72,13 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
     disk_free = shutil.disk_usage(temp_dir).free
     file_size = get_remote_file_size(url)
     if not file_size:
-        raise ValueError('Cannot get remote file size')
+        print(f'Cannot get remote file size for {url}')
+        return False
 
     needed_space = file_size * 3
     if disk_free < needed_space:
-        raise ValueError(f'Not enough disk space. Needed: {needed_space}, free space: {disk_free}')
+        print(f'Not enough disk space. Needed: {needed_space}, free space: {disk_free}')
+        return False
 
     target_file = temp_dir / 'tiles.btrfs.gz'
     download_file_aria2(url, target_file)

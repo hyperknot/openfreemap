@@ -127,14 +127,13 @@ def prepare_http_host(c):
     c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
 
     upload_http_host_files(c)
-    upload_certificates(c)
 
     c.sudo(f'{VENV_BIN}/pip install -e {HTTP_HOST_BIN} --use-pep517')
 
 
 def run_http_host_sync(c):
-    print('Running host_manager.py sync --force')
-    sudo_cmd(c, f'{VENV_BIN}/python -u {HTTP_HOST_BIN}/host_manager.py sync --force')
+    print('Running http_host.py sync --force')
+    sudo_cmd(c, f'{VENV_BIN}/python -u {HTTP_HOST_BIN}/http_host.py sync --force')
 
 
 def upload_http_host_files(c):
@@ -153,11 +152,6 @@ def upload_http_host_files(c):
     )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
-
-
-def upload_certificates(c):
-    put_dir(c, CONFIG_DIR / 'certs', '/data/nginx/certs', file_permissions=400)
-    c.sudo('chown -R nginx:nginx /data/nginx')
 
 
 def install_benchmark(c):

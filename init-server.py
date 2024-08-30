@@ -135,20 +135,6 @@ def debug(hostname, user, port):
     upload_http_host_files(c)
     # run_http_host_sync(c)
 
-    # upload_http_host_config(c)
-    # upload_http_host_files(c)
-    # sudo_cmd(c, f'{VENV_BIN}/python -u /data/ofm/http_host/bin/host_manager.py nginx-sync')
-
-    # put(c, SCRIPTS_DIR / 'tile_gen' / 'upload_manager.py', f'{TILE_GEN_BIN}')
-    # put_dir(c, SCRIPTS_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
-    # put_dir(
-    #     c,
-    #     SCRIPTS_DIR / 'loadbalancer' / 'loadbalancer_lib',
-    #     '/data/ofm/loadbalancer/loadbalancer_lib',
-    # )
-
-    # prepare_tile_gen(c)
-
 
 if __name__ == '__main__':
     cli()

@@ -9,8 +9,9 @@ from http_host_lib.btrfs import (
     get_versions_for_area,
 )
 from http_host_lib.mount import auto_mount_unmount
-from http_host_lib.sync import full_sync
-from http_host_lib.versions import sync_version_files
+from http_host_lib.nginx import write_nginx_config
+from http_host_lib.sync import auto_clean_btrfs, full_sync
+from http_host_lib.versions import fetch_version_files
 
 
 @click.group()
@@ -19,8 +20,8 @@ def cli():
     Manages OpenFreeMap HTTP hosts, including:\n
     - Downloading btrfs images\n
     - Downloading assets\n
-    - Mounting directories\n
-    - Getting the deployed versions of tilesets\n
+    - Mounting downloaded btrfs images\n
+    - Fetches version files\n
     - Running the sync cron task (called every minute with http-host-autoupdate)
     """
 
@@ -59,14 +60,32 @@ def mount():
     auto_mount_unmount()
 
 
-@cli.command(name='sync-version-files')
-def sync_version_files_():
+@cli.command(name='fetch-versions')
+def fetch_version_files_():
     """
-    Syncs the version files from remote to local.
-    Remove versions are specified by https://assets.openfreemap.com/versions/deployed_{area}.txt
+    Fetches the version files from remote to local.
+    Remote versions are specified by https://assets.openfreemap.com/versions/deployed_{area}.txt
     """
 
-    sync_version_files()
+    fetch_version_files()
+
+
+@cli.command()
+def auto_clean():
+    """
+    Cleans the old btrfs images
+    """
+
+    auto_clean_btrfs()
+
+
+@cli.command()
+def nginx_config():
+    """
+    Writes the nginx config files and reloads nginx
+    """
+
+    write_nginx_config()
 
 
 @cli.command()

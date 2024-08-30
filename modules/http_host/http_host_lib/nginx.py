@@ -200,16 +200,27 @@ def create_version_location(
 def create_latest_locations(*, local: str, domain: str) -> str:
     location_str = ''
 
-    local_version_files = config.ofm_config_dir.glob('tileset_version_*.txt')
+    local_version_files = config.deployed_versions_dir.glob('*.txt')
+
     for file in local_version_files:
-        area = file.stem.split('_')[-1]
+        area = file.stem
         with open(file) as fp:
             version = fp.read().strip()
-        print(f'  setting latest version for {area}: {version}')
 
+        print(f'  linking latest version for {area}: {version}')
+
+        # checking runs dir
         run_dir = config.runs_dir / area / version
         tilejson_path = run_dir / f'tilejson-{local}.json'
-        assert tilejson_path.is_file()
+        if not tilejson_path.is_file():
+            print(f'    error with latest: {tilejson_path} does not exist')
+            continue
+
+        # checking mnt dir
+        mnt_file = Path(f'/mnt/ofm/{area}-{version}/metadata.json')
+        if not mnt_file.is_file():
+            print(f'    error with latest: {mnt_file} does not exist')
+            continue
 
         location_str += f"""
         location = /{area} {{          # no trailing slash

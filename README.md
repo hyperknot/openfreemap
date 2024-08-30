@@ -72,22 +72,25 @@ This sets up everything on a clean Ubuntu server. You run it locally and it sets
 
 #### HTTP host - modules/http_host
 
-Inside `http_host`, all work is done by `host_manager.py`.
+Inside `http_host`, all work is done by `http_host.py`.
 
 It does the following:
 
-- checks the most up-to-date files in the public buckets
-- downloads/extracts them locally, if needed
-- mounts the downloaded Btrfs images in `/mnt/ofm`
-- creates the correct TileJSON file
-- creates the correct nginx config
-- reloads nginx
+  - Downloading btrfs images
 
-You can run `./host_manager.py --help` to see which options are available. Some commands can be run locally, including on non-linux machines.
+  - Downloading assets
+
+  - Mounting downloaded btrfs images
+
+  - Fetches version files
+
+  - Running the sync cron task (called every minute with http-host-autoupdate)
+
+You can run `./http_host.py --help` to see which options are available.
 
 #### tile generation - modules/tile_gen
 
-_note: Tile generation is 100% optional, as we are providing the processed full planet files for public download._
+_note: Tile generation is 100% optional, as we are providing the processed full planet btrfs files for public download._
 
 The `tile_gen` script downloads a full planet OSM extract and runs it through Planetiler.
 
@@ -115,15 +118,14 @@ You can directly download the processed full planet runs on the following URL pa
 
 https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB
 
-Replace the `20240607_232801_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/index.txt).
+Replace the `20240607_232801_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/files.txt).
 
 ### Public buckets
 
-There are three public buckets:
+There are two public buckets:
 
-- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/index.txt)
-- https://planet.openfreemap.com - full planet runs. index: [dirs](https://planet.openfreemap.com/dirs.txt), [files](https://planet.openfreemap.com/index.txt)
-- https://monaco.openfreemap.com - identical runs to the full planet, but only for Monaco area. Very tiny, ideal for development. index: [dirs](https://monaco.openfreemap.com/dirs.txt), [files](https://monaco.openfreemap.com/index.txt)
+- https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/files.txt)
+- https://btrfs.openfreemap.com - full planet runs. index: [dirs](https://btrfs.openfreemap.com/dirs.txt), [files](https://btrfs.openfreemap.com/files.txt)
 
 ### What about PMTiles?
 
@@ -139,13 +141,13 @@ Contributors welcome!
 
 Smaller tasks:
 
-- Cloudflare worker for indexing the public buckets, instead of generating index.txt files.
+- Cloudflare worker for indexing the public buckets, instead of generating index files.
 - Some of the POI icons are missing in the styles.
 
 Bigger tasks:
 
 - Split the styles to building blocks. For example, there should be a POI block, a label block, a road-style related block.
-- Implement automatic updates for tile gen, uploading, testing and setting versions.
+- Implement automatic updates for tile gen, uploading, testing and setting versions. (work-in-progress as of today)
 
 Tasks outside the scope of this project:
 
