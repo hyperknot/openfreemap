@@ -11,12 +11,11 @@ from ssh_lib.tasks import (
     run_http_host_sync,
     setup_ledns_writer,
     setup_loadbalancer,
-    upload_http_host_config,
+    upload_config_json,
     upload_http_host_files,
 )
 from ssh_lib.utils import (
     put,
-    put_dir,
 )
 
 
@@ -65,7 +64,7 @@ def http_host_static(hostname, user, port):
     c = get_connection(hostname, user, port)
 
     prepare_shared(c)
-    upload_http_host_config(c)
+    upload_config_json(c)
 
     prepare_http_host(c)
 
@@ -83,8 +82,8 @@ def http_host_autoupdate(hostname, user, port):
     c.sudo('rm -f /etc/cron.d/ofm_http_host')
 
     prepare_shared(c)
-    upload_http_host_config(c)
 
+    upload_config_json(c)
     prepare_http_host(c)
 
     run_http_host_sync(c)
@@ -132,8 +131,7 @@ def loadbalancer(hostname, user, port):
 def debug(hostname, user, port):
     c = get_connection(hostname, user, port)
 
-    upload_http_host_files(c)
-    # run_http_host_sync(c)
+    upload_config_json(c)
 
 
 if __name__ == '__main__':

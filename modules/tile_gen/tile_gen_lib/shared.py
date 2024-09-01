@@ -1,7 +1,45 @@
+import json
 from io import BytesIO
 from pathlib import Path
 
 import pycurl
+import requests
+
+
+def get_versions_for_area(area: str) -> list:
+    r = requests.get('https://btrfs.openfreemap.com/dirs.txt', timeout=30)
+    r.raise_for_status()
+
+    versions = [v.split('/')[2] for v in r.text.splitlines() if v.startswith(f'areas/{area}/')]
+    return sorted(versions)
+
+
+def check_host_version(domain, host_ip, area, version):
+    # check actual vector tile
+    url = f'https://{domain}/{area}/{version}/14/8529/5975.pbf'
+    assert pycurl_status(url, domain, host_ip) == 200
+
+    # check style
+    url = f'https://{domain}/styles/bright'
+    assert pycurl_status(url, domain, host_ip) == 200
+
+
+def check_host_latest(domain, host_ip, area, version):
+    # check TileJSON first
+    url = f'https://{domain}/{area}'
+    tilejson_str = pycurl_get(url, domain, host_ip)
+    tilejson = json.loads(tilejson_str)
+    tiles_url = tilejson['tiles'][0]
+    version_in_tilejson = tiles_url.split('/')[4]
+    assert version_in_tilejson == version
+
+    # check actual vector tile
+    url = f'https://{domain}/{area}/{version}/14/8529/5975.pbf'
+    assert pycurl_status(url, domain, host_ip) == 200
+
+    # check style
+    url = f'https://{domain}/styles/bright'
+    assert pycurl_status(url, domain, host_ip) == 200
 
 
 def pycurl_status(url, domain, host_ip):

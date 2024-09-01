@@ -78,40 +78,6 @@ def prepare_tile_gen(c):
     put(c, MODULES_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
 
 
-def upload_http_host_config(c):
-    domain_le = dotenv_val('DOMAIN_LE').lower()
-    domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
-    skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
-    le_email = dotenv_val('LE_EMAIL').lower()
-
-    if not (domain_le or domain_ledns):
-        sys.exit('Please specify DOMAIN_LE or DOMAIN_LEDNS in config/.env')
-
-    if domain_le and not le_email:
-        sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
-
-    host_config = {
-        'domain_le': domain_le,
-        'domain_ledns': domain_ledns,
-        'skip_planet': skip_planet,
-        'le_email': le_email,
-    }
-
-    host_config_str = json.dumps(host_config, indent=2, ensure_ascii=False)
-    print(host_config_str)
-    put_str(c, '/data/ofm/config/http_host.json', host_config_str)
-
-    if domain_ledns:
-        assert (CONFIG_DIR / 'rclone.conf').exists()
-        put(
-            c,
-            CONFIG_DIR / 'rclone.conf',
-            f'{REMOTE_CONFIG}/rclone.conf',
-            permissions=400,
-        )
-        put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_ledns_reader', '/etc/cron.d/')
-
-
 def prepare_http_host(c):
     kernel_tweaks_ofm(c)
 
@@ -127,6 +93,16 @@ def prepare_http_host(c):
     c.sudo('chown nginx:nginx /data/ofm/http_host/logs_nginx')
 
     upload_http_host_files(c)
+
+    if dotenv_val('DOMAIN_LEDNS'):
+        assert (CONFIG_DIR / 'rclone.conf').exists()
+        put(
+            c,
+            CONFIG_DIR / 'rclone.conf',
+            f'{REMOTE_CONFIG}/rclone.conf',
+            permissions=400,
+        )
+        put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_ledns_reader', '/etc/cron.d/')
 
     c.sudo(f'{VENV_BIN}/pip install -e {HTTP_HOST_BIN} --use-pep517')
 
@@ -219,21 +195,38 @@ def setup_ledns_writer(c):
     )
 
 
-def setup_loadbalancer(c):
+def upload_config_json(c):
+    domain_le = dotenv_val('DOMAIN_LE').lower()
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
+    skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
+    le_email = dotenv_val('LE_EMAIL').lower()
+
+    if not (domain_le or domain_ledns):
+        sys.exit('Please specify DOMAIN_LE or DOMAIN_LEDNS in config/.env')
+
+    if domain_le and not le_email:
+        sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
+
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
     config = {
+        'domain_le': domain_le,
         'domain_ledns': domain_ledns,
+        'le_email': le_email,
+        'skip_planet': skip_planet,
         'http_host_list': http_host_list,
         'telegram_token': dotenv_val('TELEGRAM_TOKEN'),
         'telegram_chat_id': dotenv_val('TELEGRAM_CHAT_ID'),
     }
 
     config_str = json.dumps(config, indent=2, ensure_ascii=False)
-    # print(config_str)
-    put_str(c, f'{REMOTE_CONFIG}/loadbalancer.json', config_str)
+    print(config_str)
+    put_str(c, f'{REMOTE_CONFIG}/config.json', config_str)
+
+
+def setup_loadbalancer(c):
+    upload_config_json(c)
 
     put(
         c,

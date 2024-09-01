@@ -2,9 +2,8 @@ import shutil
 import subprocess
 import sys
 
-import requests
-
 from http_host_lib.config import config
+from http_host_lib.shared import get_versions_for_area
 from http_host_lib.utils import download_file_aria2, get_remote_file_size
 
 
@@ -39,14 +38,6 @@ def download_area_version(area: str, version: str) -> bool:
         selected_version = version
 
     return download_and_extract_btrfs(area, selected_version)
-
-
-def get_versions_for_area(area: str) -> list:
-    r = requests.get('https://btrfs.openfreemap.com/dirs.txt', timeout=30)
-    r.raise_for_status()
-
-    versions = [v.split('/')[2] for v in r.text.splitlines() if v.startswith(f'areas/{area}/')]
-    return sorted(versions)
 
 
 def download_and_extract_btrfs(area: str, version: str) -> bool:

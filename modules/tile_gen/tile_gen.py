@@ -4,6 +4,7 @@ import click
 from tile_gen_lib.btrfs import make_btrfs
 from tile_gen_lib.planetiler import run_planetiler
 from tile_gen_lib.rclone import make_indexes_for_bucket, upload_area
+from tile_gen_lib.set_version import check_and_set_version
 
 
 @click.group()
@@ -46,6 +47,19 @@ def make_indexes():
 
     for bucket in ['ofm-btrfs', 'ofm-assets']:
         make_indexes_for_bucket(bucket)
+
+
+@cli.command()
+@click.argument('area', required=True)
+@click.option(
+    '--version', default='latest', help='Optional version string, like "20231227_043106_pt"'
+)
+def set_version(area, version):
+    """
+    Set versions for a given area
+    """
+
+    check_and_set_version(area, version)
 
 
 if __name__ == '__main__':
