@@ -15,12 +15,16 @@ def get_versions_for_area(area: str) -> list:
 
 
 def check_host_version(domain, host_ip, area, version):
+    # check versioned TileJSON
+    url = f'https://{domain}/{area}/{version}'
+    tilejson_str = pycurl_get(url, domain, host_ip)
+    tilejson = json.loads(tilejson_str)
+    tiles_url = tilejson['tiles'][0]
+    version_in_tilejson = tiles_url.split('/')[4]
+    assert version_in_tilejson == version
+
     # check actual vector tile
     url = f'https://{domain}/{area}/{version}/14/8529/5975.pbf'
-    assert pycurl_status(url, domain, host_ip) == 200
-
-    # check style
-    url = f'https://{domain}/styles/bright'
     assert pycurl_status(url, domain, host_ip) == 200
 
 
@@ -40,6 +44,9 @@ def check_host_latest(domain, host_ip, area, version):
     # check style
     url = f'https://{domain}/styles/bright'
     assert pycurl_status(url, domain, host_ip) == 200
+
+
+# pycurl
 
 
 def pycurl_status(url, domain, host_ip):
