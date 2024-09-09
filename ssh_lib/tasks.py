@@ -47,7 +47,7 @@ def prepare_venv(c):
     sudo_cmd(c, f'cd {OFM_DIR} && source prepare-virtualenv.sh')
 
 
-def prepare_tile_gen(c):
+def prepare_tile_gen(c, *, enable_cron):
     c.sudo('rm -f /etc/cron.d/ofm_tile_gen')
 
     install_planetiler(c)
@@ -76,7 +76,8 @@ def prepare_tile_gen(c):
     c.sudo('chown ofm:ofm /data/ofm/tile_gen/{,*}')
     c.sudo(f'chown ofm:ofm -R {TILE_GEN_BIN}')
 
-    put(c, MODULES_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
+    if enable_cron:
+        put(c, MODULES_DIR / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
 
 
 def prepare_http_host(c):

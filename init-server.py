@@ -12,7 +12,6 @@ from ssh_lib.tasks import (
     setup_ledns_writer,
     setup_loadbalancer,
     upload_config_json,
-    upload_http_host_files,
 )
 from ssh_lib.utils import (
     put,
@@ -93,14 +92,15 @@ def http_host_autoupdate(hostname, user, port):
 
 @cli.command()
 @common_options
-def tile_gen(hostname, user, port):
+@click.option('--cron', is_flag=True, help='Enable cron task')
+def tile_gen(hostname, user, port, cron):
     if not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
     prepare_shared(c)
 
-    prepare_tile_gen(c)
+    prepare_tile_gen(c, enable_cron=cron)
 
 
 @cli.command()

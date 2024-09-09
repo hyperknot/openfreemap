@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 
 
@@ -14,17 +15,17 @@ class Configuration:
     assets_dir = http_host_dir / 'assets'
 
     mnt_dir = Path('/mnt/ofm')
-    ofm_config_dir = Path('/data/ofm/config')
-    deployed_versions_dir = ofm_config_dir / 'deployed_versions'
 
     certs_dir = Path('/data/nginx/certs')
     nginx_confs = Path(__file__).parent / 'nginx_confs'
 
-    try:
-        with open(ofm_config_dir / 'http_host.json') as fp:
-            host_config = json.load(fp)
-    except Exception:
-        host_config = {}
+    ofm_config_dir = Path('/data/ofm/config')
+    deployed_versions_dir = ofm_config_dir / 'deployed_versions'
+
+    ofm_config = json.loads((ofm_config_dir / 'config.json').read_text())
+
+    rclone_config = ofm_config_dir / 'rclone.conf'
+    rclone_bin = subprocess.run(['which', 'rclone'], capture_output=True, text=True).stdout.strip()
 
 
 config = Configuration()

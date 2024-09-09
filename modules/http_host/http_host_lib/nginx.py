@@ -13,8 +13,8 @@ def write_nginx_config():
 
     curl_text_mix = ''
 
-    domain_le = config.host_config['domain_le']
-    domain_ledns = config.host_config['domain_ledns']
+    domain_le = config.ofm_config['domain_le']
+    domain_ledns = config.ofm_config['domain_ledns']
 
     # remove old configs and certs
     for file in Path('/data/nginx/sites').glob('ofm_*.conf'):
@@ -25,7 +25,7 @@ def write_nginx_config():
 
     # processing Round Robin DNS config
     if domain_ledns:
-        if not (config.ofm_config_dir / 'rclone.conf').is_file():
+        if not config.rclone_config.is_file():
             sys.exit('rclone.conf missing')
 
         # download the ledns certificate from bucket using rclone
@@ -64,7 +64,7 @@ def write_nginx_config():
                 '--webroot-path=/data/nginx/acme-challenges',
                 '--noninteractive',
                 '-m',
-                config.host_config['le_email'],
+                config.ofm_config['le_email'],
                 '--agree-tos',
                 '--cert-name=ofm_le',
                 # '--staging',
@@ -125,12 +125,11 @@ def create_location_blocks(*, local, domain):
             area=area, version=version, subdir=subdir, local=local, domain=domain
         )
 
-        if not curl_text:
-            curl_text = (
-                '\ntest with:\n'
-                f'curl -H "Host: __LOCAL__" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
-                f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
-            )
+        curl_text += (
+            '\ntest with:\n'
+            f'curl -H "Host: __LOCAL__" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
+            f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
+        )
 
     location_str += create_latest_locations(local=local, domain=domain)
 

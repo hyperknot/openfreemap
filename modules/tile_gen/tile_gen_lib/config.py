@@ -21,14 +21,11 @@ class Configuration:
         ofm_config_dir = Path('/data/ofm/config')
     else:
         repo_root = Path(__file__).parent.parent.parent.parent
-
         ofm_config_dir = repo_root / 'config'
 
     ofm_config = json.loads((ofm_config_dir / 'config.json').read_text())
-    pprint(ofm_config)
 
     rclone_config = ofm_config_dir / 'rclone.conf'
-
     rclone_bin = subprocess.run(['which', 'rclone'], capture_output=True, text=True).stdout.strip()
 
 
