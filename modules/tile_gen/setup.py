@@ -3,6 +3,8 @@ from setuptools import find_packages, setup
 
 requirements = [
     'click',
+    'pycurl',
+    'requests',
 ]
 
 

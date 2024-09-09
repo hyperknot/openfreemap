@@ -1,5 +1,12 @@
 # every hour, make a monaco run
-10 * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-tiles monaco --upload >> /data/ofm/tile_gen/logs/monaco-cron.log 2>&1
+10 * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-tiles monaco --upload >> /data/ofm/tile_gen/logs/monaco-make-tiles.log 2>&1
+
+# every minute, set monaco to latest
+* * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py tile_gen.py set-version monaco >> /data/ofm/tile_gen/logs/monaco-set-version.log 2>&1
+
+# every Tuesday morning at 00:10, make a planet run
+10 0 * * 2 ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-tiles planet --upload >> /data/ofm/tile_gen/logs/planet-make-tiles.log 2>&1
+
 
 
 

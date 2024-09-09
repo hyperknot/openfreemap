@@ -70,6 +70,7 @@ def prepare_tile_gen(c):
 
     c.sudo(f'{VENV_BIN}/pip install -e {TILE_GEN_BIN} --use-pep517')
 
+    c.sudo('rm -rf /data/ofm/tile_gen/logs')
     c.sudo('mkdir -p /data/ofm/tile_gen/logs')
 
     c.sudo('chown ofm:ofm /data/ofm/tile_gen/{,*}')
