@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from http_host_lib.assets import download_assets
 from http_host_lib.btrfs import download_area_version
 from http_host_lib.config import config
-from http_host_lib.mount import auto_mount_unmount
+from http_host_lib.mount import auto_mount, clean_up_mounts
 from http_host_lib.nginx import write_nginx_config
 from http_host_lib.utils import assert_linux, assert_sudo
 from http_host_lib.versions import fetch_version_files
@@ -42,8 +42,11 @@ def full_sync(force=False):
 
     if btrfs_downloaded or versions_changed or force:
         auto_clean_btrfs()
-        auto_mount_unmount()
+        auto_mount()
+
         write_nginx_config()
+
+        clean_up_mounts(config.mnt_dir)
 
 
 def auto_clean_btrfs():

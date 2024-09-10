@@ -121,6 +121,7 @@ def create_location_blocks(*, local, domain):
         if not subdir.is_dir():
             continue
         area, version = subdir.name.split('-')
+
         location_str += create_version_location(
             area=area, version=version, subdir=subdir, local=local, domain=domain
         )
@@ -216,11 +217,13 @@ def create_latest_locations(*, local: str, domain: str) -> str:
             continue
 
         # checking mnt dir
-        mnt_file = Path(f'/mnt/ofm/{area}-{version}/metadata.json')
+        mnt_dir = Path(f'/mnt/ofm/{area}-{version}')
+        mnt_file = mnt_dir / ' metadata.json'
         if not mnt_file.is_file():
             print(f'    error with latest: {mnt_file} does not exist')
             continue
 
+        # latest
         location_str += f"""
         location = /{area} {{          # no trailing slash
             alias {tilejson_path};       # no trailing slash
@@ -228,6 +231,38 @@ def create_latest_locations(*, local: str, domain: str) -> str:
             expires 1d;
             default_type application/json;
 
+            add_header 'Access-Control-Allow-Origin' '*' always;
+            add_header Cache-Control public;
+        }}
+        """
+
+        # wildcard
+        # identical to create_version_location
+        location_str += f"""
+        
+        # wildcard JSON
+        location ~ ^/{area}/([^/]+)$ {{     # no trailing slash
+            alias {tilejson_path};          # no trailing slash
+    
+            expires 1w;
+            default_type application/json;
+    
+            add_header 'Access-Control-Allow-Origin' '*' always;
+            add_header Cache-Control public;
+        }}
+    
+        # wildcard PBF
+        location ~ ^/{area}/([^/]+)/ {{      # trailing slash
+            alias {mnt_dir}/tiles/;          # trailing slash
+            try_files $uri @empty_tile;
+            add_header Content-Encoding gzip;
+    
+            expires 10y;
+    
+            types {{
+                application/vnd.mapbox-vector-tile pbf;
+            }}
+    
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
         }}

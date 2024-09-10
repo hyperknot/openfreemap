@@ -165,7 +165,7 @@ Auto-update works!
 
 Monaco is generated every hour, set-latest runs every minute.
 
-Planet is generated every Tuesday, set-latest runs every Saturday.
+Planet is generated every Wednesday, set-latest runs every Saturday.
 
 ##### v0.3
 

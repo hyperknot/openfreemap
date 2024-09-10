@@ -6,7 +6,7 @@ from http_host_lib.config import config
 from http_host_lib.utils import assert_linux, assert_sudo
 
 
-def auto_mount_unmount():
+def auto_mount():
     """
     Mounts/unmounts the btrfs images from /data/ofm/http_host/runs automatically.
     When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
@@ -25,8 +25,6 @@ def auto_mount_unmount():
 
     print('  running mount -a')
     subprocess.run(['mount', '-a'], check=True)
-
-    clean_up_mounts(config.mnt_dir)
 
 
 def create_fstab():
