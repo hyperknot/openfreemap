@@ -123,7 +123,7 @@ def create_location_blocks(*, local, domain):
         area, version = subdir.name.split('-')
 
         location_str += create_version_location(
-            area=area, version=version, subdir=subdir, local=local, domain=domain
+            area=area, version=version, mnt_dir=subdir, local=local, domain=domain
         )
 
         curl_text += (
@@ -133,6 +133,11 @@ def create_location_blocks(*, local, domain):
         )
 
     location_str += create_latest_locations(local=local, domain=domain)
+    curl_text += (
+        '\ntest with:\n'
+        f'curl -H "Host: __LOCAL__" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
+        f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
+    )
 
     with open(config.nginx_confs / 'location_static.conf') as fp:
         location_str += '\n' + fp.read()
@@ -141,7 +146,7 @@ def create_location_blocks(*, local, domain):
 
 
 def create_version_location(
-    *, area: str, version: str, subdir: Path, local: str, domain: str
+    *, area: str, version: str, mnt_dir: Path, local: str, domain: str
 ) -> str:
     run_dir = config.runs_dir / area / version
     if not run_dir.is_dir():
@@ -150,7 +155,7 @@ def create_version_location(
 
     tilejson_path = run_dir / f'tilejson-{local}.json'
 
-    metadata_path = subdir / 'metadata.json'
+    metadata_path = mnt_dir / 'metadata.json'
     if not metadata_path.is_file():
         print(f"  {metadata_path} doesn't exists, skipping")
         return ''
@@ -171,19 +176,21 @@ def create_version_location(
 
     return f"""
     # specific JSON
-    location = /{area}/{version} {{     # no trailing slash
-        alias {tilejson_path};          # no trailing slash
+    location = /{area}/{version} {{ # no trailing slash
+        alias {tilejson_path}; # no trailing slash
 
         expires 1w;
         default_type application/json;
 
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
+        
+        add_header x-ofm-debug 'specific JSON {area}-{version}';
     }}
 
     # specific PBF
-    location /{area}/{version}/ {{      # trailing slash
-        alias {subdir}/tiles/;          # trailing slash
+    location /{area}/{version}/ {{ # trailing slash
+        alias {mnt_dir}/tiles/; # trailing slash
         try_files $uri @empty_tile;
         add_header Content-Encoding gzip;
 
@@ -195,6 +202,8 @@ def create_version_location(
 
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
+        
+        add_header x-ofm-debug 'specific PBF {area}-{version}';
     }}
     """
 
@@ -228,14 +237,16 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         # latest
         location_str += f"""
         # latest JSON
-        location = /{area} {{          # no trailing slash
-            alias {tilejson_path};       # no trailing slash
+        location = /{area} {{ # no trailing slash
+            alias {tilejson_path}; # no trailing slash
 
             expires 1d;
             default_type application/json;
 
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
+            
+            add_header x-ofm-debug 'latest JSON {area}';
         }}
         """
 
@@ -244,20 +255,23 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         location_str += f"""
         
         # wildcard JSON
-        location ~ ^/{area}/([^/]+)$ {{     # no trailing slash
-            alias {tilejson_path};          # no trailing slash
-    
+        location ~ ^/{area}/([^/]+)$ {{    
+            root {run_dir}; # no trailing slash
+            try_files /tilejson-{local}.json =404;
+
             expires 1w;
             default_type application/json;
     
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
+            
+            add_header x-ofm-debug 'wildcard JSON {area}';
         }}
     
         # wildcard PBF
-        location ~ ^/{area}/([^/]+)/ {{      # trailing slash
-            alias {mnt_dir}/tiles/;          # trailing slash
-            try_files $uri @empty_tile;
+        location ~ ^/{area}/([^/]+)/(.+)$ {{
+            root {mnt_dir}/tiles/; # trailing slash
+            try_files /$2 @empty_tile;
             add_header Content-Encoding gzip;
     
             expires 10y;
@@ -268,6 +282,8 @@ def create_latest_locations(*, local: str, domain: str) -> str:
     
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
+            
+            add_header x-ofm-debug 'wildcard PBF {area}';
         }}
         """
 
