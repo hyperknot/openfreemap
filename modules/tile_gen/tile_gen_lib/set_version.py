@@ -8,7 +8,7 @@ def check_and_set_version(area, version):
     if version == 'latest':
         versions = get_versions_for_area(area)
         version = versions[-1]
-        print(f'Latest version on bucket: {area} {version}')
+        print(f'---\nLatest version on bucket: {area} {version}')
 
     if not check_all_hosts(area, version):
         return
