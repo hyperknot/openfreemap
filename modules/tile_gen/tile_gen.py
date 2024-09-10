@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
+from datetime import UTC, datetime
 
 import click
 from tile_gen_lib.btrfs import make_btrfs
 from tile_gen_lib.planetiler import run_planetiler
 from tile_gen_lib.rclone import make_indexes_for_bucket, upload_area
 from tile_gen_lib.set_version import check_and_set_version
+
+
+now = datetime.now(tz=UTC)
 
 
 @click.group()
@@ -22,6 +26,8 @@ def make_tiles(area, upload):
     Generate tiles for a given area, optionally upload it to the btrfs bucket
     """
 
+    print(f'{now} starting make-tiles {area} upload: {upload}')
+
     run_folder = run_planetiler(area)
     make_btrfs(run_folder)
 
@@ -36,6 +42,8 @@ def upload_area_(area):
     Upload all runs from a given area to the btrfs bucket
     """
 
+    print(f'{now} starting upload-area {area}')
+
     upload_area(area)
 
 
@@ -44,6 +52,8 @@ def make_indexes():
     """
     Make indexes for all buckets
     """
+
+    print(f'{now} starting make-indexes')
 
     for bucket in ['ofm-btrfs', 'ofm-assets']:
         make_indexes_for_bucket(bucket)
@@ -58,6 +68,8 @@ def set_version(area, version):
     """
     Set versions for a given area
     """
+
+    print(f'{now} starting set-version {area}')
 
     check_and_set_version(area, version)
 
