@@ -170,6 +170,7 @@ def create_version_location(
     )
 
     return f"""
+    # specific JSON
     location = /{area}/{version} {{     # no trailing slash
         alias {tilejson_path};          # no trailing slash
 
@@ -180,6 +181,7 @@ def create_version_location(
         add_header Cache-Control public;
     }}
 
+    # specific PBF
     location /{area}/{version}/ {{      # trailing slash
         alias {subdir}/tiles/;          # trailing slash
         try_files $uri @empty_tile;
@@ -225,6 +227,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
 
         # latest
         location_str += f"""
+        # latest JSON
         location = /{area} {{          # no trailing slash
             alias {tilejson_path};       # no trailing slash
 
