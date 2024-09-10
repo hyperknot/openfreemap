@@ -218,7 +218,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
 
         # checking mnt dir
         mnt_dir = Path(f'/mnt/ofm/{area}-{version}')
-        mnt_file = mnt_dir / ' metadata.json'
+        mnt_file = mnt_dir / 'metadata.json'
         if not mnt_file.is_file():
             print(f'    error with latest: {mnt_file} does not exist')
             continue
