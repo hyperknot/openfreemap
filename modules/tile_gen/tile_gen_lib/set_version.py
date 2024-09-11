@@ -7,6 +7,10 @@ from tile_gen_lib.shared import check_host_version, get_versions_for_area
 def check_and_set_version(area, version):
     if version == 'latest':
         versions = get_versions_for_area(area)
+        if not versions:
+            print(f'  No versions found for {area}')
+            return
+
         version = versions[-1]
         print(f'---\nLatest version on bucket: {area} {version}')
 

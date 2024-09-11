@@ -20,7 +20,7 @@ def download_area_version(area: str, version: str) -> bool:
 
     versions = get_versions_for_area(area)
     if not versions:
-        print(f'  No version found for {area}')
+        print(f'  No versions found for {area}')
         return False
 
     # latest version

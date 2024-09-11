@@ -12,7 +12,7 @@ LOG_DIR=/data/ofm/tile_gen/logs
 10 0 * * 3 ofm    $CMD make-tiles planet --upload >> $LOG_DIR/planet-make-tiles.log 2>&1
 
 # every Saturday at 8:00, set planet to latest
-0 11 * * 6 ofm     $CMD set-version monaco >> $LOG_DIR/monaco-set-version.log 2>&1
+0 11 * * 6 ofm     $CMD set-version planet >> $LOG_DIR/planet-set-version.log 2>&1
 
 # once per minute, create indexes
 * * * * * ofm     $CMD make-indexes >> $LOG_DIR/make-indexes-cron.log 2>&1
