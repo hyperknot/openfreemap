@@ -4,14 +4,14 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tile_gen_lib.config import config
 from tile_gen_lib.btrfs import cleanup_folder
+from tile_gen_lib.config import config
 
 
 def run_planetiler(area: str) -> Path:
     assert area in config.areas
 
-    date = datetime.now(tz=timezone.utc).strftime('%Y%m%d_%H%M%S')
+    date = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
 
     area_dir = config.runs_dir / area
 

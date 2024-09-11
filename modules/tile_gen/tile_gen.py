@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 import click
 from tile_gen_lib.btrfs import make_btrfs
@@ -8,7 +8,7 @@ from tile_gen_lib.rclone import make_indexes_for_bucket, upload_area
 from tile_gen_lib.set_version import check_and_set_version
 
 
-now = datetime.now(tz=UTC)
+now = datetime.now(timezone.utc)
 
 
 @click.group()

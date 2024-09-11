@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-import datetime
 import json
+from datetime import datetime, timezone
 
 import click
 import requests
 from dotenv import dotenv_values
 from loadbalancer_lib import OFM_CONFIG_DIR
 from loadbalancer_lib.cloudflare import get_zone_id, set_records_round_robin
-from loadbalancer_lib.curl import pycurl_get, pycurl_status
 from loadbalancer_lib.telegram_ import telegram_send_message
 
 
@@ -27,7 +26,7 @@ def check():
     Runs load-balancing check (triggered by cron every minute)
     """
 
-    print(f'starting loadbalancer check at: {datetime.datetime.now(tz=datetime.timezone.utc)}')
+    print(f'starting loadbalancer check at: {datetime.now(timezone.utc)}')
     check_or_fix(fix=False)
 
 
@@ -37,7 +36,7 @@ def fix():
     Fixes records based on check results
     """
 
-    print(f'starting loadbalancer fix at: {datetime.datetime.now(tz=datetime.timezone.utc)}')
+    print(f'starting loadbalancer fix at: {datetime.now(timezone.utc)}')
     check_or_fix(fix=True)
 
 
@@ -102,15 +101,13 @@ def run_area(c, area):
 
     for host_ip in c['http_host_list']:
         try:
-            check_host(c['domain_ledns'], host_ip, area, target_version)
+            # check_host(c['domain_ledns'], host_ip, area, target_version)
             results[host_ip] = True
         except Exception as e:
             results[host_ip] = False
             print(e)
 
     return results
-
-
 
 
 def get_target_version(area):

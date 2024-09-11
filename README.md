@@ -76,15 +76,15 @@ Inside `http_host`, all work is done by `http_host.py`.
 
 It does the following:
 
-  - Downloading btrfs images
+- Downloading btrfs images
 
-  - Downloading assets
+- Downloading assets
 
-  - Mounting downloaded btrfs images
+- Mounting downloaded btrfs images
 
-  - Fetches version files
+- Fetches version files
 
-  - Running the sync cron task (called every minute with http-host-autoupdate)
+- Running the sync cron task (called every minute with http-host-autoupdate)
 
 You can run `./http_host.py --help` to see which options are available.
 
@@ -161,7 +161,7 @@ See [dev setup docs](docs/dev_setup.md).
 
 ##### v0.4
 
-Auto-update works! 
+Auto-update works!
 
 Monaco is generated every hour, set-latest runs every minute.
 

@@ -200,7 +200,7 @@ def create_version_location(
 
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
-        
+
         add_header x-ofm-debug 'specific JSON {area} {version}';
     }}
 
@@ -218,7 +218,7 @@ def create_version_location(
 
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
-        
+
         add_header x-ofm-debug 'specific PBF {area} {version}';
     }}
     """
@@ -252,7 +252,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
 
         # latest
         location_str += f"""
-        
+
         # latest JSON {area}
         location = /{area} {{ # no trailing slash
             alias {tilejson_path}; # no trailing slash
@@ -262,7 +262,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
 
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
-            
+
             add_header x-ofm-debug 'latest JSON {area}';
         }}
         """
@@ -270,40 +270,40 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         # wildcard
         # identical to create_version_location
         location_str += f"""
-        
+
         # wildcard JSON {area}
-        location ~ ^/{area}/([^/]+)$ {{    
-            # regex location is unreliable with alias, only root is reliable  
+        location ~ ^/{area}/([^/]+)$ {{
+            # regex location is unreliable with alias, only root is reliable
 
             root {run_dir}; # no trailing slash
             try_files /tilejson-{local}.json =404;
 
             expires 1w;
             default_type application/json;
-    
+
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
-            
+
             add_header x-ofm-debug 'wildcard JSON {area}';
         }}
-    
+
         # wildcard PBF {area}
         location ~ ^/{area}/([^/]+)/(.+)$ {{
             # regex location is unreliable with alias, only root is reliable
-        
+
             root {mnt_dir}/tiles/; # trailing slash
             try_files /$2 @empty_tile;
             add_header Content-Encoding gzip;
-    
+
             expires 10y;
-    
+
             types {{
                 application/vnd.mapbox-vector-tile pbf;
             }}
-    
+
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
-            
+
             add_header x-ofm-debug 'wildcard PBF {area}';
         }}
         """

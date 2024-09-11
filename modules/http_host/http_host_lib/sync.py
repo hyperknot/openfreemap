@@ -18,7 +18,7 @@ def full_sync(force=False):
 
     print('---')
     print('running full_sync')
-    print(datetime.now(tz=timezone.utc))
+    print(datetime.now(timezone.utc))
 
     assert_linux()
     assert_sudo()
