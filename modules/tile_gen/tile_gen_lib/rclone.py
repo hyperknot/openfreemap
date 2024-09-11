@@ -55,6 +55,17 @@ def upload_area_run(area, run):
         check=True,
     )
 
+    # crate "done" file
+    subprocess.run(
+        [
+            'rclone',
+            'touch',
+            f'remote:ofm-btrfs/areas/{area}/{run}/done',
+        ],
+        env=dict(RCLONE_CONFIG=config.rclone_config),
+        check=True,
+    )
+
 
 def make_indexes_for_bucket(bucket):
     print(f'Making indexes for bucket: {bucket}')
