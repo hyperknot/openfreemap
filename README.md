@@ -159,13 +159,17 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
+##### v0.5
+
+Using a "done" file in the R2 buckets to mark the upload as finished. All scripts are checking for this file now.
+
 ##### v0.4
 
 Auto-update works!
 
-Monaco is generated every hour, set-latest runs every minute.
+Monaco is generated hourly. set-latest runs every minute.
 
-Planet is generated every Wednesday, set-latest runs every Saturday.
+Planet is generated weekly, every Wednesday. set-latest runs every Saturday.
 
 ##### v0.3
 
