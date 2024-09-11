@@ -90,7 +90,12 @@ def write_nginx_config():
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    print(curl_text_mix)
+    curl_text_lines = sorted(curl_text_mix.splitlines())
+    if '/monaco' in curl_text_mix:
+        curl_text_lines = [l for l in curl_text_lines if '/monaco' not in l]
+
+    curl_text_mix = '\n'.join(curl_text_lines)
+    print(f'test with:\n{curl_text_mix}')
 
 
 def create_nginx_conf(*, template_path, local, domain):
@@ -115,7 +120,7 @@ def create_nginx_conf(*, template_path, local, domain):
 
 def create_location_blocks(*, local, domain):
     location_str = ''
-    curl_text = 'test with:\n'
+    curl_text = ''
 
     for subdir in config.mnt_dir.iterdir():
         if not subdir.is_dir():
@@ -133,7 +138,7 @@ def create_location_blocks(*, local, domain):
         ]:
             curl_text += (
                 # f'curl -H "Host: __LOCAL__" -I http://localhost/{path}\n'
-                f'curl -I https://__DOMAIN__{path}\n'
+                f'curl -sI https://__DOMAIN__{path} | sort\n'
             )
 
     location_str += create_latest_locations(local=local, domain=domain)
@@ -147,7 +152,7 @@ def create_location_blocks(*, local, domain):
         ]:
             curl_text += (
                 # f'curl -H "Host: __LOCAL__" -I http://localhost/{path}\n'
-                f'curl -I https://__DOMAIN__{path}\n'
+                f'curl -sI https://__DOMAIN__{path} | sort\n'
             )
 
     with open(config.nginx_confs / 'location_static.conf') as fp:
