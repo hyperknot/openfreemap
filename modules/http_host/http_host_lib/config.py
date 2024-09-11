@@ -19,10 +19,15 @@ class Configuration:
     certs_dir = Path('/data/nginx/certs')
     nginx_confs = Path(__file__).parent / 'nginx_confs'
 
-    ofm_config_dir = Path('/data/ofm/config')
-    deployed_versions_dir = ofm_config_dir / 'deployed_versions'
+    if Path('/data/ofm').exists():
+        ofm_config_dir = Path('/data/ofm/config')
+    else:
+        repo_root = Path(__file__).parent.parent.parent.parent
+        ofm_config_dir = repo_root / 'config'
 
     ofm_config = json.loads((ofm_config_dir / 'config.json').read_text())
+
+    deployed_versions_dir = ofm_config_dir / 'deployed_versions'
 
     rclone_config = ofm_config_dir / 'rclone.conf'
     rclone_bin = subprocess.run(['which', 'rclone'], capture_output=True, text=True).stdout.strip()

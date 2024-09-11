@@ -7,10 +7,23 @@ import requests
 
 
 def get_versions_for_area(area: str) -> list:
-    r = requests.get('https://btrfs.openfreemap.com/dirs.txt', timeout=30)
+    """
+    Download the files.txt and check for the runs with the "done" file present
+    """
+    r = requests.get('https://btrfs.openfreemap.com/files.txt', timeout=30)
     r.raise_for_status()
 
-    versions = [v.split('/')[2] for v in r.text.splitlines() if v.startswith(f'areas/{area}/')]
+    versions = []
+
+    files = r.text.splitlines()
+    for f in files:
+        if not f.startswith(f'areas/{area}/'):
+            continue
+        if not f.endswith('/done'):
+            continue
+        version_str = f.split('/')[2]
+        versions.append(version_str)
+
     return sorted(versions)
 
 

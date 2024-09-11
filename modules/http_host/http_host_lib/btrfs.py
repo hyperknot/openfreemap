@@ -10,12 +10,18 @@ from http_host_lib.utils import download_file_aria2, get_remote_file_size
 def download_area_version(area: str, version: str) -> bool:
     """
     Downloads and uncompresses tiles.btrfs files from the btrfs bucket
+
+    "latest" version means the latest in the remote bucket
+    "deployed" version means to read the currently deployed version string from the config dir
     """
 
     if area not in config.areas:
-        sys.exit(f'  please specify area: {config.areas}')
+        sys.exit(f'  Please specify area: {config.areas}')
 
     versions = get_versions_for_area(area)
+    if not versions:
+        print(f'  No version found for {area}')
+        return False
 
     # latest version
     if version == 'latest':
@@ -32,9 +38,10 @@ def download_area_version(area: str, version: str) -> bool:
     else:
         if version not in versions:
             available_versions_str = '\n'.join(versions)
-            sys.exit(
-                f'Requested version is not available.\nAvailable versions for {area}:\n{available_versions_str}'
+            print(
+                f'  Requested version is not available.\nAvailable versions for {area}:\n{available_versions_str}'
             )
+            return False
         selected_version = version
 
     return download_and_extract_btrfs(area, selected_version)
