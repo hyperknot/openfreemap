@@ -115,7 +115,7 @@ def create_nginx_conf(*, template_path, local, domain):
 
 def create_location_blocks(*, local, domain):
     location_str = ''
-    curl_text = ''
+    curl_text = 'test with:\n'
 
     for subdir in config.mnt_dir.iterdir():
         if not subdir.is_dir():
@@ -126,18 +126,29 @@ def create_location_blocks(*, local, domain):
             area=area, version=version, mnt_dir=subdir, local=local, domain=domain
         )
 
-        curl_text += (
-            '\ntest with:\n'
-            f'curl -H "Host: __LOCAL__" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
-            f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
-        )
+        for path in [
+            f'/{area}/{version}',
+            f'/{area}/{version}/14/8529/5975.pbf',
+            f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
+        ]:
+            curl_text += (
+                # f'curl -H "Host: __LOCAL__" -I http://localhost/{path}\n'
+                f'curl -I https://__DOMAIN__{path}\n'
+            )
 
     location_str += create_latest_locations(local=local, domain=domain)
-    curl_text += (
-        '\ntest with:\n'
-        f'curl -H "Host: __LOCAL__" -I http://localhost/{area}/{version}/14/8529/5975.pbf\n'
-        f'curl -I https://__DOMAIN__/{area}/{version}/14/8529/5975.pbf'
-    )
+
+    for area in config.areas:
+        for path in [
+            f'/{area}',
+            f'/{area}/19700101_old_version_test',
+            f'/{area}/19700101_old_version_test/14/8529/5975.pbf',
+            f'/{area}/19700101_old_version_test/9999/9999/9999.pbf',  # empty_tile test
+        ]:
+            curl_text += (
+                # f'curl -H "Host: __LOCAL__" -I http://localhost/{path}\n'
+                f'curl -I https://__DOMAIN__{path}\n'
+            )
 
     with open(config.nginx_confs / 'location_static.conf') as fp:
         location_str += '\n' + fp.read()
@@ -175,7 +186,7 @@ def create_version_location(
     )
 
     return f"""
-    # specific JSON
+    # specific JSON {area} {version}
     location = /{area}/{version} {{ # no trailing slash
         alias {tilejson_path}; # no trailing slash
 
@@ -185,11 +196,11 @@ def create_version_location(
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
         
-        add_header x-ofm-debug 'specific JSON {area}-{version}';
+        add_header x-ofm-debug 'specific JSON {area} {version}';
     }}
 
-    # specific PBF
-    location /{area}/{version}/ {{ # trailing slash
+    # specific PBF {area} {version}
+    location ^~ /{area}/{version}/ {{ # trailing slash
         alias {mnt_dir}/tiles/; # trailing slash
         try_files $uri @empty_tile;
         add_header Content-Encoding gzip;
@@ -203,7 +214,7 @@ def create_version_location(
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
         
-        add_header x-ofm-debug 'specific PBF {area}-{version}';
+        add_header x-ofm-debug 'specific PBF {area} {version}';
     }}
     """
 
@@ -236,7 +247,8 @@ def create_latest_locations(*, local: str, domain: str) -> str:
 
         # latest
         location_str += f"""
-        # latest JSON
+        
+        # latest JSON {area}
         location = /{area} {{ # no trailing slash
             alias {tilejson_path}; # no trailing slash
 
@@ -254,8 +266,10 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         # identical to create_version_location
         location_str += f"""
         
-        # wildcard JSON
+        # wildcard JSON {area}
         location ~ ^/{area}/([^/]+)$ {{    
+            # regex location is unreliable with alias, only root is reliable  
+
             root {run_dir}; # no trailing slash
             try_files /tilejson-{local}.json =404;
 
@@ -268,8 +282,10 @@ def create_latest_locations(*, local: str, domain: str) -> str:
             add_header x-ofm-debug 'wildcard JSON {area}';
         }}
     
-        # wildcard PBF
+        # wildcard PBF {area}
         location ~ ^/{area}/([^/]+)/(.+)$ {{
+            # regex location is unreliable with alias, only root is reliable
+        
             root {mnt_dir}/tiles/; # trailing slash
             try_files /$2 @empty_tile;
             add_header Content-Encoding gzip;
