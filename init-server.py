@@ -60,7 +60,7 @@ def cli():
 @cli.command()
 @common_options
 def http_host_static(hostname, user, port, noninteractive):
-    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -76,7 +76,7 @@ def http_host_static(hostname, user, port, noninteractive):
 @cli.command()
 @common_options
 def http_host_autoupdate(hostname, user, port, noninteractive):
-    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -97,7 +97,7 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
 @common_options
 @click.option('--cron', is_flag=True, help='Enable cron task')
 def tile_gen(hostname, user, port, cron, noninteractive):
-    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -109,7 +109,7 @@ def tile_gen(hostname, user, port, cron, noninteractive):
 @cli.command()
 @common_options
 def ledns(hostname, user, port, noninteractive):
-    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -120,7 +120,7 @@ def ledns(hostname, user, port, noninteractive):
 @cli.command()
 @common_options
 def loadbalancer(hostname, user, port, noninteractive):
-    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
