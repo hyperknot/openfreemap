@@ -12,7 +12,7 @@ def auto_mount():
     When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
     """
 
-    print('running mount')
+    print('Running auto mount')
 
     assert_linux()
     assert_sudo()
@@ -28,6 +28,7 @@ def auto_mount():
 
 
 def create_fstab():
+    print('  creating fstab')
     fstab_new = []
 
     for area in ['planet', 'monaco']:
@@ -40,7 +41,7 @@ def create_fstab():
             version_str = version.name
             btrfs_file = area_dir / version_str / 'tiles.btrfs'
             if not btrfs_file.is_file():
-                print(f"  {btrfs_file} doesn't exists, skipping")
+                print(f"  {btrfs_file} doesn't exist, skipping")
                 continue
 
             mnt_folder = config.mnt_dir / f'{area}-{version_str}'
@@ -60,7 +61,7 @@ def clean_up_mounts(mnt_dir):
     if not mnt_dir.exists():
         return
 
-    print('  cleaning up mounts')
+    print('Cleaning up mounts')
 
     # handle deleted files
     p = subprocess.run(['mount'], capture_output=True, text=True, check=True)

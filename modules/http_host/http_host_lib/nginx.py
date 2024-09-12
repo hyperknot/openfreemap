@@ -8,6 +8,8 @@ from http_host_lib.utils import python_venv_executable
 
 
 def write_nginx_config():
+    print('Writing nginx config')
+
     if not config.mnt_dir.exists():
         sys.exit('  mount needs to be run first')
 
@@ -166,14 +168,14 @@ def create_version_location(
 ) -> str:
     run_dir = config.runs_dir / area / version
     if not run_dir.is_dir():
-        print(f"  {run_dir} doesn't exists, skipping")
+        print(f"  {run_dir} doesn't exist, skipping")
         return ''
 
     tilejson_path = run_dir / f'tilejson-{local}.json'
 
     metadata_path = mnt_dir / 'metadata.json'
     if not metadata_path.is_file():
-        print(f"  {metadata_path} doesn't exists, skipping")
+        print(f"  {metadata_path} doesn't exist, skipping")
         return ''
 
     url_prefix = f'https://{domain}/{area}/{version}'

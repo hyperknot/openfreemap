@@ -55,6 +55,8 @@ def auto_clean_btrfs():
     3. If there is no deployed version, then we include the second newest one
     """
 
+    print('Running auto clean btrfs')
+
     for area in config.areas:
         area_dir = config.runs_dir / area
         if not area_dir.is_dir():
