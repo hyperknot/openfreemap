@@ -160,7 +160,7 @@ See [dev setup docs](docs/dev_setup.md).
 ## Changelog
 
 ##### v0.6
-Load-balancer implemented with new config format.
+Load-balancer implemented with new config format. Implemented relaxed mode for checking while deployments are happening.
 
 ##### v0.5
 
