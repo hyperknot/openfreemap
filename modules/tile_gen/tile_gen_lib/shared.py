@@ -27,14 +27,16 @@ def get_versions_for_area(area: str) -> list:
     return sorted(versions)
 
 
+def get_deployed_version(area: str) -> str:
+    r = requests.get(f'https://assets.openfreemap.com/deployed_versions/{area}.txt', timeout=30)
+    r.raise_for_status()
+    remote_version = r.text.strip()
+    return remote_version
+
+
 def check_host_version(domain, host_ip, area, version):
     # check versioned TileJSON
-    url = f'https://{domain}/{area}/{version}'
-    tilejson_str = pycurl_get(url, domain, host_ip)
-    tilejson = json.loads(tilejson_str)
-    tiles_url = tilejson['tiles'][0]
-    version_in_tilejson = tiles_url.split('/')[4]
-    assert version_in_tilejson == version
+    check_tilejson(f'https://{domain}/{area}/{version}', domain, host_ip, version)
 
     # check actual vector tile
     url = f'https://{domain}/{area}/{version}/14/8529/5975.pbf'
@@ -42,13 +44,11 @@ def check_host_version(domain, host_ip, area, version):
 
 
 def check_host_latest(domain, host_ip, area, version):
-    # check TileJSON first
-    url = f'https://{domain}/{area}'
-    tilejson_str = pycurl_get(url, domain, host_ip)
-    tilejson = json.loads(tilejson_str)
-    tiles_url = tilejson['tiles'][0]
-    version_in_tilejson = tiles_url.split('/')[4]
-    assert version_in_tilejson == version
+    # check latest TileJSON
+    check_tilejson(f'https://{domain}/{area}', domain, host_ip, version)
+
+    # check versioned TileJSON
+    check_tilejson(f'https://{domain}/{area}/{version}', domain, host_ip, version)
 
     # check actual vector tile
     url = f'https://{domain}/{area}/{version}/14/8529/5975.pbf'
@@ -57,6 +57,14 @@ def check_host_latest(domain, host_ip, area, version):
     # check style
     url = f'https://{domain}/styles/bright'
     assert pycurl_status(url, domain, host_ip) == 200
+
+
+def check_tilejson(url, domain, host_ip, version):
+    tilejson_str = pycurl_get(url, domain, host_ip)
+    tilejson = json.loads(tilejson_str)
+    tiles_url = tilejson['tiles'][0]
+    version_in_tilejson = tiles_url.split('/')[4]
+    assert version_in_tilejson == version
 
 
 # pycurl

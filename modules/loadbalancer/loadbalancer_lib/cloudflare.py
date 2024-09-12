@@ -1,5 +1,3 @@
-from pprint import pprint
-
 import requests
 
 
@@ -62,6 +60,7 @@ def set_records_round_robin(
     current_records = dns_records.get(name, [])
 
     current_ips = {r['content'] for r in current_records}
+
     if current_ips == host_ip_set:
         print(f'No need to update records: {name} currently set: {sorted(current_ips)}')
         return False
