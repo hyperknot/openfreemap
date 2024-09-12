@@ -86,6 +86,9 @@ def auto_clean_btrfs():
         versions_to_remove = set(local_versions).difference(versions_to_keep)
 
         for version in versions_to_remove:
+            # Interesting bit: linux allows us to remove the disk image file for a mount
+            # while the mount is still being used.
+            # We delete the disk image, update nginx config and only then unmount the /mnt dir.
             print(f'  removing version for {area}: {version}')
             version_dir = config.runs_dir / area / version
             shutil.rmtree(version_dir)
