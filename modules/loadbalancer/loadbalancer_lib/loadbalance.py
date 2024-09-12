@@ -60,7 +60,11 @@ def run_area(area):
 
     # using relaxed mode for while the servers are still deploying
     now = datetime.now(timezone.utc)
-    relaxed_mode = last_modified > now - timedelta(minutes=2)
+    delta = now - last_modified
+    relaxed_mode = delta < timedelta(minutes=2)
+
+    if relaxed_mode:
+        print('    using relaxed mode')
 
     results = {}
 
@@ -68,7 +72,6 @@ def run_area(area):
         try:
             # don't check latest
             if relaxed_mode:
-                print('using relaxed mode')
                 check_host_version(config.domain_ledns, host_ip, area, version)
             else:
                 check_host_latest(config.domain_ledns, host_ip, area, version)

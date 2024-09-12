@@ -1,7 +1,7 @@
 import subprocess
 
 from tile_gen_lib.config import config
-from tile_gen_lib.shared import check_host_version, get_versions_for_area
+from tile_gen_lib.shared import check_host_version, get_deployed_version, get_versions_for_area
 
 
 def check_and_set_version(area, version):
@@ -16,6 +16,12 @@ def check_and_set_version(area, version):
 
     if not check_all_hosts(area, version):
         return
+
+    try:
+        if get_deployed_version(area)['version'] == version:
+            return
+    except Exception:
+        pass
 
     set_version(area, version)
 
