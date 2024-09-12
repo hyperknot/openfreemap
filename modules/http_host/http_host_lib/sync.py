@@ -16,10 +16,6 @@ def full_sync(force=False):
     On a new server this also takes care of everything, no need to run anything manually.
     """
 
-    print('---')
-    print('running full_sync')
-    print(datetime.now(timezone.utc))
-
     assert_linux()
     assert_sudo()
 

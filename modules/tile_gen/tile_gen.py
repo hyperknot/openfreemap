@@ -69,7 +69,7 @@ def set_version(area, version):
     Set versions for a given area
     """
 
-    print(f'{now} starting set-version {area}')
+    print(f'---\n{now}\nstarting set-version {area}')
 
     check_and_set_version(area, version)
 

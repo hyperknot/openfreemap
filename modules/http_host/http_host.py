@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from datetime import datetime, timezone
 
 import click
 from http_host_lib.assets import (
@@ -12,6 +13,9 @@ from http_host_lib.mount import auto_mount
 from http_host_lib.nginx import write_nginx_config
 from http_host_lib.sync import auto_clean_btrfs, full_sync
 from http_host_lib.versions import fetch_version_files
+
+
+now = datetime.now(timezone.utc)
 
 
 @click.group()
@@ -95,6 +99,8 @@ def sync(force):
     Runs the sync task, normally called by cron every minute
     On a new server this also takes care of everything, no need to run anything manually.
     """
+
+    print(f'---\n{now}\nrunning full_sync')
 
     full_sync(force)
 
