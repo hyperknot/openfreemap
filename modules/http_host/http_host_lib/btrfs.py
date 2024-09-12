@@ -52,7 +52,7 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
     returns True if download successful, False if skipped
     """
 
-    print(f'downloading btrfs: {area} {version}')
+    print(f'Downloading btrfs: {area} {version}')
 
     version_dir = config.runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
@@ -70,18 +70,18 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
     disk_free = shutil.disk_usage(temp_dir).free
     file_size = get_remote_file_size(url)
     if not file_size:
-        print(f'Cannot get remote file size for {url}')
+        print(f'  cannot get remote file size for {url}')
         return False
 
     needed_space = file_size * 3
     if disk_free < needed_space:
-        print(f'Not enough disk space. Needed: {needed_space}, free space: {disk_free}')
+        print(f'  not enough disk space. Needed: {needed_space}, free space: {disk_free}')
         return False
 
     target_file = temp_dir / 'tiles.btrfs.gz'
     download_file_aria2(url, target_file)
 
-    print('Uncompressing...')
+    print('  uncompressing...')
     subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'], check=True)
     btrfs_src = temp_dir / 'tiles.btrfs'
 
