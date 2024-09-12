@@ -100,7 +100,7 @@ def sync(force):
     On a new server this also takes care of everything, no need to run anything manually.
     """
 
-    print(f'---\n{now}\nstarting full_sync')
+    print(f'---\n{now}\nStarting full_sync')
 
     full_sync(force)
 

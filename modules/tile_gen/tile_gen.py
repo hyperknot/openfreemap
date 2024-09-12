@@ -26,7 +26,7 @@ def make_tiles(area, upload):
     Generate tiles for a given area, optionally upload it to the btrfs bucket
     """
 
-    print(f'---\n{now}\nstarting make-tiles {area} upload: {upload}')
+    print(f'---\n{now}\nStarting make-tiles {area} upload: {upload}')
 
     run_folder = run_planetiler(area)
     make_btrfs(run_folder)
@@ -42,7 +42,7 @@ def upload_area_(area):
     Upload all runs from a given area to the btrfs bucket
     """
 
-    print(f'---\n{now}\nstarting upload-area {area}')
+    print(f'---\n{now}\nStarting upload-area {area}')
 
     upload_area(area)
 
@@ -53,7 +53,7 @@ def make_indexes():
     Make indexes for all buckets
     """
 
-    print(f'---\n{now}\nstarting make-indexes')
+    print(f'---\n{now}\nStarting make-indexes')
 
     for bucket in ['ofm-btrfs', 'ofm-assets']:
         make_indexes_for_bucket(bucket)
@@ -69,7 +69,7 @@ def set_version(area, version):
     Set versions for a given area
     """
 
-    print(f'---\n{now}\nstarting set-version {area}')
+    print(f'---\n{now}\nStarting set-version {area}')
 
     check_and_set_version(area, version)
 
