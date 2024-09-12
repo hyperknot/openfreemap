@@ -46,6 +46,9 @@ def common_options(func):
     func = click.argument('hostname')(func)
     func = click.option('--port', type=int, help='SSH port (if not in .ssh/config)')(func)
     func = click.option('--user', help='SSH user (if not in .ssh/config)')(func)
+    func = click.option('-y', '--noninteractive', is_flag=True, help='Skip confirmation questions')(
+        func
+    )
     return func
 
 
@@ -56,8 +59,8 @@ def cli():
 
 @cli.command()
 @common_options
-def http_host_static(hostname, user, port):
-    if not click.confirm(f'Run script on {hostname}?'):
+def http_host_static(hostname, user, port, noninteractive):
+    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -72,8 +75,8 @@ def http_host_static(hostname, user, port):
 
 @cli.command()
 @common_options
-def http_host_autoupdate(hostname, user, port):
-    if not click.confirm(f'Run script on {hostname}?'):
+def http_host_autoupdate(hostname, user, port, noninteractive):
+    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -93,8 +96,8 @@ def http_host_autoupdate(hostname, user, port):
 @cli.command()
 @common_options
 @click.option('--cron', is_flag=True, help='Enable cron task')
-def tile_gen(hostname, user, port, cron):
-    if not click.confirm(f'Run script on {hostname}?'):
+def tile_gen(hostname, user, port, cron, noninteractive):
+    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -105,8 +108,8 @@ def tile_gen(hostname, user, port, cron):
 
 @cli.command()
 @common_options
-def ledns(hostname, user, port):
-    if not click.confirm(f'Run script on {hostname}?'):
+def ledns(hostname, user, port, noninteractive):
+    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -116,8 +119,8 @@ def ledns(hostname, user, port):
 
 @cli.command()
 @common_options
-def loadbalancer(hostname, user, port):
-    if not click.confirm(f'Run script on {hostname}?'):
+def loadbalancer(hostname, user, port, noninteractive):
+    if not noninteractive and click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
@@ -128,7 +131,7 @@ def loadbalancer(hostname, user, port):
 
 @cli.command()
 @common_options
-def debug(hostname, user, port):
+def debug(hostname, user, port, noninteractive):
     c = get_connection(hostname, user, port)
 
     upload_config_json(c)

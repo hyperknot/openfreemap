@@ -20,7 +20,7 @@ def auto_mount():
     if not config.runs_dir.exists():
         sys.exit('  download-btrfs needs to be run first')
 
-    clean_up_mounts(config.mnt_dir)
+    # clean_up_mounts(config.mnt_dir)  # disabling, as it can be in use before the nginx sync works
     create_fstab()
 
     print('  running mount -a')

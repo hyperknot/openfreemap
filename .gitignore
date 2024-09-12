@@ -19,3 +19,4 @@ venv
 
 
 /pnpm-lock.yaml
+/deploy-all.sh
