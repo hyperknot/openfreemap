@@ -29,9 +29,12 @@ def prepare_shared(c):
     pkg_base(c)
     rclone(c)
 
+    c.sudo(f'rm -rf {REMOTE_CONFIG}')
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {OFM_DIR}')
+
+    upload_config_json(c)
 
     prepare_venv(c)
 
@@ -228,7 +231,7 @@ def upload_config_json(c):
 
 
 def setup_loadbalancer(c):
-    upload_config_json(c)
+    c.sudo('rm -f /etc/cron.d/ofm_loadbalancer')
 
     put(
         c,
@@ -248,6 +251,6 @@ def setup_loadbalancer(c):
     c.sudo(f'{VENV_BIN}/pip install -e /data/ofm/loadbalancer --use-pep517')
 
     c.sudo('mkdir -p /data/ofm/loadbalancer/logs')
-    put(c, MODULES_DIR / 'loadbalancer' / 'cron.d' / 'ofm_loadbalancer', '/etc/cron.d/')
-
     c.sudo('chown -R ofm:ofm /data/ofm/loadbalancer')
+
+    put(c, MODULES_DIR / 'loadbalancer' / 'cron.d' / 'ofm_loadbalancer', '/etc/cron.d/')

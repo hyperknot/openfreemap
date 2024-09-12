@@ -159,6 +159,9 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
+##### v0.6
+Load-balancer implemented with new config format.
+
 ##### v0.5
 
 Using a "done" file in the R2 buckets to mark the upload as finished. All scripts are checking for this file now.

@@ -1,8 +1,6 @@
-from http_host_lib.shared import get_deployed_version
-
 from loadbalancer_lib.cloudflare import get_zone_id, set_records_round_robin
 from loadbalancer_lib.config import config
-from loadbalancer_lib.shared import check_host_latest
+from loadbalancer_lib.shared import check_host_latest, get_deployed_version
 from loadbalancer_lib.telegram_ import telegram_send_message
 
 
