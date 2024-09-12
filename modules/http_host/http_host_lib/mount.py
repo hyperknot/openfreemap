@@ -47,7 +47,7 @@ def create_fstab():
             mnt_folder.mkdir(exist_ok=True, parents=True)
 
             fstab_new.append(f'{btrfs_file} {mnt_folder} btrfs loop,ro 0 0\n')
-            print(f'  created fstab entry for {btrfs_file} -> {mnt_folder}')
+            print(f'  created fstab entry for {mnt_folder}')
 
     with open('/etc/fstab') as fp:
         fstab_orig = [l for l in fp.readlines() if f'{config.mnt_dir}/' not in l]
