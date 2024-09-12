@@ -19,7 +19,7 @@ def fetch_version_files() -> bool:
     need_nginx_sync = False
 
     for area in config.areas:
-        deployed_version = get_deployed_version(area)
+        deployed_version = get_deployed_version(area)['version']
         if not deployed_version:
             print(f'  deployed version not found: {area}')
             continue

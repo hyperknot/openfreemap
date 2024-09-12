@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
 
@@ -27,11 +28,24 @@ def get_versions_for_area(area: str) -> list:
     return sorted(versions)
 
 
-def get_deployed_version(area: str) -> str:
+def get_deployed_version(area: str) -> dict:
     r = requests.get(f'https://assets.openfreemap.com/deployed_versions/{area}.txt', timeout=30)
     r.raise_for_status()
-    remote_version = r.text.strip()
-    return remote_version
+    version = r.text.strip()
+
+    last_modified_str = r.headers.get('Last-Modified')
+    last_modified = parse_http_last_modified(last_modified_str)
+
+    return dict(
+        version=version,
+        last_modified=last_modified,
+    )
+
+
+def parse_http_last_modified(date_string) -> datetime:
+    parsed_date = datetime.strptime(date_string, '%a, %d %b %Y %H:%M:%S GMT')
+    parsed_date = parsed_date.replace(tzinfo=timezone.utc)
+    return parsed_date
 
 
 def check_host_version(domain, host_ip, area, version):

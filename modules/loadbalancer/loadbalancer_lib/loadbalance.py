@@ -1,6 +1,8 @@
+from datetime import datetime, timedelta, timezone
+
 from loadbalancer_lib.cloudflare import get_zone_id, set_records_round_robin
 from loadbalancer_lib.config import config
-from loadbalancer_lib.shared import check_host_latest, get_deployed_version
+from loadbalancer_lib.shared import check_host_latest, check_host_version, get_deployed_version
 from loadbalancer_lib.telegram_ import telegram_send_message
 
 
@@ -46,18 +48,31 @@ def check_or_fix(fix=False):
 
 
 def run_area(area):
-    version = get_deployed_version(area)
+    deployed_data = get_deployed_version(area)
+    version = deployed_data['version']
+    last_modified = deployed_data['last_modified']
+
     if not version:
         print(f'  deployed version not found: {area}')
         return
 
     print(f'  deployed version {area}: {version}')
 
+    # using relaxed mode for while the servers are still deploying
+    now = datetime.now(timezone.utc)
+    relaxed_mode = last_modified > now - timedelta(minutes=2)
+
     results = {}
 
     for host_ip in config.http_host_list:
         try:
-            check_host_latest(config.domain_ledns, host_ip, area, version)
+            # don't check latest
+            if relaxed_mode:
+                print('using relaxed mode')
+                check_host_version(config.domain_ledns, host_ip, area, version)
+            else:
+                check_host_latest(config.domain_ledns, host_ip, area, version)
+
             results[host_ip] = True
         except Exception as e:
             results[host_ip] = False

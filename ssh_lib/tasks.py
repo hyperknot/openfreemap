@@ -29,7 +29,6 @@ def prepare_shared(c):
     pkg_base(c)
     rclone(c)
 
-    c.sudo(f'rm -rf {REMOTE_CONFIG}')
     c.sudo(f'mkdir -p {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {OFM_DIR}')
