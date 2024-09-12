@@ -40,6 +40,7 @@ def create_fstab():
             version_str = version.name
             btrfs_file = area_dir / version_str / 'tiles.btrfs'
             if not btrfs_file.is_file():
+                print(f"  {btrfs_file} doesn't exists, skipping")
                 continue
 
             mnt_folder = config.mnt_dir / f'{area}-{version_str}'
