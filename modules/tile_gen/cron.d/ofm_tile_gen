@@ -2,8 +2,8 @@
 CMD="sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py"
 LOG_DIR=/data/ofm/tile_gen/logs
 
-# every hour, make a monaco run
-10 * * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
+# every day at 2:10, make a monaco run
+10 2 * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
 
 # every minute, set monaco to latest
 * * * * * ofm     $CMD set-version monaco >> $LOG_DIR/monaco-set-version.log 2>&1

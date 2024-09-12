@@ -163,6 +163,8 @@ See [dev setup docs](docs/dev_setup.md).
 
 Using a "done" file in the R2 buckets to mark the upload as finished. All scripts are checking for this file now.
 
+Monaco is generated daily, to avoid too frequent nginx reloads, which might be bad for the in-memory cache.
+
 ##### v0.4
 
 Auto-update works!
