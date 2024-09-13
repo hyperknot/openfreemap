@@ -61,7 +61,7 @@ def run_area(area):
     # using relaxed mode for while the servers are still deploying
     now = datetime.now(timezone.utc)
     delta = now - last_modified
-    relaxed_mode = delta < timedelta(minutes=2)
+    relaxed_mode = delta < timedelta(minutes=3)
 
     if relaxed_mode:
         print('    using relaxed mode')
