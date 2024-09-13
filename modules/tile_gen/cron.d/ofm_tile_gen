@@ -2,8 +2,8 @@
 CMD="sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py"
 LOG_DIR=/data/ofm/tile_gen/logs
 
-# every day at 2:10, make a monaco run
-10 2 * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
+# every day at 23:10, make a monaco run
+10 23 * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
 
 # debug every 15 minutes
 #*/15 * * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
@@ -11,10 +11,10 @@ LOG_DIR=/data/ofm/tile_gen/logs
 # every minute, set monaco to latest
 * * * * * ofm     $CMD set-version monaco >> $LOG_DIR/monaco-set-version.log 2>&1
 
-# every Wednesday morning at 00:10, make a planet run
+# every Wednesday, make a planet run
 10 0 * * 3 ofm    $CMD make-tiles planet --upload >> $LOG_DIR/planet-make-tiles.log 2>&1
 
-# every Saturday at 8:00, set planet to latest
+# every Saturday, set planet to latest
 0 11 * * 6 ofm     $CMD set-version planet >> $LOG_DIR/planet-set-version.log 2>&1
 
 # once per minute, create indexes

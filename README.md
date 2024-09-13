@@ -172,9 +172,9 @@ Monaco is generated daily, to avoid too frequent nginx reloads, which might be b
 
 Auto-update works!
 
-Monaco is generated hourly. set-latest runs every minute.
+Monaco is generated hourly. Set-latest runs every minute.
 
-Planet is generated weekly, every Wednesday. set-latest runs every Saturday.
+Planet is generated weekly, every Wednesday. Set-latest runs every Saturday.
 
 ##### v0.3
 
