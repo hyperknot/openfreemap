@@ -116,9 +116,9 @@ See [self hosting docs](docs/self_hosting.md).
 
 You can directly download the processed full planet runs on the following URL patterns:
 
-https://planet.openfreemap.com/20240607_232801_pt/tiles.btrfs.gz // 86 GB
+https://btrfs.openfreemap.comareas/planet/20240910_001001_pt/tiles.btrfs.gz // 86 GB
 
-Replace the `20240607_232801_pt` part with any newer run, from the [index file](https://planet.openfreemap.com/files.txt).
+Replace the `20240910_001001_pt` part with any newer run, from the [index file](https://btrfs.openfreemap.com/files.txt).
 
 ### Public buckets
 
