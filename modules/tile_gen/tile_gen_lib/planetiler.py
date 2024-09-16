@@ -43,13 +43,16 @@ def run_planetiler(area: str) -> Path:
         '--download-chunk-size-mb=1000',
         '--fetch-wikidata',
         '--output=tiles.mbtiles',
-        '--nodemap-type=array',
         '--storage=mmap',
         '--force',
     ]
 
     if area == 'planet':
+        command.append('--nodemap-type=array')
         command.append('--bounds=planet')
+
+    if area == 'monaco':
+        command.append('--nodemap-type=sortedtable')
 
     print(command)
 
