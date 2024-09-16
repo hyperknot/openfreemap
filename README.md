@@ -120,6 +120,8 @@ https://btrfs.openfreemap.comareas/planet/20240910_001001_pt/tiles.btrfs.gz // 8
 
 Replace the `20240910_001001_pt` part with any newer run, from the [index file](https://btrfs.openfreemap.com/files.txt).
 
+Starting next week, we'll also upload the source mbtiles files to the same bucket.
+
 ### Public buckets
 
 There are two public buckets:

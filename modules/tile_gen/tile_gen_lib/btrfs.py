@@ -56,7 +56,9 @@ def make_btrfs(run_folder: Path):
             stderr=err,
         )
 
-    os.unlink('tiles.mbtiles')
+    # remove mbtiles, only keep the btrfs file
+    # disabled for now, saving both files currently
+    # os.unlink('tiles.mbtiles')
 
     shutil.copy('mnt_rw/extract/osm_date', '.')
 
