@@ -38,6 +38,10 @@ Contributions are more than welcome!
 - Load-balancer script works. Currently in monitoring-only mode, as Round-Robin DNS handles downtime.
 - This has been the production basemap service of [MapHub](https://maphub.net/) since June 2024.
 
+## Sponsoring
+
+Please consider sponsoring our project, either through [GitHub Sponsors](https://github.com/sponsors/hyperknot), or [on our website](https://openfreemap.org/).
+
 ## Limitations of this project
 
 The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design:
