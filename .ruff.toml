@@ -34,6 +34,7 @@ lint.ignore = [
   'SIM105',
   'SIM108',
   'SIM115',
+  'DTZ007', # Naive datetime constructed using `datetime.datetime.strptime()` without %z
 ]
 
 [format]

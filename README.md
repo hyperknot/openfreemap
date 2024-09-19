@@ -38,7 +38,6 @@ Contributions are more than welcome!
 - Load-balancer script works. Currently in monitoring-only mode, as Round-Robin DNS handles downtime.
 - This has been the production basemap service of [MapHub](https://maphub.net/) since June 2024.
 
-
 ## Limitations of this project
 
 The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design:
@@ -115,7 +114,7 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 The default styles. I've already put countless hours into tweaking up some nice looking styles, probably needs the most work in the long term future.
 
-Of course, you are welcome to use custom styles. 
+Of course, you are welcome to use custom styles.
 
 #### load balancer script - modules/loadbalancer
 
