@@ -1,9 +1,8 @@
 <a href="https://openfreemap.org/"><img src="https://openfreemap.org/logo.jpg" alt="logo" height="200" class="logo" /></a>
 
-
 # OpenFreeMap
 
-[openfreemap.org](https://openfreemap.org)
+Quick introduction and how to use guide: [openfreemap.org](https://openfreemap.org)
 
 ## What is OpenFreeMap?
 
