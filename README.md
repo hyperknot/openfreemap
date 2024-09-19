@@ -1,4 +1,5 @@
-<a href="https://openfreemap.org/"><img src="website/assets/logo.jpg" alt="logo" height="200" class="logo" /></a>
+[![logo](website/assets/logo.jpg)](https://openfreemap.org/)
+
 
 # OpenFreeMap
 

@@ -4,11 +4,13 @@ Yes
 
 ## Who is behind this project and how can I follow it?
 
-I'm Zsolt Ero ([X](https://x.com/hyperknot), [blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfreemap.org)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 8 years.
+I'm Zsolt Ero ([X](https://x.com/hyperknot), [blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfreemap.org)). I built [MapHub](https://maphub.net/) and have been running map hosting in production for 9 years.
 
-X: [hyperknot](https://x.com/hyperknot) and [OpenFreeMapOrg](https://x.com/OpenFreeMapOrg)
+X: [@hyperknot](https://x.com/hyperknot) (for details) \
+X: [@OpenFreeMapOrg](https://x.com/OpenFreeMapOrg) (for announcements)
 
-GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
+GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) \
+GitHub: [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 
 ## Why did you build this project?
 
