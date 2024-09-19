@@ -8,7 +8,7 @@
 
 OpenFreeMap provides free map hosting so you can display custom maps on your website and apps.
 
-It is truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, user database, API keys, or cookies.
+It is truly **free**: there are no limits on the number of map views or requests you can make, nor on how you use your map. There is no registration page, no user database, no API keys, nor cookies.
 
 It is truly **open-source**: everything, including the full production setup, is in this repo. Map data is from OpenStreetMap.
 
@@ -26,6 +26,19 @@ The [styles repo](https://github.com/hyperknot/openfreemap-styles), on the other
 
 Contributions are more than welcome!
 
+## Status of this project
+
+- The tile generation works.
+- The web servers work.
+- Weekly auto-updates work.
+- Servers currently:
+  - 1 server running tile generation
+  - 2 servers running web hosting
+- Web servers are in Round-Robin DNS configuration with Let's Encrypt provided certificates.
+- Load-balancer script works. Currently in monitoring-only mode, as Round-Robin DNS handles downtime.
+- This has been the production basemap service of [MapHub](https://maphub.net/) since June 2024.
+
+
 ## Limitations of this project
 
 The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design:
@@ -42,7 +55,7 @@ The only way this project can possibly work is to be super focused about what it
 
 2. OFM is not something you can install on your dev machine. OFM is a deploy script specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready OFM server, both for tile hosting and generation.
 
-   This repo is also Docker free. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
+   This repo is Docker-free on purpose. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
 3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of http-host if you keep a close eye on this repo.
 
@@ -50,7 +63,7 @@ The only way this project can possibly work is to be super focused about what it
 
 There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well.
 
-There is no cloud, just dedicated servers. The HTTPS server is nginx on Ubuntu.
+There is no cloud, just dedicated servers. The web server is nginx on Ubuntu.
 
 ## Btrfs images
 
@@ -90,7 +103,7 @@ You can run `./http_host.py --help` to see which options are available.
 
 #### tile generation - modules/tile_gen
 
-_note: Tile generation is 100% optional, as we are providing the processed full planet btrfs files for public download._
+_note: Tile generation is 100% optional, as we are providing the processed full planet btrfs files for public download. You can download full planet images updated weekly, both in Btrfs and in MBTiles format._
 
 The `tile_gen` script downloads a full planet OSM extract and runs it through Planetiler.
 
@@ -100,7 +113,9 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 #### styles - [styles repo](https://github.com/hyperknot/openfreemap-styles)
 
-A very important part, probably needs the most work in the long term future.
+The default styles. I've already put countless hours into tweaking up some nice looking styles, probably needs the most work in the long term future.
+
+Of course, you are welcome to use custom styles. 
 
 #### load balancer script - modules/loadbalancer
 
@@ -114,13 +129,13 @@ See [self hosting docs](docs/self_hosting.md).
 
 ### Full planet downloads
 
-You can directly download the processed full planet runs on the following URL patterns:
+Full planet runs are uploaded weekly. You can download them both in Btrfs and in MBTiles formats. The files have the following URL patterns:
 
-https://btrfs.openfreemap.comareas/planet/20240910_001001_pt/tiles.btrfs.gz // 86 GB
+https://btrfs.openfreemap.com/areas/planet/{version}/tiles.btrfs.gz (and .mbtiles)
 
-Replace the `20240910_001001_pt` part with any newer run, from the [index file](https://btrfs.openfreemap.com/files.txt).
+Use the [index file](https://btrfs.openfreemap.com/files.txt) to find out about versions.
 
-Starting next week, we'll also upload the source mbtiles files to the same bucket.
+_Note: MBTiles files are not required for this project. We provide them for your convenience, allowing you to use the processed planet tiles with any other tool of your choice._
 
 ### Public buckets
 
@@ -128,6 +143,12 @@ There are two public buckets:
 
 - https://assets.openfreemap.com - contains fonts, sprites, styles, versions. index: [dirs](https://assets.openfreemap.com/dirs.txt), [files](https://assets.openfreemap.com/files.txt)
 - https://btrfs.openfreemap.com - full planet runs. index: [dirs](https://btrfs.openfreemap.com/dirs.txt), [files](https://btrfs.openfreemap.com/files.txt)
+
+### Domains
+
+.com - hosted through CloudFlare - serving the public buckets
+
+.org - not hosted through CloudFlare
 
 ### What about PMTiles?
 
@@ -144,16 +165,15 @@ Contributors welcome!
 Smaller tasks:
 
 - Cloudflare worker for indexing the public buckets, instead of generating index files.
-- Some of the POI icons are missing in the styles.
+- [styles] Some of the POI icons are missing.
 
 Bigger tasks:
 
-- Split the styles to building blocks. For example, there should be a POI block, a label block, a road-style related block.
-- Implement automatic updates for tile gen, uploading, testing and setting versions. (work-in-progress as of today)
+- [styles] Split the styles to building blocks. For example, there should be a POI block, a label block, a road-style related block.
 
-Tasks outside the scope of this project:
+Future:
 
-- Make a successor for the OpenMapTiles schema.
+- Migrate to [Shortbread schema](https://shortbread-tiles.org/) and possibly [VersaTiles](https://versatiles.org/)
 
 #### Dev setup
 
@@ -161,7 +181,12 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
+**v0.7**
+
+MBTiles are now uploaded, next to the btrfs image files.
+
 ##### v0.6
+
 Load-balancer implemented with new config format. Implemented relaxed mode for checking while deployments are happening.
 
 ##### v0.5
