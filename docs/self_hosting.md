@@ -54,7 +54,7 @@ On macOS you can do `brew install python`
 
 #### 4. Deploy http-host
 
-You run the deploy script locally, and it deploys to a remove server over SSH. 
+You run the deploy script locally, and it deploys to a remove server over SSH. You can use a virtualenv if you are used to working with them, but it's not necessary.
 
 ```
 cd openfreemap
@@ -75,4 +75,10 @@ After this, go for a walk and by the time you come back it should be up and runn
 
 If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`.
 
-Trigger a run manually, by running `planetiler_{area}.sh`. Recommended to use tmux or similar, as it can take days to complete.
+Trigger a run manually, by running
+
+```
+sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-tiles planet
+```
+
+It's recommended to use tmux or similar, as it can take days to complete.
