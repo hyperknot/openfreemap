@@ -8,6 +8,7 @@ requirements = [
     'python-dotenv',
     'ruff',
     'marko',
+    'requests',
 ]
 
 
