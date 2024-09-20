@@ -8,10 +8,7 @@ You can either self-host or use our public instance. Everything is **open-source
 
 Using our public instance is completely **free**: there are no limits on the number of map views or requests, and no restrictions on how you use your map. There’s no registration, no user database, no API keys, and no cookies. We aim to cover the running costs of our public instance through donations.
 
-
 #### Quick introduction and how to guide: [https://openfreemap.org/](https://openfreemap.org/)
-
-
 
 ## Goals of this project
 

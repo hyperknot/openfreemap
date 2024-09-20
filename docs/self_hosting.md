@@ -1,6 +1,6 @@
 # Self-hosting Howto
 
-_note: For most users, **you don't need to run anything**! The tiles are hosted free of charge, without registration. Read the "How can I use it?" section on https://openfreemap.org_
+You can either self-host or use our public instance. Everything is **open-source**, including the full production setup — there’s no 'open-core' model here.
 
 When self-hosting, there are two tasks you can set up on a server (see details in the repo README).
 
@@ -8,31 +8,23 @@ When self-hosting, there are two tasks you can set up on a server (see details i
 
 - **tile-gen**
 
-note: Tile generation is 100% optional, as we are providing the processed full planet files for public download. It also requires a beefy machine, see below.
+I there is a 99.9% chance you only need **http-host**. Tile-gen is slow, needs a huge machine and is totally pointless, since we upload the processed files every week.
 
 ### System requirements
 
-##### Disk space
+**http-host**: 300 GB SSD for hosting a single run and 4 GB RAM
 
-- **http-host**: 300 GB for hosting a single run
+**tile-gen**: 500 GB SDD and at least 64 GB ram
 
-- **tile-gen**: 500 GB
-
-##### RAM
-
-- **http-host**: 4 GB
-
-- **tile-gen**: 64 GB+
-
-##### OS
-
-- **Ubuntu 22+**
+**Ubuntu 22** or newer
 
 ---
 
 ### Warning
 
-This project is made to run on clean servers or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
+This project is made to run on **clean servers** or virtual machines dedicated for this project. The scripts need sudo permissions as they mount/unmount disk images. Do not run this on your dev machine without using virtual machines. If you do, please make sure you understand exactly what each script is doing.
+
+If you run it on a non-clean server, please understand that this will modify your nginx config!
 
 ---
 

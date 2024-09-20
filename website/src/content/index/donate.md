@@ -4,4 +4,4 @@ If we ever receive a **Diamond** level supporter, we'll put their logo on this p
 
 When subscribing to a support plan, you receive an invoice for each of your payments.
 
-Note: if you want to make a single donation, feel free to cancel after the first payment. However, please understand that the nature of this project needs recurring donations to cover the server costs.
+Note: if you want to make a single donation, you can do this via [GitHub Sponsors](https://github.com/sponsors/hyperknot). However, please understand that the nature of this project needs recurring donations to cover the server costs.
