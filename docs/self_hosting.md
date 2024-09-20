@@ -2,7 +2,7 @@
 
 You can either self-host or use our public instance. Everything is **open-source**, including the full production setup — there’s no 'open-core' model here.
 
-When self-hosting, there are two tasks you can set up on a server (see details in the repo README).
+When self-hosting, there are two modules you can set up on a server (see details in the repo README).
 
 - **http-host**
 
@@ -30,28 +30,49 @@ If you run it on a non-clean server, please understand that this will modify you
 
 ## Instructions
 
-Create virtualenv using: `source prepare-virtualenv.sh`
+#### 1. DNS setup
 
-It's recommended to use [direnv](https://direnv.net/), to have automatic venv activation.
+Set up a server with at least 300 GB SSD space and configure the DNS for the subdomain of your choice.
+For example "maps.example.com" -> 185.199.110.153
 
-#### 1. Prepare `config` folder
+#### 2. Clone and prepare `config` folder
 
-1. Copy `.env.sample` to `.env` and set the values.
+```
+git clone https://github.com/hyperknot/openfreemap
+```
 
-   DOMAIN_LE - Use this to specify a domain to be used with Let's Encrypt.
+Copy `.env.sample` to `.env` and set the values.
 
-1. If you want to run tile generation and upload via rclone, you can copy the `rclone.conf.sample` file as well. For simple self-hosting there is no need for this.
+`DOMAIN_LE` - Your subdomain \
+`LE_EMAIL` - Your email for Let's Encrypt
 
-#### 2. Deploy a http-host
+#### 3. Set up Python if you don't have it yet
 
-You run the deploy script locally. It'll connect to an SSH server, like this
+On Ubuntu you can get it by `sudo apt install python3-pip`
 
-`./init-server.py http-host-static HOSTNAME`
+On macOS you can do `brew install python`
+
+#### 4. Deploy http-host
+
+You run the deploy script locally, and it deploys to a remove server over SSH. 
+
+```
+cd openfreemap
+pip install -e .
+```
+
+Then run the actual deploy command
+
+```
+./init-server.py http-host-static HOSTNAME
+```
 
 After this, go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
 
-#### 3. Deploy tile-gen server (optional)
+---
 
-If you have a really beefy machine (see above) and you want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`.
+#### Deploy tile-gen server (optional)
+
+If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`.
 
 Trigger a run manually, by running `planetiler_{area}.sh`. Recommended to use tmux or similar, as it can take days to complete.
