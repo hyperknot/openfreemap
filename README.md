@@ -8,6 +8,8 @@ You can either [self-host](docs/self_hosting.md) or use our public instance. Eve
 
 Using our public instance is completely **free**: there are no limits on the number of map views or requests, and no restrictions on how you use your map. There’s no registration, no user database, no API keys, and no cookies. We aim to cover the running costs of our public instance through donations.
 
+We also provide **weekly** full planet downloads both in Btrfs and MBTiles formats.
+
 #### Quick introduction and how to guide: [https://openfreemap.org/](https://openfreemap.org/)
 
 ## Goals of this project
