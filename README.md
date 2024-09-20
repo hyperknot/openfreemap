@@ -26,9 +26,9 @@ Contributions are more than welcome!
 
 ## Status of this project
 
-- The tile generation works.
-- The web servers work.
-- Weekly auto-updates work.
+- The tile generation works
+- The web servers work
+- Weekly auto-updates work
 - Servers in our public instance are currently:
   - 1 server running tile generation
   - 2 servers running web hosting
