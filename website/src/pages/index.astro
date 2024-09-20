@@ -5,7 +5,8 @@ import Logo from '../components/Logo.astro'
 import Donate from '../components/Donate.astro'
 
 import { Content as WhatisText } from '../content/index/whatis.md'
-import { Content as RestText } from '../content/index/rest.md'
+import { Content as BeforeDonate } from '../content/index/before_donate.md'
+import { Content as AfterDonate } from '../content/index/after_donate.md'
 ---
 
 <Layout title="OpenFreeMap">
@@ -26,7 +27,8 @@ import { Content as RestText } from '../content/index/rest.md'
 
     <a class="quick-start-button" href="/quick_start">Quick Start Guide</a>
 
+    <BeforeDonate />
     <Donate />
-    <RestText />
+    <AfterDonate />
   </div>
 </Layout>
