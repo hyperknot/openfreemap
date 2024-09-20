@@ -4,7 +4,7 @@
 
 OpenFreeMap lets you display custom maps on your website and apps for free.
 
-You can either self-host or use our public instance. Everything is **open-source**, including the full production setup — there’s no 'open-core' model here. The map data comes from OpenStreetMap.
+You can either [self-host](docs/self_hosting.md) or use our public instance. Everything is **open-source**, including the full production setup — there’s no 'open-core' model here. The map data comes from OpenStreetMap.
 
 Using our public instance is completely **free**: there are no limits on the number of map views or requests, and no restrictions on how you use your map. There’s no registration, no user database, no API keys, and no cookies. We aim to cover the running costs of our public instance through donations.
 
@@ -29,22 +29,22 @@ Contributions are more than welcome!
 - The tile generation works.
 - The web servers work.
 - Weekly auto-updates work.
-- Servers currently:
+- Servers in our public instance are currently:
   - 1 server running tile generation
   - 2 servers running web hosting
 - Web servers are in Round-Robin DNS configuration with Let's Encrypt provided certificates.
 - Load-balancer script works. Currently in monitoring-only mode, as Round-Robin DNS handles downtime.
-- This has been the production basemap service of [MapHub](https://maphub.net/) since June 2024.
+- The public instance has been the production basemap service of [MapHub](https://maphub.net/) since June 2024.
 
 ## Sponsoring
 
-Please consider sponsoring our project, either through [GitHub Sponsors](https://github.com/sponsors/hyperknot), or [on our website](https://openfreemap.org/).
+Please consider sponsoring our project, either through [GitHub Sponsors](https://github.com/sponsors/hyperknot) or [on our website](https://openfreemap.org/).
 
 ## Limitations of this project
 
-The only way this project can possibly work is to be super focused about what it is and what it isn't. OFM has the following limitations by design:
+The only way this project can possibly work is to be super focused about what it is and what it isn't. OpenFreeMap has the following limitations by design:
 
-1. OFM is not providing:
+1. OpenFreeMap is not providing:
 
    - search or geocoding
    - route calculation, navigation or directions
@@ -54,11 +54,15 @@ The only way this project can possibly work is to be super focused about what it
    - elevation lookup
    - custom tile or dataset hosting
 
-2. OFM is not something you can install on your dev machine. OFM is a deploy script specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready OFM server, both for tile hosting and generation.
+2. OpenFreeMap is not something you can install locally. This repo is a deploy script specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready server, both for tile hosting and generation.
 
    This repo is Docker-free on purpose. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
-3. OFM does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of http-host if you keep a close eye on this repo.
+3. OpenFreeMap does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of http-host if you keep a close eye on this repo.
+
+## Self hosting
+
+See [self hosting docs](docs/self_hosting.md).
 
 ## What is the tech stack?
 
@@ -114,17 +118,13 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
 #### styles - [styles repo](https://github.com/hyperknot/openfreemap-styles)
 
-The default styles. I've already put countless hours into tweaking up some nice looking styles, probably needs the most work in the long term future.
+The default styles. I've already put countless hours into tweaking up some nice looking styles. Still, it'll take probably the most work in the long term future.
 
 Of course, you are welcome to use custom styles.
 
 #### load balancer script - modules/loadbalancer
 
 A Round Robin DNS based load balancer script for health checking and updating records. It pushes status messages to a Telegram bot.
-
-## Self hosting
-
-See [self hosting docs](docs/self_hosting.md).
 
 ## FAQ
 
