@@ -8,7 +8,3 @@ X: [@hyperknot](https://x.com/hyperknot) (for details) \
 X: [@OpenFreeMapOrg](https://x.com/OpenFreeMapOrg) (for announcements)
 
 GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
-
-
-
-

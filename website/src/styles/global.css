@@ -127,11 +127,9 @@ hr {
   &.pink {
     background: linear-gradient(32deg, #0070a2, transparent) #ed36a7;
 
-      &:hover,
-  &:focus {
-    background-color: #dea31d;
-  }
+    &:hover,
+    &:focus {
+      background-color: #dea31d;
+    }
   }
 }
-
-
