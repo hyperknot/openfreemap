@@ -1,18 +1,12 @@
 ---
-import { Content as DonateText } from '../content/index/donate.md'
+const { title } = Astro.props
+
+import { Content as Sponsor } from '../content/donate/sponsor.md'
+import { Content as Pro } from '../content/donate/pro.md'
+
 ---
 
-<h2>How can I donate or support this project?</h2>
-<p>
-  If this project helps you save on your map hosting costs, please subscribe to one of our support
-  plans here. Alternatively, sponsor us on <a href="https://github.com/sponsors/hyperknot"
-    >GitHub Sponsors</a
-  >.
-</p>
 
-<div id="support-plans-slider"></div>
-
-<DonateText />
-
-<script is:inline src="https://unpkg.com/nouislider@15.7.1/dist/nouislider.min.js"></script>
-<script is:inline src="/scripts/donate.js"></script>
+<Sponsor/>
+<a class="quick-start-button pink" href="https://github.com/sponsors/hyperknot">Sponsor</a>
+<Pro/>
