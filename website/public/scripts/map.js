@@ -17,11 +17,6 @@ function initMap() {
 
   document.getElementById('mapbg-image').style.opacity = '0.5'
 
-  maplibregl.setRTLTextPlugin(
-    'https://unpkg.com/@mapbox/mapbox-gl-rtl-text/mapbox-gl-rtl-text.min.js',
-    true, // Lazy load the plugin
-  )
-
   const map = new maplibregl.Map({
     style: 'https://tiles.openfreemap.org/styles/liberty',
     center: berlin.center,
