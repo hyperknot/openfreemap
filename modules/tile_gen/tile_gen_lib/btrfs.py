@@ -56,10 +56,6 @@ def make_btrfs(run_folder: Path):
             stderr=err,
         )
 
-    # remove mbtiles, only keep the btrfs file
-    # disabled for now, saving both files currently
-    # os.unlink('tiles.mbtiles')
-
     shutil.copy('mnt_rw/extract/osm_date', '.')
 
     # process logs
@@ -124,6 +120,14 @@ def make_btrfs(run_folder: Path):
     for pattern in ['*.log', '*.txt']:
         for file in Path().glob(pattern):
             shutil.move(file, 'logs')
+
+    # create a checksum file, Ubuntu style naming convention
+    with open('SHA256SUMS', 'w') as out:
+        subprocess.run(
+            ['sha256sum', 'tiles.btrfs.gz', 'tiles.mbtiles'],
+            check=True,
+            stdout=out,
+        )
 
     print('extract_btrfs.py DONE')
 
