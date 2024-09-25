@@ -12,27 +12,8 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "style": {
-        //        "noUselessElse": "off",
-        //        "noParameterAssign": "off",
-        //        "noArguments": "off"
-      },
-      "a11y": {
-        //        "useKeyWithClickEvents": "off",
-        //        "useValidAnchor": "off",
-        "useButtonType": "off"
-        //        "noBlankTarget": "off",
-        //        "noNoninteractiveTabindex": "off"
-      },
-      "security": {
-        //        "noDangerouslySetInnerHtml": "off"
-      },
-      "suspicious": {
-        "noAssignInExpressions": "off"
-        //        "noArrayIndexKey": "off"
-      },
       "complexity": {
-        //        "noForEach": "off"
+        "noForEach": "off"
       }
     },
     "ignore": []
@@ -45,6 +26,6 @@
   },
   "files": {
     "maxSize": 100000,
-    "ignore": []
+    "ignore": ["venv", "dist", ".astro"]
   }
 }
