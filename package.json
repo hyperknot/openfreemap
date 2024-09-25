@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@biomejs/biome": "^1.9.2",
     "prettier": "^3.2.4",
     "prettier-plugin-astro": "^0.14.0"
   },
