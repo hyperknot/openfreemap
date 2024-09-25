@@ -35,13 +35,13 @@ function initMap() {
     document.getElementById('mapbg-image').remove()
   })
 
-  let nav = new maplibregl.NavigationControl({ showCompass: false })
+  const nav = new maplibregl.NavigationControl({ showCompass: false })
   map.addControl(nav, 'top-right')
 
   // let scale = new maplibregl.ScaleControl()
   // map.addControl(scale)
 
-  let attrib = new maplibregl.AttributionControl({
+  const attrib = new maplibregl.AttributionControl({
     compact: false,
   })
   map.addControl(attrib)
@@ -50,7 +50,7 @@ function initMap() {
 }
 
 function selectStyle(style) {
-  const styleUrl = 'https://tiles.openfreemap.org/styles/' + style.split('-')[0]
+  const styleUrl = `https://tiles.openfreemap.org/styles/${style.split('-')[0]}`
   map.setStyle(styleUrl)
 
   if (style === 'liberty-3d') {
@@ -75,9 +75,9 @@ initMap()
 
 const buttons = document.querySelectorAll('.button-container .btn')
 
-buttons.forEach(button => {
-  button.addEventListener('click', function (event) {
-    buttons.forEach(button => button.classList.remove('selected'))
+buttons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    buttons.forEach((button) => button.classList.remove('selected'))
     button.classList.add('selected')
 
     const style = event.target.getAttribute('data-style')

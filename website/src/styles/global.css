@@ -2,7 +2,7 @@ body {
   line-height: 1.5;
   font-size: 17px;
   -webkit-font-smoothing: antialiased;
-  font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
+  font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
   font-weight: normal;
   color: #000;
 }
@@ -24,7 +24,7 @@ h6 {
   margin-top: 3em;
   margin-bottom: 0.5em;
   line-height: 1.2;
-  font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro,
+  font-family: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", source-sans-pro,
     sans-serif;
   font-weight: bold;
 }
