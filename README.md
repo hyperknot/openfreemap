@@ -157,14 +157,9 @@ There are two public buckets:
 
 I would have loved to use PMTiles; they are a brilliant idea for serverless map hosting!
 
-Unfortunately, cloud platforms can be prohibitively expensive for production usage of map tiles, as map tiles are only 405 bytes on average. This means 1 TB of traffic = 2.7 billion requests.
+Unfortunately, on Cloudflare, the range requests in big files have terrible latency, and on AWS, the egress cost can be prohibitive.
 
-##### How much would that cost?
-
-Cloudflare => **\$977** for requests (you have to pay for requests even on public buckets; only traffic is free)
-AWS S3 => **at least \$1717** in AWS fees (\$542 for Lambda + \$1085 for S3 requests + \$90 for egress costs)
-
-Moreover, range requests on Cloudflare have terrible latency.
+Of course, with normal usage, you might fall into AWS's free tier, but the internet is full of stories where someone received a surprise bill from AWS costing thousands of dollars. It's enough to have one bad crawling bot on the internet that gets stuck in a loop on your website - this can trigger thousands of dollars in AWS bills.
 
 ## Contributing
 
