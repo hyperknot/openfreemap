@@ -149,8 +149,7 @@ There are two public buckets:
 
 ### Domains
 
-.org - not hosted through CloudFlare
-
+.org - not hosted through CloudFlare \
 .com - hosted through CloudFlare - serving the public buckets
 
 ### What about PMTiles?
