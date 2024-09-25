@@ -149,17 +149,22 @@ There are two public buckets:
 
 ### Domains
 
-.com - hosted through CloudFlare - serving the public buckets
-
 .org - not hosted through CloudFlare
+
+.com - hosted through CloudFlare - serving the public buckets
 
 ### What about PMTiles?
 
-I would have loved to use PMTiles; they are a brilliant idea!
+I would have loved to use PMTiles; they are a brilliant idea for serverless map hosting!
 
-Unfortunately, making range requests in 80 GB files just doesn't work in production. It is fine for files smaller than 500 MB, but it has terrible latency and caching issues for full planet datasets.
+Unfortunately, cloud platforms can be prohibitively expensive for production usage of map tiles, as map tiles are only 405 bytes on average. This means 1 TB of traffic = 2.7 billion requests.
 
-If PMTiles implements splitting to <10 MB files, it can be a valid alternative to running servers.
+##### How much would that cost?
+
+Cloudflare => **\$977** for requests (you have to pay for requests even on public buckets; only traffic is free)
+AWS S3 => **at least \$1717** in AWS fees (\$542 for Lambda + \$1085 for S3 requests + \$90 for egress costs)
+
+Moreover, range requests on Cloudflare have terrible latency.
 
 ## Contributing
 
