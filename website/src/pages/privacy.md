@@ -26,7 +26,7 @@ Your privacy is important to us, so Hyperknot Software Kft., a company based in 
 The terms "You," "Your," "Yours" and "User" refer to the entity/person/organization using our Site.
 When this Policy mentions "We", "Us," and "Our" it refers to Hyperknot Software Kft. and its subsidiaries and affiliates.
 
-This Privacy Policy is governed by our [Terms of Services](tos).
+This Privacy Policy is governed by our [Terms of Services](/tos).
 
 For any questions regarding this Policy or any requests regarding the processing of personal data, please contact us at privacy@openfreemap.org.
 
