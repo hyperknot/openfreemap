@@ -40,7 +40,7 @@ Contributions are more than welcome!
 
 ## Sponsoring
 
-Please consider sponsoring our project, either through [GitHub Sponsors](https://github.com/sponsors/hyperknot) or [on our website](https://openfreemap.org/).
+Please consider sponsoring our project on [GitHub Sponsors](https://github.com/sponsors/hyperknot).
 
 ## Limitations of this project
 
