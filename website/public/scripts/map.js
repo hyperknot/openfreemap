@@ -32,8 +32,10 @@ function initMap() {
     container: mapDiv,
     boxZoom: false,
     // doubleClickZoom: false,
-    scrollZoom: false,
+    // scrollZoom: false,
     attributionControl: false,
+    cooperativeGestures: true,
+    dragRotate: false,
   })
   window.map = map
 
@@ -64,11 +66,13 @@ function selectStyle(style) {
     map.setPitch(london3d.pitch)
     map.setBearing(london3d.bearing)
     map.setZoom(london3d.zoom)
+    map.dragRotate.enable()
   } else if (map.getBearing() !== 0) {
     map.setCenter(berlin.center)
     map.setPitch(berlin.pitch)
     map.setBearing(berlin.bearing)
     map.setZoom(berlin.zoom)
+    map.dragRotate.disable()
   }
 
   document.getElementById('style-url-code').innerText = styleUrl
