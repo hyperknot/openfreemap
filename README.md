@@ -152,13 +152,15 @@ There are two public buckets:
 .org - not hosted through CloudFlare \
 .com - hosted through CloudFlare - serving the public buckets
 
-### What about PMTiles?
+### What about PMTiles and using the Cloud?
 
 I would have loved to use PMTiles; they are a brilliant idea for serverless map hosting!
 
-Unfortunately, on Cloudflare, the range requests in big files have terrible latency, and on AWS, the egress cost can be prohibitive.
+Unfortunately, on Cloudflare, range requests in 90 GB files have terrible latency, and on AWS, the egress costs can be prohibitive.
 
-Of course, with normal usage, you might fall into AWS's free tier, but the internet is full of stories where someone received a surprise bill from AWS costing thousands of dollars. It's enough to have one bad crawling bot on the internet that gets stuck in a loop on your website - this can trigger thousands of dollars in AWS bills.
+Of course, with normal usage, you might fall within cloud vendor's free tier, but the internet is full of stories about people receiving surprise bills from AWS, sometimes amounting to thousands of dollars. It only takes one bad crawling bot getting stuck in a loop on your website to trigger such a bill.
+
+In short, using cloud vendors would make it impossible for me to offer this service for free — this project simply wouldn't exist.
 
 ## Contributing
 
