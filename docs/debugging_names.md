@@ -1,6 +1,6 @@
 # Debugging international names
 
-If there is an issue about international names not being displayed correctly, first, we need to find one specific example item and check at which stage does the problem appear.
+If there is an issue about international names not being displayed correctly, first, we need to find **one specific example** and check at which stage does the problem appear.
 
 OpenFreeMap map data is created by the following stack:
 
@@ -19,6 +19,12 @@ OpenFreeMap map data is created by the following stack:
    <img src="assets/name-maputnik-details.png" width=240 />
 
 Now we can compare where the naming problem is coming from.
+
+In conclusion: for the **one specific example**, please link the OSM pages and add the inspector screenshot, then we can start with the debugging.
+
+
+
+
 
 ## Next steps
 
