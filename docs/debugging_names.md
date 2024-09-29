@@ -8,15 +8,15 @@ OpenFreeMap map data is created by the following stack:
 
 1.  To debug OpenStreetMap data, go to OpenStreetMap.org and search for the query string. For example "Iwate Prefecture" gives these results: [nominatim](https://nominatim.openstreetmap.org/ui/details.html?osmtype=R&osmid=3792412&class=boundary) and [openstreetmap](https://www.openstreetmap.org/relation/3792412)
 
-    <img src="assets/name-osm-search.png" width=50% />
+    <img src="assets/name-osm-search.png" width=333 />
 
 2.  Then we need to check what the data is in the generated vector tiles. The best way to do this is to go to [Maputnik editor](https://maputnik.github.io/editor?style=https://tiles.openfreemap.org/styles/bright) and select View / Inspect.
 
-    <img src="assets/name-maputnik-view.png" width=50% />
+    <img src="assets/name-maputnik-view.png" width=388 />
 
 3.  Then you can search for the little red dot matching your label and make a screenshot.
 
-   <img src="assets/name-maputnik-details.png" width=25% />
+   <img src="assets/name-maputnik-details.png" width=240 />
 
 Now we can compare where the naming problem is coming from.
 
