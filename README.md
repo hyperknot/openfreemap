@@ -156,7 +156,7 @@ There are two public buckets:
 
 I would have loved to use PMTiles; they are a brilliant idea for serverless map hosting!
 
-Unfortunately, on Cloudflare, range requests in 90 GB files have terrible latency, and on AWS, the egress costs can be prohibitive.
+Unfortunately, on Cloudflare, range requests in 90 GB files have terrible latency, and on AWS, the data transfer costs can be prohibitive.
 
 Of course, with normal usage, you might fall within cloud vendor's free tier, but the internet is full of stories about people receiving surprise bills from AWS, sometimes amounting to thousands of dollars. It only takes one bad crawling bot getting stuck in a loop on your website to trigger such a bill.
 
