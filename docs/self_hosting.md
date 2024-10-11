@@ -41,10 +41,12 @@ For example "maps.example.com" -> 185.199.110.153
 git clone https://github.com/hyperknot/openfreemap
 ```
 
-Copy `.env.sample` to `.env` and set the values.
+In the config folder, copy `.env.sample` to `.env` and set the values.
 
 `DOMAIN_LE` - Your subdomain \
 `LE_EMAIL` - Your email for Let's Encrypt
+
+It's recommended to set `SKIP_PLANET=true` first, check if everything works, and run `./init-server.py` a second time with `SKIP_PLANET=false`. This way you get a quick feedback loop for setting up your system.
 
 #### 3. Set up Python if you don't have it yet
 
@@ -67,7 +69,11 @@ Then run the actual deploy command
 ./init-server.py http-host-static HOSTNAME
 ```
 
-After this, go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
+If you used `SKIP_PLANET=true` then wait a few minutes and see what happens.
+
+If you use `SKIP_PLANET=false` then go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
+
+*// Note: If your server doesn't have an SSD, the download + uncompressing process can take hours.*
 
 ---
 

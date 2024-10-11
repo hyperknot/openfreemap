@@ -212,7 +212,6 @@ def upload_config_json(c):
         sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
 
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
-    assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
     config = {
         'domain_le': domain_le,
