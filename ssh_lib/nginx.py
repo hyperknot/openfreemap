@@ -37,6 +37,7 @@ def nginx(c):
 
     c.sudo('mkdir -p /data/nginx/sites')
     c.sudo('mkdir -p /data/nginx/acme-challenges')
+    c.sudo('mkdir -p /data/nginx/certs')
 
     if not exists(c, '/etc/nginx/ssl/dummy.crt'):
         c.sudo('mkdir -p /etc/nginx/ssl')

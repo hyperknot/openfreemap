@@ -30,10 +30,12 @@ If you run it on a non-clean server, please understand that this will modify you
 
 ## Instructions
 
+I recommend running things quickly first, with `SKIP_PLANET=true` and then once it works, running it with `SKIP_PLANET=false`.
+
 #### 1. DNS setup
 
 Set up a server with at least 300 GB SSD space and configure the DNS for the subdomain of your choice.
-For example "maps.example.com" -> 185.199.110.153
+For example, make an A record for "maps.example.com" -> 185.199.110.153
 
 #### 2. Clone and prepare `config` folder
 
@@ -46,7 +48,7 @@ In the config folder, copy `.env.sample` to `.env` and set the values.
 `DOMAIN_LE` - Your subdomain \
 `LE_EMAIL` - Your email for Let's Encrypt
 
-It's recommended to set `SKIP_PLANET=true` first, check if everything works, and run `./init-server.py` a second time with `SKIP_PLANET=false`. This way you get a quick feedback loop for setting up your system.
+Set `SKIP_PLANET=true` first.
 
 #### 3. Set up Python if you don't have it yet
 
@@ -54,7 +56,7 @@ On Ubuntu you can get it by `sudo apt install python3-pip`
 
 On macOS you can do `brew install python`
 
-#### 4. Deploy http-host
+#### 4. Prepare the Python environment
 
 You run the deploy script locally, and it deploys to a remove server over SSH. You can use a virtualenv if you are used to working with them, but it's not necessary.
 
@@ -63,17 +65,42 @@ cd openfreemap
 pip install -e .
 ```
 
-Then run the actual deploy command
+#### 5. Deploy quick version with `SKIP_PLANET=true`
+
+Run the actual deploy command and wait a few minutes
 
 ```
 ./init-server.py http-host-static HOSTNAME
 ```
 
-If you used `SKIP_PLANET=true` then wait a few minutes and see what happens.
+#### 5. Check
 
-If you use `SKIP_PLANET=false` then go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
+If everything is OK, you'll have some curl lines printed. Run the first one locally and make sure it's showing HTTP/2 200. For example this is an OK response.
 
-*// Note: If your server doesn't have an SSD, the download + uncompressing process can take hours.*
+```locally to test them.
+curl -sI https://test.openfreemap.org/monaco | sort
+
+HTTP/2 200
+access-control-allow-origin: *
+cache-control: max-age=86400
+cache-control: public
+content-length: 5776
+content-type: application/json
+date: Fri, 11 Oct 2024 21:01:23 GMT
+etag: "670991d1-1690"
+expires: Sat, 12 Oct 2024 21:01:23 GMT
+last-modified: Fri, 11 Oct 2024 21:00:01 GMT
+server: nginx
+x-ofm-debug: latest JSON monaco
+```
+
+#### 6. Deploy and check with `SKIP_PLANET=true`
+
+Update your `.env` file and re-run the same `./init-server.py http-host-static HOSTNAME` as before.
+
+Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
+
+If your server doesn't have an SSD, the download + uncompressing process can take hours.
 
 ---
 

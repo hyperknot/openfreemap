@@ -93,7 +93,9 @@ def write_nginx_config():
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
     curl_text_lines = sorted(curl_text_mix.splitlines())
-    if '/monaco' in curl_text_mix:
+    if config.ofm_config.get('skip_planet'):
+        curl_text_lines = [l for l in curl_text_lines if '/planet' not in l]
+    else:
         curl_text_lines = [l for l in curl_text_lines if '/monaco' not in l]
 
     curl_text_mix = '\n'.join(curl_text_lines)

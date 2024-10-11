@@ -22,10 +22,6 @@ Now we can compare where the naming problem is coming from.
 
 In conclusion: for the **one specific example**, please link the OSM pages and add the inspector screenshot, then we can start with the debugging.
 
-
-
-
-
 ## Next steps
 
 It'd be nice to compare with other OpenMapTiles implementations like [tilemaker](https://github.com/systemed/tilemaker) or the [OpenMapTiles reference](https://github.com/openmaptiles/openmaptiles). I don't have full planet datasets from these implementations currently, so if someone is willing to run one it'd be a great contribution.
