@@ -19,7 +19,7 @@ Self-hosting was an option, but it required a big server and a lot of time to ge
 
 Since I've spent many years developing the map tile infrastructure for [MapHub](https://maphub.net/), I decided to open-source it so anyone can use it. With OpenFreeMap, you now have the option to either set up your own server or use our public instance.
 
-## How can you offer a free public instance ?
+## How can you offer a free public instance?
 
 There is no technical reason why map hosting costs as much as it does today. Vector tiles are just static files. It's true that serving hundreds of millions of files is not easy, but at the end of the day, they are just files.
 
