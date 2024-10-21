@@ -12,7 +12,7 @@ I there is a 99.9% chance you only need **http-host**. Tile-gen is slow, needs a
 
 ### System requirements
 
-**http-host**: 300 GB SSD for hosting a single run and 4 GB RAM
+**http-host**: 300 GB disk space for hosting a single run. SSD is recommended, but not required.
 
 **tile-gen**: 500 GB SDD and at least 64 GB ram
 
