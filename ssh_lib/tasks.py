@@ -209,7 +209,7 @@ def upload_config_json(c):
     if not (domain_le or domain_ledns):
         sys.exit('Please specify DOMAIN_LE or DOMAIN_LEDNS in config/.env')
 
-    if domain_le and not le_email:
+    if domain_le and not le_email and not skip_letsencrypt:
         sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
 
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
@@ -219,6 +219,7 @@ def upload_config_json(c):
         'domain_ledns': domain_ledns,
         'le_email': le_email,
         'skip_planet': skip_planet,
+        'skip_letsencrypt': skip_letsencrypt,
         'http_host_list': http_host_list,
         'telegram_token': dotenv_val('TELEGRAM_TOKEN'),
         'telegram_chat_id': dotenv_val('TELEGRAM_CHAT_ID'),

@@ -1,3 +1,5 @@
+import os
+import sys
 from pathlib import Path
 
 from dotenv import dotenv_values
@@ -19,7 +21,18 @@ PLANETILER_BIN = f'{TILE_GEN_DIR}/planetiler'
 
 HTTP_HOST_BIN = f'{OFM_DIR}/http_host/bin'
 
-DOTENV_VALUES = dotenv_values(f'{CONFIG_DIR}/.env')
+
+ENV = os.getenv('ENV')
+if ENV:
+    env_file_name = f'.env.{ENV}'
+else:
+    env_file_name = '.env'
+
+env_file_path = CONFIG_DIR / env_file_name
+if not env_file_path.exists():
+    sys.exit(f'config/{env_file_name} does not exist')
+
+DOTENV_VALUES = dotenv_values(CONFIG_DIR / env_file_name)
 
 
 def dotenv_val(key):
