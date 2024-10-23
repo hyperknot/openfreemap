@@ -22,6 +22,9 @@ PLANETILER_BIN = f'{TILE_GEN_DIR}/planetiler'
 HTTP_HOST_BIN = f'{OFM_DIR}/http_host/bin'
 
 
+# Handling multiple .env files is supported
+# or example ENV=test would use .env.test
+
 ENV = os.getenv('ENV')
 if ENV:
     env_file_name = f'.env.{ENV}'

@@ -17,6 +17,7 @@ def write_nginx_config():
 
     domain_le = config.ofm_config['domain_le']
     domain_ledns = config.ofm_config['domain_ledns']
+    skip_letsencrypt = config.ofm_config['skip_letsencrypt']
 
     # remove old configs and certs
     for file in Path('/data/nginx/sites').glob('ofm_*.conf'):
@@ -58,36 +59,37 @@ def write_nginx_config():
         subprocess.run(['nginx', '-t'], check=True)
         subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-        subprocess.run(
-            [
-                'certbot',
-                'certonly',
-                '--webroot',
-                '--webroot-path=/data/nginx/acme-challenges',
-                '--noninteractive',
-                '-m',
-                config.ofm_config['le_email'],
-                '--agree-tos',
-                '--cert-name=ofm_le',
-                # '--staging',
-                '--deploy-hook',
-                'nginx -t && service nginx reload',
-                '-d',
-                domain_le,
-            ],
-            check=True,
-        )
+        if not skip_letsencrypt:
+            subprocess.run(
+                [
+                    'certbot',
+                    'certonly',
+                    '--webroot',
+                    '--webroot-path=/data/nginx/acme-challenges',
+                    '--noninteractive',
+                    '-m',
+                    config.ofm_config['le_email'],
+                    '--agree-tos',
+                    '--cert-name=ofm_le',
+                    # '--staging',
+                    '--deploy-hook',
+                    'nginx -t && service nginx reload',
+                    '-d',
+                    domain_le,
+                ],
+                check=True,
+            )
 
-        # link certs to nginx dir
-        le_cert.unlink()
-        le_key.unlink()
+            # link certs to nginx dir
+            le_cert.unlink()
+            le_key.unlink()
 
-        etc_cert = Path('/etc/letsencrypt/live/ofm_le/fullchain.pem')
-        etc_key = Path('/etc/letsencrypt/live/ofm_le/privkey.pem')
-        assert etc_cert.is_file()
-        assert etc_key.is_file()
-        le_cert.symlink_to(etc_cert)
-        le_key.symlink_to(etc_key)
+            etc_cert = Path('/etc/letsencrypt/live/ofm_le/fullchain.pem')
+            etc_key = Path('/etc/letsencrypt/live/ofm_le/privkey.pem')
+            assert etc_cert.is_file()
+            assert etc_key.is_file()
+            le_cert.symlink_to(etc_cert)
+            le_key.symlink_to(etc_key)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
