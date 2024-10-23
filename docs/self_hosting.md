@@ -18,13 +18,9 @@ I there is a 99.9% chance you only need **http-host**. Tile-gen is slow, needs a
 
 **Ubuntu 22** or newer
 
-
-
 ### Provider recommendation
 
 One amazing deal, which is tested and known to work well for http-host is the €4.5 / month [Contabo Storage VPS](https://contabo.com/en/storage-vps/)
-
-
 
 ---
 
