@@ -203,6 +203,7 @@ def upload_config_json(c):
     domain_le = dotenv_val('DOMAIN_LE').lower()
     domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
     skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
+    skip_letsencrypt = dotenv_val('SKIP_LETSENCRYPT').lower() == 'true'
     le_email = dotenv_val('LE_EMAIL').lower()
 
     if not (domain_le or domain_ledns):
