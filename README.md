@@ -189,7 +189,7 @@ See [dev setup docs](docs/dev_setup.md).
 
 Lot of self-hosting related fixes.
 
-Generating the domain inside the style JSON files dynamically (using nginx sub_filter).
+Generating the domain inside the style TileJSON files dynamically (using nginx sub_filter).
 
 Added SKIP_LETSENCRYPT variable for cases when the certificates are self-managed or self-signed is OK.
 
