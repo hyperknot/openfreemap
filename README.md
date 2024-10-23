@@ -185,6 +185,14 @@ See [dev setup docs](docs/dev_setup.md).
 
 ## Changelog
 
+**v0.8**
+
+Lot of self-hosting related fixes.
+
+Generating the domain inside the style JSON files dynamically (using nginx sub_filter).
+
+Added SKIP_LETSENCRYPT variable for cases when the certificates are self-managed or self-signed is OK.
+
 **v0.7**
 
 MBTiles are now uploaded, next to the btrfs image files.
