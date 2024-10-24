@@ -17,6 +17,7 @@ Before running the benchmarks, you need to create a path list (`path_list_500k.t
 ## Usage
 
 Basic command:
+
 ```bash
 wrk -c10 -t4 -d10s -s /data/ofm/benchmark/wrk_custom_list.lua http://localhost
 ```
@@ -40,4 +41,3 @@ Benchmark results can be found in [results.md](results.md)
 ## Contributing
 
 Feel free to submit your results including which hosts were used.
-
