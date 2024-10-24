@@ -1,8 +1,0 @@
-wrk -c10 -t4 -d10s -s /data/ofm/benchmark/wrk_custom_list.lua http://localhost
-
-# -t1 => more correct, since the url list is loaded exactly in sequence
-# -t4 => reflecting real world usage
-
-
-
-

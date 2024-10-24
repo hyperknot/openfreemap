@@ -129,6 +129,7 @@ def loadbalancer(hostname, user, port, noninteractive):
 @common_options
 def debug(hostname, user, port, noninteractive):
     c = get_connection(hostname, user, port)
+    run_http_host_sync(c)
 
 
 if __name__ == '__main__':

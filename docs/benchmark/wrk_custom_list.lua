@@ -1,6 +1,6 @@
 local counter = 1
 local lines = {}
-local url_base = "/planet/20231221_134737_pt/"  -- trailing slash
+local url_base = "/planet/fake_version/"  -- trailing slash
 local path_list_txt = "/data/ofm/benchmark/path_list_500k.txt"
 
 for line in io.lines(path_list_txt) do
