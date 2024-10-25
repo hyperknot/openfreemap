@@ -62,7 +62,7 @@ On macOS you can do `brew install python`
 
 #### 4. Prepare the Python environment
 
-You run the deploy script locally, and it deploys to a remove server over SSH. You can use a virtualenv if you are used to working with them, but it's not necessary.
+You run the deploy script locally, and it deploys to a remote server over SSH. You can use a virtualenv if you are used to working with them, but it's not necessary.
 
 ```
 cd openfreemap
@@ -98,7 +98,7 @@ server: nginx
 x-ofm-debug: latest JSON monaco
 ```
 
-#### 6. Deploy and check with `SKIP_PLANET=true`
+#### 6. Deploy and check with `SKIP_PLANET=false`
 
 Update your `.env` file and re-run the same `./init-server.py http-host-static HOSTNAME` as before.
 
