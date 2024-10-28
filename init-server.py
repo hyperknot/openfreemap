@@ -127,6 +127,16 @@ def loadbalancer(hostname, user, port, noninteractive):
 
 @cli.command()
 @common_options
+def http_host_sync(hostname, user, port, noninteractive):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    c = get_connection(hostname, user, port)
+    run_http_host_sync(c)
+
+
+@cli.command()
+@common_options
 def debug(hostname, user, port, noninteractive):
     c = get_connection(hostname, user, port)
     run_http_host_sync(c)

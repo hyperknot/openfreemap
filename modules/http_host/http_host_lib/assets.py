@@ -7,21 +7,26 @@ from http_host_lib.config import config
 from http_host_lib.utils import download_file_aria2, download_if_size_differs
 
 
-def download_assets():
+def download_assets() -> bool:
     """
     Downloads and extracts assets
     """
 
-    download_and_extract_asset_tar_gz('fonts')
-    download_and_extract_asset_tar_gz('styles')
-    download_and_extract_asset_tar_gz('natural_earth')
+    changed = False
 
-    download_sprites()
+    changed += download_and_extract_asset_tar_gz('fonts')
+    changed += download_and_extract_asset_tar_gz('styles')
+    changed += download_and_extract_asset_tar_gz('natural_earth')
+
+    changed += download_sprites()
+
+    return changed
 
 
 def download_and_extract_asset_tar_gz(asset_kind):
     """
     Download and extract asset.tgz if the file size differ or not available locally
+    Returns True if modified
     """
 
     print(f'Downloading asset {asset_kind}')
@@ -33,7 +38,7 @@ def download_and_extract_asset_tar_gz(asset_kind):
     local_file = asset_dir / 'ofm.tar.gz'
     if not download_if_size_differs(url, local_file):
         print(f'  skipping asset: {asset_kind}')
-        return
+        return False
 
     ofm_dir = asset_dir / 'ofm'
     ofm_dir_bak = asset_dir / 'ofm.bak'
@@ -47,9 +52,10 @@ def download_and_extract_asset_tar_gz(asset_kind):
     )
 
     print(f'  downloaded asset: {asset_kind}')
+    return True
 
 
-def download_sprites():
+def download_sprites() -> bool:
     """
     Sprites are special assets, as we have to keep the old versions indefinitely
     """
@@ -63,6 +69,8 @@ def download_sprites():
     r.raise_for_status()
 
     sprites_remote = [l for l in r.text.splitlines() if l.startswith('sprites/')]
+
+    changed = False
 
     for sprite in sprites_remote:
         sprite_name = sprite.split('/')[1].replace('.tar.gz', '')
@@ -81,3 +89,6 @@ def download_sprites():
         )
         local_file.unlink()
         print(f'  downloaded sprite version: {sprite_name}')
+        changed = True
+
+    return changed

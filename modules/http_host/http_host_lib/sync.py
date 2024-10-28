@@ -19,10 +19,9 @@ def full_sync(force=False):
     assert_sudo()
 
     # start
-
     versions_changed = fetch_version_files()
 
-    download_assets()
+    assets_changed = download_assets()
 
     btrfs_downloaded = False
 
@@ -35,7 +34,7 @@ def full_sync(force=False):
         btrfs_downloaded += download_area_version(area='planet', version='latest')
         btrfs_downloaded += download_area_version(area='planet', version='deployed')
 
-    if btrfs_downloaded or versions_changed or force:
+    if btrfs_downloaded or versions_changed or assets_changed or force:
         auto_clean_btrfs()
         auto_mount()
 
