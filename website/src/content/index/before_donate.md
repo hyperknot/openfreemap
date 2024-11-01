@@ -4,8 +4,9 @@ I'm Zsolt Ero ([blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfre
 
 After 9 years of running my own map tile infrastructure for [MapHub](https://maphub.net/), I've open-sourced it and launched OpenFreeMap.
 
-X: [@hyperknot](https://x.com/hyperknot) (for details) \
-X: [@OpenFreeMapOrg](https://x.com/OpenFreeMapOrg) (for announcements)
+X: [@hyperknot](https://x.com/hyperknot) (details) \
+X: [@OpenFreeMapOrg](https://x.com/OpenFreeMapOrg) (announcements) \
+bsky: [@hyperknot.com](https://bsky.app/profile/hyperknot.com)
 
 GitHub: [openfreemap](https://github.com/hyperknot/openfreemap) and [openfreemap-styles](https://github.com/hyperknot/openfreemap-styles)
 
