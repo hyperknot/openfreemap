@@ -43,12 +43,12 @@ def write_nginx_config():
 
     # processing Let's Encrypt config
     if domain_direct:
-        le_cert = config.certs_dir / 'ofm_direct.cert'
-        le_key = config.certs_dir / 'ofm_direct.key'
+        direct_cert = config.certs_dir / 'ofm_direct.cert'
+        direct_key = config.certs_dir / 'ofm_direct.key'
 
-        if not le_cert.is_file() or not le_key.is_file():
-            shutil.copyfile(Path('/etc/nginx/ssl/dummy.crt'), le_cert)
-            shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), le_key)
+        if not direct_cert.is_file() or not direct_key.is_file():
+            shutil.copyfile(Path('/etc/nginx/ssl/dummy.crt'), direct_cert)
+            shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), direct_key)
 
         curl_text_mix += create_nginx_conf(
             template_path=config.nginx_confs / 'le.conf',
@@ -81,15 +81,15 @@ def write_nginx_config():
             )
 
             # link certs to nginx dir
-            le_cert.unlink()
-            le_key.unlink()
+            direct_cert.unlink()
+            direct_key.unlink()
 
             etc_cert = Path('/etc/letsencrypt/live/ofm_direct/fullchain.pem')
             etc_key = Path('/etc/letsencrypt/live/ofm_direct/privkey.pem')
             assert etc_cert.is_file()
             assert etc_key.is_file()
-            le_cert.symlink_to(etc_cert)
-            le_key.symlink_to(etc_key)
+            direct_cert.symlink_to(etc_cert)
+            direct_key.symlink_to(etc_key)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
