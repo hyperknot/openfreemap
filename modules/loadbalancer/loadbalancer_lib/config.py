@@ -19,8 +19,8 @@ class Configuration:
     telegram_token = ofm_config['telegram_token']
     telegram_chat_id = ofm_config['telegram_chat_id']
 
-    domain_ledns = ofm_config['domain_ledns']
-    domain_root = '.'.join(domain_ledns.split('.')[-2:])
+    domain_roundrobin = ofm_config['domain_roundrobin']
+    domain_root = '.'.join(domain_roundrobin.split('.')[-2:])
 
     cloudflare_ini = dotenv_values(ofm_config_dir / 'cloudflare.ini')
     cloudflare_api_token = cloudflare_ini['dns_cloudflare_api_token']

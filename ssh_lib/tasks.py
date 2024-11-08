@@ -98,7 +98,7 @@ def prepare_http_host(c):
 
     upload_http_host_files(c)
 
-    if dotenv_val('DOMAIN_LEDNS'):
+    if dotenv_val('DOMAIN_ROUNDROBIN'):
         assert (CONFIG_DIR / 'rclone.conf').exists()
         put(
             c,
@@ -106,7 +106,7 @@ def prepare_http_host(c):
             f'{REMOTE_CONFIG}/rclone.conf',
             permissions=400,
         )
-        put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_ledns_reader', '/etc/cron.d/')
+        put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_roundrobin_reader', '/etc/cron.d/')
 
     c.sudo(f'{VENV_BIN}/pip install -e {HTTP_HOST_BIN} --use-pep517')
 
@@ -142,11 +142,11 @@ def install_benchmark(c):
     wrk(c)
 
 
-def setup_ledns_writer(c):
+def setup_roundrobin_writer(c):
     le_email = dotenv_val('LE_EMAIL').lower()
-    domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
+    domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
     assert le_email
-    assert domain_ledns
+    assert domain_roundrobin
     assert (CONFIG_DIR / 'rclone.conf').exists()
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
 
@@ -169,18 +169,18 @@ def setup_ledns_writer(c):
         permissions=400,
     )
 
-    c.sudo('rm -rf /data/ofm/ledns')
+    c.sudo('rm -rf /data/ofm/roundrobin')
 
     put(
         c,
-        MODULES_DIR / 'ledns' / 'rclone_write.sh',
-        '/data/ofm/ledns/rclone_write.sh',
+        MODULES_DIR / 'roundrobin' / 'rclone_write.sh',
+        '/data/ofm/roundrobin/rclone_write.sh',
         create_parent_dir=True,
         permissions=500,
     )
 
     # only use with --staging
-    # c.sudo('certbot delete --noninteractive --cert-name ofm_ledns', warn=True)
+    # c.sudo('certbot delete --noninteractive --cert-name ofm_roundrobin', warn=True)
 
     sudo_cmd(
         c,
@@ -191,23 +191,23 @@ def setup_ledns_writer(c):
         f'--noninteractive '
         f'-m {le_email} '
         f'--agree-tos '
-        f'--cert-name=ofm_ledns '
-        f'--deploy-hook /data/ofm/ledns/rclone_write.sh '
-        f'-d {domain_ledns}',
-        # f'-d {domain2_ledns}',
-        # f'-d {domain2_ledns}',
+        f'--cert-name=ofm_roundrobin '
+        f'--deploy-hook /data/ofm/roundrobin/rclone_write.sh '
+        f'-d {domain_roundrobin}',
+        # f'-d {domain2_roundrobin}',
+        # f'-d {domain2_roundrobin}',
     )
 
 
 def upload_config_json(c):
     domain_le = dotenv_val('DOMAIN_LE').lower()
-    domain_ledns = dotenv_val('DOMAIN_LEDNS').lower()
+    domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
     skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
     skip_letsencrypt = dotenv_val('SKIP_LETSENCRYPT').lower() == 'true'
     le_email = dotenv_val('LE_EMAIL').lower()
 
-    if not (domain_le or domain_ledns):
-        sys.exit('Please specify DOMAIN_LE or DOMAIN_LEDNS in config/.env')
+    if not (domain_le or domain_roundrobin):
+        sys.exit('Please specify DOMAIN_LE or DOMAIN_ROUNDROBIN in config/.env')
 
     if domain_le and not le_email and not skip_letsencrypt:
         sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
@@ -216,7 +216,7 @@ def upload_config_json(c):
 
     config = {
         'domain_le': domain_le,
-        'domain_ledns': domain_ledns,
+        'domain_roundrobin': domain_roundrobin,
         'le_email': le_email,
         'skip_planet': skip_planet,
         'skip_letsencrypt': skip_letsencrypt,

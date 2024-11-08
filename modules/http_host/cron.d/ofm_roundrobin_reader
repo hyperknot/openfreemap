@@ -1,0 +1,2 @@
+# once per day
+2 34 * * * ofm     sudo /usr/bin/bash /data/ofm/http_host/bin/roundrobin_reader.sh >> /data/ofm/http_host/logs/roundrobin_reader.log 2>&1

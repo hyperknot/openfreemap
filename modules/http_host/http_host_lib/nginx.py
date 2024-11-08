@@ -16,7 +16,7 @@ def write_nginx_config():
     curl_text_mix = ''
 
     domain_le = config.ofm_config['domain_le']
-    domain_ledns = config.ofm_config['domain_ledns']
+    domain_roundrobin = config.ofm_config['domain_roundrobin']
     skip_letsencrypt = config.ofm_config['skip_letsencrypt']
 
     # remove old configs and certs
@@ -27,18 +27,18 @@ def write_nginx_config():
         file.unlink()
 
     # processing Round Robin DNS config
-    if domain_ledns:
+    if domain_roundrobin:
         if not config.rclone_config.is_file():
             sys.exit('rclone.conf missing')
 
-        # download the ledns certificate from bucket using rclone
-        write_ledns_reader_script(domain_ledns)
-        subprocess.run(['bash', config.http_host_bin / 'ledns_reader.sh'], check=True)
+        # download the roundrobin certificate from bucket using rclone
+        write_roundrobin_reader_script(domain_roundrobin)
+        subprocess.run(['bash', config.http_host_bin / 'roundrobin_reader.sh'], check=True)
 
         curl_text_mix += create_nginx_conf(
-            template_path=config.nginx_confs / 'ledns.conf',
-            local='ofm_ledns',
-            domain=domain_ledns,
+            template_path=config.nginx_confs / 'roundrobin.conf',
+            local='ofm_roundrobin',
+            domain=domain_roundrobin,
         )
 
     # processing Let's Encrypt config
@@ -317,13 +317,13 @@ def create_latest_locations(*, local: str, domain: str) -> str:
     return location_str
 
 
-def write_ledns_reader_script(domain_ledns):
+def write_roundrobin_reader_script(domain_roundrobin):
     script = f"""
 #!/usr/bin/env bash
 export RCLONE_CONFIG=/data/ofm/config/rclone.conf
-rclone copyto -v "remote:ofm-private/ledns/{domain_ledns}/ofm_ledns.cert" /data/nginx/certs/ofm_ledns.cert
-rclone copyto -v "remote:ofm-private/ledns/{domain_ledns}/ofm_ledns.key" /data/nginx/certs/ofm_ledns.key
+rclone copyto -v "remote:ofm-private/roundrobin/{domain_roundrobin}/ofm_roundrobin.cert" /data/nginx/certs/ofm_roundrobin.cert
+rclone copyto -v "remote:ofm-private/roundrobin/{domain_roundrobin}/ofm_roundrobin.key" /data/nginx/certs/ofm_roundrobin.key
     """.strip()
 
-    with open(config.http_host_bin / 'ledns_reader.sh', 'w') as fp:
+    with open(config.http_host_bin / 'roundrobin_reader.sh', 'w') as fp:
         fp.write(script)

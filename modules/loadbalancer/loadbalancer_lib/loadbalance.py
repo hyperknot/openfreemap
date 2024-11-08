@@ -72,9 +72,9 @@ def run_area(area):
         try:
             # don't check latest
             if relaxed_mode:
-                check_host_version(config.domain_ledns, host_ip, area, version)
+                check_host_version(config.domain_roundrobin, host_ip, area, version)
             else:
-                check_host_latest(config.domain_ledns, host_ip, area, version)
+                check_host_latest(config.domain_roundrobin, host_ip, area, version)
 
             results[host_ip] = True
         except Exception as e:
@@ -91,11 +91,11 @@ def update_records(working_hosts) -> bool:
 
     updated |= set_records_round_robin(
         zone_id=zone_id,
-        name=config.domain_ledns,
+        name=config.domain_roundrobin,
         host_ip_set=working_hosts,
         proxied=False,
         ttl=300,
-        comment='domain_ledns',
+        comment='domain_roundrobin',
         cloudflare_api_token=config.cloudflare_api_token,
     )
 

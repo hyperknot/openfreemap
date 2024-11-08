@@ -43,7 +43,7 @@ def set_version(area, version):
 def check_all_hosts(area, version) -> bool:
     oc = config.ofm_config
 
-    domain = oc['domain_ledns'] or oc['domain_le']
+    domain = oc['domain_roundrobin'] or oc['domain_le']
     print(f'Using domain: {domain}')
 
     try:
