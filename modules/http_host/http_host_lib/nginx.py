@@ -17,7 +17,7 @@ def write_nginx_config():
 
     domain_direct = config.ofm_config['domain_direct']
     domain_roundrobin = config.ofm_config['domain_roundrobin']
-    skip_letsencrypt = config.ofm_config['skip_letsencrypt']
+    self_signed_certs = config.ofm_config['self_signed_certs']
 
     # remove old configs and certs
     for file in Path('/data/nginx/sites').glob('ofm_*.conf'):
@@ -43,8 +43,8 @@ def write_nginx_config():
 
     # processing Let's Encrypt config
     if domain_direct:
-        le_cert = config.certs_dir / 'ofm_le.cert'
-        le_key = config.certs_dir / 'ofm_le.key'
+        le_cert = config.certs_dir / 'ofm_direct.cert'
+        le_key = config.certs_dir / 'ofm_direct.key'
 
         if not le_cert.is_file() or not le_key.is_file():
             shutil.copyfile(Path('/etc/nginx/ssl/dummy.crt'), le_cert)
@@ -52,14 +52,14 @@ def write_nginx_config():
 
         curl_text_mix += create_nginx_conf(
             template_path=config.nginx_confs / 'le.conf',
-            local='ofm_le',
+            local='ofm_direct',
             domain=domain_direct,
         )
 
         subprocess.run(['nginx', '-t'], check=True)
         subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-        if not skip_letsencrypt:
+        if not self_signed_certs:
             subprocess.run(
                 [
                     'certbot',
@@ -68,9 +68,9 @@ def write_nginx_config():
                     '--webroot-path=/data/nginx/acme-challenges',
                     '--noninteractive',
                     '-m',
-                    config.ofm_config['le_email'],
+                    config.ofm_config['letsencrypt_email'],
                     '--agree-tos',
-                    '--cert-name=ofm_le',
+                    '--cert-name=ofm_direct',
                     # '--staging',
                     '--deploy-hook',
                     'nginx -t && service nginx reload',
@@ -84,8 +84,8 @@ def write_nginx_config():
             le_cert.unlink()
             le_key.unlink()
 
-            etc_cert = Path('/etc/letsencrypt/live/ofm_le/fullchain.pem')
-            etc_key = Path('/etc/letsencrypt/live/ofm_le/privkey.pem')
+            etc_cert = Path('/etc/letsencrypt/live/ofm_direct/fullchain.pem')
+            etc_key = Path('/etc/letsencrypt/live/ofm_direct/privkey.pem')
             assert etc_cert.is_file()
             assert etc_key.is_file()
             le_cert.symlink_to(etc_cert)

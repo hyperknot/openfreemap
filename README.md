@@ -191,7 +191,7 @@ Lot of self-hosting related fixes.
 
 Generating the domain inside the style TileJSON files dynamically (using nginx sub_filter).
 
-Added SKIP_LETSENCRYPT variable for cases when the certificates are self-managed or self-signed is OK.
+Added SELF_SIGNED_CERTS variable for cases when the certificates are self-managed or self-signed is OK.
 
 **v0.7**
 

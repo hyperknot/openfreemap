@@ -143,9 +143,9 @@ def install_benchmark(c):
 
 
 def setup_roundrobin_writer(c):
-    le_email = dotenv_val('LE_EMAIL').lower()
+    letsencrypt_email = dotenv_val('LETSENCRYPT_EMAIL').lower()
     domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
-    assert le_email
+    assert letsencrypt_email
     assert domain_roundrobin
     assert (CONFIG_DIR / 'rclone.conf').exists()
     assert (CONFIG_DIR / 'cloudflare.ini').exists()
@@ -189,7 +189,7 @@ def setup_roundrobin_writer(c):
         f'--dns-cloudflare-credentials {REMOTE_CONFIG}/cloudflare.ini '
         '--dns-cloudflare-propagation-seconds 20 '
         f'--noninteractive '
-        f'-m {le_email} '
+        f'-m {letsencrypt_email} '
         f'--agree-tos '
         f'--cert-name=ofm_roundrobin '
         f'--deploy-hook /data/ofm/roundrobin/rclone_write.sh '
@@ -203,23 +203,23 @@ def upload_config_json(c):
     domain_direct = dotenv_val('DOMAIN_DIRECT').lower()
     domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
     skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
-    skip_letsencrypt = dotenv_val('SKIP_LETSENCRYPT').lower() == 'true'
-    le_email = dotenv_val('LE_EMAIL').lower()
+    self_signed_certs = dotenv_val('SELF_SIGNED_CERTS').lower() == 'true'
+    letsencrypt_email = dotenv_val('LETSENCRYPT_EMAIL').lower()
 
     if not (domain_direct or domain_roundrobin):
         sys.exit('Please specify DOMAIN_DIRECT or DOMAIN_ROUNDROBIN in config/.env')
 
-    if domain_direct and not le_email and not skip_letsencrypt:
-        sys.exit('Please add your email to LE_EMAIL when using DOMAIN_DIRECT')
+    if domain_direct and not letsencrypt_email and not self_signed_certs:
+        sys.exit('Please add your email to LETSENCRYPT_EMAIL when using DOMAIN_DIRECT')
 
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
 
     config = {
         'domain_direct': domain_direct,
         'domain_roundrobin': domain_roundrobin,
-        'le_email': le_email,
+        'letsencrypt_email': letsencrypt_email,
         'skip_planet': skip_planet,
-        'skip_letsencrypt': skip_letsencrypt,
+        'self_signed_certs': self_signed_certs,
         'http_host_list': http_host_list,
         'telegram_token': dotenv_val('TELEGRAM_TOKEN'),
         'telegram_chat_id': dotenv_val('TELEGRAM_CHAT_ID'),
