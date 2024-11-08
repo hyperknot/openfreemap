@@ -200,22 +200,22 @@ def setup_roundrobin_writer(c):
 
 
 def upload_config_json(c):
-    domain_le = dotenv_val('DOMAIN_LE').lower()
+    domain_direct = dotenv_val('DOMAIN_DIRECT').lower()
     domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
     skip_planet = dotenv_val('SKIP_PLANET').lower() == 'true'
     skip_letsencrypt = dotenv_val('SKIP_LETSENCRYPT').lower() == 'true'
     le_email = dotenv_val('LE_EMAIL').lower()
 
-    if not (domain_le or domain_roundrobin):
-        sys.exit('Please specify DOMAIN_LE or DOMAIN_ROUNDROBIN in config/.env')
+    if not (domain_direct or domain_roundrobin):
+        sys.exit('Please specify DOMAIN_DIRECT or DOMAIN_ROUNDROBIN in config/.env')
 
-    if domain_le and not le_email and not skip_letsencrypt:
-        sys.exit('Please add your email to LE_EMAIL when using DOMAIN_LE')
+    if domain_direct and not le_email and not skip_letsencrypt:
+        sys.exit('Please add your email to LE_EMAIL when using DOMAIN_DIRECT')
 
     http_host_list = [h.strip() for h in dotenv_val('HTTP_HOST_LIST').split(',') if h.strip()]
 
     config = {
-        'domain_le': domain_le,
+        'domain_direct': domain_direct,
         'domain_roundrobin': domain_roundrobin,
         'le_email': le_email,
         'skip_planet': skip_planet,

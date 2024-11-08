@@ -15,7 +15,7 @@ def write_nginx_config():
 
     curl_text_mix = ''
 
-    domain_le = config.ofm_config['domain_le']
+    domain_direct = config.ofm_config['domain_direct']
     domain_roundrobin = config.ofm_config['domain_roundrobin']
     skip_letsencrypt = config.ofm_config['skip_letsencrypt']
 
@@ -42,7 +42,7 @@ def write_nginx_config():
         )
 
     # processing Let's Encrypt config
-    if domain_le:
+    if domain_direct:
         le_cert = config.certs_dir / 'ofm_le.cert'
         le_key = config.certs_dir / 'ofm_le.key'
 
@@ -53,7 +53,7 @@ def write_nginx_config():
         curl_text_mix += create_nginx_conf(
             template_path=config.nginx_confs / 'le.conf',
             local='ofm_le',
-            domain=domain_le,
+            domain=domain_direct,
         )
 
         subprocess.run(['nginx', '-t'], check=True)
@@ -75,7 +75,7 @@ def write_nginx_config():
                     '--deploy-hook',
                     'nginx -t && service nginx reload',
                     '-d',
-                    domain_le,
+                    domain_direct,
                 ],
                 check=True,
             )

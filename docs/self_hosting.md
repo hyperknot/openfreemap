@@ -49,7 +49,7 @@ git clone https://github.com/hyperknot/openfreemap
 
 In the config folder, copy `.env.sample` to `.env` and set the values.
 
-`DOMAIN_LE` - Your subdomain \
+`DOMAIN_DIRECT` - Your subdomain \
 `LE_EMAIL` - Your email for Let's Encrypt
 
 Set `SKIP_PLANET=true` first.
