@@ -9,8 +9,8 @@ from ssh_lib.tasks import (
     prepare_shared,
     prepare_tile_gen,
     run_http_host_sync,
-    setup_roundrobin_writer,
     setup_loadbalancer,
+    setup_roundrobin_writer,
 )
 from ssh_lib.utils import (
     put,
