@@ -45,6 +45,7 @@ def run_planetiler(area: str) -> Path:
         '--output=tiles.mbtiles',
         '--storage=mmap',
         '--force',
+        '--languages=default,tok',
     ]
 
     if area == 'planet':
