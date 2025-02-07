@@ -3,7 +3,7 @@ import json
 
 # This script parses a nginx server log and creates a text file
 # which can be used in the Lua script.
-# The path file is not suppied in this repo.
+# The path file is not supplied in this repo.
 
 with open('access.jsonl') as fp:
     json_lines = fp.readlines()
