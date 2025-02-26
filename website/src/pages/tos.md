@@ -20,6 +20,7 @@ You must be at least 18 years old and legally able to enter into this Agreement.
 ## User Conduct
 
 You agree to use the Site legally and responsibly. You will not:
+
 - Use it for illegal activities
 - Disrupt the service or introduce harmful code
 - Violate intellectual property rights
