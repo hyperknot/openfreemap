@@ -23,16 +23,11 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
 
-      - name: Set pnpm store path
-        run: |
-          cd website
-          pnpm config set store-dir .pnpm-store
-
       - name: Install, build, and upload your site output
         uses: withastro/action@v3
         with:
           path: website
-          package-manager: pnpm@latest
+          package-manager: yarn@latest
 
   deploy:
     needs: build
