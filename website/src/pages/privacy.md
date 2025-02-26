@@ -3,102 +3,95 @@ layout: '../layouts/Layout.astro'
 title: 'Privacy Policy'
 ---
 
-# OpenFreeMap and your data
+# OpenFreeMap Privacy Policy
 
-Version: 16th of Jan, 2024
+**Last Updated:** February 26, 2025
 
-We try to collect as little information as possible for the everyday running of this service.
+## Summary
 
-There are no user accounts, email lists, API keys, cookies or databases.
+OpenFreeMap is completely free and collects minimal data. We believe your privacy is essential.
 
-This page is a static HTML hosted on GitHub pages.
+**What We Do NOT Collect:**
+- We do **not** have user accounts
+- We do **not** use cookies or tracking technologies
+- We do **not** collect email addresses or send newsletters
+- We do **not** process any payments
+- We do **not** store IP addresses in our regular server logs
 
-We do not send newsletters. Please follow us on X or GitHub for updates.
+**What We DO Collect:**
+- **Basic Server Logs:** We collect anonymized logs that include browser type, referring pages, date/time stamps, and operating system—but no IP addresses by default
+- **Temporary IP Logs (Only During Security Incidents):** If we detect abuse or a security threat, we may temporarily enable IP logging for up to 30 days to investigate. These logs are deleted after the investigation or 30 days, whichever comes first
 
-The only data we might collect are server logs. The IP addresses are not included in these logs, but we reserve the right to temporarily enable them to investigate problems or misuse of our services.
+**Updates & Communication:**
+All announcements are shared exclusively through our X and Bluesky accounts.
 
 ---
 
-## PRIVACY POLICY
+## Full Privacy Policy
 
-Your privacy is important to us, so Hyperknot Software Kft., a company based in Hungary, has created the following Privacy Policy ("Policy") to let you know what information we collect when you visit our Site https://openfreemap.org ("Site"), why we collect it and how we use it.
+Your privacy matters to us. Hyperknot Software Kft., based in Hungary, has created this Privacy Policy to explain what information we collect when you visit our Site https://openfreemap.org, why we collect it, and how we use it.
 
-The terms "You," "Your," "Yours" and "User" refer to the entity/person/organization using our Site.
-When this Policy mentions "We", "Us," and "Our" it refers to Hyperknot Software Kft. and its subsidiaries and affiliates.
+The terms "You" and "User" refer to anyone using our Site. "We," "Us," and "Our" refer to Hyperknot Software Kft.
 
-This Privacy Policy is governed by our [Terms of Services](/tos).
+This Privacy Policy is governed by our [Terms of Service](/tos).
 
-For any questions regarding this Policy or any requests regarding the processing of personal data, please contact us at privacy@openfreemap.org.
+For questions about this policy or data processing, contact us at privacy@openfreemap.org.
 
-## 1. INFORMATION WE COLLECT AUTOMATICALLY
+### 1. INFORMATION WE COLLECT
 
-When you use our Site or contact us directly we may collect information, including your personal information, about the way you act in our Site, the services You use and how You use them.
-This information is necessary for the adequate performance of the contract between You and us, to enable us to comply with legal obligations and given our legitimate interest in being able to provide and improve the functionalities of the Site.
+We collect minimal data to maintain functionality and security:
 
-- Log data and Device information. We automatically collect log data and device information when you access and use the Site, even if you have not created an Account or logged in. That information includes, among other things: Internet protocol (IP) addresses, Browser type, Referring/exit pages, Date/time stamp, Operating system.
+- **Server Logs:** We collect anonymized logs that include browser type, referring/exit pages, date/time stamps, and operating system. These logs **do not** contain IP addresses.
 
-## 2. THE WAY WE USE YOUR INFORMATION
+- **IP Addresses (Temporary & Limited):** By default, we do not log IP addresses. However, if we detect a security incident (such as an attack on our service) or misuse, we may temporarily enable IP logging for a maximum of 30 days to investigate and resolve the issue. After this period or once the issue is resolved (whichever comes first), any logs containing IP addresses are permanently deleted.
 
-We process your information adhering to the general data processing principles.
-We may use the information we collect through our Site for a number of reasons, including to:
+- **Cloudflare:** We may use Cloudflare as a CDN to improve service delivery. Cloudflare may collect certain information as described in their [privacy policy](https://www.cloudflare.com/privacypolicy/).
 
-- to ensure data security and prevent fraud
-- to improve services
+### 2. HOW WE USE YOUR INFORMATION
 
-We will normally collect personal information from you only where we have your consent to do so, where we need the personal information to perform a contract with you, or where the processing is in our legitimate business interests.
+We use the collected information to:
+- Maintain and improve our services
+- Protect against security threats and misuse
+- Comply with legal obligations
 
-## 3. COOKIES
+We process your information based on our legitimate interest in providing a secure, functional service in accordance with GDPR principles.
 
-We do not use cookies or other tracking technologies.
+### 3. INFORMATION WE DO NOT COLLECT
 
-## 4. INFORMATION FROM MINORS
+We do **not** collect or process:
+- User accounts or authentication data
+- Cookies or other tracking technologies
+- Payment information
+- Email addresses (except when you contact us directly)
+- Sensitive personal information (political opinions, religious beliefs, health data, etc.)
 
-This site and our Services are not intended for or directed to persons under the age of 18. We do not knowingly collect or ask for information from minors. We do not knowingly allow minors to use our Site or Services.
-We will delete any information we discover is collected from a minor. Please contact us using the contact details below if you believe we might have information about a minor.
+### 4. INFORMATION FROM MINORS
 
-## 5. SENSITIVE INFORMATION
+Our Site is not intended for persons under 18. We do not knowingly collect information from minors.
 
-We do not collect sensitive information such as political opinions, religious or philosophical beliefs, racial or ethnic origin, genetic data, biometric data, health data or data related a sexual orientation.
-Please do not send, upload, or provide us any sensitive data and contact us using the contact details below if you believe that we might have such information. We have a right to delete any information we believe it might contain sensitive data.
+### 5. RETENTION
 
-## 6. PAYMENT INFORMATION
+We retain anonymized server logs (without IP addresses) indefinitely to help improve our service. Any logs containing IP addresses collected during security incidents are deleted after a maximum of 30 days.
 
-To order and use our services we may require you to provide certain financial information to facilitate the processing of payments. We will not store or collect your payment card details. That information is provided directly to our third-party payment processors whose use of your Personal information is governed by their Privacy Policy. All payment data is stored by Paddle and Lemon Squeezy. You may find their privacy policy link(s) here: [https://www.paddle.com/legal/privacy](https://www.paddle.com/legal/privacy) [https://www.lemonsqueezy.com/privacy](https://www.lemonsqueezy.com/privacy).
+### 6. SECURITY
 
-## 7. RETENTION
+We implement reasonable security measures to protect your information. For security-related questions, contact security@openfreemap.org.
 
-We retain your personal information to provide services to you and as otherwise necessary to comply with our legal obligation, resolve disputes, and enforce our agreements.
-We will retain your personal information as long as we need it to provide services to you, unless we are otherwise required by law or regulations to retain your personal information longer.
+### 7. YOUR RIGHTS UNDER GDPR
 
-## 8. SECURITY
+You have the right to:
+- Access any personal data we hold about you
+- Request correction of inaccurate data
+- Request deletion of your data
+- Object to processing
+- File a complaint with your local Data Protection Authority
 
-We have implemented security measures designed to protect the personal information you share with us, including physical, electronic and procedural measures. Among other things, we regularly monitor our systems for possible vulnerabilities and attacks.
-Regardless of the measures and efforts taken by us, the transmission of information via internet, email or text message is not completely secure. We do not guarantee the absolute protection and security of your personal information.
-We therefore encourage you to avoid providing us or anyone with any sensitive information of which you believe its disclosure could cause you substantial or irreparable harm.
-If you have any questions regarding the security of our Site or Services, you are welcome to contact us at security@openfreemap.org.
+To exercise these rights, contact us at privacy@openfreemap.org.
 
-## 9. YOUR RIGHTS
+### 8. CHANGES TO THIS POLICY
 
-You are entitled to a range of rights regarding the protection of your personal information. Those rights are:
+We may update this Policy periodically. Changes will be posted here, and we encourage users to follow our X and Bluesky accounts for updates.
 
-- The right to access the information we have about you. If you wish to access your personal information that we collect, you can do so at any time by contacting us using the contact details provided below.
-- The right to rectify inaccurate information about you. You can correct, update or request deletion of your personal information by contacting us using the contact details provided below.
-- The right to object the processing. When we rely on your consent to process your personal information, you may withdraw consent at any time by contacting us using the contact details provided below. This will not affect the lawfulness of processing prior to the withdrawal of your consent.
-- The right to lodge a complaint. You can raise questions or complaints to the national Data Protection Agency in your country of residence in the event where your rights may have been infringed. However, we recommend attempting to reach a peaceful resolution of the possible dispute by contacting us first.
-- The right to erase any data concerning you. You may demand erasure of data without undue delay for legitimate reasons, e.g. where data is no longer necessary for the purposes it was collected, or where the data has been unlawfully processed.
+### 9. ACCEPTANCE
 
-## 10. APPLICATION OF POLICY
-
-This Policy applies only to the services offered by our Company. Our Policy does not apply to services offered by other companies or individuals, including products or sites that may be displayed to you in search results, sites that may include our services or other sites linked from our Site or Services.
-
-## 11. AMENDMENTS
-
-Our Policy may change from time to time. We will post any Policy changes on our Site and, if the changes are significant, we may consider providing a more explicit notice (including, for certain services, email notification of Policy changes).
-
-## 12. ACCEPTANCE OF THIS POLICY
-
-We assume that all Users of this Site have carefully read this document and agree to its contents. If someone does not agree with this Policy, they should refrain from using our Site. We reserve the right to change our Policy at any time and inform by using the way as indicated in Section 11. Continued use of this Site implies acceptance of the revised Policy.
-
-## 13. FURTHER INFORMATION
-
-If you have any further questions regarding the data we collect, or how we use it, then please feel free to contact us at the details as indicated above.
+By using our Site, you agree to this Policy. If you disagree, please refrain from using the Site.	
