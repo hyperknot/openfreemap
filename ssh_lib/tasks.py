@@ -195,7 +195,6 @@ def setup_roundrobin_writer(c):
         f'--deploy-hook /data/ofm/roundrobin/rclone_write.sh '
         f'-d {domain_roundrobin}',
         # f'-d {domain2_roundrobin}',
-        # f'-d {domain2_roundrobin}',
     )
 
 
