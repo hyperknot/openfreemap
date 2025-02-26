@@ -27,7 +27,7 @@ jobs:
         uses: withastro/action@v3
         with:
           path: website
-          package-manager: yarn@latest
+          package-manager: npm@latest
 
   deploy:
     needs: build
