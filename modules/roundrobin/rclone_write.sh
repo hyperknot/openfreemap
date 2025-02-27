@@ -2,7 +2,7 @@
 
 # these are not needed as certbot generates these
 #env > /data/ofm/roundrobin/env.txt
-#RENEWED_DOMAINS=direct.openfreemap.org
+#RENEWED_DOMAINS=tiles.openfreemap.org
 #RENEWED_LINEAGE=/etc/letsencrypt/live/ofm_roundrobin
 
 export RCLONE_CONFIG=/data/ofm/config/rclone.conf
