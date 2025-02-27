@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://openfreemap.org/sitemap-index.xml
