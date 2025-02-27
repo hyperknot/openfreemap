@@ -1,6 +1,7 @@
 ---
 const { frontmatter } = Astro.props || {}
 const { title } = frontmatter || Astro.props
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 import '../styles/_style.css'
 ---
@@ -26,6 +27,7 @@ import '../styles/_style.css'
 
     <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={canonicalURL} />
   </head>
 
   <body>
