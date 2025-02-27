@@ -10,10 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.3.1",
+    "astro": "^5.4.0",
     "lightningcss": "^1.29.1"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }
