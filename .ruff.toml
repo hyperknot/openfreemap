@@ -29,7 +29,6 @@ lint.ignore = [
   'E741',
   'F401', # unused imports
   'F841',
-  'PT004',
   'SIM102',
   'SIM105',
   'SIM108',

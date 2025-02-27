@@ -88,7 +88,7 @@ def make_btrfs(run_folder: Path):
                 ['btrfs', 'filesystem', 'show', mount],
                 ['btrfs', 'filesystem', 'usage', mount],
             ]:
-                f.write(f"\n\n{' '.join(cmd)}\n")
+                f.write(f'\n\n{" ".join(cmd)}\n')
                 result = subprocess.run(['sudo'] + cmd, check=True, capture_output=True, text=True)
                 f.write(result.stdout)
 

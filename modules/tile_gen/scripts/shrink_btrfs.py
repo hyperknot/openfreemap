@@ -69,7 +69,7 @@ def cli(btrfs_img: Path):
     mnt_dir.rmdir()
 
     subprocess.run(['truncate', '-s', str(total_size), btrfs_img])
-    print(f'Truncated {btrfs_img} to {total_size//1_000_000} MB size')
+    print(f'Truncated {btrfs_img} to {total_size // 1_000_000} MB size')
     print('shrink_btrfs.py DONE')
 
 
@@ -86,7 +86,7 @@ def get_usage(mnt: Path, key: str):
 
 def do_shrink(mnt: Path, delta_size: float):
     delta_size = int(delta_size)
-    print(f'Trying to shrink by {delta_size//1_000_000} MB')
+    print(f'Trying to shrink by {delta_size // 1_000_000} MB')
     p = subprocess.run(['btrfs', 'filesystem', 'resize', str(-delta_size), mnt])
     return p.returncode == 0
 

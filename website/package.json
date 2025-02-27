@@ -15,9 +15,6 @@
     "lightningcss": "^1.29.1"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
+    "onlyBuiltDependencies": ["esbuild", "sharp"]
   }
 }
