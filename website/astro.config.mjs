@@ -1,3 +1,4 @@
+// @ts-check
 import { defineConfig } from 'astro/config'
 
 import sitemap from '@astrojs/sitemap';
@@ -6,6 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://openfreemap.org',
+  trailingSlash: 'always',
   vite: {
     css: {
       transformer: 'lightningcss',
