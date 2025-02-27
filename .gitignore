@@ -19,5 +19,5 @@ venv
 
 
 /pnpm-lock.yaml
-/deploy-all.sh
-/deploy-cron.sh
+
+/deploy-*.sh
