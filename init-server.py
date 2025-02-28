@@ -83,6 +83,8 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
     prepare_shared(c)
     prepare_http_host(c)
 
+    run_http_host_sync(c)  # disable for first install if you don't want to wait
+
     put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 

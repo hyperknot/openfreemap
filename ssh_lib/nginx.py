@@ -39,14 +39,7 @@ def nginx(c):
     c.sudo('mkdir -p /data/nginx/acme-challenges')
     c.sudo('mkdir -p /data/nginx/certs')
 
-    if not exists(c, '/etc/nginx/ssl/dummy.crt'):
-        c.sudo('mkdir -p /etc/nginx/ssl')
-        c.sudo(
-            'openssl req -x509 -nodes -days 365 -newkey rsa:2048 '
-            '-keyout /etc/nginx/ssl/dummy.key -out /etc/nginx/ssl/dummy.crt '
-            '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
-            hide=True,
-        )
+    generate_self_signed_cert(c)
 
     put(c, f'{ASSETS_DIR}/nginx/nginx.conf', '/etc/nginx/')
     put(c, f'{ASSETS_DIR}/nginx/mime.types', '/etc/nginx/')
@@ -88,3 +81,14 @@ def lego(c):
     c.sudo('chmod +x /tmp/lego/lego')
     c.sudo('mv /tmp/lego/lego /usr/local/bin')
     c.sudo('rm -rf /tmp/lego*')
+
+
+def generate_self_signed_cert(c):
+    if not exists(c, '/etc/nginx/ssl/dummy.cert'):
+        c.sudo('mkdir -p /etc/nginx/ssl')
+        c.sudo(
+            'openssl req -x509 -nodes -days 365 -newkey rsa:2048 '
+            '-keyout /etc/nginx/ssl/dummy.key -out /etc/nginx/ssl/dummy.cert '
+            '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
+            hide=True,
+        )

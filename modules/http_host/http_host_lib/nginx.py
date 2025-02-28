@@ -47,7 +47,7 @@ def write_nginx_config():
         direct_key = config.certs_dir / 'ofm_direct.key'
 
         if not direct_cert.is_file() or not direct_key.is_file():
-            shutil.copyfile(Path('/etc/nginx/ssl/dummy.crt'), direct_cert)
+            shutil.copyfile(Path('/etc/nginx/ssl/dummy.cert'), direct_cert)
             shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), direct_key)
 
         curl_text_mix += create_nginx_conf(
