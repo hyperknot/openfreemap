@@ -3,7 +3,6 @@ line-length = 100
 extend-exclude = ["temp"]
 
 
-
 lint.select = [
   "E",   # pycodestyle errors
   "W",   # pycodestyle warnings
@@ -30,10 +29,11 @@ lint.ignore = [
   'F401', # unused imports
   'F841',
   'SIM102',
+  #'SIM103', #  	needless-bool, return the condition {condition} directly
   'SIM105',
   'SIM108',
   'SIM115',
-  'DTZ007', # Naive datetime constructed using `datetime.datetime.strptime()` without %z
+#  'DTZ007', # Naive datetime constructed using `datetime.datetime.strptime()` without %z
 ]
 
 [format]
