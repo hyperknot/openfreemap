@@ -21,6 +21,7 @@ lint.select = [
 
 lint.ignore = [
   'A003',
+  'DTZ007',
   'E501',
   'E711',
   'E712',
