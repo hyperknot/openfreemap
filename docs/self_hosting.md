@@ -8,7 +8,7 @@ When self-hosting, there are two modules you can set up on a server (see details
 
 - **tile-gen**
 
-I there is a 99.9% chance you only need **http-host**. Tile-gen is slow, needs a huge machine and is totally pointless, since we upload the processed files every week.
+There is a 99.9% chance you only need **http-host**. Tile-gen is slow, needs a huge machine and is totally pointless, since we upload the processed files every week.
 
 ### System requirements
 
