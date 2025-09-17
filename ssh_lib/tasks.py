@@ -12,7 +12,7 @@ from ssh_lib import (
     dotenv_val,
 )
 from ssh_lib.benchmark import c1000k, wrk
-from ssh_lib.kernel import kernel_tweaks_ofm
+from ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from ssh_lib.nginx import certbot, nginx
 from ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from ssh_lib.planetiler import install_planetiler
@@ -83,7 +83,8 @@ def prepare_tile_gen(c, *, enable_cron):
 
 
 def prepare_http_host(c):
-    kernel_tweaks_ofm(c)
+    kernel_somaxconn65k(c)
+    kernel_limits1m(c)
 
     nginx(c)
     certbot(c)

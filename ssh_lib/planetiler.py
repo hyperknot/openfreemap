@@ -2,7 +2,7 @@ from ssh_lib import PLANETILER_BIN, PLANETILER_SRC
 from ssh_lib.utils import apt_get_install, apt_get_update, exists, sudo_cmd
 
 
-PLANETILER_COMMIT = 'ee22a014022f1dcc120cba6a768567408ba74908'
+PLANETILER_COMMIT = 'cc769c4f'
 PLANETILER_PATH = f'{PLANETILER_BIN}/planetiler.jar'
 
 
@@ -17,6 +17,7 @@ def install_planetiler(c):
     c.sudo(f'rm -rf {PLANETILER_BIN} {PLANETILER_SRC}')
     c.sudo(f'mkdir -p {PLANETILER_BIN} {PLANETILER_SRC}')
 
+    c.sudo('git config --global advice.detachedHead false')
     c.sudo(
         f'git clone --recurse-submodules https://github.com/onthegomap/planetiler.git {PLANETILER_SRC}'
     )

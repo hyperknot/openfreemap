@@ -91,13 +91,25 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
 @cli.command()
 @common_options
 @click.option('--cron', is_flag=True, help='Enable cron task')
-def tile_gen(hostname, user, port, cron, noninteractive):
+@click.option('--reinstall', is_flag=True, help='Reinstall everything in /data/ofm folder')
+def tile_gen(
+    hostname,
+    user,
+    port,
+    noninteractive,
+    #
+    cron,
+    reinstall,
+):
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 
     c = get_connection(hostname, user, port)
 
-    prepare_shared(c)
+    if reinstall:
+        c.sudo('rm -rf /data/ofm')
+
+    # prepare_shared(c)
 
     prepare_tile_gen(c, enable_cron=cron)
 
