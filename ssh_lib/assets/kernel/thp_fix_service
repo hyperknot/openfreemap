@@ -1,0 +1,10 @@
+[Unit]
+Before=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'
+
+[Install]
+RequiredBy=docker.service
