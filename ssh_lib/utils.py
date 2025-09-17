@@ -60,20 +60,36 @@ def put_dir(
         put(c, file, f'{remote_dir}/{file.name}', file_permissions, user, group)
 
 
-def put_str(c, remote_path, str_):
+def put_str(c, remote_path, str_, create_parent_dir=False):
     tmp_file = 'tmp.txt'
     with open(tmp_file, 'w') as outfile:
         outfile.write(str_ + '\n')
-    put(c, tmp_file, remote_path)
+    put(c, tmp_file, remote_path, create_parent_dir=create_parent_dir)
     os.remove(tmp_file)
 
 
-def append_str(c, remote_path, str_):
+def file_contains(c, file_path, search_str):
+    """Check if a file contains a specific string."""
+    if not exists(c, file_path):
+        return False
+
+    # Use grep -qF for fixed string search (no regex interpretation)
+    # -q for quiet (no output), -F for fixed string
+    result = c.sudo(f"grep -qF '{search_str}' '{file_path}'", warn=True, hide=True)
+    return result.ok
+
+
+def append_str(c, remote_path, str_, check_duplicate=False):
+    """Append string to file. If check_duplicate=True, only append if string doesn't exist."""
+    if check_duplicate and file_contains(c, remote_path, str_.strip()):
+        return False  # String already exists, didn't append
+
     tmp_path = f'/tmp/fabtmp_{random_string(8)}'
     put_str(c, tmp_path, str_)
 
     sudo_cmd(c, f"cat '{tmp_path}' >> '{remote_path}'")
     c.sudo(f'rm -f {tmp_path}')
+    return True  # Successfully appended
 
 
 def sudo_cmd(c, cmd, *, user=None):

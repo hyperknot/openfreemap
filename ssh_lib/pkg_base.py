@@ -33,9 +33,45 @@ def pkg_base(c):
         #
         'python3',
         'python3-venv',
+        #
+        'acpid',
+        'autojump',
+        'bash-completion',
+        'btop',
+        'ctop',
+        'dbus',
+        'direnv',
+        'fd-find',
+        'file',
+        'ioping',
+        'libffi-dev',
+        'libssl-dev',
+        'lsof',
+        'man-db',
+        'mc',
+        'nano',
+        'ncdu',
+        'net-tools',
+        'netbase',
+        'nethogs',
+        'openssh-client',
+        'p7zip-full',
+        'pkg-config',
+        'psmisc',
+        'ripgrep',
+        'silversearcher-ag',
+        'time',
+        'tmux',
+        #
+        # 'dstat',
+        # 'iperf3',
+        # 'iproute2',
+        # 'nasm',
     ]
 
     apt_get_install(c, ' '.join(pkg_list))
+
+    c.sudo('ln -s $(which fdfind) /usr/local/bin/fd', warn=True)
 
 
 def pkg_upgrade(c):

@@ -1,4 +1,5 @@
-from ssh_lib.utils import put_str
+from ssh_lib import ASSETS_DIR
+from ssh_lib.utils import put, put_str
 
 
 def kernel_somaxconn65k(c):
@@ -18,6 +19,12 @@ def kernel_limits1m(c):
     )
 
 
-def kernel_tweaks_ofm(c):
-    kernel_somaxconn65k(c)
-    kernel_limits1m(c)
+def kernel_vmovercommit(c):
+    put_str(c, '/etc/sysctl.d/60-vmovercommit.conf', 'vm.overcommit_memory = 1')
+
+
+def kernel_thp_fix(c):
+    # transparent_hugepage
+    put(c, f'{ASSETS_DIR}/kernel/thp_fix_service', '/etc/systemd/system/thp_fix.service')
+    c.sudo('systemctl daemon-reload')
+    c.sudo('systemctl enable thp_fix')
