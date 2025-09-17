@@ -84,11 +84,13 @@ def lego(c):
 
 
 def generate_self_signed_cert(c):
-    if not exists(c, '/etc/nginx/ssl/dummy.cert'):
-        c.sudo('mkdir -p /etc/nginx/ssl')
-        c.sudo(
-            'openssl req -x509 -nodes -days 3650 -newkey rsa:2048 '
-            '-keyout /etc/nginx/ssl/dummy.key -out /etc/nginx/ssl/dummy.cert '
-            '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
-            hide=True,
-        )
+    if exists(c, '/etc/nginx/ssl/dummy.cert'):
+        return
+
+    c.sudo('mkdir -p /etc/nginx/ssl')
+    c.sudo(
+        'openssl req -x509 -nodes -days 3650 -newkey rsa:2048 '
+        '-keyout /etc/nginx/ssl/dummy.key -out /etc/nginx/ssl/dummy.cert '
+        '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
+        hide=True,
+    )
