@@ -2,7 +2,7 @@ from ssh_lib import PLANETILER_BIN, PLANETILER_SRC
 from ssh_lib.utils import apt_get_install, apt_get_update, exists, sudo_cmd
 
 
-PLANETILER_COMMIT = 'cc769c4f'
+PLANETILER_COMMIT = '33b22c516e21cfbce6168ecba1c74486dc95d589'
 PLANETILER_PATH = f'{PLANETILER_BIN}/planetiler.jar'
 
 
@@ -25,7 +25,7 @@ def install_planetiler(c):
     sudo_cmd(c, f'cd {PLANETILER_SRC} && git checkout {PLANETILER_COMMIT}')
     sudo_cmd(c, f'cd {PLANETILER_SRC} && git submodule update --init --recursive')
 
-    sudo_cmd(c, f'cd {PLANETILER_SRC} && ./mvnw clean test package > {PLANETILER_SRC}/_build.log')
+    sudo_cmd(c, f'cd {PLANETILER_SRC} && ./mvnw clean test package')
 
     c.sudo(
         f'mv {PLANETILER_SRC}/planetiler-dist/target/planetiler-dist-*-SNAPSHOT-with-deps.jar {PLANETILER_PATH}',
