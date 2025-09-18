@@ -25,7 +25,11 @@
 }
 
 .mapbg-attrib {
-  font: 12px / 20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font:
+    12px / 20px "Helvetica Neue",
+    Arial,
+    Helvetica,
+    sans-serif;
   background-color: hsla(0, 0%, 100%, 0.5);
   padding: 0 5px;
   bottom: 0;
