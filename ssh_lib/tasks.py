@@ -143,62 +143,6 @@ def install_benchmark(c):
     wrk(c)
 
 
-def setup_roundrobin_writer(c):
-    letsencrypt_email = dotenv_val('LETSENCRYPT_EMAIL').lower()
-    domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
-    assert letsencrypt_email
-    assert domain_roundrobin
-    assert (CONFIG_DIR / 'rclone.conf').exists()
-    assert (CONFIG_DIR / 'cloudflare.ini').exists()
-
-    rclone(c)
-    certbot(c)
-
-    c.sudo(f'mkdir -p {REMOTE_CONFIG}')
-
-    put(
-        c,
-        CONFIG_DIR / 'rclone.conf',
-        f'{REMOTE_CONFIG}/rclone.conf',
-        permissions=400,
-    )
-
-    put(
-        c,
-        CONFIG_DIR / 'cloudflare.ini',
-        f'{REMOTE_CONFIG}/cloudflare.ini',
-        permissions=400,
-    )
-
-    c.sudo('rm -rf /data/ofm/roundrobin')
-
-    put(
-        c,
-        MODULES_DIR / 'roundrobin' / 'rclone_write.sh',
-        '/data/ofm/roundrobin/rclone_write.sh',
-        create_parent_dir=True,
-        permissions=500,
-    )
-
-    # only use with --staging
-    # c.sudo('certbot delete --noninteractive --cert-name ofm_roundrobin', warn=True)
-
-    sudo_cmd(
-        c,
-        'certbot certonly '
-        '--dns-cloudflare '
-        f'--dns-cloudflare-credentials {REMOTE_CONFIG}/cloudflare.ini '
-        '--dns-cloudflare-propagation-seconds 20 '
-        f'--noninteractive '
-        f'-m {letsencrypt_email} '
-        f'--agree-tos '
-        f'--cert-name=ofm_roundrobin '
-        f'--deploy-hook /data/ofm/roundrobin/rclone_write.sh '
-        f'-d {domain_roundrobin}',
-        # f'-d {domain2_roundrobin}',
-    )
-
-
 def upload_config_json(c):
     domain_direct = dotenv_val('DOMAIN_DIRECT').lower()
     domain_roundrobin = dotenv_val('DOMAIN_ROUNDROBIN').lower()
@@ -232,13 +176,6 @@ def upload_config_json(c):
 
 def setup_loadbalancer(c):
     c.sudo('rm -f /etc/cron.d/ofm_loadbalancer')
-
-    put(
-        c,
-        CONFIG_DIR / 'cloudflare.ini',
-        f'{REMOTE_CONFIG}/cloudflare.ini',
-        permissions=400,
-    )
 
     c.sudo('rm -rf /data/ofm/loadbalancer')
     put_dir(c, MODULES_DIR / 'loadbalancer', '/data/ofm/loadbalancer')
