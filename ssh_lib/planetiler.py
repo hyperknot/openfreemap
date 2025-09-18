@@ -1,11 +1,9 @@
 from ssh_lib import PLANETILER_BIN, PLANETILER_SRC
 from ssh_lib.java import java
-from ssh_lib.utils import apt_get_install, apt_get_update, exists, sudo_cmd
+from ssh_lib.utils import exists, sudo_cmd
 
 
-# PLANETILER_COMMIT = '33b22c516e21cfbce6168ecba1c74486dc95d589'  # last good
-PLANETILER_COMMIT = 'cc769c4f3c8d0ada8be7e650d3afdb4e92cbd3f2'  # main, not working
-
+PLANETILER_COMMIT = 'cc769c'
 PLANETILER_PATH = f'{PLANETILER_BIN}/planetiler.jar'
 
 
