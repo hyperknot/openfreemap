@@ -109,8 +109,7 @@ def tile_gen(
     if reinstall:
         c.sudo('rm -rf /data/ofm')
 
-    # prepare_shared(c)
-
+    prepare_shared(c)
     prepare_tile_gen(c, enable_cron=cron)
 
 
