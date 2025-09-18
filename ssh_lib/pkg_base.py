@@ -71,7 +71,7 @@ def pkg_base(c):
 
     apt_get_install(c, ' '.join(pkg_list))
 
-    c.sudo('ln -s $(which fdfind) /usr/local/bin/fd', warn=True)
+    c.sudo('ln -snf $(which fdfind) /usr/local/bin/fd', warn=True)
 
 
 def pkg_upgrade(c):
