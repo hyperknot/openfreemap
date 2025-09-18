@@ -187,7 +187,7 @@ See [dev setup docs](docs/dev_setup.md).
 
 ##### v0.9
 
-Updated Planetiler version to latest
+Updated Planetiler version to 33b22c
 
 
 ##### v0.8
