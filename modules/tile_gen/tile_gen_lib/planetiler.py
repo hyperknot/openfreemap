@@ -4,8 +4,8 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tile_gen_lib.btrfs import cleanup_folder
-from tile_gen_lib.config import config
+from .btrfs import cleanup_folder
+from .config import config
 
 
 def run_planetiler(area: str) -> Path:
@@ -16,12 +16,13 @@ def run_planetiler(area: str) -> Path:
     area_dir = config.runs_dir / area
 
     # delete all previous runs for the given area
-    for subdir in area_dir.iterdir():
-        cleanup_folder(subdir)
+    if area_dir.is_dir():
+        for subdir in area_dir.iterdir():
+            cleanup_folder(subdir)
 
-    print('running rmtree')
-    shutil.rmtree(area_dir, ignore_errors=True)
-    print('rmtree done')
+        print('running rmtree')
+        shutil.rmtree(area_dir, ignore_errors=True)
+        print('rmtree done')
 
     run_folder = area_dir / f'{date}_pt'
     run_folder.mkdir(parents=True, exist_ok=True)

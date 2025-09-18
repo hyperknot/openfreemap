@@ -3,8 +3,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from tile_gen_lib.config import config
-from tile_gen_lib.utils import python_venv_executable
+from .config import config
+from .utils import python_venv_executable
 
 
 IMAGE_SIZE = '200G'

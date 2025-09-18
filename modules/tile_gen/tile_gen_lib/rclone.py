@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-from tile_gen_lib.config import config
+from .config import config
 
 
 def upload_area(area):

@@ -1,7 +1,7 @@
 import subprocess
 
-from tile_gen_lib.config import config
-from tile_gen_lib.shared import check_host_version, get_deployed_version, get_versions_for_area
+from .config import config
+from .shared import check_host_version, get_deployed_version, get_versions_for_area
 
 
 def check_and_set_version(area, version):

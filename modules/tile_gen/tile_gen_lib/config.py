@@ -1,7 +1,6 @@
 import json
 import subprocess
 from pathlib import Path
-from pprint import pprint
 
 
 class Configuration:
