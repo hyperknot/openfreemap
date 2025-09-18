@@ -1,31 +1,186 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "root": true,
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+  },
+  "files": {
+    "maxSize": 100000,
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      //
+      "!**/.pytest_cache",
+      "!**/venv",
+      "!**/.astro",
+      "!**/.venv",
+      "!**/_astro",
+      "!**/_not_used",
+      "!**/dist",
+      "!**/dist-electron",
+      "!**/node_modules",
+      "!**/.pytest_cache",
+      //
+    ],
+  },
   "formatter": {
     "indentStyle": "space",
-    "lineWidth": 100
-  },
-  "organizeImports": {
-    "enabled": true,
-    "ignore": []
+    "lineWidth": 100,
   },
   "linter": {
     "enabled": true,
+    "domains": {
+      "solid": "all",
+    },
     "rules": {
       "recommended": true,
+      "style": {
+        "noNonNullAssertion": "off",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "generic",
+          },
+        },
+        "useLiteralEnumMembers": "error",
+        "useNodejsImportProtocol": "error",
+        "useAsConstAssertion": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "useExponentiationOperator": "error",
+        "useTemplate": "error",
+        "noParameterAssign": "error",
+        "useDefaultParameterLast": "error",
+        "useImportType": "error",
+        "useExportType": "error",
+        "useShorthandFunctionType": "error",
+        "noUselessElse": "error",
+        "useGroupedAccessorPairs": "error",
+        "useObjectSpread": "error",
+      },
+      "security": {
+        //  "noDangerouslySetInnerHtml": "off",
+        // "noBlankTarget": "off",
+      },
+      "a11y": {
+        "useFocusableInteractive": "off", // The HTML element with the interactive role "treeitem" is not focusable.
+        "useSemanticElements": "off", // SessionTreeDay / role="group"
+        "noStaticElementInteractions": "off", // SessionTreeDay / To add interactivity such as a mouse or key event listener to a static element, give the element an appropriate role value.
+        "useAriaPropsSupportedByRole": "off", // SessionTree / The ARIA attribute 'aria-multiselectable' is not supported by this element.
+        "useKeyWithClickEvents": "off", // PasteBlock / Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.
+        "noNoninteractiveElementToInteractiveRole": "off", // SessionTree
+        //    "useValidAnchor": "off",
+        //    "useButtonType": "off",
+        //   "noLabelWithoutControl": "off",
+        //  "noSvgWithoutTitle": "off",
+        // "noNoninteractiveTabindex": "off",
+      },
+      "correctness": {
+        "noUnusedFunctionParameters": "off",
+        "noUnusedImports": "off",
+        "noUnusedVariables": "off",
+        "noUnusedPrivateClassMembers": "off",
+        "noUnreachable": "off",
+        "noSolidDestructuredProps": "error",
+        "noGlobalDirnameFilename": "error",
+        "useParseIntRadix": "error",
+        "useSingleJsDocAsterisk": "error",
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noImplicitAnyLet": "off",
+        "noUselessEscapeInString": "error",
+        "useStaticResponseMethods": "error",
+        "useIterableCallbackReturn": "off",
+        // "noAssignInExpressions": "off",
+        //"noArrayIndexKey": "off",
+      },
       "complexity": {
-        "noForEach": "off"
-      }
+        "noCommaOperator": "error",
+        "useNumericLiterals": "error",
+        //     "noArguments": "off",
+        "useIndexOf": "error",
+        "noImplicitCoercions": "error", // Number(), Boolean()
+        //        "noUselessFragments": "off"
+      },
+      "nursery": {
+        //        "noShadow": "error",
+        //        "useReadonlyClassProperties": "error",
+        //        "noImportCycles": "error",
+
+        //        "noFloatingPromises": "error",
+        //        "noMisusedPromises": "error",
+
+        //        "noUnassignedVariables": "error", // bug reported ref= not recognised
+        "noUselessUndefined": "error",
+      },
+      "performance": { "useSolidForComponent": "error" },
     },
-    "ignore": []
   },
   "javascript": {
     "formatter": {
       "semicolons": "asNeeded",
-      "quoteStyle": "single"
-    }
+      "quoteStyle": "single",
+    },
   },
-  "files": {
-    "maxSize": 100000,
-    "ignore": ["venv", "dist", ".astro"]
-  }
+  "json": {
+    "parser": {
+      "allowTrailingCommas": true,
+    },
+    "formatter": {
+      "trailingCommas": "none",
+    },
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        //        "useSortedProperties": "on" // sort CSS props
+      },
+    },
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off",
+          },
+        },
+      },
+    },
+    {
+      "includes": ["**/*.jsonc"],
+      "json": {
+        "formatter": {
+          "trailingCommas": "all",
+        },
+      },
+    },
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noDuplicateProperties": "off",
+            "noEmptyBlock": "off",
+            "noUnknownAtRules": "off",
+          },
+          "complexity": {
+            "noImportantStyles": "off",
+          },
+          "style": { "noDescendingSpecificity": "off" },
+        },
+      },
+    },
+  ],
 }

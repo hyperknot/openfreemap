@@ -47,7 +47,6 @@ Please consider sponsoring our project on [GitHub Sponsors](https://github.com/s
 The only way this project can possibly work is to be super focused about what it is and what it isn't. OpenFreeMap has the following limitations by design:
 
 1. OpenFreeMap is not providing:
-
    - search or geocoding
    - route calculation, navigation or directions
    - static image generation
