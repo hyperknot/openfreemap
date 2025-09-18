@@ -3,9 +3,12 @@ from datetime import datetime, timezone
 
 import click
 from tile_gen_lib.btrfs import make_btrfs
+from tile_gen_lib.get_version_shared import (
+    get_deployed_version,
+    get_versions_for_area,
+)
 from tile_gen_lib.planetiler import run_planetiler
-from tile_gen_lib.rclone import make_indexes_for_bucket, upload_area
-from tile_gen_lib.set_version import check_and_set_version
+from tile_gen_lib.rclone import make_indexes_for_bucket, set_version_on_bucket, upload_area
 
 
 now = datetime.now(timezone.utc)
@@ -71,7 +74,22 @@ def set_version(area, version):
 
     print(f'---\n{now}\nStarting set-version {area}')
 
-    check_and_set_version(area, version)
+    if version == 'latest':
+        versions = get_versions_for_area(area)
+        if not versions:
+            print(f'  No versions found for {area}')
+            return
+
+        version = versions[-1]
+        print(f'  Latest version on bucket: {area} {version}')
+
+    try:
+        if get_deployed_version(area)['version'] == version:
+            return
+    except Exception:
+        pass
+
+    set_version_on_bucket(area, version)
 
 
 if __name__ == '__main__':

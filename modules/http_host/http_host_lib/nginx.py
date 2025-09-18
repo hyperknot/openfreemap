@@ -320,15 +320,3 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         """
 
     return location_str
-
-
-def write_roundrobin_reader_script(domain_roundrobin):
-    script = f"""
-#!/usr/bin/env bash
-export RCLONE_CONFIG=/data/ofm/config/rclone.conf
-rclone copyto -v "remote:ofm-private/roundrobin/{domain_roundrobin}/ofm_roundrobin.cert" /data/nginx/certs/ofm_roundrobin.cert
-rclone copyto -v "remote:ofm-private/roundrobin/{domain_roundrobin}/ofm_roundrobin.key" /data/nginx/certs/ofm_roundrobin.key
-    """.strip()
-
-    with open(config.http_host_bin / 'roundrobin_reader.sh', 'w') as fp:
-        fp.write(script)

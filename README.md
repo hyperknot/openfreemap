@@ -190,8 +190,6 @@ See [dev setup docs](docs/dev_setup.md).
 Updated Planetiler version to latest
 Updated OpenJDK to 24 via Temurin repo
 
-
-
 ##### v0.8
 
 Lot of self-hosting related fixes.

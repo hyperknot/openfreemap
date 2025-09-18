@@ -121,11 +121,12 @@ def http_host_sync(hostname, user, port, noninteractive):
     run_http_host_sync(c)
 
 
-@cli.command()
-@common_options
-def debug(hostname, user, port, noninteractive):
-    c = get_connection(hostname, user, port)
-    run_http_host_sync(c)
+#
+# @cli.command()
+# @common_options
+# def debug(hostname, user, port, noninteractive):
+#     c = get_connection(hostname, user, port)
+#     run_http_host_sync(c)
 
 
 if __name__ == '__main__':

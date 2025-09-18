@@ -33,8 +33,6 @@ def prepare_shared(c):
     c.sudo(f'chown ofm:ofm {REMOTE_CONFIG}')
     c.sudo(f'chown ofm:ofm {OFM_DIR}')
 
-    upload_config_json(c)
-
     prepare_venv(c)
 
 
@@ -85,6 +83,8 @@ def prepare_tile_gen(c, *, enable_cron):
 def prepare_http_host(c):
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
+
+    upload_config_json(c)
 
     nginx(c)
     certbot(c)
