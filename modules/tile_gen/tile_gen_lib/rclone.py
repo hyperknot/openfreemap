@@ -132,3 +132,17 @@ def make_indexes_for_bucket(bucket):
         check=True,
         input=index_str.encode(),
     )
+
+
+def set_version_on_bucket(area, version):
+    print(f'setting version: {area} {version}')
+    subprocess.run(
+        [
+            config.rclone_bin,
+            'rcat',
+            f'remote:ofm-assets/deployed_versions/{area}.txt',
+        ],
+        env=dict(RCLONE_CONFIG=config.rclone_config),
+        check=True,
+        input=version.strip().encode(),
+    )
