@@ -5,8 +5,8 @@ LOG_DIR=/data/ofm/tile_gen/logs
 # every day at 23:10, make a monaco run
 10 23 * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
 
-# debug every 15 minutes
-#*/15 * * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
+# debug monaco run, every minute
+#*/1 * * * * ofm    $CMD make-tiles monaco --upload >> $LOG_DIR/monaco-make-tiles.log 2>&1
 
 # every minute, set monaco to latest
 * * * * * ofm     $CMD set-version monaco >> $LOG_DIR/monaco-set-version.log 2>&1
