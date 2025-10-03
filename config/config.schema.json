@@ -3,6 +3,9 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string"
+    },
     "domains": {
       "type": "array",
       "minItems": 1,
@@ -20,6 +23,20 @@
   },
   "required": ["domains", "servers", "skip_planet"],
   "definitions": {
+    "cert-upload": {
+      "type": "object",
+      "description": "Upload your own certificate. Ideal for Cloudflare Origin Certificates with 15 year expiry. Steps: 1) Create an Origin Certificate on Cloudflare at SSL/TLS / Origin Server. 2) Generate private key and CSR with Cloudflare: Private key type: ECC, Certificate Validity: 15 years. 3) Key format: PEM. Save origin certificate as something.cert and private key as something.key in the dirname folder.",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "upload" },
+        "dirname": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Directory name containing your certificate (.cert) and private key (.key) files"
+        }
+      },
+      "required": ["type", "dirname"]
+    },
     "cert-letsencrypt": {
       "type": "object",
       "additionalProperties": false,
@@ -37,20 +54,11 @@
       },
       "required": ["type"]
     },
-    "cert-upload": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "type": { "const": "upload" },
-        "dirname": { "type": "string", "minLength": 1 }
-      },
-      "required": ["type", "dirname"]
-    },
     "cert": {
       "oneOf": [
+        { "$ref": "#/definitions/cert-upload" },
         { "$ref": "#/definitions/cert-letsencrypt" },
-        { "$ref": "#/definitions/cert-dummy" },
-        { "$ref": "#/definitions/cert-upload" }
+        { "$ref": "#/definitions/cert-dummy" }
       ]
     },
     "domain": {
@@ -66,20 +74,16 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "name": {
+        "hostname": {
           "type": "string",
-          "pattern": "^[a-zA-Z0-9-]+$"
-        },
-        "ip": {
-          "type": "string",
-          "format": "ipv4"
+          "description": "hostname used for ssh to connect. can be an IP address"
         },
         "server_ssh_passwd": {
           "type": "string",
           "description": "Leave this empty if you use SSH keys"
         }
       },
-      "required": ["name", "ip"]
+      "required": ["hostname"]
     }
   }
 }
