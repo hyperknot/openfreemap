@@ -38,7 +38,7 @@ def pkg_base(c):
         'autojump',
         'bash-completion',
         'btop',
-        'ctop',
+        # 'ctop', # unsupported on Ubuntu 24
         'dbus',
         'direnv',
         'fd-find',
