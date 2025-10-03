@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "domains": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/domain" }
+    },
+    "servers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/server" }
+    },
+    "skip_planet": {
+      "type": "boolean",
+      "description": "Skip the full planet download, useful for testing"
+    }
+  },
+  "required": ["domains", "servers", "skip_planet"],
+  "definitions": {
+    "cert-letsencrypt": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "letsencrypt" },
+        "email": { "type": "string", "format": "email" }
+      },
+      "required": ["type", "email"]
+    },
+    "cert-dummy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "dummy" }
+      },
+      "required": ["type"]
+    },
+    "cert-upload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "upload" },
+        "dirname": { "type": "string", "minLength": 1 }
+      },
+      "required": ["type", "dirname"]
+    },
+    "cert": {
+      "oneOf": [
+        { "$ref": "#/definitions/cert-letsencrypt" },
+        { "$ref": "#/definitions/cert-dummy" },
+        { "$ref": "#/definitions/cert-upload" }
+      ]
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": { "type": "string", "format": "hostname" },
+        "cert": { "$ref": "#/definitions/cert" }
+      },
+      "required": ["domain", "cert"]
+    },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9-]+$"
+        },
+        "ip": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "server_ssh_passwd": {
+          "type": "string",
+          "description": "Leave this empty if you use SSH keys"
+        }
+      },
+      "required": ["name", "ip"]
+    }
+  }
+}
