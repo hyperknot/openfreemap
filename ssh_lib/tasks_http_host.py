@@ -17,7 +17,7 @@ def prepare_http_host(c):
     kernel_limits1m(c)
 
     nginx(c)
-    certbot(c)
+    # certbot(c)
 
     c.sudo(f'rm -rf {config.http_host_dir}/logs')
     c.sudo(f'mkdir -p {config.http_host_dir}/logs')
@@ -72,11 +72,17 @@ def upload_config_and_certs(c):
 
         if domain_data['cert']['type'] == 'upload':
             local_cert_path = Path(domain_data['cert']['cert_path'])
+
+            # handle relative paths - make them relative to config.local_config_dir
+            if not local_cert_path.is_absolute():
+                local_cert_path = Path(config.local_config_dir) / local_cert_path
+
             cert_basename = local_cert_path.stem
             local_key_path = local_cert_path.parent / f'{cert_basename}.key'
-            if not local_cert_path.is_file() or local_key_path.is_file():
+
+            if not local_cert_path.is_file() or not local_key_path.is_file():
                 print(
-                    f'cert or key file for {domain_data["domain"]} is not found. Make sure these files exists: {local_cert_path} {local_key_path}'
+                    f'cert or key file for {domain_data["domain"]} is not found.\nMake sure these files exists:\n{local_cert_path}\n{local_key_path}\n------'
                 )
 
             remote_cert_path = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
@@ -103,8 +109,8 @@ def upload_http_host_files(c):
 
     put_dir(
         c,
-        config.local_modules_dir / 'http_host' / 'http_host_lib' / 'nginx_confs',
-        f'{config.http_host_bin}/http_host_lib/nginx_confs',
+        config.local_modules_dir / 'http_host' / 'http_host_lib' / 'nginx_templates',
+        f'{config.http_host_bin}/http_host_lib/nginx_templates',
     )
 
     c.sudo('chown -R ofm:ofm /data/ofm/http_host')
