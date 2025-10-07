@@ -5,6 +5,7 @@ requirements = [
     'click',
     'pycurl',
     'requests',
+    'json5',
 ]
 
 

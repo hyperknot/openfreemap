@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 from http_host_lib.config import config
-from http_host_lib.shared import get_versions_for_area
+from http_host_lib.get_version_shared import get_versions_for_area
 from http_host_lib.utils import download_file_aria2, get_remote_file_size
 
 
