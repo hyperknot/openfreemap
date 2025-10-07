@@ -9,6 +9,7 @@ requirements = [
     'ruff',
     'marko',
     'requests',
+    'jsonschema',
 ]
 
 
