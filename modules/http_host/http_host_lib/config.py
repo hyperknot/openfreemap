@@ -1,3 +1,4 @@
+import json
 import subprocess
 from pathlib import Path
 
@@ -28,7 +29,7 @@ class Configuration:
         repo_root = Path(__file__).parent.parent.parent.parent
         ofm_config_dir = repo_root / 'config'
 
-    jsonc_config = json5.loads((ofm_config_dir / 'config.jsonc').read_text())
+    json_config = json.loads((ofm_config_dir / 'config.json').read_text())
 
     deployed_versions_dir = ofm_config_dir / 'deployed_versions'
 

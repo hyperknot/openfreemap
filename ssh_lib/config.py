@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 class Configuration:
-    # Local paths relative to this file
+    # local paths relative to this file
     local_assets_dir = Path(__file__).parent / 'assets'
     local_config_dir = Path(__file__).parent.parent / 'config'
     local_modules_dir = Path(__file__).parent.parent / 'modules'
@@ -14,7 +14,9 @@ class Configuration:
     else:
         local_config_jsonc = local_config_dir / f'config.{ENV}.jsonc'
 
-    # remote paths (always Linux /, not using pathlib)
+    config_schema_json = local_config_dir / 'config.schema.json'
+
+    # remote paths (always forward / on Linux - not using pathlib)
     ofm_dir = '/data/ofm'
     remote_config = f'{ofm_dir}/config'
     venv_bin = f'{ofm_dir}/venv/bin'

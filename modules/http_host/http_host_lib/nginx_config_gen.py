@@ -20,7 +20,7 @@ def write_nginx_config():
     for file in config.nginx_certs_dir.glob('ofm-*'):
         file.unlink()
 
-    conf = config.jsonc_config
+    conf = config.json_config
 
     curl_help_lines = []
 
@@ -40,12 +40,9 @@ def write_nginx_config():
 
 
 def process_domain(domain_data):
-    domain_slug = slugify(domain_data['domain'], separator='_')
-    domain_data['slug'] = domain_slug
-
     if domain_data['cert'] == 'upload':
-        domain_data['cert_file'] = config.nginx_certs_dir / f'{domain_slug}.cert'
-        domain_data['key_file'] = config.nginx_certs_dir / f'{domain_slug}.key'
+        domain_data['cert_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.cert'
+        domain_data['key_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.key'
 
         if not domain_data['cert_file'].is_file() or not domain_data['key_file'].is_file():
             sys.exit(
