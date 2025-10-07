@@ -1,6 +1,8 @@
 import json
+from pathlib import Path
 
 import json5
+from jsonschema import ValidationError, validate
 
 from ssh_lib.benchmark import c1000k, wrk
 from ssh_lib.config import config
@@ -37,17 +39,41 @@ def upload_config_and_certs(c):
         print(f'{config.local_config_jsonc} not found. Make sure it exists in the /config dir')
         return
 
-    # validate using json5 + jsonschema
-    # use config.config_schema_json
-    config_data = json5.loads(config.local_config_jsonc.read_text())
+    # Load and parse the JSONC/JSON5 config file
+    try:
+        config_data = json5.loads(config.local_config_jsonc.read_text())
+    except Exception as e:
+        print(f'❌ Error parsing config file: {e}')
+        return
+
+    # Load the JSON schema
+    try:
+        schema = json.loads(config.config_schema_json.read_text())
+    except Exception as e:
+        print(f'❌ Error loading schema file: {e}')
+        return
+
+    # Validate the config against the schema
+    try:
+        validate(instance=config_data, schema=schema)
+        print('✓ Configuration is valid')
+    except ValidationError as e:
+        print('❌ Configuration validation failed:')
+        print(f'   Error: {e.message}')
+        if e.path:
+            print(f'   Path: {".".join(str(p) for p in e.path)}')
+        return
+    except Exception as e:
+        print(f'❌ Validation error: {e}')
+        return
 
     # pre-generate all the slugs
     for domain_data in config_data['domains']:
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
 
         if domain_data['cert']['type'] == 'upload':
-            local_cert_path = domain_data['cert']['cert_path']
-            cert_basename = local_cert_path.basename
+            local_cert_path = Path(domain_data['cert']['cert_path'])
+            cert_basename = local_cert_path.stem
             local_key_path = local_cert_path.parent / f'{cert_basename}.key'
             if not local_cert_path.is_file() or local_key_path.is_file():
                 print(
@@ -60,8 +86,6 @@ def upload_config_and_certs(c):
             # TODO fix permissions
             put(c, local_cert_path, remote_cert_path)
             put(c, local_key_path, remote_key_path)
-
-
 
     # generate a normal JSON and upload it
     config_str = json.dumps(config_data, indent=2, ensure_ascii=False)
