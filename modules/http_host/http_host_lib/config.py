@@ -17,8 +17,10 @@ class Configuration:
 
     mnt_dir = Path('/mnt/ofm')
 
-    certs_dir = Path('/data/nginx/certs')
-    nginx_confs_templates = Path(__file__).parent / 'nginx_conf_templates'
+    nginx_templates = Path(__file__).parent / 'nginx_templates'
+
+    nginx_certs_dir = Path('/data/nginx/certs')
+    nginx_sites_dir = Path('/data/nginx/sites')
 
     if Path('/data/ofm').exists():
         ofm_config_dir = Path('/data/ofm/config')
