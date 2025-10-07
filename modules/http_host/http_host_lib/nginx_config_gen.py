@@ -1,9 +1,9 @@
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 from http_host_lib.config import config
+from http_host_lib.slugify import slugify
 from http_host_lib.utils import python_venv_executable
 
 
@@ -13,12 +13,6 @@ def write_nginx_config():
     if not config.mnt_dir.exists():
         sys.exit('  mount needs to be run first')
 
-    curl_text_mix = ''
-
-    domain_direct = config.ofm_config['domain_direct']
-    domain_roundrobin = config.ofm_config['domain_roundrobin']
-    self_signed_certs = config.ofm_config['self_signed_certs']
-
     # remove old configs and certs
     for file in Path('/data/nginx/sites').glob('ofm_*.conf'):
         file.unlink()
@@ -26,115 +20,72 @@ def write_nginx_config():
     for file in Path('/data/nginx/certs').glob('ofm_*'):
         file.unlink()
 
-    # processing Round Robin DNS config
-    if domain_roundrobin:
-        if not config.rclone_config.is_file():
-            sys.exit('rclone.conf missing')
+    conf = config.jsonc_config
 
-        # download the roundrobin certificate from bucket using rclone
-        write_roundrobin_reader_script(domain_roundrobin)
-        subprocess.run(['bash', config.http_host_bin / 'roundrobin_reader.sh'], check=True)
+    curl_help_lines = []
 
-        curl_text_mix += create_nginx_conf(
-            template_path=config.nginx_confs / 'roundrobin.conf',
-            local='ofm_roundrobin',
-            domain=domain_roundrobin,
-        )
-
-    # processing Let's Encrypt config
-    if domain_direct:
-        direct_cert = config.certs_dir / 'ofm_direct.cert'
-        direct_key = config.certs_dir / 'ofm_direct.key'
-
-        if not direct_cert.is_file() or not direct_key.is_file():
-            shutil.copyfile(Path('/etc/nginx/ssl/dummy.cert'), direct_cert)
-            shutil.copyfile(Path('/etc/nginx/ssl/dummy.key'), direct_key)
-
-        curl_text_mix += create_nginx_conf(
-            template_path=config.nginx_confs / 'le.conf',
-            local='ofm_direct',
-            domain=domain_direct,
-        )
-
-        subprocess.run(['nginx', '-t'], check=True)
-        subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
-
-        if not self_signed_certs:
-            subprocess.run(
-                [
-                    'certbot',
-                    'certonly',
-                    '--webroot',
-                    '--webroot-path=/data/nginx/acme-challenges',
-                    '--noninteractive',
-                    '-m',
-                    config.ofm_config['letsencrypt_email'],
-                    '--agree-tos',
-                    '--cert-name=ofm_direct',
-                    # '--staging',
-                    '--deploy-hook',
-                    'nginx -t && service nginx reload',
-                    '-d',
-                    domain_direct,
-                ],
-                check=True,
-            )
-
-            # link certs to nginx dir
-            direct_cert.unlink()
-            direct_key.unlink()
-
-            etc_cert = Path('/etc/letsencrypt/live/ofm_direct/fullchain.pem')
-            etc_key = Path('/etc/letsencrypt/live/ofm_direct/privkey.pem')
-            assert etc_cert.is_file()
-            assert etc_key.is_file()
-            direct_cert.symlink_to(etc_cert)
-            direct_key.symlink_to(etc_key)
+    for domain_data in conf['domains']:
+        curl_help_lines += process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    curl_text_lines = sorted(curl_text_mix.splitlines())
     if config.ofm_config.get('skip_planet'):
-        curl_text_lines = [l for l in curl_text_lines if '/planet' not in l]
+        curl_help_lines = [l for l in curl_help_lines if '/planet' not in l]
     else:
-        curl_text_lines = [l for l in curl_text_lines if '/monaco' not in l]
+        curl_help_lines = [l for l in curl_help_lines if '/monaco' not in l]
 
-    curl_text_mix = '\n'.join(curl_text_lines)
-    print(f'test with:\n{curl_text_mix}')
+    curl_help_str = '\n'.join(curl_help_lines)
+    print(f'test with:\n{curl_help_str}')
 
 
-def create_nginx_conf(*, template_path, local, domain):
-    location_str, curl_text = create_location_blocks(local=local, domain=domain)
+def process_domain(domain_data):
+    domain_slug = slugify(domain_data['domain'], separator='_')
+    domain_data['slug'] = domain_slug
 
-    with open(template_path) as fp:
-        template = fp.read()
+    if domain_data['cert'] == 'upload':
+        domain_data['cert_file'] = config.certs_dir / f'{domain_slug}.cert'
+        domain_data['key_file'] = config.certs_dir / f'{domain_slug}.key'
 
-    template = template.replace('__LOCATION_BLOCKS__', location_str)
-    template = template.replace('__LOCAL__', local)
-    template = template.replace('__DOMAIN__', domain)
+        if not domain_data['cert_file'].is_file() or not domain_data['key_file'].is_file():
+            sys.exit(
+                f'  cert or key file does not exist: {domain_data["cert_file"]} {domain_data["key_file"]}'
+            )
 
-    curl_text = curl_text.replace('__LOCAL__', local)
-    curl_text = curl_text.replace('__DOMAIN__', domain)
+        return create_nginx_conf(domain_data)
 
-    with open(f'/data/nginx/sites/{local}.conf', 'w') as fp:
+
+def create_nginx_conf(domain_data: dict):
+    dynamic_block_lines, curl_text = dynamic_blocks(domain_data)
+
+    template = (config.nginx_confs_templates / 'common.conf').read_text()
+
+    template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_lines)
+
+    template = template.replace('__DOMAIN_SLUG__', domain_data['slug'])
+    template = template.replace('__DOMAIN__', domain_data['domain'])
+
+    curl_text = curl_text.replace('__DOMAIN_SLUG__', domain_data['slug'])
+    curl_text = curl_text.replace('__DOMAIN__', domain_data['domain'])
+
+    with open(f'/data/nginx/sites/{domain_data["slug"]}.conf', 'w') as fp:
         fp.write(template)
-        print(f'  nginx config written: {domain} {local}')
+        print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
 
     return curl_text
 
 
-def create_location_blocks(*, local, domain):
-    location_str = ''
-    curl_text = ''
+def dynamic_blocks(domain_data: dict):
+    nginx_conf_lines = ''
+    curl_help_lines = []
 
     for subdir in config.mnt_dir.iterdir():
         if not subdir.is_dir():
             continue
         area, version = subdir.name.split('-')
 
-        location_str += create_version_location(
-            area=area, version=version, mnt_dir=subdir, local=local, domain=domain
+        nginx_conf_lines += create_version_location(
+            area=area, version=version, mnt_dir=subdir, domain_data=domain_data
         )
 
         for path in [
@@ -142,12 +93,12 @@ def create_location_blocks(*, local, domain):
             f'/{area}/{version}/14/8529/5975.pbf',
             f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
         ]:
-            curl_text += (
-                # f'curl -H "Host: __LOCAL__" -I http://localhost/{path}\n'
-                f'curl -sI https://__DOMAIN__{path} | sort\n'
-            )
+            curl_help_lines += [
+                f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}',
+                f'curl -sI https://__DOMAIN__{path} | sort',
+            ]
 
-    location_str += create_latest_locations(local=local, domain=domain)
+    nginx_conf_lines += create_latest_locations(domain_data=domain_data)
 
     for area in config.areas:
         for path in [
@@ -156,33 +107,30 @@ def create_location_blocks(*, local, domain):
             f'/{area}/19700101_old_version_test/14/8529/5975.pbf',
             f'/{area}/19700101_old_version_test/9999/9999/9999.pbf',  # empty_tile test
         ]:
-            curl_text += (
-                # f'curl -H "Host: __LOCAL__" -I http://localhost/{path}\n'
-                f'curl -sI https://__DOMAIN__{path} | sort\n'
-            )
+            curl_help_lines += [
+                f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}',
+                f'curl -sI https://__DOMAIN__{path} | sort',
+            ]
 
-    with open(config.nginx_confs / 'location_static.conf') as fp:
-        location_str += '\n' + fp.read()
+    nginx_conf_lines += '\n' + (config.nginx_confs_templates / 'static_blocks.conf').read_text()
 
-    return location_str, curl_text
+    return nginx_conf_lines, curl_help_lines
 
 
-def create_version_location(
-    *, area: str, version: str, mnt_dir: Path, local: str, domain: str
-) -> str:
+def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_data: dict) -> str:
     run_dir = config.runs_dir / area / version
     if not run_dir.is_dir():
         print(f"  {run_dir} doesn't exist, skipping")
         return ''
 
-    tilejson_path = run_dir / f'tilejson-{local}.json'
+    tilejson_path = run_dir / f'tilejson-{domain_data["slug"]}.json'
 
     metadata_path = mnt_dir / 'metadata.json'
     if not metadata_path.is_file():
         print(f"  {metadata_path} doesn't exist, skipping")
         return ''
 
-    url_prefix = f'https://{domain}/{area}/{version}'
+    url_prefix = f'https://{domain_data["domain"]}/{area}/{version}'
 
     subprocess.run(
         [
@@ -232,7 +180,7 @@ def create_version_location(
     """
 
 
-def create_latest_locations(*, local: str, domain: str) -> str:
+def create_latest_locations(*, domain_data: dict) -> str:
     location_str = ''
 
     local_version_files = config.deployed_versions_dir.glob('*.txt')
@@ -246,7 +194,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
 
         # checking runs dir
         run_dir = config.runs_dir / area / version
-        tilejson_path = run_dir / f'tilejson-{local}.json'
+        tilejson_path = run_dir / f'tilejson-{domain_data["slug"]}.json'
         if not tilejson_path.is_file():
             print(f'    error with latest: {tilejson_path} does not exist')
             continue
@@ -285,7 +233,7 @@ def create_latest_locations(*, local: str, domain: str) -> str:
             # regex location is unreliable with alias, only root is reliable
 
             root {run_dir}; # no trailing slash
-            try_files /tilejson-{local}.json =404;
+            try_files /tilejson-{domain_data['slug']}.json =404;
 
             expires 1w;
             default_type application/json;
@@ -320,3 +268,36 @@ def create_latest_locations(*, local: str, domain: str) -> str:
         """
 
     return location_str
+
+
+# if not self_signed_certs:
+#     subprocess.run(
+#         [
+#             'certbot',
+#             'certonly',
+#             '--webroot',
+#             '--webroot-path=/data/nginx/acme-challenges',
+#             '--noninteractive',
+#             '-m',
+#             config.ofm_config['letsencrypt_email'],
+#             '--agree-tos',
+#             '--cert-name=ofm_direct',
+#             # '--staging',
+#             '--deploy-hook',
+#             'nginx -t && service nginx reload',
+#             '-d',
+#             domain_direct,
+#         ],
+#         check=True,
+#     )
+#
+#     # link certs to nginx dir
+#     direct_cert.unlink()
+#     direct_key.unlink()
+#
+#     etc_cert = Path('/etc/letsencrypt/live/ofm_direct/fullchain.pem')
+#     etc_key = Path('/etc/letsencrypt/live/ofm_direct/privkey.pem')
+#     assert etc_cert.is_file()
+#     assert etc_key.is_file()
+#     direct_cert.symlink_to(etc_cert)
+#     direct_key.symlink_to(etc_key)

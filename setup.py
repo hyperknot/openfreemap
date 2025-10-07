@@ -10,6 +10,7 @@ requirements = [
     'marko',
     'requests',
     'jsonschema',
+    'json5',
 ]
 
 

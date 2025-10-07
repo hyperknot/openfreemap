@@ -1,6 +1,7 @@
-import json
 import subprocess
 from pathlib import Path
+
+import json5
 
 
 class Configuration:
@@ -17,7 +18,7 @@ class Configuration:
     mnt_dir = Path('/mnt/ofm')
 
     certs_dir = Path('/data/nginx/certs')
-    nginx_confs = Path(__file__).parent / 'nginx_confs'
+    nginx_confs_templates = Path(__file__).parent / 'nginx_conf_templates'
 
     if Path('/data/ofm').exists():
         ofm_config_dir = Path('/data/ofm/config')
@@ -25,7 +26,7 @@ class Configuration:
         repo_root = Path(__file__).parent.parent.parent.parent
         ofm_config_dir = repo_root / 'config'
 
-    ofm_config = json.loads((ofm_config_dir / 'config.json').read_text())
+    jsonc_config = json5.loads((ofm_config_dir / 'config.jsonc').read_text())
 
     deployed_versions_dir = ofm_config_dir / 'deployed_versions'
 

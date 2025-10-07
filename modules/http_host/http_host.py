@@ -7,10 +7,10 @@ from http_host_lib.assets import (
 )
 from http_host_lib.btrfs import (
     download_area_version,
-    get_versions_for_area,
 )
+from http_host_lib.get_version_shared import get_versions_for_area
 from http_host_lib.mount import auto_mount
-from http_host_lib.nginx import write_nginx_config
+from http_host_lib.nginx_config_gen import write_nginx_config
 from http_host_lib.sync import auto_clean_btrfs, full_sync
 from http_host_lib.versions import fetch_version_files
 
