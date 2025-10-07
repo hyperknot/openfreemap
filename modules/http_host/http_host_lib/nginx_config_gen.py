@@ -14,10 +14,10 @@ def write_nginx_config():
         sys.exit('  mount needs to be run first')
 
     # remove old configs and certs
-    for file in Path('/data/nginx/sites').glob('ofm_*.conf'):
+    for file in config.nginx_sites_dir.glob('ofm-*.conf'):
         file.unlink()
 
-    for file in Path('/data/nginx/certs').glob('ofm_*'):
+    for file in config.nginx_certs_dir.glob('ofm-*'):
         file.unlink()
 
     conf = config.jsonc_config
@@ -44,8 +44,8 @@ def process_domain(domain_data):
     domain_data['slug'] = domain_slug
 
     if domain_data['cert'] == 'upload':
-        domain_data['cert_file'] = config.certs_dir / f'{domain_slug}.cert'
-        domain_data['key_file'] = config.certs_dir / f'{domain_slug}.key'
+        domain_data['cert_file'] = config.nginx_certs_dir / f'{domain_slug}.cert'
+        domain_data['key_file'] = config.nginx_certs_dir / f'{domain_slug}.key'
 
         if not domain_data['cert_file'].is_file() or not domain_data['key_file'].is_file():
             sys.exit(
@@ -56,23 +56,22 @@ def process_domain(domain_data):
 
 
 def create_nginx_conf(domain_data: dict):
-    dynamic_block_lines, curl_text = dynamic_blocks(domain_data)
+    dynamic_block_lines, curl_help = dynamic_blocks(domain_data)
 
-    template = (config.nginx_confs_templates / 'common.conf').read_text()
+    template = (config.nginx_templates / 'common.conf').read_text()
 
     template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_lines)
 
     template = template.replace('__DOMAIN_SLUG__', domain_data['slug'])
     template = template.replace('__DOMAIN__', domain_data['domain'])
 
-    curl_text = curl_text.replace('__DOMAIN_SLUG__', domain_data['slug'])
-    curl_text = curl_text.replace('__DOMAIN__', domain_data['domain'])
+    curl_help = curl_help.replace('__DOMAIN_SLUG__', domain_data['slug'])
+    curl_help = curl_help.replace('__DOMAIN__', domain_data['domain'])
 
-    with open(f'/data/nginx/sites/{domain_data["slug"]}.conf', 'w') as fp:
-        fp.write(template)
-        print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
+    (config.nginx_sites_dir / f'ofm-{domain_data["slug"]}.conf').write_text(template)
+    print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
 
-    return curl_text
+    return curl_help
 
 
 def dynamic_blocks(domain_data: dict):
@@ -112,7 +111,7 @@ def dynamic_blocks(domain_data: dict):
                 f'curl -sI https://__DOMAIN__{path} | sort',
             ]
 
-    nginx_conf_lines += '\n' + (config.nginx_confs_templates / 'static_blocks.conf').read_text()
+    nginx_conf_lines += '\n' + (config.nginx_templates / 'static_blocks.conf').read_text()
 
     return nginx_conf_lines, curl_help_lines
 
