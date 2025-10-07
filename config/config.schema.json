@@ -25,17 +25,18 @@
   "definitions": {
     "cert-upload": {
       "type": "object",
-      "description": "Upload your own certificate. Ideal for Cloudflare Origin Certificates with 15 year expiry. Steps: 1) Create an Origin Certificate on Cloudflare at SSL/TLS / Origin Server. 2) Generate private key and CSR with Cloudflare: Private key type: ECC, Certificate Validity: 15 years. 3) Key format: PEM. Save origin certificate as something.cert and private key as something.key in the dirname folder.",
+      "description": "Upload your own certificate. Ideal for Cloudflare Origin Certificates with 15 year expiry. Steps: 1) Create an Origin Certificate on Cloudflare at SSL/TLS / Origin Server. 2) Generate private key and CSR with Cloudflare: Private key type: ECC, Certificate Validity: 15 years. 3) Key format: PEM. Save origin certificate as something.cert and private key as something.key in the same directory.",
       "additionalProperties": false,
       "properties": {
         "type": { "const": "upload" },
-        "dirname": {
+        "cert_path": {
           "type": "string",
           "minLength": 1,
-          "description": "Directory name containing your certificate (.cert) and private key (.key) files"
+          "pattern": "^.*\\.cert$",
+          "description": "Path to your certificate file (*.cert). Both absolute and relative paths are supported. The corresponding private key (.key) should be in the same directory with the same basename."
         }
       },
-      "required": ["type", "dirname"]
+      "required": ["type", "cert_path"]
     },
     "cert-letsencrypt": {
       "type": "object",
