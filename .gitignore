@@ -21,3 +21,4 @@ venv
 /pnpm-lock.yaml
 
 /deploy-*.sh
+tmp.txt

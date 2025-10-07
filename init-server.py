@@ -76,12 +76,12 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
 
     c.sudo('rm -f /etc/cron.d/ofm_http_host')
 
-    prepare_shared(c)
+    # prepare_shared(c)
     prepare_http_host(c)
-
-    run_http_host_sync(c)  # disable for first install if you don't want to wait
-
-    put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+    #
+    # run_http_host_sync(c)  # disable for first install if you don't want to wait
+    #
+    # put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 @cli.command()

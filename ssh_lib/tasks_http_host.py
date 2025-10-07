@@ -16,8 +16,6 @@ def prepare_http_host(c):
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
 
-    upload_config_and_certs(c)
-
     nginx(c)
     certbot(c)
 
@@ -30,8 +28,9 @@ def prepare_http_host(c):
     c.sudo(f'chown nginx:nginx {config.http_host_dir}/logs_nginx')
 
     upload_http_host_files(c)
-
     c.sudo(f'{config.venv_bin}/pip install -e {config.http_host_bin} --use-pep517')
+
+    upload_config_and_certs(c)
 
 
 def upload_config_and_certs(c):
@@ -83,7 +82,6 @@ def upload_config_and_certs(c):
             remote_cert_path = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
             remote_key_path = f'/data/nginx/certs/ofm-{domain_data["slug"]}.key'
 
-            # TODO fix permissions
             put(c, local_cert_path, remote_cert_path)
             put(c, local_key_path, remote_key_path)
 
