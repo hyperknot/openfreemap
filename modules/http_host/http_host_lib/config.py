@@ -2,8 +2,6 @@ import json
 import subprocess
 from pathlib import Path
 
-import json5
-
 
 class Configuration:
     areas = ['planet', 'monaco']

@@ -4,7 +4,7 @@ import click
 from fabric import Config, Connection
 
 from ssh_lib.config import config
-from ssh_lib.tasks_http_host import prepare_http_host, run_http_host_sync
+from ssh_lib.tasks_http_host import prepare_http_host, run_http_host_sync, upload_config_and_certs
 from ssh_lib.tasks_shared import prepare_shared
 from ssh_lib.tasks_tile_gen import prepare_tile_gen
 from ssh_lib.utils import (
@@ -78,10 +78,10 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
 
     # prepare_shared(c)
     prepare_http_host(c)
-    #
-    # run_http_host_sync(c)  # disable for first install if you don't want to wait
-    #
-    # put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+
+    run_http_host_sync(c)  # disable for first install if you don't want to wait
+
+    put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
 
 @cli.command()
