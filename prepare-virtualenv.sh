@@ -18,4 +18,3 @@ source .venv/bin/activate
 uv pip install -e .
 uv pip install -e modules/http_host
 uv pip install -e modules/tile_gen
-uv pip install -e modules/loadbalancer
