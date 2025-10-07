@@ -3,34 +3,35 @@
 import click
 from fabric import Config, Connection
 
-from ssh_lib import MODULES_DIR, dotenv_val
-from ssh_lib.tasks_httphost import prepare_http_host, run_http_host_sync
-from ssh_lib.tasks_tilegen import prepare_tile_gen
+from ssh_lib.config import config
+from ssh_lib.tasks_http_host import prepare_http_host, run_http_host_sync
 from ssh_lib.tasks_shared import prepare_shared
+from ssh_lib.tasks_tile_gen import prepare_tile_gen
 from ssh_lib.utils import (
     put,
 )
 
 
 def get_connection(hostname, user, port):
-    ssh_passwd = dotenv_val('SSH_PASSWD')
+    # ssh_passwd = dotenv_val('SSH_PASSWD')
 
-    if ssh_passwd:
-        print('Using SSH password')
+    # if ssh_passwd:
+    #     print('Using SSH password')
+    #
+    #     c = Connection(
+    #         host=hostname,
+    #         user=user,
+    #         port=port,
+    #         connect_kwargs={'password': ssh_passwd},
+    #         config=Config(overrides={'sudo': {'password': ssh_passwd}}),
+    #     )
+    # else:
 
-        c = Connection(
-            host=hostname,
-            user=user,
-            port=port,
-            connect_kwargs={'password': ssh_passwd},
-            config=Config(overrides={'sudo': {'password': ssh_passwd}}),
-        )
-    else:
-        c = Connection(
-            host=hostname,
-            user=user,
-            port=port,
-        )
+    c = Connection(
+        host=hostname,
+        user=user,
+        port=port,
+    )
 
     return c
 
@@ -80,7 +81,17 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
 
     run_http_host_sync(c)  # disable for first install if you don't want to wait
 
-    put(c, MODULES_DIR / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+    put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
+
+
+@cli.command()
+@common_options
+def http_host_sync(hostname, user, port, noninteractive):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
+        return
+
+    c = get_connection(hostname, user, port)
+    run_http_host_sync(c)
 
 
 @cli.command()
@@ -106,16 +117,6 @@ def tile_gen(
 
     prepare_shared(c)
     prepare_tile_gen(c, enable_cron=cron)
-
-
-@cli.command()
-@common_options
-def http_host_sync(hostname, user, port, noninteractive):
-    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
-        return
-
-    c = get_connection(hostname, user, port)
-    run_http_host_sync(c)
 
 
 #
