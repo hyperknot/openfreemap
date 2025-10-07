@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 
 from http_host_lib.config import config
-from http_host_lib.slugify import slugify
 from http_host_lib.utils import python_venv_executable
 
 
