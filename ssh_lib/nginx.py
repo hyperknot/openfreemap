@@ -1,4 +1,4 @@
-from ssh_lib import ASSETS_DIR
+from ssh_lib.config import config
 from ssh_lib.utils import (
     apt_get_install,
     apt_get_purge,
@@ -41,10 +41,10 @@ def nginx(c):
 
     generate_self_signed_cert(c)
 
-    put(c, f'{ASSETS_DIR}/nginx/nginx.conf', '/etc/nginx/')
-    put(c, f'{ASSETS_DIR}/nginx/mime.types', '/etc/nginx/')
-    put(c, f'{ASSETS_DIR}/nginx/default_disable.conf', '/data/nginx/sites')
-    put(c, f'{ASSETS_DIR}/nginx/cloudflare.conf', '/data/nginx/config')
+    put(c, f'{config.local_assets_dir}/nginx/nginx.conf', '/etc/nginx/')
+    put(c, f'{config.local_assets_dir}/nginx/mime.types', '/etc/nginx/')
+    put(c, f'{config.local_assets_dir}/nginx/default_disable.conf', '/data/nginx/sites')
+    put(c, f'{config.local_assets_dir}/nginx/cloudflare.conf', '/data/nginx/config')
 
     sudo_cmd(c, 'curl https://ssl-config.mozilla.org/ffdhe2048.txt -o /etc/nginx/ffdhe2048.txt')
 

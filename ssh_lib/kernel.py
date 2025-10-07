@@ -1,4 +1,4 @@
-from ssh_lib import ASSETS_DIR
+from ssh_lib.config import config
 from ssh_lib.utils import put, put_str
 
 
@@ -25,6 +25,10 @@ def kernel_vmovercommit(c):
 
 def kernel_thp_fix(c):
     # transparent_hugepage
-    put(c, f'{ASSETS_DIR}/kernel/thp_fix_service', '/etc/systemd/system/thp_fix.service')
+    put(
+        c,
+        f'{config.local_assets_dir}/kernel/thp_fix_service',
+        '/etc/systemd/system/thp_fix.service',
+    )
     c.sudo('systemctl daemon-reload')
     c.sudo('systemctl enable thp_fix')
