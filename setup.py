@@ -5,7 +5,7 @@ requirements = [
     'click',
     'fabric',
     'nginxfmt',
-    'python-dotenv',
+    # 'python-dotenv',
     'ruff',
     'marko',
     'requests',
