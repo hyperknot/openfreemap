@@ -4,12 +4,9 @@ import click
 from fabric import Config, Connection
 
 from ssh_lib import MODULES_DIR, dotenv_val
-from ssh_lib.tasks import (
-    prepare_http_host,
-    prepare_shared,
-    prepare_tile_gen,
-    run_http_host_sync,
-)
+from ssh_lib.tasks_httphost import prepare_http_host, run_http_host_sync
+from ssh_lib.tasks_tilegen import prepare_tile_gen
+from ssh_lib.tasks_shared import prepare_shared
 from ssh_lib.utils import (
     put,
 )
