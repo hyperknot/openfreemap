@@ -31,7 +31,7 @@ def download_and_extract_asset_tar_gz(asset_kind):
 
     print(f'Downloading asset {asset_kind}')
 
-    asset_dir = config.assets_dir / asset_kind
+    asset_dir = config.local_assets_dir / asset_kind
     asset_dir.mkdir(exist_ok=True, parents=True)
 
     url = f'https://assets.openfreemap.com/{asset_kind}/ofm.tar.gz'
@@ -62,7 +62,7 @@ def download_sprites() -> bool:
 
     print('Downloading sprites')
 
-    sprites_dir = config.assets_dir / 'sprites'
+    sprites_dir = config.local_assets_dir / 'sprites'
     sprites_dir.mkdir(exist_ok=True, parents=True)
 
     r = requests.get('https://assets.openfreemap.com/files.txt', timeout=30)

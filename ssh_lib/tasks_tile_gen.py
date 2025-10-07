@@ -10,15 +10,15 @@ def prepare_tile_gen(c, *, enable_cron):
 
     c.sudo(f'rm -rf {config.tile_gen_bin}')
 
-    put_dir(c, config.modules_dir / 'tile_gen', config.tile_gen_bin, file_permissions='755')
+    put_dir(c, config.local_modules_dir / 'tile_gen', config.tile_gen_bin, file_permissions='755')
 
     for dirname in ['tile_gen_lib', 'scripts']:
-        put_dir(c, config.modules_dir / 'tile_gen' / dirname, f'{config.tile_gen_bin}/{dirname}')
+        put_dir(c, config.local_modules_dir / 'tile_gen' / dirname, f'{config.tile_gen_bin}/{dirname}')
 
-    if (config.config_dir / 'rclone.conf').exists():
+    if (config.local_config_dir / 'rclone.conf').exists():
         put(
             c,
-            config.config_dir / 'rclone.conf',
+            config.local_config_dir / 'rclone.conf',
             f'{config.remote_config}/rclone.conf',
             permissions='600',
             user='ofm',
@@ -33,4 +33,4 @@ def prepare_tile_gen(c, *, enable_cron):
     c.sudo(f'chown ofm:ofm -R {config.tile_gen_bin}')
 
     if enable_cron:
-        put(c, config.modules_dir / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')
+        put(c, config.local_modules_dir / 'tile_gen' / 'cron.d' / 'ofm_tile_gen', '/etc/cron.d/')

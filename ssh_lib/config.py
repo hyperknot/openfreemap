@@ -4,15 +4,15 @@ from pathlib import Path
 
 class Configuration:
     # Local paths relative to this file
-    assets_dir = Path(__file__).parent / 'assets'
-    config_dir = Path(__file__).parent.parent / 'config'
-    modules_dir = Path(__file__).parent.parent / 'modules'
+    local_assets_dir = Path(__file__).parent / 'assets'
+    local_config_dir = Path(__file__).parent.parent / 'config'
+    local_modules_dir = Path(__file__).parent.parent / 'modules'
 
     ENV = os.getenv('ENV')
     if not ENV:
-        config_jsonc = config_dir / 'config.jsonc'
+        local_config_jsonc = local_config_dir / 'config.jsonc'
     else:
-        config_jsonc = config_dir / f'config.{ENV}.jsonc'
+        local_config_jsonc = local_config_dir / f'config.{ENV}.jsonc'
 
     # remote paths (always Linux /, not using pathlib)
     ofm_dir = '/data/ofm'

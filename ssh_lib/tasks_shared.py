@@ -23,7 +23,7 @@ def prepare_shared(c):
 def prepare_venv(c):
     put(
         c,
-        config.modules_dir / 'prepare-virtualenv.sh',
+        config.local_modules_dir / 'prepare-virtualenv.sh',
         config.ofm_dir,
         permissions='755',
         user='ofm',
