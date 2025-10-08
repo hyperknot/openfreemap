@@ -4,7 +4,7 @@ from http_host_lib.assets import download_assets
 from http_host_lib.btrfs import download_area_version
 from http_host_lib.config import config
 from http_host_lib.mount import auto_mount, clean_up_mounts
-from http_host_lib.nginx import write_nginx_config
+from http_host_lib.nginx_config_gen import write_nginx_config
 from http_host_lib.utils import assert_linux, assert_sudo
 from http_host_lib.versions import fetch_version_files
 

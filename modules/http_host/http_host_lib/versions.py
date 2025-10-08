@@ -1,7 +1,5 @@
-import requests
-
 from http_host_lib.config import config
-from http_host_lib.shared import get_deployed_version
+from http_host_lib.get_version_shared import get_deployed_version
 from http_host_lib.utils import assert_linux, assert_sudo
 
 
