@@ -21,25 +21,23 @@ def write_nginx_config():
 
     conf = config.json_config
 
-    curl_help_lines = []
+    curl_help_text = ''
 
     for domain_data in conf['domains']:
-        curl_help_lines += process_domain(domain_data)
+        curl_help_text += process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    if config.ofm_config.get('skip_planet'):
-        curl_help_lines = [l for l in curl_help_lines if '/planet' not in l]
-    else:
-        curl_help_lines = [l for l in curl_help_lines if '/monaco' not in l]
+    exclude_path = '/planet' if conf.get('skip_planet') else '/monaco'
+    curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
 
-    curl_help_str = '\n'.join(curl_help_lines)
-    print(f'test with:\n{curl_help_str}')
+    curl_help_joined = '\n'.join(curl_help_lines)
+    print(f'test with:\n{curl_help_joined}')
 
 
-def process_domain(domain_data) -> list:
-    if domain_data['cert'] == 'upload':
+def process_domain(domain_data) -> str:
+    if domain_data['cert']['type'] == 'upload':
         domain_data['cert_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.cert'
         domain_data['key_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.key'
 
@@ -50,38 +48,40 @@ def process_domain(domain_data) -> list:
 
         return create_nginx_conf(domain_data)
 
-    return []
+    return ''
 
 
-def create_nginx_conf(domain_data: dict):
-    dynamic_block_lines, curl_help = dynamic_blocks(domain_data)
+def create_nginx_conf(domain_data: dict) -> str:
+    dynamic_block_text, curl_help_text = dynamic_blocks(domain_data)
 
     template = (config.nginx_templates / 'common.conf').read_text()
 
-    template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_lines)
+    template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_text)
 
     template = template.replace('__DOMAIN_SLUG__', domain_data['slug'])
     template = template.replace('__DOMAIN__', domain_data['domain'])
 
-    curl_help = curl_help.replace('__DOMAIN_SLUG__', domain_data['slug'])
-    curl_help = curl_help.replace('__DOMAIN__', domain_data['domain'])
+    curl_help_text = curl_help_text.replace('__DOMAIN_SLUG__', domain_data['slug'])
+    curl_help_text = curl_help_text.replace('__DOMAIN__', domain_data['domain'])
 
     (config.nginx_sites_dir / f'ofm-{domain_data["slug"]}.conf').write_text(template)
     print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
 
-    return curl_help
+    print('=' * 20, curl_help_text)
+
+    return curl_help_text
 
 
-def dynamic_blocks(domain_data: dict):
-    nginx_conf_lines = ''
-    curl_help_lines = []
+def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
+    nginx_conf_text = ''
+    curl_help_text = ''
 
     for subdir in config.mnt_dir.iterdir():
         if not subdir.is_dir():
             continue
         area, version = subdir.name.split('-')
 
-        nginx_conf_lines += create_version_location(
+        nginx_conf_text += create_version_location(
             area=area, version=version, mnt_dir=subdir, domain_data=domain_data
         )
 
@@ -90,12 +90,10 @@ def dynamic_blocks(domain_data: dict):
             f'/{area}/{version}/14/8529/5975.pbf',
             f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
         ]:
-            curl_help_lines += [
-                f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}',
-                f'curl -sI https://__DOMAIN__{path} | sort',
-            ]
+            curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}\n'
+            curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
 
-    nginx_conf_lines += create_latest_locations(domain_data=domain_data)
+    nginx_conf_text += create_latest_locations(domain_data=domain_data)
 
     for area in config.areas:
         for path in [
@@ -104,14 +102,13 @@ def dynamic_blocks(domain_data: dict):
             f'/{area}/19700101_old_version_test/14/8529/5975.pbf',
             f'/{area}/19700101_old_version_test/9999/9999/9999.pbf',  # empty_tile test
         ]:
-            curl_help_lines += [
-                f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}',
-                f'curl -sI https://__DOMAIN__{path} | sort',
-            ]
+            curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}\n'
+            curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
 
-    nginx_conf_lines += '\n' + (config.nginx_templates / 'static_blocks.conf').read_text()
+    nginx_conf_text += '\n' + (config.nginx_templates / 'static_blocks.conf').read_text()
+    print(curl_help_text)
 
-    return nginx_conf_lines, curl_help_lines
+    return nginx_conf_text, curl_help_text
 
 
 def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_data: dict) -> str:
