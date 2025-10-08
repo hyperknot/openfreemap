@@ -1,4 +1,5 @@
 import json
+import sys
 from pathlib import Path
 
 import json5
@@ -71,6 +72,7 @@ def upload_config_and_certs(c):
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
 
         if domain_data['cert']['type'] == 'upload':
+            print(domain_data)
             local_cert_path = Path(domain_data['cert']['cert_path'])
 
             # handle relative paths - make them relative to config.local_config_dir
