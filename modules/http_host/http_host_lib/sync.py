@@ -30,7 +30,7 @@ def full_sync(force=False):
     btrfs_downloaded += download_area_version(area='monaco', version='deployed')
 
     # download latest and deployed planet
-    if not config.ofm_config.get('skip_planet'):
+    if not config.json_config.get('skip_planet'):
         btrfs_downloaded += download_area_version(area='planet', version='latest')
         btrfs_downloaded += download_area_version(area='planet', version='deployed')
 

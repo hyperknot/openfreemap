@@ -38,7 +38,7 @@ def write_nginx_config():
     print(f'test with:\n{curl_help_str}')
 
 
-def process_domain(domain_data):
+def process_domain(domain_data) -> list:
     if domain_data['cert'] == 'upload':
         domain_data['cert_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.cert'
         domain_data['key_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.key'
@@ -49,6 +49,8 @@ def process_domain(domain_data):
             )
 
         return create_nginx_conf(domain_data)
+
+    return []
 
 
 def create_nginx_conf(domain_data: dict):
