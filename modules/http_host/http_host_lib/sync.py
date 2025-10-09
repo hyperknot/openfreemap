@@ -18,6 +18,10 @@ def full_sync(force=False):
     assert_linux()
     assert_sudo()
 
+    # if it's a manual/forced run, we clean up old/deleted mounts
+    if force:
+        clean_up_mounts(config.mnt_dir)
+
     # start
     versions_changed = fetch_version_files()
 
