@@ -1,5 +1,4 @@
 import json
-import sys
 from pathlib import Path
 
 import json5
@@ -8,7 +7,7 @@ from jsonschema import ValidationError, validate
 from ssh_lib.benchmark import c1000k, wrk
 from ssh_lib.config import config
 from ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
-from ssh_lib.nginx import certbot, nginx
+from ssh_lib.nginx import nginx
 from ssh_lib.slugify import slugify
 from ssh_lib.utils import put, put_dir, put_str, sudo_cmd
 
@@ -29,50 +28,49 @@ def prepare_http_host(c):
     c.sudo(f'chown nginx:nginx {config.http_host_dir}/logs_nginx')
 
     upload_http_host_files(c)
-    c.sudo(f'{config.venv_bin}/pip install -e {config.http_host_bin} --use-pep517')
+    c.sudo(f'{config.venv_bin}/pip install -e {config.http_host_bin} --use-pep517', echo=True)
 
     upload_config_and_certs(c)
 
 
 def upload_config_and_certs(c):
     if not config.local_config_jsonc.is_file():
-        print(f'{config.local_config_jsonc} not found. Make sure it exists in the /config dir')
-        return
+        raise FileNotFoundError(
+            f'{config.local_config_jsonc} not found. Make sure it exists in the /config dir'
+        )
 
     # Load and parse the JSONC/JSON5 config file
     try:
         config_data = json5.loads(config.local_config_jsonc.read_text())
     except Exception as e:
-        print(f'❌ Error parsing config file: {e}')
-        return
+        raise RuntimeError(f'Error parsing config file: {e}') from e
 
     # Load the JSON schema
     try:
         schema = json.loads(config.config_schema_json.read_text())
     except Exception as e:
-        print(f'❌ Error loading schema file: {e}')
-        return
+        raise RuntimeError(f'Error loading schema file: {e}') from e
 
     # Validate the config against the schema
     try:
         validate(instance=config_data, schema=schema)
         print('✓ Configuration is valid')
     except ValidationError as e:
-        print('❌ Configuration validation failed:')
-        print(f'   Error: {e.message}')
+        error_msg = f'Configuration validation failed: {e.message}'
         if e.path:
-            print(f'   Path: {".".join(str(p) for p in e.path)}')
-        return
+            error_msg += f'\nPath: {".".join(str(p) for p in e.path)}'
+        raise RuntimeError(error_msg) from e
     except Exception as e:
-        print(f'❌ Validation error: {e}')
-        return
+        raise RuntimeError(f'Validation error: {e}') from e
+
+    # clean old certs
+    c.sudo('rm -rf /data/nginx/certs/ofm-*')
 
     # pre-generate all the slugs
     for domain_data in config_data['domains']:
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
 
         if domain_data['cert']['type'] == 'upload':
-            print(domain_data)
             local_cert_path = Path(domain_data['cert']['cert_path'])
 
             # handle relative paths - make them relative to config.local_config_dir
@@ -83,8 +81,9 @@ def upload_config_and_certs(c):
             local_key_path = local_cert_path.parent / f'{cert_basename}.key'
 
             if not local_cert_path.is_file() or not local_key_path.is_file():
-                print(
-                    f'cert or key file for {domain_data["domain"]} is not found.\nMake sure these files exists:\n{local_cert_path}\n{local_key_path}\n------'
+                raise FileNotFoundError(
+                    f'cert or key file for {domain_data["domain"]} is not found.\n'
+                    f'Make sure these files exists:\n{local_cert_path}\n{local_key_path}'
                 )
 
             remote_cert_path = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
@@ -92,6 +91,9 @@ def upload_config_and_certs(c):
 
             put(c, local_cert_path, remote_cert_path)
             put(c, local_key_path, remote_key_path)
+
+            domain_data['cert_file'] = remote_cert_path
+            domain_data['key_file'] = remote_key_path
 
     # generate a normal JSON and upload it
     config_str = json.dumps(config_data, indent=2, ensure_ascii=False)

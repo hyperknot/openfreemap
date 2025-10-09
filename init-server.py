@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 
 import click
 from fabric import Config, Connection
@@ -13,25 +14,24 @@ from ssh_lib.utils import (
 
 
 def get_connection(hostname, user, port):
-    # ssh_passwd = dotenv_val('SSH_PASSWD')
+    ssh_passwd = os.getenv('SSH_PASSWD')
 
-    # if ssh_passwd:
-    #     print('Using SSH password')
-    #
-    #     c = Connection(
-    #         host=hostname,
-    #         user=user,
-    #         port=port,
-    #         connect_kwargs={'password': ssh_passwd},
-    #         config=Config(overrides={'sudo': {'password': ssh_passwd}}),
-    #     )
-    # else:
+    if ssh_passwd:
+        print('Using SSH password')
 
-    c = Connection(
-        host=hostname,
-        user=user,
-        port=port,
-    )
+        c = Connection(
+            host=hostname,
+            user=user,
+            port=port,
+            connect_kwargs={'password': ssh_passwd},
+            config=Config(overrides={'sudo': {'password': ssh_passwd}}),
+        )
+    else:
+        c = Connection(
+            host=hostname,
+            user=user,
+            port=port,
+        )
 
     return c
 
