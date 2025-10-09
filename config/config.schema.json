@@ -21,7 +21,7 @@
       "description": "Skip the full planet download, useful for testing"
     }
   },
-  "required": ["domains", "servers", "skip_planet"],
+  "required": ["domains", "servers"],
   "definitions": {
     "cert-upload": {
       "type": "object",

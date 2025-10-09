@@ -13,7 +13,9 @@ def prepare_tile_gen(c, *, enable_cron):
     put_dir(c, config.local_modules_dir / 'tile_gen', config.tile_gen_bin, file_permissions='755')
 
     for dirname in ['tile_gen_lib', 'scripts']:
-        put_dir(c, config.local_modules_dir / 'tile_gen' / dirname, f'{config.tile_gen_bin}/{dirname}')
+        put_dir(
+            c, config.local_modules_dir / 'tile_gen' / dirname, f'{config.tile_gen_bin}/{dirname}'
+        )
 
     if (config.local_config_dir / 'rclone.conf').exists():
         put(

@@ -2,6 +2,7 @@
 import os
 
 import click
+import json5
 from fabric import Config, Connection
 
 from ssh_lib.config import config
@@ -79,7 +80,9 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
     # prepare_shared(c)
     prepare_http_host(c)
 
-    run_http_host_sync(c)  # disable for first install if you don't want to wait
+    # for the monaco run, wait for the sync to complete
+    if json5.loads(config.local_config_jsonc.read_text()).get('skip_planet'):
+        run_http_host_sync(c)
 
     put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
