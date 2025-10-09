@@ -12,11 +12,8 @@ def write_nginx_config():
     if not config.mnt_dir.exists():
         sys.exit('  mount needs to be run first')
 
-    # remove old configs and certs
+    # remove old configs
     for file in config.nginx_sites_dir.glob('ofm-*.conf'):
-        file.unlink()
-
-    for file in config.nginx_certs_dir.glob('ofm-*'):
         file.unlink()
 
     conf = config.json_config
@@ -38,10 +35,10 @@ def write_nginx_config():
 
 def process_domain(domain_data) -> str:
     if domain_data['cert']['type'] == 'upload':
-        domain_data['cert_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.cert'
-        domain_data['key_file'] = config.nginx_certs_dir / f'{domain_data["slug"]}.key'
-
-        if not domain_data['cert_file'].is_file() or not domain_data['key_file'].is_file():
+        if (
+            not Path(domain_data['cert_file']).is_file()
+            or not Path(domain_data['key_file']).is_file()
+        ):
             sys.exit(
                 f'  cert or key file does not exist: {domain_data["cert_file"]} {domain_data["key_file"]}'
             )
