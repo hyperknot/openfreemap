@@ -16,17 +16,15 @@ def write_nginx_config():
     for file in config.nginx_sites_dir.glob('ofm-*.conf'):
         file.unlink()
 
-    conf = config.json_config
-
     curl_help_text = ''
 
-    for domain_data in conf['domains']:
+    for domain_data in config.json_config['domains']:
         curl_help_text += process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    exclude_path = '/planet' if conf.get('skip_planet') else '/monaco'
+    exclude_path = '/planet' if config.json_config.get('skip_planet') else '/monaco'
     curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
 
     curl_help_joined = '\n'.join(curl_help_lines)
@@ -64,14 +62,14 @@ def create_nginx_conf(domain_data: dict) -> str:
     (config.nginx_sites_dir / f'ofm-{domain_data["slug"]}.conf').write_text(template)
     print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
 
-    print('=' * 20, curl_help_text)
-
     return curl_help_text
 
 
 def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
     nginx_conf_text = ''
     curl_help_text = ''
+
+    help_area = 'monaco' if config.json_config.get('skip_planet') else 'planet'
 
     for subdir in config.mnt_dir.iterdir():
         if not subdir.is_dir():
@@ -82,29 +80,27 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
             area=area, version=version, mnt_dir=subdir, domain_data=domain_data
         )
 
-        for path in [
-            f'/{area}/{version}',
-            f'/{area}/{version}/14/8529/5975.pbf',
-            f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
-        ]:
-            curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}\n'
-            curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
+        if area == help_area:
+            for path in [
+                f'/{area}/{version}',
+                f'/{area}/{version}/14/8529/5975.pbf',
+                f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
+            ]:
+                curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}\n'
+                curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
 
     nginx_conf_text += create_latest_locations(domain_data=domain_data)
 
-    for area in config.areas:
-        for path in [
-            f'/{area}',
-            f'/{area}/19700101_old_version_test',
-            f'/{area}/19700101_old_version_test/14/8529/5975.pbf',
-            f'/{area}/19700101_old_version_test/9999/9999/9999.pbf',  # empty_tile test
-        ]:
-            curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}\n'
-            curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
+    for path in [
+        f'/{help_area}',
+        f'/{help_area}/latest',
+        f'/{help_area}/latest/14/8529/5975.pbf',
+        f'/{help_area}/latest/9999/9999/9999.pbf',  # empty_tile test
+    ]:
+        curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost/{path}\n'
+        curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
 
     nginx_conf_text += '\n' + (config.nginx_templates / 'static_blocks.conf').read_text()
-    print(curl_help_text)
-
     return nginx_conf_text, curl_help_text
 
 
@@ -187,14 +183,16 @@ def create_latest_locations(*, domain_data: dict) -> str:
         run_dir = config.runs_dir / area / version
         tilejson_path = run_dir / f'tilejson-{domain_data["slug"]}.json'
         if not tilejson_path.is_file():
-            print(f'    error with latest: {tilejson_path} does not exist')
+            print(
+                f'    skipping latest block for {area} / {version}: {tilejson_path} does not exist'
+            )
             continue
 
         # checking mnt dir
         mnt_dir = Path(f'/mnt/ofm/{area}-{version}')
         mnt_file = mnt_dir / 'metadata.json'
         if not mnt_file.is_file():
-            print(f'    error with latest: {mnt_file} does not exist')
+            print(f'    skipping latest block for {area} / {version}: {mnt_file} does not exist')
             continue
 
         # latest
