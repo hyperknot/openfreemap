@@ -67,13 +67,22 @@ def clean_up_mounts(mnt_dir):
     p = subprocess.run(['mount'], capture_output=True, text=True, check=True)
     lines = [l for l in p.stdout.splitlines() if f'{mnt_dir}/' in l and '(deleted)' in l]
 
+    # Extract unique mount paths (deduplicate)
+    mount_paths = set()
     for l in lines:
         mnt_path = Path(l.split('(deleted) on ')[1].split(' type btrfs')[0])
+        mount_paths.add(mnt_path)
+
+    # Process each unique mount path once
+    for mnt_path in mount_paths:
+        if not mnt_path.exists():
+            print(f'  skipping {mnt_path} (already removed)')
+            continue
+
         print(f'  removing deleted mount {mnt_path}')
-        assert mnt_path.exists()
 
         # Unmount ALL instances (handle stacked mounts)
-        while subprocess.run(['mountpoint', '-q', mnt_path]).returncode == 0:
+        while subprocess.run(['mountpoint', '-q', str(mnt_path)]).returncode == 0:
             print(f'    unmounting {mnt_path}')
             subprocess.run(['umount', mnt_path], check=True)
 
@@ -90,7 +99,7 @@ def clean_up_mounts(mnt_dir):
         print(f'  removing old mount {subdir}')
 
         # Unmount ALL instances here too
-        while subprocess.run(['mountpoint', '-q', subdir]).returncode == 0:
+        while subprocess.run(['mountpoint', '-q', str(subdir)]).returncode == 0:
             print(f'    unmounting {subdir}')
             subprocess.run(['umount', subdir], check=True)
 
