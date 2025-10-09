@@ -71,7 +71,12 @@ def clean_up_mounts(mnt_dir):
         mnt_path = Path(l.split('(deleted) on ')[1].split(' type btrfs')[0])
         print(f'  removing deleted mount {mnt_path}')
         assert mnt_path.exists()
-        subprocess.run(['umount', mnt_path], check=True)
+
+        # Unmount ALL instances (handle stacked mounts)
+        while subprocess.run(['mountpoint', '-q', mnt_path]).returncode == 0:
+            print(f'    unmounting {mnt_path}')
+            subprocess.run(['umount', mnt_path], check=True)
+
         mnt_path.rmdir()
 
     # clean all mounts not in current fstab
@@ -83,5 +88,10 @@ def clean_up_mounts(mnt_dir):
             continue
 
         print(f'  removing old mount {subdir}')
-        subprocess.run(['umount', subdir], check=True)
+
+        # Unmount ALL instances here too
+        while subprocess.run(['mountpoint', '-q', subdir]).returncode == 0:
+            print(f'    unmounting {subdir}')
+            subprocess.run(['umount', subdir], check=True)
+
         subdir.rmdir()
