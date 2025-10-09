@@ -77,7 +77,7 @@ def http_host_autoupdate(hostname, user, port, noninteractive):
 
     c.sudo('rm -f /etc/cron.d/ofm_http_host')
 
-    # prepare_shared(c)
+    prepare_shared(c)
     prepare_http_host(c)
 
     # for the monaco run, wait for the sync to complete
