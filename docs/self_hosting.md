@@ -82,7 +82,7 @@ Run the actual deploy command and wait a few minutes
 If everything is OK, you'll have some curl lines printed. Run the first one locally and make sure it's showing HTTP/2 200. For example this is an OK response.
 
 ```locally to test them.
-curl -sI https://test.openfreemap.org/monaco | sort
+curl -sI https://test.openfreemap.org/monaco
 
 HTTP/2 200
 access-control-allow-origin: *

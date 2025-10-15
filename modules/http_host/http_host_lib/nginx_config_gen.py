@@ -87,7 +87,7 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
                 # f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
             ]:
                 # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
-                curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
+                curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
 
     nginx_conf_text += create_latest_locations(domain_data=domain_data)
 
@@ -98,7 +98,7 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
         # f'/{help_area}/latest/9999/9999/9999.pbf',  # empty_tile test
     ]:
         # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
-        curl_help_text += f'curl -sI https://__DOMAIN__{path} | sort\n'
+        curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
 
     nginx_conf_text += '\n' + (config.nginx_templates / 'static_blocks.conf').read_text()
     return nginx_conf_text, curl_help_text
