@@ -155,15 +155,19 @@ def print_server_health(results: dict) -> None:
             if server_data['all_ok']
             else click.style('FAILED', fg='red')
         )
-        print(f'SERVER {server_hostname} ({server_data["ip"]}) {status}')
+        server_line = f'SERVER {server_hostname} ({server_data["ip"]})'
+        print(f'{server_line:<50} {status}')
 
         for domain, domain_data in server_data['domains'].items():
+            domain_line = f'  {domain}'
             if domain_data['status'] == 'ok':
-                print(f'  {domain}     {click.style("OK", fg="green")}')
+                print(f'{domain_line:<50} {click.style("OK", fg="green")}')
             else:
-                print(f'  {domain}     {click.style("FAILED", fg="red")} - {domain_data["error"]}')
+                print(
+                    f'{domain_line:<50} {click.style("FAILED", fg="red")}\n  {domain_data["error"]}'
+                )
 
-        print()  # Empty line between servers
+        print()
 
 
 def check_host_using_tilejson(*, url: str, ip: str, version: str) -> None:
