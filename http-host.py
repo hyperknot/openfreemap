@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
+import json
+from pprint import pprint
 
 import click
 
+from modules.http_host.http_host_lib.get_version_shared import get_deployed_version
 from ssh_lib.cli_helpers import common_options, get_connection
 from ssh_lib.config import config
-from ssh_lib.tasks_http_host import prepare_http_host, run_http_host_sync
+from ssh_lib.pycurl import pycurl_get
+from ssh_lib.tasks_http_host import prepare_http_host, read_jsonc, run_http_host_sync
 from ssh_lib.tasks_shared import prepare_shared
 from ssh_lib.utils import (
+    get_ip_from_ssh_alias,
     put,
 )
 
@@ -59,6 +64,40 @@ def sync(hostname, user, port, noninteractive):
 
     c = get_connection(hostname, user, port)
     run_http_host_sync(c)
+
+
+@cli.command()
+def debug():
+    config_data = read_jsonc()
+
+    area = 'monaco' if config_data['skip_planet'] else 'planet'
+    version = get_deployed_version(area)['version']
+
+    domains = [d['domain'] for d in config_data['domains']]
+
+    servers = []
+
+    for s in config_data['servers']:
+        hostname = s['hostname']
+        ip = get_ip_from_ssh_alias(hostname)
+        servers.append(dict(hostname=hostname, ip=ip))
+
+    for domain in domains:
+        for server in servers:
+            print(domain, server)
+            check_host_using_tilejson(
+                url=f'https://{domain}/{area}/{version}',
+                ip=server['ip'],
+                version=version,
+            )
+
+
+def check_host_using_tilejson(*, url, ip, version):
+    tilejson_str = pycurl_get(url, ip)
+    tilejson = json.loads(tilejson_str)
+    tiles_url = tilejson['tiles'][0]
+    version_in_tilejson = tiles_url.split('/')[4]
+    assert version_in_tilejson == version
 
 
 if __name__ == '__main__':

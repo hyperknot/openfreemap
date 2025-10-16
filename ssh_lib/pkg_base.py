@@ -34,11 +34,11 @@ def pkg_base(c):
         'python3',
         'python3-venv',
         #
+        # 'ctop', # unsupported on Ubuntu 24
         'acpid',
         'autojump',
         'bash-completion',
         'btop',
-        # 'ctop', # unsupported on Ubuntu 24
         'dbus',
         'direnv',
         'fd-find',
@@ -54,6 +54,7 @@ def pkg_base(c):
         'net-tools',
         'netbase',
         'nethogs',
+        'nvme-cli',
         'openssh-client',
         'p7zip-full',
         'pkg-config',

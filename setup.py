@@ -11,6 +11,7 @@ requirements = [
     'requests',
     'jsonschema',
     'json5',
+    'pycurl',
 ]
 
 
