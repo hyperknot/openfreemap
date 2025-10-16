@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-from pprint import pprint
 
 import click
 
@@ -34,6 +33,10 @@ def init_static(hostname, user, port, noninteractive):
 
     run_http_host_sync(c)
 
+    # Check server health after deployment
+    results = check_server_health(hostname)
+    print_server_health(results)
+
 
 @cli.command()
 @common_options
@@ -55,6 +58,10 @@ def init_autoupdate(hostname, user, port, noninteractive, sync):
 
     put(c, config.local_modules_dir / 'http_host' / 'cron.d' / 'ofm_http_host', '/etc/cron.d/')
 
+    # Check server health after deployment
+    results = check_server_health(hostname)
+    print_server_health(results)
+
 
 @cli.command()
 @common_options
@@ -65,43 +72,98 @@ def sync(hostname, user, port, noninteractive):
     c = get_connection(hostname, user, port)
     run_http_host_sync(c)
 
+    # Check server health after sync
+    results = check_server_health(hostname)
+    print_server_health(results)
+
 
 @cli.command()
-def debug():
+@click.option('--hostname', help='Check only a specific server')
+def debug(hostname):
+    results = check_server_health(hostname)
+    print_server_health(results)
+
+
+def check_server_health(hostname: str = None) -> dict:
+    """
+    Check health of servers by verifying deployed version matches expected version.
+
+    Args:
+        hostname: Optional hostname to check. If None, checks all servers in config.
+
+    Returns:
+        dict: Results for each server with structure:
+            {
+                'server_hostname': {
+                    'ip': '1.2.3.4',
+                    'all_ok': True/False,
+                    'domains': {
+                        'domain.com': {'status': 'ok'/'failed', 'error': None/'error message'}
+                    }
+                }
+            }
+    """
     config_data = read_jsonc()
     area = 'monaco' if config_data.get('skip_planet') else 'planet'
     version = get_deployed_version(area)['version']
     domains = [d['domain'] for d in config_data['domains']]
+
     servers = [
         {'hostname': s['hostname'], 'ip': get_ip_from_ssh_alias(s['hostname'])}
         for s in config_data['servers']
     ]
 
+    # Filter to specific server if requested
+    if hostname:
+        servers = [s for s in servers if s['hostname'] == hostname]
+        if not servers:
+            raise ValueError(f'Server {hostname} not found in config')
+
+    results = {}
+
     for server in servers:
-        print(f'SERVER {server["hostname"]} ({server["ip"]})')
-        server_ok = True
+        server_hostname = server['hostname']
+        server_ip = server['ip']
+        results[server_hostname] = {'ip': server_ip, 'domains': {}, 'all_ok': True}
 
         for domain in domains:
             try:
                 check_host_using_tilejson(
                     url=f'https://{domain}/{area}/{version}',
-                    ip=server['ip'],
+                    ip=server_ip,
                     version=version,
                 )
-                print(f'  {domain}     {click.style("OK", fg="green")}')
+                results[server_hostname]['domains'][domain] = {'status': 'ok', 'error': None}
             except AssertionError:
-                print(
-                    f'  {domain}     {click.style("FAILED", fg="red")} - Version mismatch (expected {version})'
-                )
-                server_ok = False
+                results[server_hostname]['domains'][domain] = {
+                    'status': 'failed',
+                    'error': f'Version mismatch (expected {version})',
+                }
+                results[server_hostname]['all_ok'] = False
             except Exception as e:
-                print(f'  {domain}     {click.style("FAILED", fg="red")} - {e}')
-                server_ok = False
+                results[server_hostname]['domains'][domain] = {'status': 'failed', 'error': str(e)}
+                results[server_hostname]['all_ok'] = False
 
-        if server_ok:
-            print(f'  {click.style("ALL OK", fg="green")}\n')
-        else:
-            print(f'  {click.style("FAILED", fg="red")}\n')
+    return results
+
+
+def print_server_health(results: dict) -> None:
+    """Print server health results in a human-readable format."""
+    for server_hostname, server_data in results.items():
+        status = (
+            click.style('OK', fg='green')
+            if server_data['all_ok']
+            else click.style('FAILED', fg='red')
+        )
+        print(f'SERVER {server_hostname} ({server_data["ip"]}) {status}')
+
+        for domain, domain_data in server_data['domains'].items():
+            if domain_data['status'] == 'ok':
+                print(f'  {domain}     {click.style("OK", fg="green")}')
+            else:
+                print(f'  {domain}     {click.style("FAILED", fg="red")} - {domain_data["error"]}')
+
+        print()  # Empty line between servers
 
 
 def check_host_using_tilejson(*, url: str, ip: str, version: str) -> None:
