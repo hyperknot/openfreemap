@@ -34,13 +34,13 @@ def pkg_base(c):
         'python3',
         'python3-venv',
         #
-        # 'ctop', # unsupported on Ubuntu 24
         'acpid',
         'autojump',
         'bash-completion',
         'btop',
         'dbus',
         'direnv',
+        'dmidecode',
         'fd-find',
         'file',
         'ioping',
@@ -68,6 +68,7 @@ def pkg_base(c):
         # 'iperf3',
         # 'iproute2',
         # 'nasm',
+        # 'ctop', # unsupported on Ubuntu 24
     ]
 
     apt_get_install(c, ' '.join(pkg_list))
