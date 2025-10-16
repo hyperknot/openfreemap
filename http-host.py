@@ -69,30 +69,38 @@ def sync(hostname, user, port, noninteractive):
 @cli.command()
 def debug():
     config_data = read_jsonc()
-
-    area = 'monaco' if config_data['skip_planet'] else 'planet'
+    area = 'monaco' if config_data.get('skip_planet') else 'planet'
     version = get_deployed_version(area)['version']
-
     domains = [d['domain'] for d in config_data['domains']]
+    servers = [
+        {'hostname': s['hostname'], 'ip': get_ip_from_ssh_alias(s['hostname'])}
+        for s in config_data['servers']
+    ]
 
-    servers = []
+    for server in servers:
+        print(f'SERVER {server["hostname"]} ({server["ip"]})')
+        server_ok = True
 
-    for s in config_data['servers']:
-        hostname = s['hostname']
-        ip = get_ip_from_ssh_alias(hostname)
-        servers.append(dict(hostname=hostname, ip=ip))
+        for domain in domains:
+            try:
+                check_host_using_tilejson(
+                    url=f'https://{domain}/{area}/{version}',
+                    ip=server['ip'],
+                    version=version,
+                )
+                print(f'  {domain}     OK')
+            except AssertionError:
+                print(f'  {domain}     FAILED - Version mismatch (expected {version})')
+                server_ok = False
+            except Exception as e:
+                print(f'  {domain}     FAILED - {e}')
+                server_ok = False
 
-    for domain in domains:
-        for server in servers:
-            print(domain, server)
-            check_host_using_tilejson(
-                url=f'https://{domain}/{area}/{version}',
-                ip=server['ip'],
-                version=version,
-            )
+        status = 'OK' if server_ok else 'FAILED'
+        print(f'  {status}\n')
 
 
-def check_host_using_tilejson(*, url, ip, version):
+def check_host_using_tilejson(*, url: str, ip: str, version: str) -> None:
     tilejson_str = pycurl_get(url, ip)
     tilejson = json.loads(tilejson_str)
     tiles_url = tilejson['tiles'][0]

@@ -13,13 +13,12 @@ Example:
 
 How it works:
     Overrides DNS resolution to connect to a specific IP while using the correct
-    hostname for TLS/SNI. This lets you bypass round-robin to test individual servers.
+    hostname for TLS/SNI. Verifies HTTPS is working without validating certificate chain.
 """
 
 from io import BytesIO
 from urllib.parse import urlparse
 
-import certifi
 import pycurl
 
 
@@ -28,6 +27,7 @@ def pycurl_status(url: str, target_ip: str) -> int:
     Check HTTP status of a specific server behind round-robin DNS.
 
     Makes a HEAD request to the target IP while using the hostname for HTTPS/SNI.
+    Verifies HTTPS is configured but does not validate certificate chain.
 
     Args:
         url: Full URL to request (e.g., 'https://api.example.com/health')
@@ -42,7 +42,8 @@ def pycurl_status(url: str, target_ip: str) -> int:
 
     c = pycurl.Curl()
     c.setopt(c.URL, url)
-    c.setopt(c.CAINFO, certifi.where())
+    c.setopt(c.SSL_VERIFYPEER, 0)  # Skip cert validation
+    c.setopt(c.SSL_VERIFYHOST, 0)  # Skip hostname validation
     c.setopt(c.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(c.NOBODY, True)  # HEAD request
     c.setopt(c.TIMEOUT, 5)
@@ -58,6 +59,7 @@ def pycurl_get(url: str, target_ip: str, binary: bool = False) -> str | bytes:
     Fetch content from a specific server behind round-robin DNS.
 
     Makes a GET request to the target IP while using the hostname for HTTPS/SNI.
+    Verifies HTTPS is configured but does not validate certificate chain.
 
     Args:
         url: Full URL to request (e.g., 'https://api.example.com/data')
@@ -77,7 +79,8 @@ def pycurl_get(url: str, target_ip: str, binary: bool = False) -> str | bytes:
     buffer = BytesIO()
     c = pycurl.Curl()
     c.setopt(c.URL, url)
-    c.setopt(c.CAINFO, certifi.where())
+    c.setopt(c.SSL_VERIFYPEER, 0)  # Skip cert validation
+    c.setopt(c.SSL_VERIFYHOST, 0)  # Skip hostname validation
     c.setopt(c.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(c.WRITEDATA, buffer)
     c.setopt(c.TIMEOUT, 5)
