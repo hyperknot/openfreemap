@@ -12,6 +12,7 @@ requirements = [
     'jsonschema',
     'json5',
     'pycurl',
+    'certifi',
 ]
 
 

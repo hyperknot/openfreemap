@@ -17,9 +17,9 @@ How it works:
 """
 
 from io import BytesIO
-from pathlib import Path
 from urllib.parse import urlparse
 
+import certifi
 import pycurl
 
 
@@ -42,11 +42,7 @@ def pycurl_status(url: str, target_ip: str) -> int:
 
     c = pycurl.Curl()
     c.setopt(c.URL, url)
-
-    if Path('/etc/ssl/certs/ca-certificates.crt').exists():
-        c.setopt(c.CAINFO, '/etc/ssl/certs/ca-certificates.crt')
-
-    # Override DNS: map hostname:port -> target_ip
+    c.setopt(c.CAINFO, certifi.where())
     c.setopt(c.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(c.NOBODY, True)  # HEAD request
     c.setopt(c.TIMEOUT, 5)
@@ -81,10 +77,7 @@ def pycurl_get(url: str, target_ip: str, binary: bool = False) -> str | bytes:
     buffer = BytesIO()
     c = pycurl.Curl()
     c.setopt(c.URL, url)
-
-    if Path('/etc/ssl/certs/ca-certificates.crt').exists():
-        c.setopt(c.CAINFO, '/etc/ssl/certs/ca-certificates.crt')
-
+    c.setopt(c.CAINFO, certifi.where())
     c.setopt(c.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(c.WRITEDATA, buffer)
     c.setopt(c.TIMEOUT, 5)
