@@ -88,16 +88,20 @@ def debug():
                     ip=server['ip'],
                     version=version,
                 )
-                print(f'  {domain}     OK')
+                print(f'  {domain}     {click.style("OK", fg="green")}')
             except AssertionError:
-                print(f'  {domain}     FAILED - Version mismatch (expected {version})')
+                print(
+                    f'  {domain}     {click.style("FAILED", fg="red")} - Version mismatch (expected {version})'
+                )
                 server_ok = False
             except Exception as e:
-                print(f'  {domain}     FAILED - {e}')
+                print(f'  {domain}     {click.style("FAILED", fg="red")} - {e}')
                 server_ok = False
 
-        status = 'OK' if server_ok else 'FAILED'
-        print(f'  {status}\n')
+        if server_ok:
+            print(f'  {click.style("ALL OK", fg="green")}\n')
+        else:
+            print(f'  {click.style("FAILED", fg="red")}\n')
 
 
 def check_host_using_tilejson(*, url: str, ip: str, version: str) -> None:
