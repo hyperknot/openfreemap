@@ -1,10 +1,12 @@
 import os
 import secrets
+import socket
 import string
 import sys
 from pathlib import Path
 
 import requests
+from fabric import Connection
 from invoke import UnexpectedExit
 
 
@@ -205,3 +207,29 @@ def get_latest_release_github(user, repo):
     assert data['tag_name'] == data['name']
 
     return data['tag_name']
+
+
+def get_ip_from_ssh_alias(ssh_alias):
+    """
+    Get IP address from SSH config alias.
+
+    Args:
+        ssh_alias: SSH hostname/alias from ~/.ssh/config
+
+    Returns:
+        str: IP address
+
+    Raises:
+        socket.gaierror: If hostname cannot be resolved
+    """
+
+    # Create connection (doesn't actually connect)
+    conn = Connection(ssh_alias)
+
+    # Get the resolved hostname from SSH config
+    hostname = conn.host
+
+    # Resolve to IP
+    ip_address = socket.gethostbyname(hostname)
+
+    return ip_address

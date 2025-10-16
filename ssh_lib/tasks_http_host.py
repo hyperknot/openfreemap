@@ -34,34 +34,7 @@ def prepare_http_host(c):
 
 
 def upload_config_and_certs(c):
-    if not config.local_config_jsonc.is_file():
-        raise FileNotFoundError(
-            f'{config.local_config_jsonc} not found. Make sure it exists in the /config dir'
-        )
-
-    # Load and parse the JSONC/JSON5 config file
-    try:
-        config_data = json5.loads(config.local_config_jsonc.read_text())
-    except Exception as e:
-        raise RuntimeError(f'Error parsing config file: {e}') from e
-
-    # Load the JSON schema
-    try:
-        schema = json.loads(config.config_schema_json.read_text())
-    except Exception as e:
-        raise RuntimeError(f'Error loading schema file: {e}') from e
-
-    # Validate the config against the schema
-    try:
-        validate(instance=config_data, schema=schema)
-        print('✓ Configuration is valid')
-    except ValidationError as e:
-        error_msg = f'Configuration validation failed: {e.message}'
-        if e.path:
-            error_msg += f'\nPath: {".".join(str(p) for p in e.path)}'
-        raise RuntimeError(error_msg) from e
-    except Exception as e:
-        raise RuntimeError(f'Validation error: {e}') from e
+    config_data = read_jsonc()
 
     # clean old certs
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
@@ -98,6 +71,40 @@ def upload_config_and_certs(c):
     # generate a normal JSON and upload it
     config_str = json.dumps(config_data, indent=2, ensure_ascii=False)
     put_str(c, f'{config.remote_config}/config.json', config_str)
+
+
+def read_jsonc():
+    if not config.local_config_jsonc.is_file():
+        raise FileNotFoundError(
+            f'{config.local_config_jsonc} not found. Make sure it exists in the /config dir'
+        )
+
+    # Load and parse the JSONC/JSON5 config file
+    try:
+        config_data = json5.loads(config.local_config_jsonc.read_text())
+    except Exception as e:
+        raise RuntimeError(f'Error parsing config file: {e}') from e
+
+    # Load the JSON schema
+    try:
+        schema = json.loads(config.config_schema_json.read_text())
+    except Exception as e:
+        raise RuntimeError(f'Error loading schema file: {e}') from e
+
+    # Validate the config against the schema
+    try:
+        validate(instance=config_data, schema=schema)
+        print('✓ Configuration is valid')
+    except ValidationError as e:
+        error_msg = f'Configuration validation failed: {e.message}'
+        if e.path:
+            error_msg += f'\nPath: {".".join(str(p) for p in e.path)}'
+        raise RuntimeError(error_msg) from e
+
+    except Exception as e:
+        raise RuntimeError(f'Validation error: {e}') from e
+
+    return config_data
 
 
 def upload_http_host_files(c):
