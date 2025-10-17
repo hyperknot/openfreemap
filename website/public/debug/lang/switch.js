@@ -51,8 +51,8 @@ function modifyStyle({ style, langCode }) {
 }
 
 function applyLanguage() {
-  const hash = window.location.hash.substring(1); // Remove the '#'
-  const langCode = hash || null;
+  const hash = window.location.hash.substring(1) // Remove the '#'
+  const langCode = hash || null
 
   const style = map.getStyle()
   modifyStyle({ style, langCode })
@@ -62,7 +62,9 @@ function applyLanguage() {
 map.on('load', () => {
   // Add default hash if not present
   if (!window.location.hash) {
-    alert('To change the map language, modify the language code in the URL.\n\nExamples:\n• #en → English\n• #de → German\n• #fr → French\n• #es → Spanish\n• #int → International names\n\nDefault language set to: en (English)')
+    alert(
+      'To change the map language, modify the language code in the URL.\n\nExamples:\n• #en → English\n• #de → German\n• #fr → French\n• #es → Spanish\n• #int → International names',
+    )
     window.location.hash = '#es'
     // The hashchange event will trigger applyLanguage()
   } else {
