@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "openfreemap-website",
+  "compatibility_date": "2025-10-17",
+  "assets": {
+    "directory": "./dist"
+  },
+  "account_id": "11e26518d5be29140a5322d583465a12",
+  "workers_dev": true
+}
