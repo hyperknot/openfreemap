@@ -50,7 +50,7 @@ map.on('load', () => {
   // Add default hash if not present
   if (!window.location.hash) {
     alert(
-      'To change the map language, modify the language code in the URL #.\nLabels will be RED when different. name_xx on line 1, name:xx on line 2',
+      'To change the map language, modify the language code in the URL #.\nLabels will be RED when different.\nname_xx on line 1, name:xx on line 2',
     )
     window.location.hash = '#en'
     // The hashchange event will trigger applyLanguage()
