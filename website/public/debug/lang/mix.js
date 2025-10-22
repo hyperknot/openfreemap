@@ -15,6 +15,7 @@ const line2Input = document.getElementById('line2')
 const langInput = document.getElementById('lang')
 const line1ExprInput = document.getElementById('line1-expr')
 const line2ExprInput = document.getElementById('line2-expr')
+const showDifferencesRedCheckbox = document.getElementById('showDifferencesRed')
 
 map.on('load', () => {
   const params = new URLSearchParams(window.location.search)
@@ -22,7 +23,7 @@ map.on('load', () => {
   // Set defaults if no params present
   if (!params.has('line1') && !params.has('line2') && !params.has('lang')) {
     const url = new URL(window.location)
-    url.searchParams.set('line1', 'colon,underscore,name,latin')
+    url.searchParams.set('line1', 'colon,underscore,latin,name')
     url.searchParams.set('line2', 'nonlatin')
     url.searchParams.set('lang', 'en')
     window.history.replaceState({}, '', url)
@@ -50,6 +51,7 @@ function initializeInputListeners() {
   line1Input.addEventListener('input', handleInput)
   line2Input.addEventListener('input', handleInput)
   langInput.addEventListener('input', handleInput)
+  showDifferencesRedCheckbox.addEventListener('change', handleInput)
 }
 
 function initializeModal() {
@@ -82,7 +84,7 @@ function initializeResetButton() {
 // ============================================
 
 function applyConfiguration() {
-  const { line1, line2, lang } = parseParams()
+  const { line1, line2, lang, showDifferencesRed } = parseParams()
 
   if (!map.getStyle()) return
 
@@ -92,16 +94,18 @@ function applyConfiguration() {
     line1Config: line1 ?? '',
     line2Config: line2 ?? '',
     langCode: lang,
+    showDifferencesRed,
   })
   map.setStyle(style, { diff: true })
   updateExpressionDisplays()
 }
 
 function syncInputsFromParams() {
-  const { line1, line2, lang } = parseParams()
+  const { line1, line2, lang, showDifferencesRed } = parseParams()
   line1Input.value = line1 ?? ''
   line2Input.value = line2 ?? ''
   langInput.value = lang ?? ''
+  showDifferencesRedCheckbox.checked = showDifferencesRed
 }
 
 function updateParamsFromInputs() {
@@ -109,6 +113,12 @@ function updateParamsFromInputs() {
   params.set('line1', line1Input.value)
   params.set('line2', line2Input.value)
   params.set('lang', langInput.value)
+
+  if (showDifferencesRedCheckbox.checked) {
+    params.set('showDifferencesRed', '1')
+  } else {
+    params.delete('showDifferencesRed')
+  }
 
   const queryString = params.toString()
   const hash = window.location.hash
@@ -132,7 +142,7 @@ function updateExpressionDisplays() {
 // 4. STYLE MODIFICATION
 // ============================================
 
-function modifyStyle({ style, line1Config, line2Config, langCode }) {
+function modifyStyle({ style, line1Config, line2Config, langCode, showDifferencesRed }) {
   for (const layer of style.layers) {
     if (layer.source !== 'openmaptiles') continue
     if (!layer.layout) continue
@@ -156,6 +166,22 @@ function modifyStyle({ style, line1Config, line2Config, langCode }) {
       layer.layout['text-field'] = line2Expr
     } else {
       layer.layout['text-field'] = ['get', 'name']
+    }
+
+    // Apply red color when differences should be shown
+    if (showDifferencesRed && line1Expr && line2Expr) {
+      if (!layer.paint) layer.paint = {}
+      layer.paint['text-color'] = [
+        'case',
+        ['!=', line1Expr, line2Expr],
+        '#ff0000', // Red when different
+        '#000000', // Black when same
+      ]
+    } else {
+      // Reset to default color if checkbox is unchecked
+      if (layer.paint && layer.paint['text-color']) {
+        delete layer.paint['text-color']
+      }
     }
   }
 }
@@ -181,6 +207,7 @@ function parseParams() {
     line1: params.get('line1'),
     line2: params.get('line2'),
     lang: params.get('lang') || 'en',
+    showDifferencesRed: params.has('showDifferencesRed'),
   }
 }
 
