@@ -28,7 +28,7 @@ map.on('load', () => {
   syncInputsFromParams()
   applyConfiguration()
   initializeInputListeners()
-  // initializeModal()
+  initializeModal()
 })
 
 // ============================================
@@ -36,7 +36,7 @@ map.on('load', () => {
 // ============================================
 
 function initializeInputListeners() {
-  const debouncedApplyConfig = debounce(applyConfiguration, 1000)
+  const debouncedApplyConfig = debounce(applyConfiguration, 500)
 
   const handleInput = () => {
     updateParamsFromInputs()
@@ -82,7 +82,7 @@ function applyConfiguration() {
     line2Config: line2 ?? '',
     langCode: lang || 'en',
   })
-  map.setStyle(style, { diff: false })
+  map.setStyle(style, { diff: true })
 }
 
 function syncInputsFromParams() {
