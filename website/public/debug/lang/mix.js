@@ -25,11 +25,10 @@ map.on('load', () => {
     url.searchParams.set('lang', 'en')
     window.history.replaceState({}, '', url)
   }
-
   syncInputsFromParams()
   applyConfiguration()
   initializeInputListeners()
-  initializeModal()
+  // initializeModal()
 })
 
 // ============================================
@@ -37,9 +36,16 @@ map.on('load', () => {
 // ============================================
 
 function initializeInputListeners() {
-  line1Input.addEventListener('input', updateParamsFromInputs)
-  line2Input.addEventListener('input', updateParamsFromInputs)
-  langInput.addEventListener('input', updateParamsFromInputs)
+  const debouncedApplyConfig = debounce(applyConfiguration, 1000)
+
+  const handleInput = () => {
+    updateParamsFromInputs()
+    debouncedApplyConfig()
+  }
+
+  line1Input.addEventListener('input', handleInput)
+  line2Input.addEventListener('input', handleInput)
+  langInput.addEventListener('input', handleInput)
 }
 
 function initializeModal() {
@@ -134,6 +140,17 @@ function modifyStyle({ style, line1Config, line2Config, langCode }) {
 // ============================================
 // 5. UTILITY FUNCTIONS
 // ============================================
+
+function debounce(func, delay) {
+  let timeoutId
+
+  return function (...args) {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+  }
+}
 
 function parseParams() {
   const params = new URLSearchParams(window.location.search)
