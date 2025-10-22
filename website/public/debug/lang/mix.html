@@ -7,8 +7,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
-<body>
-    <div id="map" class="w-full h-screen"></div>
+<body class="flex flex-col h-screen">
+    <!-- UI Panel -->
+    <div class="bg-gray-900 border-b border-gray-700 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-2">
+            <div class="flex items-center gap-3">
+                <div class="flex-1">
+                    <label for="line1" class="block text-xs font-medium text-gray-400 mb-1">
+                        Line 1
+                    </label>
+                    <input
+                        type="text"
+                        id="line1"
+                        class="w-full px-3 py-1.5 text-sm border border-gray-600 rounded bg-gray-800 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono"
+                        placeholder="underscore,colon,name,latin"
+                    />
+                </div>
+
+                <div class="flex-1">
+                    <label for="line2" class="block text-xs font-medium text-gray-400 mb-1">
+                        Line 2
+                    </label>
+                    <input
+                        type="text"
+                        id="line2"
+                        class="w-full px-3 py-1.5 text-sm border border-gray-600 rounded bg-gray-800 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono"
+                        placeholder="nonlatin"
+                    />
+                </div>
+
+                <div class="w-24">
+                    <label for="lang" class="block text-xs font-medium text-gray-400 mb-1">
+                        Lang
+                    </label>
+                    <input
+                        type="text"
+                        id="lang"
+                        class="w-full px-3 py-1.5 text-sm border border-gray-600 rounded bg-gray-800 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono text-center"
+                        placeholder="en"
+                        maxlength="5"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="map" class="flex-1"></div>
+
     <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
     <script src="mix.js"></script>
 </body>
