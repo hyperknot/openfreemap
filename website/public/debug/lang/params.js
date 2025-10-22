@@ -52,23 +52,23 @@ function applyLanguage() {
 }
 
 map.on('load', () => {
-  let langCode = getLanguageParam()
-  
+  const langCode = getLanguageParam()
+
   // Alert the URL param value on first load
   alert(
     `Language parameter: ${langCode || 'not set (defaulting to en)'}\n\n` +
-    'To change the map language, modify the ?lang= parameter in the URL.\n' +
-    'Labels will be RED when different.\n' +
-    'name_xx on line 1, name:xx on line 2'
+      'To change the map language, modify the ?lang= parameter in the URL.\n' +
+      'Labels will be RED when different.\n' +
+      'name_xx on line 1, name:xx on line 2',
   )
-  
+
   // Add default param if not present
   if (!langCode) {
     const url = new URL(window.location)
     url.searchParams.set('lang', 'en')
     window.history.replaceState({}, '', url)
   }
-  
+
   applyLanguage()
 })
 
