@@ -20,7 +20,7 @@ map.on('load', () => {
   // Set defaults if no params present
   if (!params.has('line1') && !params.has('line2') && !params.has('lang')) {
     const url = new URL(window.location)
-    url.searchParams.set('line1', 'underscore,colon,name,latin')
+    url.searchParams.set('line1', 'colon,underscore,name,latin')
     url.searchParams.set('line2', 'nonlatin')
     url.searchParams.set('lang', 'en')
     window.history.replaceState({}, '', url)
@@ -29,6 +29,7 @@ map.on('load', () => {
   applyConfiguration()
   initializeInputListeners()
   initializeModal()
+  initializeResetButton()
 })
 
 // ============================================
@@ -63,6 +64,13 @@ function initializeModal() {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
       modal.classList.add('hidden')
     }
+  })
+}
+
+function initializeResetButton() {
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    const hash = window.location.hash
+    window.location.href = `${window.location.pathname}${hash}`
   })
 }
 
@@ -175,12 +183,12 @@ function buildFieldAccessor(config, langCode) {
       parts.push(['get', `name_${langCode}`])
     } else if (field === 'colon') {
       parts.push(['get', `name:${langCode}`])
-    } else if (field === 'name') {
-      parts.push(['get', 'name'])
     } else if (field === 'latin') {
       parts.push(['get', 'name:latin'])
     } else if (field === 'nonlatin') {
       parts.push(['get', 'name:nonlatin'])
+    } else if (field === 'name') {
+      parts.push(['get', 'name'])
     } else {
       parts.push(['get', field])
     }
