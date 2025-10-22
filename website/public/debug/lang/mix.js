@@ -13,6 +13,8 @@ const map = new maplibregl.Map({
 const line1Input = document.getElementById('line1')
 const line2Input = document.getElementById('line2')
 const langInput = document.getElementById('lang')
+const line1ExprInput = document.getElementById('line1-expr')
+const line2ExprInput = document.getElementById('line2-expr')
 
 map.on('load', () => {
   const params = new URLSearchParams(window.location.search)
@@ -41,6 +43,7 @@ function initializeInputListeners() {
 
   const handleInput = () => {
     updateParamsFromInputs()
+    updateExpressionDisplays()
     debouncedApplyConfig()
   }
 
@@ -88,9 +91,10 @@ function applyConfiguration() {
     style,
     line1Config: line1 ?? '',
     line2Config: line2 ?? '',
-    langCode: lang || 'en',
+    langCode: lang,
   })
   map.setStyle(style, { diff: true })
+  updateExpressionDisplays()
 }
 
 function syncInputsFromParams() {
@@ -111,6 +115,17 @@ function updateParamsFromInputs() {
   const newUrl = `${window.location.pathname}?${queryString}${hash}`
 
   window.history.replaceState({}, '', newUrl)
+}
+
+function updateExpressionDisplays() {
+  const { line1, line2, lang } = parseParams()
+  const langCode = lang
+
+  const line1Expr = buildFieldAccessor(line1 ?? '', langCode)
+  const line2Expr = buildFieldAccessor(line2 ?? '', langCode)
+
+  line1ExprInput.value = line1Expr ? JSON.stringify(line1Expr) : ''
+  line2ExprInput.value = line2Expr ? JSON.stringify(line2Expr) : ''
 }
 
 // ============================================
@@ -165,7 +180,7 @@ function parseParams() {
   return {
     line1: params.get('line1'),
     line2: params.get('line2'),
-    lang: params.get('lang'),
+    lang: params.get('lang') || 'en',
   }
 }
 
