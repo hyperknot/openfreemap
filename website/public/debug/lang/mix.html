@@ -48,11 +48,39 @@
                         maxlength="5"
                     />
                 </div>
+
+                <div class="pt-5">
+                    <button
+                        id="shareBtn"
+                        class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all"
+                    >
+                        Share
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="map" class="flex-1"></div>
+
+    <!-- Modal Dialog -->
+    <div id="shareModal" class="hidden fixed inset-0 z-50">
+        <div id="modalOverlay" class="fixed inset-0 bg-black/50"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-gray-800 rounded-lg p-8 max-w-md shadow-2xl">
+                <p class="text-gray-300 text-center leading-relaxed mb-6">
+                    Your settings have been saved to the URL.<br>
+                    Copy the address bar to share this map.
+                </p>
+                <button
+                    id="closeModalBtn"
+                    class="w-full py-2.5 text-sm text-white bg-gray-700 rounded hover:bg-gray-600 transition-all"
+                >
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
     <script src="mix.js"></script>
