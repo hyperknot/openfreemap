@@ -19,16 +19,16 @@ parsed = urlparse(url)
 base_url = f'{parsed.scheme}://{parsed.netloc}'
 path = parsed.path.lstrip('/')
 
-destination = '.'
+destination = './downloads'
 
 subprocess.run(
     [
         'rclone',
-        'ls',
+        'copy',
         '--http-url',
         base_url,
         f':http:{path}',
-        # destination,
+        destination,
         '--dump',
         'headers',
         '-vv',
