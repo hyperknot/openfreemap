@@ -14,12 +14,22 @@ rclone_config = Path('../../config/rclone.conf')
 
 url = 'https://download.mapterhorn.com/planet.pmtiles'
 
-# Parse URL properly
 parsed = urlparse(url)
 base_url = f'{parsed.scheme}://{parsed.netloc}'
 path = parsed.path.lstrip('/')
 
-destination = './downloads'
+bucket_name = 'ofm-mapterhorn'
+remote_name = 'remote'
+destination = f'{remote_name}:{bucket_name}'
+
+common_opts = [
+    # '--verbose=10',
+    # '--dump',
+    # 'headers',
+    '--progress',
+    '--config',
+    rclone_config,
+]
 
 subprocess.run(
     [
@@ -29,10 +39,8 @@ subprocess.run(
         base_url,
         f':http:{path}',
         destination,
-        '--dump',
-        'headers',
-        '-vv',
-        '--config',
-        rclone_config,
+        '--multi-thread-streams=8',
+        '--s3-chunk-size=100M',
+        *common_opts,
     ]
 )
