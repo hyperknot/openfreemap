@@ -133,3 +133,36 @@ hr {
     }
   }
 }
+
+@media (prefers-color-scheme:dark) {
+  :root {
+    color-scheme:dark;
+  }
+
+  body {
+    color: #FFF;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #CCC;
+  }
+
+  #style-url-pre {
+    background: #101010;
+  }
+
+  p {
+    a {
+      color: #CCC;
+    }
+  }
+  
+  strong {
+    color: #CCC;
+  }
+}
