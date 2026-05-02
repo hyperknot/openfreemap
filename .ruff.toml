@@ -1,49 +1,57 @@
-target-version = "py310"
+target-version = "py313"
+unsafe-fixes = true
 line-length = 100
-extend-exclude = ["temp"]
+extend-exclude = ["alembic", "*.ipynb", "temp"]
 
 
 lint.select = [
-  "E",   # pycodestyle errors
-  "W",   # pycodestyle warnings
-  "F",   # pyflakes
-  "I",   # isort
-  'UP',  # pyupgrade
   'A',   # flake8-builtins
   "C4",  # flake8-comprehensions
+  'DTZ', # flake8-datetimez
+  "E",   # pycodestyle errors
   'EXE', # flake8-executable
+  "F",   # Pyflakes
   'FA',  # flake8-future-annotations
+  "I",   # isort
   'PT',  # flake8-pytest-style
   'RSE', # flake8-raise
   'SIM', # flake8-simplify
-  'DTZ', # flake8-datetimez, https://beta.ruff.rs/docs/rules/#flake8-datetimez-dtz
+  'UP',  # pyupgrade
+  "W",   # pycodestyle warnings
 ]
 
 lint.ignore = [
   'A003',
-  'DTZ007',
+  # 'C408',  # keep dict() as-is
+  'DTZ007', # naive datetime.strptime() without %z
   'E501',
   'E711',
   'E712',
-  # 'E721', # type comparison
+  'E721',   # type() comparison
+  # 'E722', # bare except
   'E741',
-  'F401', # unused imports
+  'EXE003', # shebang should contain "python"
+  'F401',   # unused imports
   'F841',
+  # 'PT018', # assertion should be broken into multiple parts
   'SIM102',
-  #'SIM103', #  	needless-bool, return the condition {condition} directly
+  'SIM103', # return the condition directly
   'SIM105',
   'SIM108',
+  # 'SIM110', # use any() instead of a for loop
+  # 'SIM114',
   'SIM115',
-#  'DTZ007', # Naive datetime constructed using `datetime.datetime.strptime()` without %z
+  # 'UP007', # use X | Y instead of Union[X, Y]
+  # 'UP032', # use an f-string instead of format()
+  # 'UP046', # prefer type parameters over Generic subclasses
 ]
 
 [format]
 quote-style = "single"
 
 [lint.isort]
-known-first-party = ["ssh_lib"]
+known-first-party = ["lib", "api", "deploy", "ssh_lib"]
 lines-after-imports = 2
 
 [lint.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
-
