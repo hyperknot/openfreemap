@@ -1,4 +1,5 @@
-from ssh_lib.utils import apt_get_update, exists
+from ssh_lib.apt import apt_get_update
+from ssh_lib.utils import exists
 
 
 def rclone(c):
