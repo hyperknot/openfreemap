@@ -19,6 +19,14 @@
     "skip_planet": {
       "type": "boolean",
       "description": "Skip the full planet download, useful for testing"
+    },
+    "telegram_token": {
+      "type": "string",
+      "description": "Telegram bot token for HTTP host operational alerts"
+    },
+    "telegram_chat_id": {
+      "type": "string",
+      "description": "Telegram chat id for HTTP host operational alerts"
     }
   },
   "required": ["domains", "servers"],
