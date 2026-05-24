@@ -1,5 +1,6 @@
 from http_host_lib.config import config
 from http_host_lib.get_version_shared import get_deployed_version
+from http_host_lib.telegram_wrapper import telegram_send_message
 from http_host_lib.utils import assert_linux, assert_sudo
 
 
@@ -22,6 +23,12 @@ def fetch_version_files() -> bool:
             print(f'  deployed version not found: {area}')
             continue
         print(f'  deployed version {area}: {deployed_version}')
+
+        if not (config.runs_dir / area / deployed_version / 'tiles.btrfs').is_file():
+            message = f'not switching {area} to {deployed_version}: local btrfs is missing'
+            print(f'  {message}')
+            telegram_send_message(f'{config.ofm_host_prefix} ERROR\n{message}')
+            continue
 
         local_version_file = config.deployed_versions_dir / f'{area}.txt'
 

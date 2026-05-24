@@ -1,4 +1,5 @@
 import json
+import socket
 import subprocess
 from pathlib import Path
 
@@ -28,6 +29,9 @@ class Configuration:
         ofm_config_dir = repo_root / 'config'
 
     json_config = json.loads((ofm_config_dir / 'config.json').read_text())
+    telegram_token = json_config.pop('telegram_token', None)
+    telegram_chat_id = json_config.pop('telegram_chat_id', None)
+    ofm_host_prefix = f'OFM http_host {socket.gethostname()}'
 
     deployed_versions_dir = ofm_config_dir / 'deployed_versions'
 
