@@ -4,6 +4,7 @@ import sys
 
 from http_host_lib.config import config
 from http_host_lib.get_version_shared import get_versions_for_area
+from http_host_lib.telegram_wrapper import telegram_send_message
 from http_host_lib.utils import download_file_aria2, get_remote_file_size
 
 
@@ -18,9 +19,16 @@ def download_area_version(area: str, version: str) -> bool:
     if area not in config.areas:
         sys.exit(f'  Please specify area: {config.areas}')
 
-    versions = get_versions_for_area(area)
+    try:
+        versions = get_versions_for_area(area)
+    except Exception as e:
+        message = f'cannot fetch available versions for {area}: {type(e).__name__}: {e}'
+        telegram_send_message(f'ERROR\nBTRFS download failed\n{message}')
+        return False
+
     if not versions:
-        print(f'  No versions found for {area}')
+        message = f'No versions found for {area}'
+        telegram_send_message(f'ERROR\nBTRFS download failed\n{message}')
         return False
 
     # latest version
@@ -38,9 +46,13 @@ def download_area_version(area: str, version: str) -> bool:
     else:
         if version not in versions:
             available_versions_str = '\n'.join(versions)
-            print(
-                f'  Requested version is not available.\nAvailable versions for {area}:\n{available_versions_str}'
+            message = (
+                f'Requested version is not available.\n'
+                f'area: {area}\n'
+                f'version: {version}\n'
+                f'Available versions for {area}:\n{available_versions_str}'
             )
+            telegram_send_message(f'ERROR\nBTRFS download failed\n{message}')
             return False
         selected_version = version
 
@@ -70,25 +82,33 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
     disk_free = shutil.disk_usage(temp_dir).free
     file_size = get_remote_file_size(url)
     if not file_size:
-        print(f'  cannot get remote file size for {url}')
+        message = f'cannot get remote file size for {url}'
+        telegram_send_message(f'ERROR\nBTRFS download failed\n{message}')
         return False
 
     needed_space = file_size * 3
     if disk_free < needed_space:
-        print(f'  not enough disk space. Needed: {needed_space}, free space: {disk_free}')
+        message = f'not enough disk space. Needed: {needed_space}, free space: {disk_free}'
+        telegram_send_message(f'ERROR\nBTRFS download failed\n{message}\nurl: {url}')
         return False
 
     target_file = temp_dir / 'tiles.btrfs.gz'
-    download_file_aria2(url, target_file)
+    try:
+        download_file_aria2(url, target_file)
 
-    print('  uncompressing...')
-    subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'], check=True)
-    btrfs_src = temp_dir / 'tiles.btrfs'
+        print('  uncompressing...')
+        subprocess.run(['unpigz', temp_dir / 'tiles.btrfs.gz'], check=True)
+        btrfs_src = temp_dir / 'tiles.btrfs'
 
-    shutil.rmtree(version_dir, ignore_errors=True)
-    version_dir.mkdir(parents=True)
+        shutil.rmtree(version_dir, ignore_errors=True)
+        version_dir.mkdir(parents=True)
 
-    btrfs_src.rename(btrfs_file)
+        btrfs_src.rename(btrfs_file)
 
-    shutil.rmtree(temp_dir)
-    return True
+        shutil.rmtree(temp_dir)
+        return True
+    except Exception as e:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        message = f'download failed for {url}: {type(e).__name__}: {e}'
+        telegram_send_message(f'ERROR\nBTRFS download failed\n{message}')
+        return False

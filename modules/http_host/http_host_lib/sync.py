@@ -6,7 +6,7 @@ from http_host_lib.config import config
 from http_host_lib.mount import auto_mount, clean_up_mounts
 from http_host_lib.nginx_config_gen import write_nginx_config
 from http_host_lib.utils import assert_linux, assert_sudo
-from http_host_lib.versions import fetch_version_files
+from http_host_lib.versions import get_remote_deployed_versions, write_version_files
 
 
 def full_sync(force=False):
@@ -22,21 +22,26 @@ def full_sync(force=False):
     if force:
         clean_up_mounts(config.mnt_dir)
 
-    # start
-    versions_changed = fetch_version_files()
+    remote_versions = {
+        area: version
+        for area, version in get_remote_deployed_versions().items()
+        if area != 'planet' or not config.json_config.get('skip_planet')
+    }
 
     assets_changed = download_assets()
 
     btrfs_downloaded = False
+    for area in config.areas:
+        if area == 'planet' and config.json_config.get('skip_planet'):
+            continue
 
-    # download latest and deployed monaco
-    btrfs_downloaded += download_area_version(area='monaco', version='latest')
-    btrfs_downloaded += download_area_version(area='monaco', version='deployed')
+        deployed_version = remote_versions.get(area)
+        if deployed_version:
+            btrfs_downloaded += download_area_version(area=area, version=deployed_version)
 
-    # download latest and deployed planet
-    if not config.json_config.get('skip_planet'):
-        btrfs_downloaded += download_area_version(area='planet', version='latest')
-        btrfs_downloaded += download_area_version(area='planet', version='deployed')
+        btrfs_downloaded += download_area_version(area=area, version='latest')
+
+    versions_changed = write_version_files(remote_versions)
 
     if btrfs_downloaded or versions_changed or assets_changed or force:
         auto_clean_btrfs()

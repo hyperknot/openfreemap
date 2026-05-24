@@ -3,6 +3,7 @@ from http_host_lib.telegram_core import telegram_send_message as telegram_send_m
 
 
 def telegram_send_message(message: str, *, markdown: bool = False) -> None:
+    message = f'{config.ofm_host_prefix} {message}'
     print(message)
 
     if not config.telegram_token or not config.telegram_chat_id:

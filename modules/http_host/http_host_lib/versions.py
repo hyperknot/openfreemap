@@ -4,10 +4,26 @@ from http_host_lib.telegram_wrapper import telegram_send_message
 from http_host_lib.utils import assert_linux, assert_sudo
 
 
+def get_remote_deployed_versions() -> dict[str, str]:
+    print('Fetching remote deployed version files')
+
+    remote_versions = {}
+    for area in config.areas:
+        deployed_version = get_deployed_version(area)['version']
+        if not deployed_version:
+            print(f'  deployed version not found: {area}')
+            continue
+
+        print(f'  remote deployed version {area}: {deployed_version}')
+        remote_versions[area] = deployed_version
+
+    return remote_versions
+
+
 def fetch_version_files() -> bool:
     """
-    Syncs the version files from remote to local.
-    Remote versions are specified by https://assets.openfreemap.com/versions/deployed_{area}.txt
+    Syncs remote deployed version files to local state, but only for versions
+    that are already downloaded locally.
     """
 
     print('Syncing local version files')
@@ -15,19 +31,16 @@ def fetch_version_files() -> bool:
     assert_linux()
     assert_sudo()
 
+    return write_version_files(get_remote_deployed_versions())
+
+
+def write_version_files(remote_versions: dict[str, str]) -> bool:
     need_nginx_sync = False
 
-    for area in config.areas:
-        deployed_version = get_deployed_version(area)['version']
-        if not deployed_version:
-            print(f'  deployed version not found: {area}')
-            continue
-        print(f'  deployed version {area}: {deployed_version}')
-
+    for area, deployed_version in remote_versions.items():
         if not (config.runs_dir / area / deployed_version / 'tiles.btrfs').is_file():
             message = f'not switching {area} to {deployed_version}: local btrfs is missing'
-            print(f'  {message}')
-            telegram_send_message(f'{config.ofm_host_prefix} ERROR\n{message}')
+            telegram_send_message(f'ERROR\n{message}')
             continue
 
         local_version_file = config.deployed_versions_dir / f'{area}.txt'
