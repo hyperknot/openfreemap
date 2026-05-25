@@ -1,6 +1,6 @@
-from .config import config
-from .planetiler import install_planetiler
-from .utils import put
+from lib.config import config
+from lib.ssh_lib.planetiler import install_planetiler
+from lib.ssh_lib.utils import put
 
 
 def prepare_tilegen(c, *, enable_cron):

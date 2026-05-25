@@ -1,4 +1,5 @@
-from .config import config
+from lib.config import config
+
 from .utils import put, put_str
 
 

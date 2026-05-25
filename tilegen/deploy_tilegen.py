@@ -7,9 +7,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import click
 
-from lib.ssh_lib.cli_helpers import common_options, get_connection
-from lib.ssh_lib.tasks_shared import prepare_shared
-from lib.ssh_lib.tasks_tilegen import prepare_tilegen
+from lib.deploy.cli_helpers import common_options, get_connection
+from lib.deploy.tasks_shared import prepare_shared
+from lib.deploy.tasks_tilegen import prepare_tilegen
 
 
 @click.group()

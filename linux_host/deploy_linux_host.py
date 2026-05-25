@@ -8,16 +8,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import click
 
-from lib.get_version_shared import get_deployed_version
-from lib.ssh_lib.cli_helpers import common_options, get_connection
-from lib.ssh_lib.pycurl import pycurl_get
-from lib.ssh_lib.tasks_linux_host import (
+from lib.deploy.cli_helpers import common_options, get_connection
+from lib.deploy.tasks_linux_host import (
     install_linux_host_cron,
     prepare_linux_host,
     read_jsonc,
     run_linux_host_sync,
 )
-from lib.ssh_lib.tasks_shared import prepare_shared
+from lib.deploy.tasks_shared import prepare_shared
+from lib.get_version_shared import get_deployed_version
+from lib.pycurl import pycurl_get
 from lib.ssh_lib.utils import get_ip_from_ssh_alias
 
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env -S uv run
 import click
 
-from lib.ssh_lib.cli_helpers import common_options, get_connection
-from lib.ssh_lib.tasks_linux_host import upload_config_and_certs
+from lib.deploy.cli_helpers import common_options, get_connection
+from lib.deploy.tasks_linux_host import upload_config_and_certs
 
 
 @click.group()

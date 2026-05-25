@@ -1,9 +1,10 @@
+from lib.config import config
+
 from .apt import (
     apt_get_install,
     apt_get_update,
     setup_apt_repository,
 )
-from .config import config
 from .utils import (
     exists,
     put,

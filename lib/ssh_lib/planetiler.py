@@ -1,4 +1,5 @@
-from .config import config
+from lib.config import config
+
 from .java import java
 from .utils import exists, sudo_cmd
 

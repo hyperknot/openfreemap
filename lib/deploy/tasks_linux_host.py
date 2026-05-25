@@ -1,12 +1,11 @@
 from pathlib import Path
 
+from lib.config import config
+from lib.deploy.benchmark import c1000k, wrk
 from lib.linux_host_config import read_linux_host_config
-
-from .benchmark import c1000k, wrk
-from .config import config
-from .kernel import kernel_limits1m, kernel_somaxconn65k
-from .nginx import nginx
-from .utils import put, sudo_cmd
+from lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
+from lib.ssh_lib.nginx import nginx
+from lib.ssh_lib.utils import put, sudo_cmd
 
 
 def prepare_linux_host(c):

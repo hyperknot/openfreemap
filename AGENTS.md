@@ -8,7 +8,7 @@ Python packages:
 
 - `lib/` — shared Python code.
   - `lib/get_version_shared.py` — shared deployed/version helpers.
-  - `lib/ssh_lib/` — SSH deployment and server setup helpers.
+  - `lib/deploy/` and `lib/ssh_lib/` — deployment and SSH server setup helpers.
 - `linux_host/` — runtime code for Linux tile hosts.
   - Script: `linux_host/scripts/linux-host.py`
   - Runtime library: `linux_host/lib/`
@@ -73,6 +73,6 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
 - Keep runtime package config local to each runtime package:
   - `linux_host/lib/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
   - `tilegen/lib/config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
-  - deployment config in `lib/ssh_lib/config.py`
+  - deployment config in `lib/config.py`
 - Use Click for CLIs.
 - Use ./lint.sh for linting and formatting.
