@@ -30,5 +30,8 @@ def kernel_thp_fix(c):
         f'{config.local_assets_dir}/kernel/thp_fix_service',
         '/etc/systemd/system/thp_fix.service',
     )
+    # Clean up stale symlinks from the old RequiredBy=docker.service install
+    c.sudo('rm -f /etc/systemd/system/docker.service.requires/thp_fix.service')
+    c.sudo('rm -f /etc/systemd/system/docker.service.wants/thp_fix.service')
     c.sudo('systemctl daemon-reload')
     c.sudo('systemctl enable thp_fix')

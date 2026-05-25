@@ -1,4 +1,4 @@
-from ssh_lib.utils import (
+from ssh_lib.apt import (
     apt_get_install,
     apt_get_update,
 )
@@ -61,6 +61,7 @@ def pkg_base(c):
         'psmisc',
         'ripgrep',
         'silversearcher-ag',
+        'sqlite3',
         'time',
         'tmux',
         #

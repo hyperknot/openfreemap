@@ -1,13 +1,14 @@
 import os
 import secrets
+import shlex
 import socket
 import string
 import sys
+import tempfile
 from pathlib import Path
 
-import requests
 from fabric import Connection
-from invoke import UnexpectedExit
+from invoke.exceptions import UnexpectedExit
 
 
 def put(
@@ -63,11 +64,10 @@ def put_dir(
 
 
 def put_str(c, remote_path, str_, create_parent_dir=False):
-    tmp_file = 'tmp.txt'
-    with open(tmp_file, 'w') as outfile:
-        outfile.write(str_ + '\n')
-    put(c, tmp_file, remote_path, create_parent_dir=create_parent_dir)
-    os.remove(tmp_file)
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.txt') as f:
+        f.write(str_ + '\n')
+        f.flush()
+        put(c, f.name, remote_path, create_parent_dir=create_parent_dir)
 
 
 def file_contains(c, file_path, search_str):
@@ -94,11 +94,12 @@ def append_str(c, remote_path, str_, check_duplicate=False):
     return True  # Successfully appended
 
 
-def sudo_cmd(c, cmd, *, user=None):
-    cmd = cmd.replace('"', '\\"')
+def sudo_cmd(c, cmd, *, user=None, cwd=None):
+    if cwd:
+        cmd = f'cd {shlex.quote(cwd)} && {cmd}'
 
     try:
-        c.sudo(f'bash -c "{cmd}"', user=user)
+        c.sudo(f'bash -lc {shlex.quote(cmd)}', user=user)
     except UnexpectedExit as e:
         print(f'Command failed: {e.result.command}')
         print(f'Error: {e.result.stderr}')
@@ -140,49 +141,54 @@ def is_dir(c, path):
     return c.sudo(f"test -d '{path}'", hide=True, warn=True).ok
 
 
+def ensure_dirs(c, *paths):
+    quoted = ' '.join(shlex.quote(path) for path in paths if path)
+    if quoted:
+        c.run(f'mkdir -p {quoted}', echo=True)
+
+
+def truncate_files_in_dir(c, path):
+    quoted = shlex.quote(path)
+    c.run(
+        f'mkdir -p {quoted} && find {quoted} -type f -exec truncate -s 0 {{}} +',
+        warn=True,
+        hide=True,
+    )
+
+
 def random_string(length):
     return ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
 def ubuntu_release(c):
-    return c.run('lsb_release -rs').stdout.strip()[:2]
+    return int(c.run('lsb_release -rs').stdout.strip()[:2])
 
 
 def ubuntu_codename(c):
     return c.run('lsb_release -cs').stdout.strip()
 
 
-def apt_get_update(c):
-    c.sudo('apt-get update')
-
-
-def apt_get_install(c, pkgs, warn=False):
-    c.sudo(
-        f'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends {pkgs}',
-        warn=warn,
-        echo=True,
-    )
-
-
-def apt_get_purge(c, pkgs):
-    c.sudo(f'DEBIAN_FRONTEND=noninteractive apt-get purge -y {pkgs}')
-
-
-def apt_get_autoremove(c):
-    c.sudo('DEBIAN_FRONTEND=noninteractive apt-get autoremove -y')
-
-
 def get_username(c):
     return c.run('whoami').stdout.strip()
 
 
-def add_user(c, username, passwd=None, uid=None):
-    uid_str = f'--uid={uid}' if uid else ''
+def add_user(c, username, passwd=None, uid=None, *, system: bool):
+    """Create a user if it doesn't already exist."""
+    if c.sudo(f'id -u {username}', hide=True, warn=True).ok:
+        print(f'User {username} already exists, skipping.')
+        return
 
-    # --disabled-password -> ssh-key login only
-    c.sudo(f'adduser --disabled-password --gecos "" {uid_str} {username}', warn=True)
-    if passwd:
-        sudo_cmd(c, f'echo "{username}:{passwd}" | chpasswd')
+    if system:
+        c.sudo(f'useradd --system --shell /usr/sbin/nologin --user-group {username}')
+    else:
+        parts = ['adduser', '--disabled-password', '--gecos ""']
+        if uid:
+            parts.append(f'--uid={uid}')
+        parts.append(username)
+        c.sudo(' '.join(parts))
+
+        if passwd:
+            c.sudo(f'echo "{username}:{passwd}" | chpasswd')
 
 
 def remove_user(c, username):
@@ -199,14 +205,20 @@ def enable_sudo(c, username, nopasswd=False):
 
 
 def get_latest_release_github(user, repo):
+    import requests
+
     url = f'https://api.github.com/repos/{user}/{repo}/releases/latest'
-    r = requests.get(url)
+    r = requests.get(url, timeout=30)
     r.raise_for_status()
 
     data = r.json()
-    assert data['tag_name'] == data['name']
+    tag_name = data.get('tag_name')
+    if not isinstance(tag_name, str) or not tag_name.strip():
+        raise RuntimeError(
+            f'GitHub latest release response for {user}/{repo} is missing tag_name: {data!r}'
+        )
 
-    return data['tag_name']
+    return tag_name.strip()
 
 
 def get_ip_from_ssh_alias(ssh_alias):
@@ -228,6 +240,8 @@ def get_ip_from_ssh_alias(ssh_alias):
 
     # Get the resolved hostname from SSH config
     hostname = conn.host
+    if not isinstance(hostname, str) or not hostname:
+        raise RuntimeError(f'Could not resolve hostname for SSH alias {ssh_alias!r}')
 
     # Resolve to IP
     ip_address = socket.gethostbyname(hostname)
