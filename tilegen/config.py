@@ -6,8 +6,6 @@ class Configuration:
     areas = ['planet', 'monaco']
 
     repo_root = Path(__file__).resolve().parent.parent
-    package_dir = Path(__file__).resolve().parent
-    scripts_dir = package_dir / 'scripts'
 
     tilegen_dir = Path('/data/ofm/tilegen')
     planetiler_bin = tilegen_dir / 'planetiler'

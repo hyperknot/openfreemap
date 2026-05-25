@@ -8,7 +8,7 @@ from lib.get_version_shared import (
     get_versions_for_area,
 )
 from tilegen.btrfs import append_sha256sum, gzip_btrfs, make_btrfs, move_logs
-from tilegen.mbtiles_metadata import update_mbtiles_metadata
+from tilegen.mbtiles import update_mbtiles_metadata
 from tilegen.planetiler import run_planetiler
 from tilegen.rclone import (
     finalize_run_upload,

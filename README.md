@@ -75,7 +75,7 @@ There is no cloud, just dedicated servers. The web server is nginx on Ubuntu.
 
 Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](tilegen/scripts/extract_mbtiles.py) and [shrink_btrfs](tilegen/scripts/shrink_btrfs.py) scripts for this very purpose.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote the [extract_mbtiles](tilegen/mbtiles.py) and [shrink_btrfs](tilegen/btrfs.py) helpers for this very purpose.
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
@@ -113,7 +113,7 @@ _note: Tile generation is 100% optional, as we are providing the processed full 
 
 The `tilegen` script downloads a full planet OSM extract and runs it through Planetiler.
 
-The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](tilegen/scripts/extract_mbtiles.py) script. The partition is shrunk using the [shrink_btrfs](tilegen/scripts/shrink_btrfs.py) script.
+The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](tilegen/mbtiles.py) helper. The partition is shrunk using the [shrink_btrfs](tilegen/btrfs.py) helper.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
