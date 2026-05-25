@@ -1,7 +1,7 @@
 amends "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Builtins.pkl"
 
-local ignoreFiles = "**/fixtures/**/*"
+local ignoreFiles = List("**/fixtures/**/*", "data/ref/**/*")
 
 local linters = new Mapping<String, Step> {
     ["biome"] = (Builtins.biome) {
