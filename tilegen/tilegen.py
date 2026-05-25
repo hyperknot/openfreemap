@@ -40,13 +40,15 @@ def make_tiles(area, upload):
     run_folder = run_planetiler(area)
     remote_dir = f'remote:ofm-btrfs/areas/{area}/{run_folder.name}'
 
+    # btrfs extraction updates mbtiles metadata, so checksum mbtiles afterwards.
+    make_btrfs(run_folder)
+
     # mbtiles: checksum and upload
     append_sha256sum(run_folder / 'tiles.mbtiles', mode='w')
     if upload:
         upload_run_file(run_folder / 'tiles.mbtiles', remote_dir)
 
-    # btrfs: create, checksum, upload
-    make_btrfs(run_folder)
+    # btrfs: checksum and upload
     append_sha256sum(run_folder / 'tiles.btrfs')
     if upload:
         upload_run_file(run_folder / 'tiles.btrfs', remote_dir)
