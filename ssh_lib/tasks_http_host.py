@@ -4,12 +4,12 @@ from pathlib import Path
 import json5
 from jsonschema import ValidationError, validate
 
-from ssh_lib.benchmark import c1000k, wrk
-from ssh_lib.config import config
-from ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
-from ssh_lib.nginx import nginx
-from ssh_lib.slugify import slugify
-from ssh_lib.utils import put, put_dir, put_str, sudo_cmd
+from .benchmark import c1000k, wrk
+from .config import config
+from .kernel import kernel_limits1m, kernel_somaxconn65k
+from .nginx import nginx
+from .slugify import slugify
+from .utils import put, put_dir, put_str, sudo_cmd
 
 
 def prepare_http_host(c):

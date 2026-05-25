@@ -1,10 +1,10 @@
-from ssh_lib.apt import (
+from .apt import (
     apt_get_install,
     apt_get_purge,
     apt_get_update,
     setup_apt_repository,
 )
-from ssh_lib.utils import (
+from .utils import (
     ubuntu_codename,
 )
 

@@ -1,6 +1,6 @@
-from ssh_lib.config import config
-from ssh_lib.java import java
-from ssh_lib.utils import exists, sudo_cmd
+from .config import config
+from .java import java
+from .utils import exists, sudo_cmd
 
 
 PLANETILER_COMMIT = 'cc769c'

@@ -1,6 +1,6 @@
-from ssh_lib.config import config
-from ssh_lib.planetiler import install_planetiler
-from ssh_lib.utils import put, put_dir
+from .config import config
+from .planetiler import install_planetiler
+from .utils import put, put_dir
 
 
 def prepare_tile_gen(c, *, enable_cron):

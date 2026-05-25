@@ -1,7 +1,7 @@
-from ssh_lib.config import config
-from ssh_lib.pkg_base import pkg_base, pkg_upgrade
-from ssh_lib.rclone import rclone
-from ssh_lib.utils import add_user, enable_sudo, put, sudo_cmd
+from .config import config
+from .pkg_base import pkg_base, pkg_upgrade
+from .rclone import rclone
+from .utils import add_user, enable_sudo, put, sudo_cmd
 
 
 def prepare_shared(c):

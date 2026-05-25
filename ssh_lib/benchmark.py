@@ -1,6 +1,6 @@
-from ssh_lib.apt import apt_get_install
-from ssh_lib.config import config
-from ssh_lib.utils import exists, put
+from .apt import apt_get_install
+from .config import config
+from .utils import exists, put
 
 
 def c1000k(c):

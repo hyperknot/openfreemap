@@ -1,7 +1,7 @@
 import shlex
 from urllib.parse import urlparse
 
-from ssh_lib.utils import put_str
+from .utils import put_str
 
 
 def setup_apt_repository(

@@ -1,4 +1,4 @@
-from ssh_lib.apt import (
+from .apt import (
     apt_get_install,
     apt_get_update,
 )

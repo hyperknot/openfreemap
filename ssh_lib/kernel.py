@@ -1,5 +1,5 @@
-from ssh_lib.config import config
-from ssh_lib.utils import put, put_str
+from .config import config
+from .utils import put, put_str
 
 
 def kernel_somaxconn65k(c):

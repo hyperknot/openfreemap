@@ -1,10 +1,10 @@
-from ssh_lib.apt import (
+from .apt import (
     apt_get_install,
     apt_get_update,
     setup_apt_repository,
 )
-from ssh_lib.config import config
-from ssh_lib.utils import (
+from .config import config
+from .utils import (
     exists,
     put,
     sudo_cmd,
