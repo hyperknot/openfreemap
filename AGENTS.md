@@ -68,7 +68,7 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
 ## Code style
 
 - Prefer simple, direct code over abstractions.
-- Use absolute imports from `lib`, `linux_host`, and `tilegen`.
+
 - Keep shared code in `lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
 - Keep runtime package config local to each runtime package:
   - `linux_host/lib/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely

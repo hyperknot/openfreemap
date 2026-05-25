@@ -5,7 +5,7 @@ from pathlib import Path
 class Configuration:
     repo_root = Path(__file__).resolve().parents[1]
 
-    local_assets_dir = Path(__file__).parent / 'ssh_lib' / 'assets'
+    local_assets_dir = Path(__file__).parent / 'assets'
     local_config_dir = repo_root / 'config'
     local_linux_host_config_dir = local_config_dir / 'linux_host'
     local_linux_host_dir = repo_root / 'linux_host'

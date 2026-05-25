@@ -1,5 +1,5 @@
 from lib.config import config
-from lib.ssh_lib.planetiler import install_planetiler
+from lib.deploy.planetiler import install_planetiler
 from lib.ssh_lib.utils import put
 
 
