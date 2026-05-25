@@ -1,6 +1,9 @@
 making web maps free and fun again
 add dark themes in website
 
+remove DONE from uploads, use SHASUMS
+
+
 nginx acme
 
 logrotate

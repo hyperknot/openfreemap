@@ -11,6 +11,7 @@ IMAGE_SIZE = '200G'
 
 
 def make_btrfs(run_folder: Path):
+    """Create tiles.btrfs from tiles.mbtiles. Does not gzip or move logs."""
     os.chdir(run_folder)
 
     cleanup_folder(run_folder)
@@ -112,24 +113,28 @@ def make_btrfs(run_folder: Path):
     os.unlink('image.btrfs')
     shutil.move('image2.btrfs', 'tiles.btrfs')
 
-    # parallel gzip (pigz)
+    print('make_btrfs DONE')
+
+
+def gzip_btrfs(run_folder: Path):
+    """Gzip tiles.btrfs using pigz. Removes the original tiles.btrfs."""
+    os.chdir(run_folder)
     subprocess.run(['pigz', 'tiles.btrfs', '--fast'], check=True)
 
-    # move logs
-    Path('logs').mkdir()
+
+def move_logs(run_folder: Path):
+    """Move log and stats files into a logs/ subdirectory."""
+    os.chdir(run_folder)
+    Path('logs').mkdir(exist_ok=True)
     for pattern in ['*.log', '*.txt']:
         for file in Path().glob(pattern):
             shutil.move(file, 'logs')
 
-    # create a checksum file, Ubuntu style naming convention
-    with open('SHA256SUMS', 'w') as out:
-        subprocess.run(
-            ['sha256sum', 'tiles.btrfs.gz', 'tiles.mbtiles'],
-            check=True,
-            stdout=out,
-        )
 
-    print('extract_btrfs.py DONE')
+def append_sha256sum(file, mode='a'):
+    file = Path(file)
+    with (file.parent / 'SHA256SUMS').open(mode) as out:
+        subprocess.run(['sha256sum', file.name], cwd=file.parent, check=True, stdout=out)
 
 
 def cleanup_folder(run_folder: Path):

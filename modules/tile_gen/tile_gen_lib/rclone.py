@@ -4,6 +4,10 @@ import sys
 from .config import config
 
 
+# Files that are uploaded individually before finish_run_upload
+LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz'}
+
+
 def upload_area(area):
     """
     Uploads an area, making sure there is exactly one run present
@@ -34,33 +38,45 @@ def upload_area_run(area, run):
     run_dir = config.runs_dir / area / run
     assert run_dir.is_dir()
 
+    remote_dir = f'remote:ofm-btrfs/areas/{area}/{run}'
+
+    for name in ['tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz']:
+        file = run_dir / name
+        if file.is_file():
+            upload_run_file(file, remote_dir)
+
+    finish_run_upload(run_dir, remote_dir)
+
+
+def finish_run_upload(run_dir, remote_dir):
+    """Upload remaining small files, SHA256SUMS last, then mark done."""
+    for file in sorted(run_dir.iterdir()):
+        if file.is_file() and file.name not in LARGE_FILES | {'SHA256SUMS', 'done'}:
+            upload_run_file(file, remote_dir)
+
+    upload_run_file(run_dir / 'SHA256SUMS', remote_dir)
+
+    # create "done" file
     subprocess.run(
-        [
-            'rclone',
-            'sync',
-            '--verbose=1',
-            '--transfers=8',
-            '--multi-thread-streams=8',
-            '--fast-list',
-            '--stats-file-name-length=0',
-            '--stats-one-line',
-            '--log-file',
-            run_dir / 'logs' / 'rclone.log',
-            '--exclude',
-            'logs/**',
-            run_dir,
-            f'remote:ofm-btrfs/areas/{area}/{run}',
-        ],
+        ['rclone', 'touch', f'{remote_dir}/done'],
         env=dict(RCLONE_CONFIG=config.rclone_config),
         check=True,
     )
 
-    # crate "done" file
+
+def upload_run_file(file, remote_dir):
+    print(f'Uploading {file} to {remote_dir}')
+
     subprocess.run(
         [
             'rclone',
-            'touch',
-            f'remote:ofm-btrfs/areas/{area}/{run}/done',
+            'copyto',
+            '--verbose=1',
+            '--multi-thread-streams=8',
+            '--stats-file-name-length=0',
+            '--stats-one-line',
+            str(file),
+            f'{remote_dir}/{file.name}',
         ],
         env=dict(RCLONE_CONFIG=config.rclone_config),
         check=True,
