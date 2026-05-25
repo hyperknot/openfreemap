@@ -32,13 +32,12 @@ Common commands:
 
 ```bash
 uv sync
-uv run ruff check .
-uv run ruff format .
+
 ./linux_host/scripts/linux-host.py --help
-./tilegen/scripts/tilegen.py --help
 ./linux_host/deploy_linux_host.py --help
+
+./tilegen/scripts/tilegen.py --help
 ./tilegen/deploy_tilegen.py --help
-uv build --wheel
 ```
 
 Packaging is defined in `pyproject.toml` and uses `uv_build`. Keep it that way.
@@ -75,26 +74,5 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
   - `linux_host/lib/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
   - `tilegen/lib/config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
   - deployment config in `lib/ssh_lib/config.py`
-- Keep deploy CLIs as real scripts in the relevant package's `scripts/` directory.
 - Use Click for CLIs.
-- Run `uv run ruff check .` after Python edits.
-
-## Frontend workflow
-
-Use pnpm for website work:
-
-```bash
-cd website
-pnpm install
-pnpm run build
-```
-
-## Generated files
-
-Do not commit generated caches/build outputs such as:
-
-- `dist/`
-- `__pycache__/`
-- `*.egg-info/`
-- `.ruff_cache/`
-- `node_modules/`
+- Use ./lint.sh for linting and formatting.
