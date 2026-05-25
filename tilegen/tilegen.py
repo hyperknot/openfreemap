@@ -48,7 +48,7 @@ def make_tiles(area, upload):
         upload_run_file(run_folder / 'tiles.mbtiles', remote_dir)
 
     # btrfs: create, checksum and upload
-    make_btrfs(run_folder)
+    make_btrfs(run_folder, area)
     append_sha256sum(run_folder / 'tiles.btrfs')
     if upload:
         upload_run_file(run_folder / 'tiles.btrfs', remote_dir)

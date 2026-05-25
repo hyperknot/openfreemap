@@ -11,15 +11,17 @@ from tilegen.mbtiles import extract_mbtiles
 IMAGE_SIZE = '200G'
 
 
-def make_btrfs(run_folder: Path):
+def make_btrfs(run_folder: Path, area: str):
     """Create tiles.btrfs from tiles.mbtiles. Does not gzip or move logs."""
     os.chdir(run_folder)
 
     cleanup_folder(run_folder)
 
+    image_size = '1G' if area == 'monaco' else IMAGE_SIZE
+
     # make an empty file that's definitely bigger then the current OSM output
     for image in ['image.btrfs', 'image2.btrfs']:
-        subprocess.run(['truncate', '-s', IMAGE_SIZE, image], check=True)
+        subprocess.run(['fallocate', '-l', image_size, image], check=True)
         subprocess.run(['mkfs.btrfs', '-m', 'single', image], check=True, capture_output=True)
 
     for image, mount in [('image.btrfs', 'mnt_rw'), ('image2.btrfs', 'mnt_rw2')]:
