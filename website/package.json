@@ -11,11 +11,11 @@
     "deploy_w": "pnpm build && wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/sitemap": "^3.2.1",
-    "astro": "^5.4.0",
-    "lightningcss": "^1.29.1",
-    "typescript": "^5.9.3"
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^6.3.7",
+    "lightningcss": "^1.32.0",
+    "typescript": "^6.0.3"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -25,6 +25,6 @@
     ]
   },
   "devDependencies": {
-    "wrangler": "^4.43.0"
+    "wrangler": "^4.94.0"
   }
 }
