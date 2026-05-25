@@ -18,7 +18,7 @@ def make_btrfs(run_folder: Path):
 
     # make an empty file that's definitely bigger then the current OSM output
     for image in ['image.btrfs', 'image2.btrfs']:
-        subprocess.run(['fallocate', '-l', IMAGE_SIZE, image], check=True)
+        subprocess.run(['truncate', '-s', IMAGE_SIZE, image], check=True)
         subprocess.run(['mkfs.btrfs', '-m', 'single', image], check=True, capture_output=True)
 
     for image, mount in [('image.btrfs', 'mnt_rw'), ('image2.btrfs', 'mnt_rw2')]:
