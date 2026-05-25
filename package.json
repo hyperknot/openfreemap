@@ -1,7 +1,11 @@
 {
   "dependencies": {
     "@biomejs/biome": "^2.2.4",
-    "prettier": "^3.6.2",
-    "prettier-plugin-astro": "^0.14.0"
+    "prettier": "^3.6.2"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "prettier-plugin-astro": "^0.14.0",
+    "prettier-plugin-tailwindcss": "^0.8.0"
   }
 }
