@@ -92,7 +92,6 @@ pnpm run build
 
 Do not commit generated caches/build outputs such as:
 
-- `.venv/`
 - `dist/`
 - `__pycache__/`
 - `*.egg-info/`

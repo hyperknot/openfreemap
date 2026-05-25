@@ -16,7 +16,6 @@
       "!**/.pytest_cache",
       "!**/venv",
       "!**/.astro",
-      "!**/.venv",
       "!**/_astro",
       "!**/_not_used",
       "!**/dist",

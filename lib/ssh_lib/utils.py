@@ -50,7 +50,6 @@ def put_source_dir(c, local_dir: Path, remote_dir: str, *, user='ofm'):
         '.pytest_cache',
         '.ruff_cache',
         '.astro',
-        '.venv',
         '.wrangler',
         '__pycache__',
         'dist',
