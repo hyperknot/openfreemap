@@ -9,10 +9,9 @@ from tile_gen_lib.get_version_shared import (
 )
 from tile_gen_lib.planetiler import run_planetiler
 from tile_gen_lib.rclone import (
-    finish_run_upload,
+    finalize_run_upload,
     make_indexes_for_bucket,
     set_version_on_bucket,
-    upload_area,
     upload_run_file,
 )
 
@@ -60,20 +59,8 @@ def make_tiles(area, upload):
     # finalize
     move_logs(run_folder)
     if upload:
-        finish_run_upload(run_folder, remote_dir)
+        finalize_run_upload(run_folder, remote_dir)
         make_indexes_for_bucket('ofm-btrfs')
-
-
-@cli.command(name='upload-area')
-@click.argument('area', required=True)
-def upload_area_(area):
-    """
-    Upload all runs from a given area to the btrfs bucket
-    """
-
-    print(f'---\n{now}\nStarting upload-area {area}')
-
-    upload_area(area)
 
 
 @cli.command()

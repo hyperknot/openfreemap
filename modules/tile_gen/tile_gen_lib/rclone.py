@@ -1,54 +1,12 @@
 import subprocess
-import sys
-
 from .config import config
 
 
-# Files that are uploaded individually before finish_run_upload
+# Files that are uploaded individually before finalize_run_upload
 LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz'}
 
 
-def upload_area(area):
-    """
-    Uploads an area, making sure there is exactly one run present
-    """
-
-    print(f'Uploading area: {area}')
-
-    assert area in config.areas
-
-    area_dir = config.runs_dir / area
-    if not area_dir.exists():
-        return
-
-    runs = list(area_dir.iterdir())
-    if len(runs) != 1:
-        print('Error: Make sure there is only one run in the given area')
-        sys.exit(1)
-
-    run = runs[0].name
-
-    upload_area_run(area, run)
-    make_indexes_for_bucket('ofm-btrfs')
-
-
-def upload_area_run(area, run):
-    print(f'Uploading {area} {run} to btrfs bucket')
-
-    run_dir = config.runs_dir / area / run
-    assert run_dir.is_dir()
-
-    remote_dir = f'remote:ofm-btrfs/areas/{area}/{run}'
-
-    for name in ['tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz']:
-        file = run_dir / name
-        if file.is_file():
-            upload_run_file(file, remote_dir)
-
-    finish_run_upload(run_dir, remote_dir)
-
-
-def finish_run_upload(run_dir, remote_dir):
+def finalize_run_upload(run_dir, remote_dir):
     """Upload remaining small files, SHA256SUMS last, then mark done."""
     for file in sorted(run_dir.iterdir()):
         if file.is_file() and file.name not in LARGE_FILES | {'SHA256SUMS', 'done'}:
