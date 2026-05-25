@@ -1,16 +1,19 @@
 #!/usr/bin/env -S uv run
+
+import sys
 from datetime import UTC, datetime
+from pathlib import Path
+
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 import click
 
-from lib.get_version_shared import (
-    get_deployed_version,
-    get_versions_for_area,
-)
-from tilegen.btrfs import append_sha256sum, gzip_btrfs, make_btrfs, move_logs
-from tilegen.mbtiles import update_mbtiles_metadata
-from tilegen.planetiler import run_planetiler
-from tilegen.rclone import (
+from lib.get_version_shared import get_deployed_version, get_versions_for_area
+from tilegen.lib.btrfs import append_sha256sum, gzip_btrfs, make_btrfs, move_logs
+from tilegen.lib.mbtiles import update_mbtiles_metadata
+from tilegen.lib.planetiler import run_planetiler
+from tilegen.lib.rclone import (
     finalize_run_upload,
     make_indexes_for_bucket,
     set_version_on_bucket,

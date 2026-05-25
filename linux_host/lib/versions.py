@@ -1,7 +1,7 @@
 from lib.get_version_shared import get_deployed_version
-from linux_host.config import config
-from linux_host.telegram_wrapper import telegram_send_message
-from linux_host.utils import assert_linux, assert_sudo
+from linux_host.lib.config import config
+from linux_host.lib.telegram_wrapper import telegram_send_message
+from linux_host.lib.utils import assert_linux, assert_sudo
 
 
 def get_remote_deployed_versions() -> dict[str, str]:

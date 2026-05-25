@@ -4,8 +4,9 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
+from tilegen.lib.config import config
+
 from .btrfs import cleanup_folder
-from .config import config
 
 
 def run_planetiler(area: str) -> Path:

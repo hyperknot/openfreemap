@@ -75,7 +75,7 @@ There is no cloud, just dedicated servers. The web server is nginx on Ubuntu 24.
 
 Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote the [extract_mbtiles](tilegen/mbtiles.py) and [shrink_btrfs](tilegen/btrfs.py) helpers for this very purpose.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote the [extract_mbtiles](tilegen/lib/mbtiles.py) and [shrink_btrfs](tilegen/lib/btrfs.py) helpers for this very purpose.
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
@@ -87,11 +87,11 @@ The project has the following parts
 
 #### deployment helpers - lib/ssh_lib
 
-`deploy_linux_host.py` and `deploy_tilegen.py` set up clean Ubuntu 24.04 servers over SSH.
+`linux_host/deploy_linux_host.py` and `tilegen/deploy_tilegen.py` set up clean Ubuntu 24.04 servers over SSH.
 
 #### Linux host - linux_host
 
-Inside `linux_host`, all work is done by `linux_host.py`.
+Inside `linux_host`, the CLI entrypoint is `linux_host/scripts/linux-host.py`; reusable runtime code lives in `linux_host/lib/`.
 
 It does the following:
 
@@ -105,7 +105,7 @@ It does the following:
 
 - Running the sync cron task (called every minute with linux-host-autoupdate)
 
-You can run `uv run linux-host --help` to see which options are available.
+You can run `./linux_host/scripts/linux-host.py --help` to see which options are available.
 
 #### tile generation - tilegen
 
@@ -113,7 +113,7 @@ _note: Tile generation is 100% optional, as we are providing the processed full 
 
 The `tilegen` script downloads a full planet OSM extract and runs it through Planetiler.
 
-The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](tilegen/mbtiles.py) helper. The partition is shrunk using the [shrink_btrfs](tilegen/btrfs.py) helper.
+The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](tilegen/lib/mbtiles.py) helper. The partition is shrunk using the [shrink_btrfs](tilegen/lib/btrfs.py) helper.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 

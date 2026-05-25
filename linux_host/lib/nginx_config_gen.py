@@ -2,8 +2,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from linux_host.config import config
-from linux_host.utils import python_venv_executable
+from linux_host.lib.config import config
+from linux_host.lib.utils import python_venv_executable
 
 
 def write_nginx_config():

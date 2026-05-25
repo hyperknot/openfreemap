@@ -72,7 +72,7 @@ uv sync
 Run the actual deploy command and wait a few minutes
 
 ```
-uv run ./deploy_linux_host.py init-static HOSTNAME
+./linux_host/deploy_linux_host.py init-static HOSTNAME
 ```
 
 #### 5. Check
@@ -98,7 +98,7 @@ x-ofm-debug: latest JSON monaco
 
 #### 6. Deploy and check with `SKIP_PLANET=false`
 
-Update your `.env` file and re-run the same `uv run ./deploy_linux_host.py init-static HOSTNAME` as before.
+Update your `.env` file and re-run the same `./linux_host/deploy_linux_host.py init-static HOSTNAME` as before.
 
 Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
 
@@ -108,12 +108,12 @@ If your server doesn't have an SSD, the download + uncompressing process can tak
 
 #### Deploy tilegen server (optional)
 
-If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `uv run ./deploy_tilegen.py tilegen HOSTNAME`.
+If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `./tilegen/deploy_tilegen.py tilegen HOSTNAME`.
 
 Trigger a run manually, by running
 
 ```
-cd /data/ofm/src && sudo uv run python -u -m tilegen.tilegen make-tiles planet
+cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet
 ```
 
 It's recommended to use tmux or similar, as it can take days to complete.

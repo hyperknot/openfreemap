@@ -3,9 +3,9 @@ import subprocess
 import sys
 
 from lib.get_version_shared import get_versions_for_area
-from linux_host.config import config
-from linux_host.telegram_wrapper import telegram_send_message
-from linux_host.utils import download_file_aria2, get_remote_file_size
+from linux_host.lib.config import config
+from linux_host.lib.telegram_wrapper import telegram_send_message
+from linux_host.lib.utils import download_file_aria2, get_remote_file_size
 
 
 def download_area_version(area: str, version: str) -> bool:

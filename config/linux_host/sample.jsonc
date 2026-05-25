@@ -23,7 +23,7 @@
     },
   ],
 
-  // SSH hosts used by deploy_linux_host.py. These can be ~/.ssh/config aliases.
+  // SSH hosts used by linux_host/deploy_linux_host.py. These can be ~/.ssh/config aliases.
   "servers": [
     {
       "hostname": "my-ofm-host",

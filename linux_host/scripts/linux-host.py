@@ -1,19 +1,21 @@
 #!/usr/bin/env -S uv run
+
+import sys
 from datetime import UTC, datetime
+from pathlib import Path
+
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 import click
 
 from lib.get_version_shared import get_versions_for_area
-from linux_host.assets import (
-    download_assets,
-)
-from linux_host.btrfs import (
-    download_area_version,
-)
-from linux_host.mount import auto_mount
-from linux_host.nginx_config_gen import write_nginx_config
-from linux_host.sync import auto_clean_btrfs, full_sync
-from linux_host.versions import fetch_version_files
+from linux_host.lib.assets import download_assets
+from linux_host.lib.btrfs import download_area_version
+from linux_host.lib.mount import auto_mount
+from linux_host.lib.nginx_config_gen import write_nginx_config
+from linux_host.lib.sync import auto_clean_btrfs, full_sync
+from linux_host.lib.versions import fetch_version_files
 
 
 now = datetime.now(UTC)

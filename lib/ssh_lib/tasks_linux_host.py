@@ -71,7 +71,11 @@ def install_linux_host_cron(c):
 
 def run_linux_host_sync(c):
     print('Running linux_host sync --force')
-    sudo_cmd(c, 'uv run python -u -m linux_host.linux_host sync --force', cwd=config.source_dir)
+    sudo_cmd(
+        c,
+        'PYTHONUNBUFFERED=1 ./linux_host/scripts/linux-host.py sync --force',
+        cwd=config.source_dir,
+    )
 
 
 def install_benchmark(c):

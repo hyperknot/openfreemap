@@ -1,5 +1,5 @@
-from linux_host.config import config
-from linux_host.telegram_core import telegram_send_message as telegram_send_message_core
+from linux_host.lib.config import config
+from linux_host.lib.telegram_core import telegram_send_message as telegram_send_message_core
 
 
 def telegram_send_message(message: str, *, markdown: bool = False) -> None:

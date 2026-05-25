@@ -10,16 +10,16 @@ Python packages:
   - `lib/get_version_shared.py` — shared deployed/version helpers.
   - `lib/ssh_lib/` — SSH deployment and server setup helpers.
 - `linux_host/` — runtime code for Linux tile hosts.
-  - CLI module: `linux_host.linux_host`
-  - Installed command: `linux-host`
+  - Script: `linux_host/scripts/linux-host.py`
+  - Runtime library: `linux_host/lib/`
   - Cron file: `linux_host/cron.d/ofm_linux_host`
 - `tilegen/` — runtime code for tile generation.
-  - CLI module: `tilegen.tilegen`
-  - Installed command: `tilegen`
+  - Script: `tilegen/scripts/tilegen.py`
+  - Runtime library: `tilegen/lib/`
   - Cron file: `tilegen/cron.d/ofm_tilegen`
-- Root deploy scripts:
-  - `deploy_linux_host.py`
-  - `deploy_tilegen.py`
+- Deploy/debug scripts:
+  - `linux_host/deploy_linux_host.py`
+  - `tilegen/deploy_tilegen.py`
   - `debug.py`
 
 Frontend/site code lives in `website/` and uses pnpm.
@@ -34,10 +34,10 @@ Common commands:
 uv sync
 uv run ruff check .
 uv run ruff format .
-uv run linux-host --help
-uv run tilegen --help
-uv run ./deploy_linux_host.py --help
-uv run ./deploy_tilegen.py --help
+./linux_host/scripts/linux-host.py --help
+./tilegen/scripts/tilegen.py --help
+./linux_host/deploy_linux_host.py --help
+./tilegen/deploy_tilegen.py --help
 uv build --wheel
 ```
 
@@ -59,11 +59,11 @@ Remote layout:
 
 Do not implement partial-package or multi-repo deployment logic. Keep deployment simple: upload full source, then run uv from `/data/ofm/src`.
 
-Remote runtime commands should use `uv run`, for example:
+Remote runtime commands should use the executable uv-shebang scripts, for example:
 
 ```bash
-cd /data/ofm/src && sudo uv run python -u -m linux_host.linux_host sync
-cd /data/ofm/src && sudo uv run python -u -m tilegen.tilegen make-tiles planet
+cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./linux_host/scripts/linux-host.py sync
+cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet
 ```
 
 ## Code style
@@ -72,10 +72,10 @@ cd /data/ofm/src && sudo uv run python -u -m tilegen.tilegen make-tiles planet
 - Use absolute imports from `lib`, `linux_host`, and `tilegen`.
 - Keep shared code in `lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
 - Keep runtime package config local to each runtime package:
-  - `linux_host/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
-  - `tilegen/config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
+  - `linux_host/lib/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
+  - `tilegen/lib/config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
   - deployment config in `lib/ssh_lib/config.py`
-- Keep root deploy CLIs as real scripts with their logic in the script.
+- Keep deploy CLIs as real scripts in the relevant package's `scripts/` directory.
 - Use Click for CLIs.
 - Run `uv run ruff check .` after Python edits.
 

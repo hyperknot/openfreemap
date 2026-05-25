@@ -5,7 +5,7 @@ from pathlib import Path
 class Configuration:
     areas = ['planet', 'monaco']
 
-    repo_root = Path(__file__).resolve().parent.parent
+    repo_root = Path(__file__).resolve().parents[2]
 
     tilegen_dir = Path('/data/ofm/tilegen')
     planetiler_bin = tilegen_dir / 'planetiler'

@@ -25,6 +25,6 @@ Host orb_my
 Then I run commands like the following:
 
 ```
-uv run ./deploy_linux_host.py init-static orb_my
-uv run ./debug.py debug orb_my
+./linux_host/deploy_linux_host.py init-static orb_my
+./debug.py debug orb_my
 ```

@@ -3,8 +3,8 @@ import subprocess
 
 import requests
 
-from linux_host.config import config
-from linux_host.utils import download_file_aria2, download_if_size_differs
+from linux_host.lib.config import config
+from linux_host.lib.utils import download_file_aria2, download_if_size_differs
 
 
 def download_assets() -> bool:

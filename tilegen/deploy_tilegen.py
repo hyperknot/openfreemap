@@ -1,4 +1,10 @@
 #!/usr/bin/env -S uv run
+import sys
+from pathlib import Path
+
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import click
 
 from lib.ssh_lib.cli_helpers import common_options, get_connection

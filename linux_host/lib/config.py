@@ -7,8 +7,8 @@ from lib.linux_host_config import read_linux_host_config
 class Configuration:
     areas = ['planet', 'monaco']
 
-    repo_root = Path(__file__).resolve().parent.parent
-    package_dir = Path(__file__).resolve().parent
+    repo_root = Path(__file__).resolve().parents[2]
+    package_dir = Path(__file__).resolve().parents[1]
     scripts_dir = package_dir / 'scripts'
     nginx_templates = package_dir / 'nginx_templates'
 

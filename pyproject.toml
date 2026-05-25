@@ -14,10 +14,6 @@ dependencies = [
 [dependency-groups]
 dev = ["nginxfmt>=1.0.0", "ruff>=0.14.6"]
 
-[project.scripts]
-linux-host = "linux_host.linux_host:cli"
-tilegen = "tilegen.tilegen:cli"
-
 [build-system]
 requires = ["uv_build"]
 build-backend = "uv_build"
