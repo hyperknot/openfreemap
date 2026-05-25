@@ -7,21 +7,23 @@ from pathlib import Path
 
 def update_mbtiles_metadata(mbtiles_path: Path) -> None:
     with sqlite3.connect(mbtiles_path) as conn:
-        metadata = dict(conn.execute('select name, value from metadata').fetchall())
+        metadata = dict(conn.execute('select name, value from metadata'))
 
         conn.execute("update metadata set value='OpenFreeMap' where name='name'")
         conn.execute("update metadata set value='https://openfreemap.org' where name='description'")
 
-        attribution = metadata.get('attribution', '')
-        if 'openfreemap' not in attribution.lower():
+        if 'openfreemap' not in metadata['attribution']:
             attribution = (
-                '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> ' + attribution
+                '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> '
+                + metadata['attribution']
             )
             conn.execute("update metadata set value = ? where name = 'attribution'", (attribution,))
 
         if 'osm_date' not in metadata and 'planetiler:osm:osmosisreplicationtime' in metadata:
-            osm_date = metadata['planetiler:osm:osmosisreplicationtime'][:10]
-            conn.execute('insert into metadata (name, value) values (?, ?)', ('osm_date', osm_date))
+            conn.execute(
+                'insert into metadata (name, value) values (?, ?)',
+                ('osm_date', metadata['planetiler:osm:osmosisreplicationtime'][:10]),
+            )
 
 
 def extract_mbtiles(mbtiles_path: Path, dir_path: Path) -> None:
@@ -34,20 +36,15 @@ def extract_mbtiles(mbtiles_path: Path, dir_path: Path) -> None:
     with sqlite3.connect(mbtiles_path) as conn:
         write_dedupl_files(conn, dir_path)
         write_tile_files(conn, dir_path)
-
-    write_metadata_files(mbtiles_path, dir_path)
-    print('extract_mbtiles DONE')
-
-
-def write_metadata_files(mbtiles_path: Path, dir_path: Path) -> None:
-    with sqlite3.connect(mbtiles_path) as conn:
-        metadata = dict(conn.execute('select name, value from metadata').fetchall())
+        metadata = dict(conn.execute('select name, value from metadata'))
 
     with (dir_path / 'metadata.json').open('w') as fp:
         json.dump(metadata, fp, indent=2)
 
     with (dir_path / 'osm_date').open('w') as fp:
         fp.write(metadata['osm_date'])
+
+    print('extract_mbtiles DONE')
 
 
 def write_dedupl_files(conn: sqlite3.Connection, dir_path: Path) -> None:
