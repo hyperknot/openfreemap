@@ -1,9 +1,7 @@
 {
-  "root": true,
-  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
-
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
   "vcs": {
-    "enabled": false,
+    "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true,
   },
@@ -13,38 +11,35 @@
     "includes": [
       "**",
       //
-      "!**/.pytest_cache",
-      "!**/venv",
-      "!**/.astro",
-      "!**/_astro",
-      "!**/_not_used",
-      "!**/dist",
-      "!**/dist-electron",
-      "!**/node_modules",
+      "!**/*.astro",
+      "!**/*.css",
+      "!**/*.html",
+      "!**/*.scss",
       //
+      "!!**/_not_used",
+      "!!**/fixtures",
+      "!!**/public/cdn",
+      "!!packages/shared/db/migrations/meta",
     ],
   },
+
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 100,
   },
   "linter": {
-    "enabled": true,
     "domains": {
       "solid": "all",
     },
     "rules": {
-      "recommended": true,
       "style": {
-        "noNonNullAssertion": "off",
+        "noNonNullAssertion": "off", // TS: value!
         "useConsistentArrayType": {
           "level": "error",
           "options": {
             "syntax": "generic",
           },
         },
-        "useLiteralEnumMembers": "error",
-        "useNodejsImportProtocol": "error",
         "useAsConstAssertion": "error",
         "useEnumInitializers": "error",
         "useSelfClosingElements": "error",
@@ -52,76 +47,33 @@
         "noUnusedTemplateLiteral": "error",
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
-        "useExponentiationOperator": "error",
-        "useTemplate": "error",
         "noParameterAssign": "error",
         "useDefaultParameterLast": "error",
-        "useImportType": "error",
-        "useExportType": "error",
-        "useShorthandFunctionType": "error",
-        "noUselessElse": "error",
         "useGroupedAccessorPairs": "error",
         "useObjectSpread": "error",
       },
-      "security": {
-        //  "noDangerouslySetInnerHtml": "off",
-        // "noBlankTarget": "off",
-      },
-      "a11y": {
-        "useFocusableInteractive": "off", // The HTML element with the interactive role "treeitem" is not focusable.
-        "useSemanticElements": "off", // SessionTreeDay / role="group"
-        "noStaticElementInteractions": "off", // SessionTreeDay / To add interactivity such as a mouse or key event listener to a static element, give the element an appropriate role value.
-        "useAriaPropsSupportedByRole": "off", // SessionTree / The ARIA attribute 'aria-multiselectable' is not supported by this element.
-        "useKeyWithClickEvents": "off", // PasteBlock / Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.
-        "noNoninteractiveElementToInteractiveRole": "off", // SessionTree
-        //    "useValidAnchor": "off",
-        //    "useButtonType": "off",
-        //   "noLabelWithoutControl": "off",
-        //  "noSvgWithoutTitle": "off",
-        // "noNoninteractiveTabindex": "off",
-      },
       "correctness": {
-        "noUnusedFunctionParameters": "off",
-        "noUnusedImports": "off",
-        "noUnusedVariables": "off",
-        "noUnusedPrivateClassMembers": "off",
-        "noUnreachable": "off",
-        "noSolidDestructuredProps": "error",
+        "noUnusedFunctionParameters": "error",
         "noGlobalDirnameFilename": "error",
-        "useParseIntRadix": "error",
         "useSingleJsDocAsterisk": "error",
       },
       "suspicious": {
-        "noExplicitAny": "off",
-        "noImplicitAnyLet": "off",
-        "noUselessEscapeInString": "error",
+        "noExplicitAny": "off", // TS: any
         "useStaticResponseMethods": "error",
-        "useIterableCallbackReturn": "off",
-        // "noAssignInExpressions": "off",
-        //"noArrayIndexKey": "off",
       },
       "complexity": {
-        "noCommaOperator": "error",
-        "useNumericLiterals": "error",
-        //     "noArguments": "off",
-        "useIndexOf": "error",
-        "noImplicitCoercions": "error", // Number(), Boolean()
-        //        "noUselessFragments": "off"
-      },
-      "nursery": {
-        //        "noShadow": "error",
-        //        "useReadonlyClassProperties": "error",
-        //        "noImportCycles": "error",
-
-        //        "noFloatingPromises": "error",
-        //        "noMisusedPromises": "error",
-
-        //        "noUnassignedVariables": "error", // bug reported ref= not recognised
+        "noImplicitCoercions": "error",
         "noUselessUndefined": "error",
       },
-      "performance": { "useSolidForComponent": "error" },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "options": {
+            "attributes": ["class", "classList"],
+          },
+        },
+      },
     },
-    "includes": ["**"],
   },
   "javascript": {
     "formatter": {
@@ -133,28 +85,13 @@
     "parser": {
       "allowTrailingCommas": true,
     },
-    "formatter": {
-      "trailingCommas": "none",
-    },
   },
-  "assist": {
-    "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on",
-        //        "useSortedProperties": "on" // sort CSS props
-      },
-    },
-  },
+
   "overrides": [
     {
-      "includes": ["**/*.astro"],
+      "includes": ["**/3rd_party/**"],
       "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedImports": "off",
-          },
-        },
+        "enabled": false,
       },
     },
     {
@@ -162,22 +99,6 @@
       "json": {
         "formatter": {
           "trailingCommas": "all",
-        },
-      },
-    },
-    {
-      "includes": ["**/*.css"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noDuplicateProperties": "off",
-            "noEmptyBlock": "off",
-            "noUnknownAtRules": "off",
-          },
-          "complexity": {
-            "noImportantStyles": "off",
-          },
-          "style": { "noDescendingSpecificity": "off" },
         },
       },
     },

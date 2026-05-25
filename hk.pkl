@@ -1,0 +1,94 @@
+amends "package://github.com/jdx/hk/releases/download/v1.42.0/hk@1.42.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.42.0/hk@1.42.0#/Builtins.pkl"
+
+local ignoreFiles = "**/fixtures/**/*"
+
+local linters = new Mapping<String, Step> {
+    ["biome"] = (Builtins.biome) {
+        glob = List(
+            "**/*.js",
+            "**/*.mjs",
+            "**/*.json",
+            "**/*.jsonc",
+            "**/*.jsx",
+            "**/*.ts",
+            "**/*.tsx",
+        )
+        condition = "exec('test -x node_modules/.bin/biome && printf true || printf false') == 'true'"
+        check = "node_modules/.bin/biome check --error-on-warnings --unsafe --no-errors-on-unmatched {{ files }}"
+        fix = "node_modules/.bin/biome check --write --error-on-warnings --unsafe --no-errors-on-unmatched {{ files }}"
+    }
+
+    ["prettier"] {
+        glob = List(
+            "**/*.md",
+            "**/*.yml",
+            "**/*.html",
+            "**/*.astro",
+            "**/*.css",
+            "**/*.scss",
+        )
+        condition = "exec('test -x node_modules/.bin/prettier && printf true || printf false') == 'true'"
+        check = "node_modules/.bin/prettier --no-error-on-unmatched-pattern --check {{ files }}"
+        fix = "node_modules/.bin/prettier --no-error-on-unmatched-pattern --write {{ files }}"
+    }
+
+    ["eslint"] {
+        glob = List("**/*.ts", "**/*.tsx")
+        batch = true
+        depends = "biome"
+        condition = "exec('test -x node_modules/.bin/eslint && printf true || printf false') == 'true'"
+        check = "node_modules/.bin/eslint --report-unused-disable-directives --max-warnings 0 --no-warn-ignored {{ files }}"
+        fix = "node_modules/.bin/eslint --report-unused-disable-directives --max-warnings 0 --no-warn-ignored --fix {{ files }}"
+    }
+
+    ["ruff"] = (Builtins.ruff) {
+        condition = "exec('test -x .venv/bin/ruff && printf true || printf false') == 'true'"
+        check = ".venv/bin/ruff check --force-exclude {{ files }}"
+        fix = ".venv/bin/ruff check --force-exclude --fix {{ files }}"
+    }
+
+    ["ruff-format"] = (Builtins.ruff_format) {
+        depends = "ruff"
+        condition = "exec('test -x .venv/bin/ruff && printf true || printf false') == 'true'"
+        check_diff = ".venv/bin/ruff format --quiet --force-exclude --diff {{ files }}"
+        fix = ".venv/bin/ruff format --quiet --force-exclude {{ files }}"
+    }
+
+    ["nginxfmt"] {
+        glob = "**/nginx/*.conf"
+        condition = "exec('test -x .venv/bin/nginxfmt && printf true || printf false') == 'true'"
+        fix = ".venv/bin/nginxfmt -v {{ files }}"
+    }
+
+    ["taplo-format"] = Builtins.taplo_format
+
+    ["check-case-conflict"] = Builtins.check_case_conflict
+    ["fix-byte-order-marker"] = Builtins.fix_byte_order_marker
+    ["check-symlinks"] = Builtins.check_symlinks
+    ["mixed-line-ending"] = (Builtins.mixed_line_ending) {
+        exclude = ignoreFiles
+    }
+    ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
+        exclude = ignoreFiles
+    }
+}
+
+hooks {
+    ["pre-commit"] {
+        fix = true
+        stage = true
+        stash = "patch-file"
+        steps = linters
+    }
+
+    ["fix"] {
+        fix = true
+        steps = linters
+    }
+
+    ["check"] {
+        fix = false
+        steps = linters
+    }
+}

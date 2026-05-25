@@ -12,29 +12,29 @@
       //   certs/tiles.example.com.key
       "cert": {
         "type": "upload",
-        "cert_path": "certs/tiles.example.com.cert"
-      }
+        "cert_path": "certs/tiles.example.com.cert",
+      },
 
       // Alternative for local testing only:
       // "cert": { "type": "dummy" }
 
       // Alternative for a public server with direct Let's Encrypt access:
       // "cert": { "type": "letsencrypt", "email": "admin@example.com" }
-    }
+    },
   ],
 
   // SSH hosts used by deploy_linux_host.py. These can be ~/.ssh/config aliases.
   "servers": [
     {
-      "hostname": "my-ofm-host"
+      "hostname": "my-ofm-host",
 
       // Optional, only if you do not use SSH keys:
       // "server_ssh_passwd": "change-me"
-    }
+    },
   ],
 
   // Useful for first deploys and tests: only sync Monaco instead of the full planet.
-  "skip_planet": true
+  "skip_planet": true,
 
   // Optional operational Telegram alerts:
   // "telegram_token": "123456:ABC...",

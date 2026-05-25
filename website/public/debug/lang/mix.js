@@ -65,7 +65,7 @@ function initializeModal() {
     modal.classList.add('hidden')
   })
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
       modal.classList.add('hidden')
     }
@@ -179,7 +179,7 @@ function modifyStyle({ style, line1Config, line2Config, langCode, showDifference
       ]
     } else {
       // Reset to default color if checkbox is unchecked
-      if (layer.paint && layer.paint['text-color']) {
+      if (layer.paint?.['text-color']) {
         delete layer.paint['text-color']
       }
     }
@@ -217,8 +217,8 @@ function buildFieldAccessor(config, langCode) {
   const parts = []
   const fields = config
     .split(',')
-    .map(f => f.trim())
-    .filter(f => f)
+    .map((f) => f.trim())
+    .filter((f) => f)
 
   for (const field of fields) {
     if (field === 'underscore') {

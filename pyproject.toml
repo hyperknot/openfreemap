@@ -12,10 +12,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-  "nginxfmt>=1.0.0",
-  "ruff>=0.14.6",
-]
+dev = ["nginxfmt>=1.0.0", "ruff>=0.14.6"]
 
 [project.scripts]
 linux-host = "linux_host.linux_host:cli"

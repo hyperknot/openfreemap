@@ -87,7 +87,9 @@ const buttons = document.querySelectorAll('.button-container .btn')
 
 buttons.forEach((button) => {
   button.addEventListener('click', (event) => {
-    buttons.forEach((button) => button.classList.remove('selected'))
+    buttons.forEach((button) => {
+      button.classList.remove('selected')
+    })
     button.classList.add('selected')
 
     const style = event.target.getAttribute('data-style')

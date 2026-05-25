@@ -1,6 +1,7 @@
 """Shared version helpers for tilegen and linux_host."""
 
-from datetime import UTC, datetime
+from datetime import datetime
+from email.utils import parsedate_to_datetime
 
 import requests
 
@@ -41,6 +42,4 @@ def get_deployed_version(area: str) -> dict:
 
 
 def parse_http_last_modified(date_string) -> datetime:
-    parsed_date = datetime.strptime(date_string, '%a, %d %b %Y %H:%M:%S GMT')
-    parsed_date = parsed_date.replace(tzinfo=UTC)
-    return parsed_date
+    return parsedate_to_datetime(date_string)

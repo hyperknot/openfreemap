@@ -3,8 +3,8 @@
   "name": "openfreemap-website",
   "compatibility_date": "2025-10-17",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
   },
   "account_id": "99fde2e5efdeb199c6910cdeaa276a97",
-  "workers_dev": false
+  "workers_dev": false,
 }

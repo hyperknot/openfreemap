@@ -27,12 +27,12 @@ lint.ignore = [
   'E501',
   'E711',
   'E712',
-  'E721',   # type() comparison
+  'E721', # type() comparison
   # 'E722', # bare except
   'E741',
   'F401',   # unused imports
   'F841',
-  'PT018', # assertion should be broken into multiple parts
+  'PT018',  # assertion should be broken into multiple parts
   'SIM102',
   'SIM103', # return the condition directly
   'SIM105',
