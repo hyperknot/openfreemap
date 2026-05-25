@@ -1,7 +1,7 @@
 from .config import config
 from .pkg_base import pkg_base, pkg_upgrade
 from .rclone import rclone
-from .utils import add_user, enable_sudo, put_source_dir, sudo_cmd
+from .utils import add_user, enable_sudo, put_dir_tarball, sudo_cmd
 
 
 def prepare_shared(c):
@@ -22,7 +22,30 @@ def prepare_shared(c):
 
 
 def upload_source(c):
-    put_source_dir(c, config.repo_root, config.source_dir, user='ofm')
+    put_dir_tarball(
+        c,
+        config.repo_root,
+        config.source_dir,
+        user='ofm',
+        exclude_set={
+            '*.egg-info',
+            '*.pyc',
+            '.DS_Store',
+            '.astro',
+            '.git',
+            '.ipynb_checkpoints',
+            '.mypy_cache',
+            '.pnpm-store',
+            '.pytest_cache',
+            '.ruff_cache',
+            '.venv',
+            '.wrangler',
+            '__pycache__',
+            'dist',
+            'node_modules',
+            'venv',
+        },
+    )
 
 
 def prepare_uv(c):

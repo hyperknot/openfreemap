@@ -1,3 +1,4 @@
+import fnmatch
 import os
 import secrets
 import shlex
@@ -36,34 +37,54 @@ def put(
     set_permission(c, remote_path, permissions=permissions, user=user, group=group)
 
 
-def put_str(c, remote_path, str_, create_parent_dir=False):
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.txt') as f:
-        f.write(str_ + '\n')
-        f.flush()
-        put(c, f.name, remote_path, create_parent_dir=create_parent_dir)
+def put_dir(
+    c,
+    local_dir: Path,
+    remote_dir,
+    dir_permissions=None,
+    file_permissions=None,
+    user='root',
+    group=None,
+    exclude_set=None,
+):
+    """
+    copies all files from local path to remote path
+    not recursive
+    """
+
+    files = [file for file in local_dir.iterdir() if file.is_file()]
+
+    if exclude_set:
+        files = [f for f in files if f.name not in exclude_set]
+
+    c.sudo(f'mkdir -p "{remote_dir}"')
+    set_permission(c, remote_dir, permissions=dir_permissions, user=user, group=group)
+
+    for file in files:
+        print(f'uploading {remote_dir}/{file.name}')
+        put(c, file, f'{remote_dir}/{file.name}', file_permissions, user, group)
 
 
-def put_source_dir(c, local_dir: Path, remote_dir: str, *, user='ofm'):
-    exclude_names = {
-        '.git',
-        '.mypy_cache',
-        '.pytest_cache',
-        '.ruff_cache',
-        '.astro',
-        '.wrangler',
-        '__pycache__',
-        'dist',
-        'node_modules',
-        'venv',
-    }
-
+def put_dir_tarball(
+    c,
+    local_dir: Path,
+    remote_dir,
+    dir_permissions=None,
+    file_permissions=None,
+    user='root',
+    group=None,
+    exclude_set=None,
+):
     local_dir = local_dir.resolve()
+    remote_dir = str(remote_dir)
 
     def include(tarinfo):
         relative_parts = Path(tarinfo.name).parts[1:]
-        if any(part in exclude_names or part.endswith('.egg-info') for part in relative_parts):
-            return None
-        if tarinfo.name.endswith(('.pyc', '.pyo', '.DS_Store')):
+        if any(
+            fnmatch.fnmatch(part, pattern)
+            for part in relative_parts
+            for pattern in set(exclude_set or ())
+        ):
             return None
         return tarinfo
 
@@ -72,15 +93,30 @@ def put_source_dir(c, local_dir: Path, remote_dir: str, *, user='ofm'):
             tar.add(local_dir, arcname=local_dir.name, filter=include)
         archive.flush()
 
-        tmp_path = f'/tmp/ofm_source_{random_string(8)}.tar.gz'
+        tmp_path = f'/tmp/source_{random_string(8)}.tar.gz'
         c.put(archive.name, tmp_path)
 
     c.sudo(f'rm -rf {shlex.quote(remote_dir)}')
     c.sudo(f'mkdir -p {shlex.quote(remote_dir)}')
     c.sudo(f'tar -xzf {shlex.quote(tmp_path)} -C {shlex.quote(remote_dir)} --strip-components=1')
     c.sudo(f'rm -f {shlex.quote(tmp_path)}')
-    set_permission(c, remote_dir, user=user)
-    c.sudo(f'chown -R {user}:{user} {shlex.quote(remote_dir)}')
+    set_permission(c, remote_dir, permissions=dir_permissions, user=user, group=group)
+
+    if user:
+        group = group or user
+        c.sudo(f'chown -R {shlex.quote(user)}:{shlex.quote(group)} {shlex.quote(remote_dir)}')
+
+    if file_permissions:
+        c.sudo(
+            f'find {shlex.quote(remote_dir)} -type f -exec chmod {shlex.quote(str(file_permissions))} {{}} +'
+        )
+
+
+def put_str(c, remote_path, str_, create_parent_dir=False):
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.txt') as f:
+        f.write(str_ + '\n')
+        f.flush()
+        put(c, f.name, remote_path, create_parent_dir=create_parent_dir)
 
 
 def file_contains(c, file_path, search_str):
