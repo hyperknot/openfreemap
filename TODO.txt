@@ -1,7 +1,7 @@
 making web maps free and fun again
 add dark themes in website
 
-
+nginx acme
 
 logrotate
 
@@ -28,7 +28,7 @@ logrotate
 sudo systemctl enable --now logrotate.timer
 sudo systemctl status logrotate.timer
 
-/etc/cron.daily/logrotate 
+/etc/cron.daily/logrotate
 
 Dry run:
 sudo logrotate -d /etc/logrotate.d/nginx
@@ -51,4 +51,3 @@ sudo logrotate -vf /etc/logrotate.conf
 }
 
 ---
-
