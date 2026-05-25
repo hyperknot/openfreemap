@@ -1,7 +1,6 @@
 amends "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Builtins.pkl"
-
-local ignoreFiles = List("**/fixtures/**/*", "data/ref/**/*")
+import "./hk-local.pkl" as Local
 
 local linters = new Mapping<String, Step> {
     ["biome"] = (Builtins.biome) {
@@ -67,10 +66,10 @@ local linters = new Mapping<String, Step> {
     ["fix-byte-order-marker"] = Builtins.fix_byte_order_marker
     ["check-symlinks"] = Builtins.check_symlinks
     ["mixed-line-ending"] = (Builtins.mixed_line_ending) {
-        exclude = ignoreFiles
+        exclude = Local.ignoreFiles
     }
     ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
-        exclude = ignoreFiles
+        exclude = Local.ignoreFiles
     }
 }
 
