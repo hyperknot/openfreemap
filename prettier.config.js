@@ -9,7 +9,7 @@ export default {
     'prettier-plugin-tailwindcss',
   ],
 
-  tailwindStylesheet: './packages/shared/styles/_tailwind.css',
+  // tailwindStylesheet: './packages/shared/styles/_tailwind.css',
   astroAllowShorthand: true,
 
   overrides: [

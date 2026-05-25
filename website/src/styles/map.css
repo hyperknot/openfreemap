@@ -16,7 +16,7 @@
   height: 100%;
   position: absolute;
   z-index: 1;
-  background-image: url("/berlin.webp");
+  background-image: url('/berlin.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -26,7 +26,7 @@
 
 .mapbg-attrib {
   font:
-    12px / 20px "Helvetica Neue",
+    12px / 20px 'Helvetica Neue',
     Arial,
     Helvetica,
     sans-serif;

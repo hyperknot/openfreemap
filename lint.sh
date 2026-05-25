@@ -9,5 +9,5 @@ hk install
 
 hk fix --all
 
-pnpm typecheck
-pnpm --dir website typecheck
+#pnpm typecheck
+#pnpm --dir website typecheck

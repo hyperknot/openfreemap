@@ -1,9 +1,9 @@
 ---
+import '../styles/_style.css'
+
 const { frontmatter } = Astro.props || {}
 const { title } = frontmatter || Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-
-import '../styles/_style.css'
 ---
 
 <!doctype html>

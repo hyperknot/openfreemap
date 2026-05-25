@@ -7,51 +7,51 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
   </head>
-  <body class="flex flex-col h-screen">
+  <body class="flex h-screen flex-col">
     <!-- UI Panel -->
-    <div class="bg-gray-900 border-b border-gray-700 shadow-md">
-      <div class="max-w-7xl mx-auto px-4 py-2">
+    <div class="border-b border-gray-700 bg-gray-900 shadow-md">
+      <div class="mx-auto max-w-7xl px-4 py-2">
         <div class="flex items-start gap-3">
           <div class="flex-1">
-            <label for="line1" class="block text-xs font-medium text-gray-400 mb-1"> Line 1 </label>
+            <label for="line1" class="mb-1 block text-xs font-medium text-gray-400"> Line 1 </label>
             <input
               type="text"
               id="line1"
-              class="w-full px-3 py-1.5 text-sm border border-gray-600 rounded bg-gray-800 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono"
+              class="w-full rounded border border-gray-600 bg-gray-800 px-3 py-1.5 font-mono text-sm text-gray-100 transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
             />
             <input
               type="text"
               id="line1-expr"
               readonly
-              class="w-full px-3 py-1 text-xs border border-gray-700 rounded bg-gray-900 text-gray-400 font-mono mt-1 cursor-default focus:outline-none focus:ring-0 focus:border-gray-700 selection:bg-gray-700 selection:text-gray-200"
+              class="mt-1 w-full cursor-default rounded border border-gray-700 bg-gray-900 px-3 py-1 font-mono text-xs text-gray-400 selection:bg-gray-700 selection:text-gray-200 focus:border-gray-700 focus:ring-0 focus:outline-none"
             />
           </div>
 
           <div class="flex-1">
-            <label for="line2" class="block text-xs font-medium text-gray-400 mb-1"> Line 2 </label>
+            <label for="line2" class="mb-1 block text-xs font-medium text-gray-400"> Line 2 </label>
             <input
               type="text"
               id="line2"
-              class="w-full px-3 py-1.5 text-sm border border-gray-600 rounded bg-gray-800 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono"
+              class="w-full rounded border border-gray-600 bg-gray-800 px-3 py-1.5 font-mono text-sm text-gray-100 transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
             />
             <input
               type="text"
               id="line2-expr"
               readonly
-              class="w-full px-3 py-1 text-xs border border-gray-700 rounded bg-gray-900 text-gray-400 font-mono mt-1 cursor-default focus:outline-none focus:ring-0 focus:border-gray-700 selection:bg-gray-700 selection:text-gray-200"
+              class="mt-1 w-full cursor-default rounded border border-gray-700 bg-gray-900 px-3 py-1 font-mono text-xs text-gray-400 selection:bg-gray-700 selection:text-gray-200 focus:border-gray-700 focus:ring-0 focus:outline-none"
             />
           </div>
 
           <div class="flex flex-col gap-2">
             <div class="flex items-start gap-2">
               <div class="w-24">
-                <label for="lang" class="block text-xs font-medium text-gray-400 mb-1">
+                <label for="lang" class="mb-1 block text-xs font-medium text-gray-400">
                   Lang
                 </label>
                 <input
                   type="text"
                   id="lang"
-                  class="w-full px-3 py-1.5 text-sm border border-gray-600 rounded bg-gray-800 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono text-center"
+                  class="w-full rounded border border-gray-600 bg-gray-800 px-3 py-1.5 text-center font-mono text-sm text-gray-100 transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                   maxlength="5"
                 />
               </div>
@@ -59,13 +59,13 @@
               <div class="flex gap-2">
                 <button
                   id="shareBtn"
-                  class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all mt-5"
+                  class="mt-5 rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white transition-all hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none"
                 >
                   Share
                 </button>
                 <button
                   id="resetBtn"
-                  class="px-4 py-1.5 text-sm font-medium text-white bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all mt-5"
+                  class="mt-5 rounded bg-gray-700 px-4 py-1.5 text-sm font-medium text-white transition-all hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none"
                 >
                   Reset
                 </button>
@@ -73,12 +73,12 @@
             </div>
 
             <label
-              class="flex items-center gap-2 text-xs text-gray-300 cursor-pointer whitespace-nowrap"
+              class="flex cursor-pointer items-center gap-2 text-xs whitespace-nowrap text-gray-300"
             >
               <input
                 type="checkbox"
                 id="showDifferencesRed"
-                class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <span>highlight line1 != line2</span>
             </label>
@@ -90,17 +90,17 @@
     <div id="map" class="flex-1"></div>
 
     <!-- Modal Dialog -->
-    <div id="shareModal" class="hidden fixed inset-0 z-50">
+    <div id="shareModal" class="fixed inset-0 z-50 hidden">
       <div id="modalOverlay" class="fixed inset-0 bg-black/50"></div>
       <div class="fixed inset-0 flex items-center justify-center p-4">
-        <div class="relative bg-gray-800 rounded-lg p-8 max-w-md shadow-2xl">
-          <p class="text-gray-300 text-center leading-relaxed mb-6">
+        <div class="relative max-w-md rounded-lg bg-gray-800 p-8 shadow-2xl">
+          <p class="mb-6 text-center leading-relaxed text-gray-300">
             Your settings have been saved to the URL.<br />
             Copy the address bar to share this map.
           </p>
           <button
             id="closeModalBtn"
-            class="w-full py-2.5 text-sm text-white bg-gray-700 rounded hover:bg-gray-600 transition-all"
+            class="w-full rounded bg-gray-700 py-2.5 text-sm text-white transition-all hover:bg-gray-600"
           >
             Close
           </button>

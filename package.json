@@ -1,4 +1,6 @@
 {
+  "private": true,
+  "type": "module",
   "dependencies": {
     "@biomejs/biome": "^2.2.4",
     "prettier": "^3.6.2"
