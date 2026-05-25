@@ -8,6 +8,7 @@ from lib.get_version_shared import (
     get_versions_for_area,
 )
 from tilegen.btrfs import append_sha256sum, gzip_btrfs, make_btrfs, move_logs
+from tilegen.mbtiles_metadata import update_mbtiles_metadata
 from tilegen.planetiler import run_planetiler
 from tilegen.rclone import (
     finalize_run_upload,
@@ -40,15 +41,14 @@ def make_tiles(area, upload):
     run_folder = run_planetiler(area)
     remote_dir = f'remote:ofm-btrfs/areas/{area}/{run_folder.name}'
 
-    # btrfs extraction updates mbtiles metadata, so checksum mbtiles afterwards.
-    make_btrfs(run_folder)
-
-    # mbtiles: checksum and upload
+    # mbtiles: update metadata, checksum and upload
+    update_mbtiles_metadata(run_folder / 'tiles.mbtiles')
     append_sha256sum(run_folder / 'tiles.mbtiles', mode='w')
     if upload:
         upload_run_file(run_folder / 'tiles.mbtiles', remote_dir)
 
-    # btrfs: checksum and upload
+    # btrfs: create, checksum and upload
+    make_btrfs(run_folder)
     append_sha256sum(run_folder / 'tiles.btrfs')
     if upload:
         upload_run_file(run_folder / 'tiles.btrfs', remote_dir)
