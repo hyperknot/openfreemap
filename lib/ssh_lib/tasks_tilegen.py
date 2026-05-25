@@ -7,13 +7,15 @@ def prepare_tilegen(c, *, enable_cron):
     c.sudo('rm -f /etc/cron.d/ofm_tilegen')
     install_planetiler(c)
 
-    if (config.local_config_dir / 'rclone.conf').exists():
+    rclone_config = config.local_config_dir / 'tilegen' / 'rclone.conf'
+    if rclone_config.exists():
         put(
             c,
-            config.local_config_dir / 'rclone.conf',
-            f'{config.remote_config}/rclone.conf',
+            rclone_config,
+            f'{config.remote_tilegen_config}/rclone.conf',
             permissions='600',
             user='ofm',
+            create_parent_dir=True,
         )
 
     c.sudo('mkdir -p /data/ofm/tilegen/logs')

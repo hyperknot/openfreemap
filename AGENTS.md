@@ -51,18 +51,19 @@ Deployment uploads the full source tree to the server and syncs a uv environment
 
 Remote layout:
 
-- `/data/ofm/source` — uploaded source tree and uv project root.
-- `/data/ofm/config` — generated runtime config and rclone config.
+- `/data/ofm/src` — uploaded source tree and uv project root.
+- `/data/ofm/config/linux_host` — selected Linux host runtime config.
+- `/data/ofm/config/tilegen` — selected tilegen runtime config.
 - `/data/ofm/linux_host` — Linux host runtime data, logs, assets and runs.
 - `/data/ofm/tilegen` — tile generation runtime data, logs, runs and Planetiler.
 
-Do not implement partial-package or multi-repo deployment logic. Keep deployment simple: upload full source, then run uv from `/data/ofm/source`.
+Do not implement partial-package or multi-repo deployment logic. Keep deployment simple: upload full source, then run uv from `/data/ofm/src`.
 
 Remote runtime commands should use `uv run`, for example:
 
 ```bash
-cd /data/ofm/source && sudo uv run python -u -m linux_host.linux_host sync
-cd /data/ofm/source && sudo uv run python -u -m tilegen.tilegen make-tiles planet
+cd /data/ofm/src && sudo uv run python -u -m linux_host.linux_host sync
+cd /data/ofm/src && sudo uv run python -u -m tilegen.tilegen make-tiles planet
 ```
 
 ## Code style
@@ -71,8 +72,8 @@ cd /data/ofm/source && sudo uv run python -u -m tilegen.tilegen make-tiles plane
 - Use absolute imports from `lib`, `linux_host`, and `tilegen`.
 - Keep shared code in `lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
 - Keep runtime package config local to each runtime package:
-  - `linux_host/config.py`
-  - `tilegen/config.py`
+  - `linux_host/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
+  - `tilegen/config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
   - deployment config in `lib/ssh_lib/config.py`
 - Keep root deploy CLIs as real scripts with their logic in the script.
 - Use Click for CLIs.

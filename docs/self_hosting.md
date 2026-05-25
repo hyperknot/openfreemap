@@ -113,7 +113,7 @@ If you have a really beefy machine (see above) and you really want to generate t
 Trigger a run manually, by running
 
 ```
-cd /data/ofm/source && sudo uv run python -u -m tilegen.tilegen make-tiles planet
+cd /data/ofm/src && sudo uv run python -u -m tilegen.tilegen make-tiles planet
 ```
 
 It's recommended to use tmux or similar, as it can take days to complete.

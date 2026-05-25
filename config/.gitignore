@@ -1,6 +1,0 @@
-.env.prod
-README.md
-config.pro.jsonc
-config.public.jsonc
-config.test.jsonc
-rclone.conf

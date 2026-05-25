@@ -58,7 +58,7 @@ def auto_clean_btrfs():
 
     For each area we keep max two versions:
     1. The newest one available locally
-    2. The one currently deployed, specified in /data/ofm/config/deployed_versions
+    2. The one currently deployed, specified in /data/ofm/config/linux_host/deployed_versions
     3. If there is no deployed version, then we include the second newest one
     """
 

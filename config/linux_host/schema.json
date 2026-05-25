@@ -22,11 +22,11 @@
     },
     "telegram_token": {
       "type": "string",
-      "description": "Telegram bot token for HTTP host operational alerts"
+      "description": "Telegram bot token"
     },
     "telegram_chat_id": {
       "type": "string",
-      "description": "Telegram chat id for HTTP host operational alerts"
+      "description": "Telegram chat id"
     }
   },
   "required": ["domains", "servers"],

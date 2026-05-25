@@ -13,11 +13,11 @@ class Configuration:
     runs_dir = tilegen_dir / 'runs'
 
     if Path('/data/ofm').exists():
-        ofm_config_dir = Path('/data/ofm/config')
+        tilegen_config_dir = Path('/data/ofm/config/tilegen')
     else:
-        ofm_config_dir = repo_root / 'config'
+        tilegen_config_dir = repo_root / 'config' / 'tilegen'
 
-    rclone_config = ofm_config_dir / 'rclone.conf'
+    rclone_config = tilegen_config_dir / 'rclone.conf'
     rclone_bin = subprocess.run(['which', 'rclone'], capture_output=True, text=True).stdout.strip()
 
 

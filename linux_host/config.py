@@ -1,7 +1,7 @@
-import json
 import socket
-import subprocess
 from pathlib import Path
+
+from lib.linux_host_config import read_linux_host_config
 
 
 class Configuration:
@@ -22,20 +22,17 @@ class Configuration:
     nginx_sites_dir = Path('/data/nginx/sites')
 
     if Path('/data/ofm').exists():
-        ofm_config_dir = Path('/data/ofm/config')
+        linux_host_config_dir = Path('/data/ofm/config/linux_host')
     else:
-        ofm_config_dir = repo_root / 'config'
+        linux_host_config_dir = repo_root / 'config' / 'linux_host'
 
-    config_json_path = ofm_config_dir / 'config.json'
-    json_config = json.loads(config_json_path.read_text()) if config_json_path.exists() else {}
+    config_jsonc_path = linux_host_config_dir / 'config.jsonc'
+    json_config = read_linux_host_config(config_jsonc_path) if config_jsonc_path.exists() else {}
     telegram_token = json_config.pop('telegram_token', None)
     telegram_chat_id = json_config.pop('telegram_chat_id', None)
     ofm_host_prefix = f'OFM linux_host {socket.gethostname()}'
 
-    deployed_versions_dir = ofm_config_dir / 'deployed_versions'
-
-    rclone_config = ofm_config_dir / 'rclone.conf'
-    rclone_bin = subprocess.run(['which', 'rclone'], capture_output=True, text=True).stdout.strip()
+    deployed_versions_dir = linux_host_config_dir / 'deployed_versions'
 
 
 config = Configuration()

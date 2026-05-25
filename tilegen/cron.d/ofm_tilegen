@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
-CMD="cd /data/ofm/source && sudo uv run python -u -m tilegen.tilegen"
+CMD="cd /data/ofm/src && sudo uv run python -u -m tilegen.tilegen"
 LOG_DIR=/data/ofm/tilegen/logs
 
 0 * * * * ofm     $CMD make-indexes >> $LOG_DIR/make_indexes.log 2>&1

@@ -1,3 +1,3 @@
 SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
-* * * * * ofm     /usr/bin/flock -n /tmp/linux_host.lockfile -c 'cd /data/ofm/source && sudo uv run python -u -m linux_host.linux_host sync >> /data/ofm/linux_host/logs/linux_host_sync.log 2>&1'
+* * * * * ofm     /usr/bin/flock -n /tmp/linux_host.lockfile -c 'cd /data/ofm/src && sudo uv run python -u -m linux_host.linux_host sync >> /data/ofm/linux_host/logs/linux_host_sync.log 2>&1'
