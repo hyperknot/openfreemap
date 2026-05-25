@@ -10,4 +10,4 @@ find . -name .pytest_cache -exec rm -rf {} +
 find . -name .ruff_cache -exec rm -rf {} +
 find . -name venv -type d -prune -exec rm -rf {} +
 
-uv sync --python=3.12 --no-dev
+uv sync

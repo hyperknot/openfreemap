@@ -30,4 +30,4 @@ def prepare_uv(c):
         c, 'command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh', user='ofm'
     )
     c.sudo('test ! -x /home/ofm/.local/bin/uv || ln -sf /home/ofm/.local/bin/uv /usr/local/bin/uv')
-    sudo_cmd(c, 'uv sync --python=3.12 --no-dev', user='ofm', cwd=config.source_dir)
+    sudo_cmd(c, 'uv sync --python=3.13', user='ofm', cwd=config.source_dir)

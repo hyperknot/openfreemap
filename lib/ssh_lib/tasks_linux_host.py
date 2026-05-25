@@ -99,7 +99,7 @@ def install_linux_host_cron(c):
 def run_linux_host_sync(c):
     print('Running linux_host sync --force')
     sudo_cmd(
-        c, 'uv run --no-dev python -u -m linux_host.linux_host sync --force', cwd=config.source_dir
+        c, 'uv run python -u -m linux_host.linux_host sync --force', cwd=config.source_dir
     )
 
 

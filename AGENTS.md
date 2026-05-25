@@ -58,11 +58,11 @@ Remote layout:
 
 Do not implement partial-package or multi-repo deployment logic. Keep deployment simple: upload full source, then run uv from `/data/ofm/source`.
 
-Remote runtime commands should use `uv run --no-dev`, for example:
+Remote runtime commands should use `uv run`, for example:
 
 ```bash
-cd /data/ofm/source && sudo uv run --no-dev python -u -m linux_host.linux_host sync
-cd /data/ofm/source && sudo uv run --no-dev python -u -m tilegen.tilegen make-tiles planet
+cd /data/ofm/source && sudo uv run python -u -m linux_host.linux_host sync
+cd /data/ofm/source && sudo uv run python -u -m tilegen.tilegen make-tiles planet
 ```
 
 ## Code style

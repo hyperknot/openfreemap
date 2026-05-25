@@ -1,7 +1,7 @@
 [project]
 name = "openfreemap"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
   "click>=8.3.1",
   "fabric>=3.2.2",
