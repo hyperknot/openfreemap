@@ -36,6 +36,8 @@ def prepare_http_host(c):
 def upload_config_and_certs(c):
     config_data = read_jsonc()
 
+    c.sudo('mkdir -p /data/nginx/certs')
+
     # clean old certs
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
 
