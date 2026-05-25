@@ -4,23 +4,23 @@ You can either self-host or use our public instance. Everything is **open-source
 
 When self-hosting, there are two modules you can set up on a server (see details in the repo README).
 
-- **http-host**
+- **linux-host**
 
-- **tile-gen**
+- **tilegen**
 
-There is a 99.9% chance you only need **http-host**. Tile-gen is slow, needs a huge machine and is totally pointless, since we upload the processed files every week.
+There is a 99.9% chance you only need **linux-host**. Tile-gen is slow, needs a huge machine and is totally pointless, since we upload the processed files every week.
 
 ### System requirements
 
-**http-host**: 300 GB disk space for hosting a single run. SSD is recommended, but not required.
+**linux-host**: 300 GB disk space for hosting a single run. SSD is recommended, but not required.
 
-**tile-gen**: 500 GB SDD and at least 64 GB ram
+**tilegen**: 500 GB SDD and at least 64 GB ram
 
 **Ubuntu 22** or newer
 
 ### Provider recommendation
 
-One amazing deal, which is tested and known to work well for http-host is the €4.5 / month [Contabo Storage VPS](https://contabo.com/en/storage-vps/)
+One amazing deal, which is tested and known to work well for linux-host is the €4.5 / month [Contabo Storage VPS](https://contabo.com/en/storage-vps/)
 
 ---
 
@@ -56,9 +56,7 @@ Set `SKIP_PLANET=true` first.
 
 #### 3. Set up Python if you don't have it yet
 
-On Ubuntu you can get it by `sudo apt install python3-pip`
-
-On macOS you can do `brew install python`
+Install [uv](https://docs.astral.sh/uv/) locally and make sure it is on your `PATH`.
 
 #### 4. Prepare the Python environment
 
@@ -66,7 +64,7 @@ You run the deploy script locally, and it deploys to a remote server over SSH. Y
 
 ```
 cd openfreemap
-pip install -e .
+uv sync
 ```
 
 #### 5. Deploy quick version with `SKIP_PLANET=true`
@@ -74,7 +72,7 @@ pip install -e .
 Run the actual deploy command and wait a few minutes
 
 ```
-./init-server.py http-host-static HOSTNAME
+uv run ./deploy_linux_host.py init-static HOSTNAME
 ```
 
 #### 5. Check
@@ -100,7 +98,7 @@ x-ofm-debug: latest JSON monaco
 
 #### 6. Deploy and check with `SKIP_PLANET=false`
 
-Update your `.env` file and re-run the same `./init-server.py http-host-static HOSTNAME` as before.
+Update your `.env` file and re-run the same `uv run ./deploy_linux_host.py init-static HOSTNAME` as before.
 
 Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
 
@@ -108,14 +106,14 @@ If your server doesn't have an SSD, the download + uncompressing process can tak
 
 ---
 
-#### Deploy tile-gen server (optional)
+#### Deploy tilegen server (optional)
 
-If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `./init-server.py tile-gen HOSTNAME`.
+If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `uv run ./deploy_tilegen.py tilegen HOSTNAME`.
 
 Trigger a run manually, by running
 
 ```
-sudo /data/ofm/venv/bin/python -u /data/ofm/tile_gen/bin/tile_gen.py make-tiles planet
+cd /data/ofm/source && sudo uv run --no-dev python -u -m tilegen.tilegen make-tiles planet
 ```
 
 It's recommended to use tmux or similar, as it can take days to complete.

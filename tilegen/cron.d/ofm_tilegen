@@ -1,0 +1,10 @@
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+CMD="cd /data/ofm/source && sudo uv run --no-dev python -u -m tilegen.tilegen"
+LOG_DIR=/data/ofm/tilegen/logs
+
+0 * * * * ofm     $CMD make-indexes >> $LOG_DIR/make_indexes.log 2>&1
+0 0 * * * ofm     $CMD set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
+0 1 * * * ofm     $CMD set-version monaco >> $LOG_DIR/set_version_monaco.log 2>&1
+0 2 * * 5 ofm     $CMD make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
+0 3 * * * ofm     $CMD make-tiles monaco --upload >> $LOG_DIR/make_tiles_monaco.log 2>&1

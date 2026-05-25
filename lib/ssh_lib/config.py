@@ -1,0 +1,32 @@
+import os
+from pathlib import Path
+
+
+class Configuration:
+    repo_root = Path(__file__).resolve().parents[2]
+
+    local_assets_dir = Path(__file__).parent / 'assets'
+    local_config_dir = repo_root / 'config'
+    local_linux_host_dir = repo_root / 'linux_host'
+    local_tilegen_dir = repo_root / 'tilegen'
+
+    ENV = os.getenv('ENV')
+    if not ENV:
+        local_config_jsonc = local_config_dir / 'config.jsonc'
+    else:
+        local_config_jsonc = local_config_dir / f'config.{ENV}.jsonc'
+
+    config_schema_json = local_config_dir / 'config.schema.json'
+
+    # Remote paths (always forward / on Linux - not using pathlib)
+    ofm_dir = '/data/ofm'
+    source_dir = f'{ofm_dir}/source'
+    remote_config = f'{ofm_dir}/config'
+
+    linux_host_dir = f'{ofm_dir}/linux_host'
+    tilegen_dir = f'{ofm_dir}/tilegen'
+    planetiler_src = f'{tilegen_dir}/planetiler_src'
+    planetiler_bin = f'{tilegen_dir}/planetiler'
+
+
+config = Configuration()

@@ -1,0 +1,30 @@
+[project]
+name = "openfreemap"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "click>=8.3.1",
+  "fabric>=3.2.2",
+  "json5>=0.12.1",
+  "jsonschema>=4.25.1",
+  "pycurl>=7.45.7",
+  "requests>=2.32.5",
+]
+
+[dependency-groups]
+dev = [
+  "nginxfmt>=1.0.0",
+  "ruff>=0.14.6",
+]
+
+[project.scripts]
+linux-host = "linux_host.linux_host:cli"
+tilegen = "tilegen.tilegen:cli"
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = ["lib", "linux_host", "tilegen"]
+module-root = ""

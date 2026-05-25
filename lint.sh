@@ -7,10 +7,10 @@ node_modules/.bin/prettier -w "**/*.md"
 #pnpm biome check --write --unsafe --colors=off --log-level=info --log-kind=pretty . | grep path | sort
 pnpm biome check --write --unsafe .
 
-ruff check --fix .
-ruff format .
+uv run ruff check --fix .
+uv run ruff format .
 
-find . -type f -name '*.conf' -path '*/nginx*' -exec nginxfmt -v {} +;
+find . -type f -name '*.conf' -path '*/nginx*' -exec uv run nginxfmt -v {} +;
 
 
 

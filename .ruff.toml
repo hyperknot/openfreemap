@@ -1,4 +1,4 @@
-target-version = "py313"
+target-version = "py312"
 unsafe-fixes = true
 line-length = 100
 extend-exclude = ["alembic", "*.ipynb", "temp"]
@@ -50,7 +50,7 @@ lint.ignore = [
 quote-style = "single"
 
 [lint.isort]
-known-first-party = ["lib", "api", "deploy", "ssh_lib"]
+known-first-party = ["lib", "linux_host", "tilegen"]
 lines-after-imports = 2
 
 [lint.flake8-comprehensions]

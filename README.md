@@ -59,7 +59,7 @@ The only way this project can possibly work is to be super focused about what it
 
    This repo is Docker-free on purpose. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
-3. OpenFreeMap does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of http-host if you keep a close eye on this repo.
+3. OpenFreeMap does not promise worry-free automatic updates for self-hosters. Only use the autoupdate version of linux-host if you keep a close eye on this repo.
 
 ## Self hosting
 
@@ -75,7 +75,7 @@ There is no cloud, just dedicated servers. The web server is nginx on Ubuntu.
 
 Production-quality hosting of 300 million tiny files is hard. The average file size is just 450 byte. Dozens of tile servers have been written to tackle this problem, but they all have their limitations.
 
-The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](modules/tile_gen/scripts/extract_mbtiles.py) and [shrink_btrfs](modules/tile_gen/scripts/shrink_btrfs.py) scripts for this very purpose.
+The original idea of this project is to avoid using tile servers altogether. Instead, the tiles are directly served from Btrfs partition images + hard links using an optimised nginx config. I wrote [extract_mbtiles](tilegen/scripts/extract_mbtiles.py) and [shrink_btrfs](tilegen/scripts/shrink_btrfs.py) scripts for this very purpose.
 
 This replaces a running service with a pure, file-system-level implementation. Since the Linux kernel's file caching is among the highest-performing and most thoroughly tested codes ever written, it delivers serious performance.
 
@@ -85,13 +85,13 @@ I run some [benchmarks](docs/benchmark/README.md) on a Hetzner server, the aim w
 
 The project has the following parts
 
-#### deploy server - ssh_lib and init-server.py
+#### deployment helpers - lib/ssh_lib
 
-This sets up everything on a clean Ubuntu server. You run it locally and it sets up the server via SSH.
+`deploy_linux_host.py` and `deploy_tilegen.py` set up clean Ubuntu servers over SSH.
 
-#### HTTP host - modules/http_host
+#### Linux host - linux_host
 
-Inside `http_host`, all work is done by `http_host.py`.
+Inside `linux_host`, all work is done by `linux_host.py`.
 
 It does the following:
 
@@ -103,17 +103,17 @@ It does the following:
 
 - Fetches version files
 
-- Running the sync cron task (called every minute with http-host-autoupdate)
+- Running the sync cron task (called every minute with linux-host-autoupdate)
 
-You can run `./http_host.py --help` to see which options are available.
+You can run `uv run linux-host --help` to see which options are available.
 
-#### tile generation - modules/tile_gen
+#### tile generation - tilegen
 
 _note: Tile generation is 100% optional, as we are providing the processed full planet btrfs files for public download. You can download full planet images updated weekly, both in Btrfs and in MBTiles format._
 
-The `tile_gen` script downloads a full planet OSM extract and runs it through Planetiler.
+The `tilegen` script downloads a full planet OSM extract and runs it through Planetiler.
 
-The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](modules/tile_gen/scripts/extract_mbtiles.py) script. The partition is shrunk using the [shrink_btrfs](modules/tile_gen/scripts/shrink_btrfs.py) script.
+The created .mbtiles file is then extracted into a Btrfs partition image using the custom [extract_mbtiles](tilegen/scripts/extract_mbtiles.py) script. The partition is shrunk using the [shrink_btrfs](tilegen/scripts/shrink_btrfs.py) script.
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
@@ -122,10 +122,6 @@ Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 The default styles. I've already put countless hours into tweaking up some nice looking styles. Still, it'll take probably the most work in the long term future.
 
 Of course, you are welcome to use custom styles.
-
-#### load balancer script - modules/loadbalancer
-
-A Round Robin DNS based load balancer script for health checking and updating records. It pushes status messages to a Telegram bot.
 
 ## FAQ
 

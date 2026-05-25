@@ -1,0 +1,263 @@
+import os
+import secrets
+import shlex
+import socket
+import string
+import sys
+import tarfile
+import tempfile
+from pathlib import Path
+
+from fabric import Connection
+from invoke.exceptions import UnexpectedExit
+
+
+def put(
+    c, local_path, remote_path, permissions=None, user='root', group=None, create_parent_dir=False
+):
+    tmp_path = f'/tmp/fabtmp_{random_string(8)}'
+    c.put(local_path, tmp_path)
+
+    if create_parent_dir:
+        dirname = os.path.dirname(remote_path)
+        c.sudo(f'mkdir -p {dirname}')
+        set_permission(c, dirname, user=user, group=group)
+
+    if is_dir(c, remote_path):
+        if not remote_path.endswith('/'):
+            remote_path += '/'
+
+        filename = os.path.basename(local_path)
+        remote_path += filename
+
+    c.sudo(f"mv '{tmp_path}' '{remote_path}'")
+    c.sudo(f"rm -rf '{tmp_path}'")
+
+    set_permission(c, remote_path, permissions=permissions, user=user, group=group)
+
+
+def put_str(c, remote_path, str_, create_parent_dir=False):
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.txt') as f:
+        f.write(str_ + '\n')
+        f.flush()
+        put(c, f.name, remote_path, create_parent_dir=create_parent_dir)
+
+
+def put_source_dir(c, local_dir: Path, remote_dir: str, *, user='ofm'):
+    exclude_names = {
+        '.git',
+        '.mypy_cache',
+        '.pytest_cache',
+        '.ruff_cache',
+        '.astro',
+        '.venv',
+        '.wrangler',
+        '__pycache__',
+        'dist',
+        'node_modules',
+        'venv',
+    }
+
+    local_dir = local_dir.resolve()
+
+    def include(tarinfo):
+        relative_parts = Path(tarinfo.name).parts[1:]
+        if any(part in exclude_names or part.endswith('.egg-info') for part in relative_parts):
+            return None
+        if tarinfo.name.endswith(('.pyc', '.pyo', '.DS_Store')):
+            return None
+        return tarinfo
+
+    with tempfile.NamedTemporaryFile(suffix='.tar.gz') as archive:
+        with tarfile.open(archive.name, 'w:gz') as tar:
+            tar.add(local_dir, arcname=local_dir.name, filter=include)
+        archive.flush()
+
+        tmp_path = f'/tmp/ofm_source_{random_string(8)}.tar.gz'
+        c.put(archive.name, tmp_path)
+
+    c.sudo(f'rm -rf {shlex.quote(remote_dir)}')
+    c.sudo(f'mkdir -p {shlex.quote(remote_dir)}')
+    c.sudo(f'tar -xzf {shlex.quote(tmp_path)} -C {shlex.quote(remote_dir)} --strip-components=1')
+    c.sudo(f'rm -f {shlex.quote(tmp_path)}')
+    set_permission(c, remote_dir, user=user)
+    c.sudo(f'chown -R {user}:{user} {shlex.quote(remote_dir)}')
+
+
+def file_contains(c, file_path, search_str):
+    """Check if a file contains a specific string."""
+    if not exists(c, file_path):
+        return False
+
+    # Use grep -qF for fixed string search (no regex interpretation)
+    # -q for quiet (no output), -F for fixed string
+    result = c.sudo(f"grep -qF '{search_str}' '{file_path}'", warn=True, hide=True)
+    return result.ok
+
+
+def append_str(c, remote_path, str_, check_duplicate=False):
+    """Append string to file. If check_duplicate=True, only append if string doesn't exist."""
+    if check_duplicate and file_contains(c, remote_path, str_.strip()):
+        return False  # String already exists, didn't append
+
+    tmp_path = f'/tmp/fabtmp_{random_string(8)}'
+    put_str(c, tmp_path, str_)
+
+    sudo_cmd(c, f"cat '{tmp_path}' >> '{remote_path}'")
+    c.sudo(f'rm -f {tmp_path}')
+    return True  # Successfully appended
+
+
+def sudo_cmd(c, cmd, *, user=None, cwd=None):
+    if cwd:
+        cmd = f'cd {shlex.quote(cwd)} && {cmd}'
+
+    try:
+        c.sudo(f'bash -lc {shlex.quote(cmd)}', user=user)
+    except UnexpectedExit as e:
+        print(f'Command failed: {e.result.command}')
+        print(f'Error: {e.result.stderr}')
+        sys.exit(1)
+
+
+def run_nice(c, cmd):
+    try:
+        c.run(cmd)
+    except UnexpectedExit as e:
+        print(f'Command failed: {e.result.command}')
+        print(f'Error: {e.result.stderr}')
+        sys.exit(1)
+
+
+def set_permission(c, path, *, permissions=None, user=None, group=None):
+    if user:
+        if not group:
+            group = user
+        c.sudo(f"chown {user}:{group} '{path}'")
+
+    if permissions:
+        c.sudo(f"chmod {permissions} '{path}'")
+
+
+def reboot(c):
+    print('Rebooting')
+    try:
+        c.sudo('reboot')
+    except Exception:
+        pass
+
+
+def exists(c, path):
+    return c.sudo(f"test -e '{path}'", hide=True, warn=True).ok
+
+
+def is_dir(c, path):
+    return c.sudo(f"test -d '{path}'", hide=True, warn=True).ok
+
+
+def ensure_dirs(c, *paths):
+    quoted = ' '.join(shlex.quote(path) for path in paths if path)
+    if quoted:
+        c.run(f'mkdir -p {quoted}', echo=True)
+
+
+def truncate_files_in_dir(c, path):
+    quoted = shlex.quote(path)
+    c.run(
+        f'mkdir -p {quoted} && find {quoted} -type f -exec truncate -s 0 {{}} +',
+        warn=True,
+        hide=True,
+    )
+
+
+def random_string(length):
+    return ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(length))
+
+
+def ubuntu_release(c):
+    return int(c.run('lsb_release -rs').stdout.strip()[:2])
+
+
+def ubuntu_codename(c):
+    return c.run('lsb_release -cs').stdout.strip()
+
+
+def get_username(c):
+    return c.run('whoami').stdout.strip()
+
+
+def add_user(c, username, passwd=None, uid=None, *, system: bool):
+    """Create a user if it doesn't already exist."""
+    if c.sudo(f'id -u {username}', hide=True, warn=True).ok:
+        print(f'User {username} already exists, skipping.')
+        return
+
+    if system:
+        c.sudo(f'useradd --system --shell /usr/sbin/nologin --user-group {username}')
+    else:
+        parts = ['adduser', '--disabled-password', '--gecos ""']
+        if uid:
+            parts.append(f'--uid={uid}')
+        parts.append(username)
+        c.sudo(' '.join(parts))
+
+        if passwd:
+            c.sudo(f'echo "{username}:{passwd}" | chpasswd')
+
+
+def remove_user(c, username):
+    c.sudo(f'userdel -r {username}', warn=True)
+    c.sudo(f'rm -rf /home/{username}')
+
+
+def enable_sudo(c, username, nopasswd=False):
+    c.sudo(f'usermod -aG sudo {username}')
+    if nopasswd:
+        put_str(c, '/etc/sudoers.d/tmp.', f'{username} ALL=(ALL) NOPASSWD:ALL')
+        set_permission(c, '/etc/sudoers.d/tmp.', permissions='440', user='root')
+        c.sudo(f'mv /etc/sudoers.d/tmp. /etc/sudoers.d/{username}')
+
+
+def get_latest_release_github(user, repo):
+    import requests
+
+    url = f'https://api.github.com/repos/{user}/{repo}/releases/latest'
+    r = requests.get(url, timeout=30)
+    r.raise_for_status()
+
+    data = r.json()
+    tag_name = data.get('tag_name')
+    if not isinstance(tag_name, str) or not tag_name.strip():
+        raise RuntimeError(
+            f'GitHub latest release response for {user}/{repo} is missing tag_name: {data!r}'
+        )
+
+    return tag_name.strip()
+
+
+def get_ip_from_ssh_alias(ssh_alias):
+    """
+    Get IP address from SSH config alias.
+
+    Args:
+        ssh_alias: SSH hostname/alias from ~/.ssh/config
+
+    Returns:
+        str: IP address
+
+    Raises:
+        socket.gaierror: If hostname cannot be resolved
+    """
+
+    # Create connection (doesn't actually connect)
+    conn = Connection(ssh_alias)
+
+    # Get the resolved hostname from SSH config
+    hostname = conn.host
+    if not isinstance(hostname, str) or not hostname:
+        raise RuntimeError(f'Could not resolve hostname for SSH alias {ssh_alias!r}')
+
+    # Resolve to IP
+    ip_address = socket.gethostbyname(hostname)
+
+    return ip_address

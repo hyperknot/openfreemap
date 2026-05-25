@@ -25,6 +25,6 @@ Host orb_my
 Then I run commands like the following:
 
 ```
-./init-server.py http-host-static orb_my
-./init-server.py debug orb_my
+uv run ./deploy_linux_host.py init-static orb_my
+uv run ./debug.py debug orb_my
 ```

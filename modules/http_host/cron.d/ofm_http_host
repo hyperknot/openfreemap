@@ -1,4 +1,0 @@
-# every minute sync, locking so that only one process can run at a time
-* * * * * ofm     /usr/bin/flock -n /tmp/http_host.lockfile -c 'sudo /data/ofm/venv/bin/python -u /data/ofm/http_host/bin/http_host.py sync >> /data/ofm/http_host/logs/http_host_sync.log 2>&1'
-
-

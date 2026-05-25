@@ -16,6 +16,8 @@ _temp
 
 /.idea
 venv
+.venv
+dist
 
 
 /pnpm-lock.yaml
