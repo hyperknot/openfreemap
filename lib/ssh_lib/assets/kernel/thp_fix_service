@@ -1,5 +1,7 @@
 [Unit]
+Description=Disable Transparent Huge Pages
 Before=docker.service
+ConditionPathExists=/sys/kernel/mm/transparent_hugepage/enabled
 
 [Service]
 Type=oneshot
@@ -7,4 +9,4 @@ ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled
 ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'
 
 [Install]
-RequiredBy=docker.service
+WantedBy=multi-user.target
