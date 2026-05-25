@@ -16,7 +16,7 @@ There is a 99.9% chance you only need **linux-host**. Tile-gen is slow, needs a 
 
 **tilegen**: 500 GB SDD and at least 64 GB ram
 
-**Ubuntu 22** or newer
+**Ubuntu 24.04**
 
 ### Provider recommendation
 

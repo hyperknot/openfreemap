@@ -4,12 +4,12 @@
 
 On macOS, I recommend [OrbStack](https://orbstack.dev/).
 
-I saved this function into my bash_profile. It sets up a clean x64-based Ubuntu 22 VM in a few seconds.
+I saved this function into my bash_profile. It sets up a clean x64-based Ubuntu 24.04 VM in a few seconds.
 
 ```
 orb_reset() {
    orbctl delete -f ubuntu-test
-   orbctl create -a amd64 ubuntu:jammy ubuntu-test
+   orbctl create -a amd64 ubuntu:noble ubuntu-test
 }
 ```
 

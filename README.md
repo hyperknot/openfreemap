@@ -55,7 +55,7 @@ The only way this project can possibly work is to be super focused about what it
    - elevation lookup
    - custom tile or dataset hosting
 
-2. OpenFreeMap is not something you can install locally. This repo is a deploy script specifically made to set up clean Ubuntu servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready server, both for tile hosting and generation.
+2. OpenFreeMap is not something you can install locally. This repo is a deploy script specifically made to set up clean Ubuntu 24.04 servers or virtual machines. It uses [Fabric](https://www.fabfile.org/) and runs commands over SSH. With a single command it can set up a production-ready server, both for tile hosting and generation.
 
    This repo is Docker-free on purpose. If someone wants to make a Docker-based version of this, I'm more than happy to link it here.
 
@@ -69,7 +69,7 @@ See [self hosting docs](docs/self_hosting.md).
 
 There is no tile server running; only Btrfs partition images with 300 million hard-linked files. This was my idea; I haven't read about anyone else doing this in production, but it works really well.
 
-There is no cloud, just dedicated servers. The web server is nginx on Ubuntu.
+There is no cloud, just dedicated servers. The web server is nginx on Ubuntu 24.04.
 
 ## Btrfs images
 
@@ -87,7 +87,7 @@ The project has the following parts
 
 #### deployment helpers - lib/ssh_lib
 
-`deploy_linux_host.py` and `deploy_tilegen.py` set up clean Ubuntu servers over SSH.
+`deploy_linux_host.py` and `deploy_tilegen.py` set up clean Ubuntu 24.04 servers over SSH.
 
 #### Linux host - linux_host
 

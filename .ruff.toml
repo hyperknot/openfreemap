@@ -1,4 +1,4 @@
-target-version = "py312"
+target-version = "py313"
 unsafe-fixes = true
 line-length = 100
 extend-exclude = ["alembic", "*.ipynb", "temp"]
@@ -23,17 +23,16 @@ lint.select = [
 lint.ignore = [
   'A003',
   # 'C408',  # keep dict() as-is
-  'DTZ007', # naive datetime.strptime() without %z
+  # 'DTZ007', # naive datetime.strptime() without %z
   'E501',
   'E711',
   'E712',
   'E721',   # type() comparison
   # 'E722', # bare except
   'E741',
-  'EXE003', # shebang should contain "python"
   'F401',   # unused imports
   'F841',
-  # 'PT018', # assertion should be broken into multiple parts
+  'PT018', # assertion should be broken into multiple parts
   'SIM102',
   'SIM103', # return the condition directly
   'SIM105',
