@@ -13,11 +13,11 @@ def prepare_linux_host(c):
     kernel_limits1m(c)
     nginx(c)
 
-    c.sudo(f'mkdir -p {linux_host_deploy_config.linux_host_dir}/logs')
-    c.sudo(f'chown ofm:ofm {linux_host_deploy_config.linux_host_dir}/logs')
+    c.sudo(f'mkdir -p {linux_host_deploy_config.remote_linux_host_dir}/logs')
+    c.sudo(f'chown ofm:ofm {linux_host_deploy_config.remote_linux_host_dir}/logs')
 
-    c.sudo(f'mkdir -p {linux_host_deploy_config.linux_host_dir}/logs_nginx')
-    c.sudo(f'chown nginx:nginx {linux_host_deploy_config.linux_host_dir}/logs_nginx')
+    c.sudo(f'mkdir -p {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
+    c.sudo(f'chown nginx:nginx {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
 
     upload_config_and_certs(c)
 
@@ -79,7 +79,7 @@ def run_linux_host_sync(c):
     sudo_cmd(
         c,
         'PYTHONUNBUFFERED=1 ./linux_host/scripts/linux-host.py sync --force',
-        cwd=linux_host_deploy_config.source_dir,
+        cwd=linux_host_deploy_config.remote_source_dir,
     )
 
 

@@ -13,16 +13,16 @@ def prepare_shared(c, deploy_config):
     pkg_base(c)
     rclone(c)
 
-    c.sudo(f'mkdir -p {deploy_config.remote_config}')
-    c.sudo(f'chown ofm:ofm {deploy_config.remote_config}')
-    c.sudo(f'chown ofm:ofm {deploy_config.ofm_dir}')
+    c.sudo(f'mkdir -p {deploy_config.remote_config_dir}')
+    c.sudo(f'chown ofm:ofm {deploy_config.remote_config_dir}')
+    c.sudo(f'chown ofm:ofm {deploy_config.remote_ofm_dir}')
 
     python_uv(c)
 
     put_dir_tarball(
         c,
-        deploy_config.repo_root,
-        deploy_config.source_dir,
+        deploy_config.local_repo_root,
+        deploy_config.remote_source_dir,
         user='ofm',
         exclude_set={
             '.astro',
@@ -36,4 +36,4 @@ def prepare_shared(c, deploy_config):
         },
     )
 
-    sudo_cmd(c, 'uv sync', user='ofm', cwd=deploy_config.source_dir)
+    sudo_cmd(c, 'uv sync', user='ofm', cwd=deploy_config.remote_source_dir)

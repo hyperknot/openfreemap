@@ -23,6 +23,6 @@ def wrk(c):
     c.sudo('mkdir -p /data/ofm/benchmark')
     put(
         c,
-        linux_host_deploy_config.repo_root / 'docs' / 'benchmark' / 'wrk_custom_list.lua',
+        linux_host_deploy_config.local_repo_root / 'docs' / 'benchmark' / 'wrk_custom_list.lua',
         '/data/ofm/benchmark',
     )
