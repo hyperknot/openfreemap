@@ -1,5 +1,6 @@
 from shared_lib.ssh_lib.utils import put
-from tilegen.deploy_tilegen.planetiler import install_planetiler
+from tilegen.deploy_tilegen.install_planetiler import install_planetiler
+from tilegen.deploy_tilegen.install_pmtiles import install_pmtiles
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
@@ -7,6 +8,7 @@ def prepare_tilegen(c, *, enable_cron):
     c.sudo('rm -f /etc/cron.d/ofm_tilegen')
 
     install_planetiler(c)
+    install_pmtiles(c)
 
     rclone_config = tilegen_deploy_config.local_config_dir / 'tilegen' / 'rclone.conf'
     if rclone_config.exists():

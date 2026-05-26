@@ -4,7 +4,7 @@ from tilegen.tilegen_lib.tilegen_config import tilegen_config
 
 
 # Files that are uploaded individually before finalize_run_upload
-LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz'}
+LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz', 'tiles.pmtiles'}
 
 
 def finalize_run_upload(run_dir, remote_dir):

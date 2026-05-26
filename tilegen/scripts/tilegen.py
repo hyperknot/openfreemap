@@ -8,6 +8,7 @@ from shared_lib.get_version_shared import get_deployed_version, get_versions_for
 from tilegen.tilegen_lib.btrfs import append_sha256sum, gzip_btrfs, make_btrfs, move_logs
 from tilegen.tilegen_lib.mbtiles import update_mbtiles_metadata
 from tilegen.tilegen_lib.planetiler import run_planetiler
+from tilegen.tilegen_lib.pmtiles import make_pmtiles
 from tilegen.tilegen_lib.rclone import (
     finalize_run_upload,
     make_indexes_for_bucket,
@@ -56,6 +57,16 @@ def make_tiles(area, upload):
     append_sha256sum(run_folder / 'tiles.btrfs.gz')
     if upload:
         upload_run_file(run_folder / 'tiles.btrfs.gz', remote_dir)
+
+    # delete btrfs files to save space
+    for btrfs_file in [run_folder / 'tiles.btrfs', run_folder / 'tiles.btrfs.gz']:
+        btrfs_file.unlink(missing_ok=True)
+
+    # pmtiles: create from mbtiles, checksum and upload
+    make_pmtiles(run_folder)
+    append_sha256sum(run_folder / 'tiles.pmtiles')
+    if upload:
+        upload_run_file(run_folder / 'tiles.pmtiles', remote_dir)
 
     # finalize
     move_logs(run_folder)

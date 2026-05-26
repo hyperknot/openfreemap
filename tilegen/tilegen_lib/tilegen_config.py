@@ -10,6 +10,8 @@ class TilegenConfig:
     tilegen_dir = Path('/data/ofm/tilegen')
     planetiler_bin = tilegen_dir / 'planetiler'
     planetiler_path = planetiler_bin / 'planetiler.jar'
+    pmtiles_bin = tilegen_dir / 'pmtiles'
+    pmtiles_path = pmtiles_bin / 'pmtiles'
     runs_dir = tilegen_dir / 'runs'
 
     if Path('/data/ofm').exists():

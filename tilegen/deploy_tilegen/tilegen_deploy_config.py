@@ -16,6 +16,7 @@ class TilegenDeployConfig:
     tilegen_dir = f'{ofm_dir}/tilegen'
     planetiler_src = f'{tilegen_dir}/planetiler_src'
     planetiler_bin = f'{tilegen_dir}/planetiler'
+    pmtiles_bin = f'{tilegen_dir}/pmtiles'
 
 
 tilegen_deploy_config = TilegenDeployConfig()
