@@ -73,19 +73,29 @@ def put_dir_tarball(
     file_permissions=None,
     user='root',
     group=None,
-    exclude_set=None,
+    exclude_patterns=None,
 ):
     local_dir = local_dir.resolve()
     remote_dir = str(remote_dir)
+    exclude_patterns = {pattern.strip() for pattern in exclude_patterns or () if pattern.strip()}
+    root_patterns = {pattern.strip('/') for pattern in exclude_patterns if '/' in pattern}
+    component_patterns = {pattern for pattern in exclude_patterns if '/' not in pattern}
 
     def include(tarinfo):
         relative_parts = Path(tarinfo.name).parts[1:]
-        if any(
-            fnmatch.fnmatch(part, pattern)
-            for part in relative_parts
-            for pattern in set(exclude_set or ())
-        ):
-            return None
+        if not relative_parts:
+            return tarinfo
+
+        path = Path(*relative_parts).as_posix()
+
+        for pattern in root_patterns:
+            if fnmatch.fnmatch(path, pattern) or fnmatch.fnmatch(path, f'{pattern}/*'):
+                return None
+
+        for pattern in component_patterns:
+            if any(fnmatch.fnmatch(part, pattern) for part in relative_parts):
+                return None
+
         return tarinfo
 
     with tempfile.NamedTemporaryFile(suffix='.tar.gz') as archive:

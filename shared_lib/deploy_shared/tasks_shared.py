@@ -24,15 +24,26 @@ def prepare_shared(c, deploy_config):
         deploy_config.local_repo_root,
         deploy_config.remote_source_dir,
         user='ofm',
-        exclude_set={
+        exclude_patterns={
             '.astro',
-            '.git',
             '.ruff_cache',
             '.venv',
             '.wrangler',
             '__pycache__',
+            'cron.d',
             'dist',
             'node_modules',
+            #
+            '/.git',
+            '/.github',
+            '/config',
+            '/docs',
+            '/linux_host/deploy_linux_host',
+            '/shared_lib/assets',
+            '/shared_lib/deploy_shared',
+            '/shared_lib/ssh_lib',
+            '/tilegen/deploy_tilegen',
+            '/website',
         },
     )
 
