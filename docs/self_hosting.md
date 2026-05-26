@@ -69,10 +69,18 @@ uv sync
 
 #### 5. Deploy quick version with `SKIP_PLANET=true`
 
-Run the actual deploy command and wait a few minutes
+Run the actual deploy command and wait a few minutes:
 
 ```
 ./linux_host/deploy_linux_host.py init-static HOSTNAME
+```
+
+The deploy script connects over SSH. You can SSH as `root` or as a normal sudo-capable user; the script creates and uses an `ofm` runtime user. If needed, add `--user YOUR_SSH_USER` and/or `--port 22`.
+
+For password-based SSH, set `SSH_PASSWD`. If sudo uses a different password, set `SUDO_PASSWD` too:
+
+```
+SSH_PASSWD='your-ssh-password' SUDO_PASSWD='your-sudo-password' ./linux_host/deploy_linux_host.py --user YOUR_SSH_USER --port 22 init-static HOSTNAME
 ```
 
 #### 5. Check
@@ -108,12 +116,18 @@ If your server doesn't have an SSD, the download + uncompressing process can tak
 
 #### Deploy tilegen server (optional)
 
-If you have a really beefy machine (see above) and you really want to generate tiles yourself, you can run `./tilegen/deploy_tilegen.py tilegen HOSTNAME`.
-
-Trigger a run manually, by running
+If you have a really beefy machine (see above) and you really want to generate tiles yourself:
 
 ```
-cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet
+./tilegen/deploy_tilegen.py HOSTNAME
 ```
 
-It's recommended to use tmux or similar, as it can take days to complete.
+The same `--user`, `--port`, `SSH_PASSWD` and `SUDO_PASSWD` options from the linux-host deploy also work here. Add `--cron` to enable the tilegen cron job.
+
+Trigger a run manually over SSH:
+
+```
+cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet --upload
+```
+
+For a quick smoke test, use `monaco` instead of `planet`. It's recommended to use tmux or similar, as a full planet run can take days to complete.
