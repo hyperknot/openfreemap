@@ -1,19 +1,36 @@
+# OSM planet release cadence:
+# - OpenStreetMap snapshots the full planet database on Monday. The snapshot date is
+#   encoded in the filename, e.g. planet-260518.osm.pbf is the 2026-05-18 snapshot.
+# - The PBF files are published later at https://planet.openstreetmap.org/pbf/.
+# - The .md5 checksum appears after the PBF file and marks the release as complete.
+# - Looking at the last 52 checked releases, the average .md5 release time was Saturday
+#   08:26 UTC. The latest release was Sunday 05:51 UTC for the 2026-02-09 snapshot.
+# - We picked Sunday 08:00 UTC as the safe build time, giving a buffer before Planetiler
+#   downloads the latest planet.
+# - We set the deployed planet version three days later, on Wednesday at 08:00 UTC.
+
 SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
 CMD="cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py"
 LOG_DIR=/data/ofm/tilegen/logs
 
-# Every hour, on the hour.
-0 * * * * ofm     $CMD make-indexes >> $LOG_DIR/make_indexes.log 2>&1
+# --- Planet ---
 
-# Every day at 00:00.
-0 0 * * * ofm     $CMD set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
+# Every Sunday at 08:00, build and upload planet tiles.
+0 8 * * 0 ofm     $CMD make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
 
-# Every day at 01:00.
+# Every Wednesday at 08:00, set the deployed planet version.
+0 8 * * 3 ofm     $CMD set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
+
+# --- Monaco ---
+
+# Every day at 03:00, build and upload Monaco tiles.
+0 3 * * * ofm     $CMD make-tiles monaco --upload >> $LOG_DIR/make_tiles_monaco.log 2>&1
+
+# Every day at 01:00, set the deployed Monaco version.
 0 1 * * * ofm     $CMD set-version monaco >> $LOG_DIR/set_version_monaco.log 2>&1
 
-# Every Friday at 02:00.
-0 2 * * 5 ofm     $CMD make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
+# --- Utils ---
 
-# Every day at 03:00.
-0 3 * * * ofm     $CMD make-tiles monaco --upload >> $LOG_DIR/make_tiles_monaco.log 2>&1
+# Every hour, on the hour, rebuild bucket indexes.
+0 * * * * ofm     $CMD make-indexes >> $LOG_DIR/make_indexes.log 2>&1
