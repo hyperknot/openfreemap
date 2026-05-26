@@ -2,7 +2,7 @@ from pathlib import Path
 
 from linux_host.deploy_lib.benchmark import c1000k, wrk
 from linux_host.deploy_lib.linux_host_deploy_config import linux_host_deploy_config
-from shared_lib.linux_host_config import read_linux_host_config
+from linux_host.lib.linux_host_config import read_linux_host_config
 from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from shared_lib.ssh_lib.nginx import nginx
 from shared_lib.ssh_lib.utils import put, sudo_cmd
