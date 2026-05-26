@@ -29,7 +29,7 @@ def cli(
         c.sudo('rm -rf /data/ofm')
 
     prepare_shared(c, tilegen_deploy_config)
-    # prepare_tilegen(c, enable_cron=cron)
+    prepare_tilegen(c, enable_cron=cron)
 
 
 if __name__ == '__main__':

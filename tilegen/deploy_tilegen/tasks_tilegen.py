@@ -25,8 +25,4 @@ def prepare_tilegen(c, *, enable_cron):
     c.sudo('chown ofm:ofm /data/ofm/tilegen /data/ofm/tilegen/logs')
 
     if enable_cron:
-        install_tilegen_cron(c)
-
-
-def install_tilegen_cron(c):
-    put(c, tilegen_deploy_config.local_tilegen_dir / 'cron.d' / 'ofm_tilegen', '/etc/cron.d/')
+        put(c, tilegen_deploy_config.local_tilegen_dir / 'cron.d' / 'ofm_tilegen', '/etc/cron.d/')
