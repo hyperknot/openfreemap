@@ -85,7 +85,7 @@ I run some [benchmarks](docs/benchmark/README.md) on a Hetzner server, the aim w
 
 The project has the following parts
 
-#### deployment helpers - shared_lib/deploy and shared_lib/ssh_lib
+#### deployment helpers - shared_lib/deploy_shared and shared_lib/ssh_lib
 
 `linux_host/deploy_linux_host.py` and `tilegen/deploy_tilegen.py` set up clean Ubuntu 24.04 servers over SSH.
 

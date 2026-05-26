@@ -8,7 +8,7 @@ Python packages:
 
 - `shared_lib/` — shared Python code.
   - `shared_lib/get_version_shared.py` — shared deployed/version helpers.
-  - `shared_lib/deploy/` and `shared_lib/ssh_lib/` — deployment and SSH server setup helpers.
+  - `shared_lib/deploy_shared/` and `shared_lib/ssh_lib/` — deployment and SSH server setup helpers.
 - `linux_host/` — runtime code for Linux tile hosts.
   - Script: `linux_host/scripts/linux-host.py`
   - Runtime library: `linux_host/lib/`
@@ -76,6 +76,6 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
   - deployment config and deployment helpers live in each package's `deploy_lib/`:
     - `linux_host/deploy_lib/`
     - `tilegen/deploy_lib/`
-  - shared deployment helpers stay in `shared_lib/deploy/`.
+  - shared deployment helpers stay in `shared_lib/deploy_shared/`.
 - Use Click for CLIs.
 - Use ./lint.sh for linting and formatting.

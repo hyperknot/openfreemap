@@ -2,7 +2,7 @@
 import click
 
 from linux_host.deploy_lib.tasks_linux_host import upload_config_and_certs
-from shared_lib.deploy.cli_helpers import common_options, get_connection
+from shared_lib.deploy_shared.cli_helpers import common_options, get_connection
 
 
 @click.group()

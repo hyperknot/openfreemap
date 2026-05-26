@@ -10,8 +10,8 @@ from linux_host.deploy_lib.tasks_linux_host import (
     read_jsonc,
     run_linux_host_sync,
 )
-from shared_lib.deploy.cli_helpers import common_options, get_connection
-from shared_lib.deploy.tasks_shared import prepare_shared
+from shared_lib.deploy_shared.cli_helpers import common_options, get_connection
+from shared_lib.deploy_shared.tasks_shared import prepare_shared
 from shared_lib.get_version_shared import get_deployed_version
 from shared_lib.pycurl import pycurl_get
 from shared_lib.ssh_lib.utils import get_ip_from_ssh_alias
