@@ -1,6 +1,6 @@
 import subprocess
 
-from tilegen.lib.tilegen_config import tilegen_config
+from tilegen.tilegen_lib.tilegen_config import tilegen_config
 
 
 # Files that are uploaded individually before finalize_run_upload

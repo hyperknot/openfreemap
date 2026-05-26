@@ -3,8 +3,8 @@ import json
 
 import click
 
-from linux_host.deploy_lib.linux_host_deploy_config import linux_host_deploy_config
-from linux_host.deploy_lib.tasks_linux_host import (
+from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
+from linux_host.deploy_linux_host.tasks_linux_host import (
     install_linux_host_cron,
     prepare_linux_host,
     read_jsonc,

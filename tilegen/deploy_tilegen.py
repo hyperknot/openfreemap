@@ -3,8 +3,8 @@ import click
 
 from shared_lib.deploy_shared.cli_helpers import common_options, get_connection
 from shared_lib.deploy_shared.tasks_shared import prepare_shared
-from tilegen.deploy_lib.tasks_tilegen import prepare_tilegen
-from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
+from tilegen.deploy_tilegen.tasks_tilegen import prepare_tilegen
+from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
 @click.group()

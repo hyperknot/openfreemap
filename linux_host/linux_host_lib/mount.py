@@ -2,8 +2,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from linux_host.lib.linux_host_config import linux_host_config
-from linux_host.lib.utils import assert_linux, assert_sudo
+from linux_host.linux_host_lib.linux_host_config import linux_host_config
+from linux_host.linux_host_lib.utils import assert_linux, assert_sudo
 
 
 def auto_mount():

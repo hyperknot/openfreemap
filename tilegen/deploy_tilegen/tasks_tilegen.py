@@ -1,6 +1,6 @@
 from shared_lib.ssh_lib.utils import put
-from tilegen.deploy_lib.planetiler import install_planetiler
-from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
+from tilegen.deploy_tilegen.planetiler import install_planetiler
+from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
 def prepare_tilegen(c, *, enable_cron):

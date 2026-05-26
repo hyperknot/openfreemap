@@ -5,7 +5,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from tilegen.lib.mbtiles import extract_mbtiles
+from tilegen.tilegen_lib.mbtiles import extract_mbtiles
 
 
 IMAGE_SIZE = '200G'

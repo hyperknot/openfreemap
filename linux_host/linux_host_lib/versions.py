@@ -1,6 +1,6 @@
-from linux_host.lib.linux_host_config import linux_host_config
-from linux_host.lib.telegram_wrapper import telegram_send_message
-from linux_host.lib.utils import assert_linux, assert_sudo
+from linux_host.linux_host_lib.linux_host_config import linux_host_config
+from linux_host.linux_host_lib.telegram_wrapper import telegram_send_message
+from linux_host.linux_host_lib.utils import assert_linux, assert_sudo
 from shared_lib.get_version_shared import get_deployed_version
 
 

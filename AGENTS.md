@@ -11,11 +11,11 @@ Python packages:
   - `shared_lib/deploy_shared/` and `shared_lib/ssh_lib/` — deployment and SSH server setup helpers.
 - `linux_host/` — runtime code for Linux tile hosts.
   - Script: `linux_host/scripts/linux-host.py`
-  - Runtime library: `linux_host/lib/`
+  - Runtime library: `linux_host/linux_host_lib/`
   - Cron file: `linux_host/cron.d/ofm_linux_host`
 - `tilegen/` — runtime code for tile generation.
   - Script: `tilegen/scripts/tilegen.py`
-  - Runtime library: `tilegen/lib/`
+  - Runtime library: `tilegen/tilegen_lib/`
   - Cron file: `tilegen/cron.d/ofm_tilegen`
 - Deploy/debug scripts:
   - `linux_host/deploy_linux_host.py`
@@ -71,11 +71,11 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
 
 - Keep shared code in `shared_lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
 - Keep runtime package config local to each runtime package:
-  - `linux_host/lib/linux_host_config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
-  - `tilegen/lib/tilegen_config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
-  - deployment config and deployment helpers live in each package's `deploy_lib/`:
-    - `linux_host/deploy_lib/`
-    - `tilegen/deploy_lib/`
+  - `linux_host/linux_host_lib/linux_host_config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
+  - `tilegen/tilegen_lib/tilegen_config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
+  - deployment config and deployment helpers live in the runtime-specific deploy packages:
+    - `linux_host/deploy_linux_host/`
+    - `tilegen/deploy_tilegen/`
   - shared deployment helpers stay in `shared_lib/deploy_shared/`.
 - Use Click for CLIs.
 - Use ./lint.sh for linting and formatting.

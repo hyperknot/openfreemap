@@ -1,12 +1,12 @@
 import shutil
 
-from linux_host.lib.assets import download_assets
-from linux_host.lib.btrfs import download_area_version
-from linux_host.lib.linux_host_config import linux_host_config
-from linux_host.lib.mount import auto_mount, clean_up_mounts
-from linux_host.lib.nginx_config_gen import write_nginx_config
-from linux_host.lib.utils import assert_linux, assert_sudo
-from linux_host.lib.versions import get_remote_deployed_versions, write_version_files
+from linux_host.linux_host_lib.assets import download_assets
+from linux_host.linux_host_lib.btrfs import download_area_version
+from linux_host.linux_host_lib.linux_host_config import linux_host_config
+from linux_host.linux_host_lib.mount import auto_mount, clean_up_mounts
+from linux_host.linux_host_lib.nginx_config_gen import write_nginx_config
+from linux_host.linux_host_lib.utils import assert_linux, assert_sudo
+from linux_host.linux_host_lib.versions import get_remote_deployed_versions, write_version_files
 
 
 def full_sync(force=False):

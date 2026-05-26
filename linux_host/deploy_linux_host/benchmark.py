@@ -1,4 +1,4 @@
-from linux_host.deploy_lib.linux_host_deploy_config import linux_host_deploy_config
+from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
 from shared_lib.ssh_lib.apt import apt_get_install
 from shared_lib.ssh_lib.utils import exists, put
 

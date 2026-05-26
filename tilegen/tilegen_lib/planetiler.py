@@ -4,7 +4,7 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
-from tilegen.lib.tilegen_config import tilegen_config
+from tilegen.tilegen_lib.tilegen_config import tilegen_config
 
 from .btrfs import cleanup_folder
 
