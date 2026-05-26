@@ -3,7 +3,7 @@ from shared_lib.ssh_lib.utils import exists, sudo_cmd
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
-PLANETILER_COMMIT = 'cc769c'
+PLANETILER_COMMIT = 'f91cc19d'
 PLANETILER_PATH = f'{tilegen_deploy_config.planetiler_bin}/planetiler.jar'
 
 
