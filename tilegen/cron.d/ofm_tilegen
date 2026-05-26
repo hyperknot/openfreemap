@@ -11,7 +11,7 @@
 
 SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
-CMD="cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py"
+CMD="cd /data/ofm/src && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py"
 LOG_DIR=/data/ofm/tilegen/logs
 
 # --- Planet ---

@@ -62,7 +62,7 @@ Remote runtime commands should use the executable uv-shebang scripts, for exampl
 
 ```bash
 cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./linux_host/scripts/linux-host.py sync
-cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet
+cd /data/ofm/src && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet
 ```
 
 ## Code style

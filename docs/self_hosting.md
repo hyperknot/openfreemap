@@ -127,7 +127,7 @@ The same `--user`, `--port`, `SSH_PASSWD` and `SUDO_PASSWD` options from the lin
 Trigger a run manually over SSH:
 
 ```
-cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet --upload
+cd /data/ofm/src && ./tilegen/scripts/tilegen.py make-tiles planet --upload
 ```
 
 For a quick smoke test, use `monaco` instead of `planet`. It's recommended to use tmux or similar, as a full planet run can take days to complete.
