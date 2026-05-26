@@ -1,6 +1,6 @@
 import subprocess
 
-from tilegen.lib.config import config
+from tilegen.lib.tilegen_config import tilegen_config
 
 
 # Files that are uploaded individually before finalize_run_upload
@@ -18,7 +18,7 @@ def finalize_run_upload(run_dir, remote_dir):
     # create "done" file
     subprocess.run(
         ['rclone', 'touch', f'{remote_dir}/done'],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
     )
 
@@ -37,7 +37,7 @@ def upload_run_file(file, remote_dir):
             str(file),
             f'{remote_dir}/{file.name}',
         ],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
     )
 
@@ -59,7 +59,7 @@ def make_indexes_for_bucket(bucket):
             'files.txt',
             f'remote:{bucket}',
         ],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
         capture_output=True,
         text=True,
@@ -73,7 +73,7 @@ def make_indexes_for_bucket(bucket):
             'rcat',
             f'remote:{bucket}/files.txt',
         ],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
         input=index_str.encode(),
     )
@@ -89,7 +89,7 @@ def make_indexes_for_bucket(bucket):
             '--fast-list',
             f'remote:{bucket}',
         ],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
         capture_output=True,
         text=True,
@@ -103,7 +103,7 @@ def make_indexes_for_bucket(bucket):
             'rcat',
             f'remote:{bucket}/dirs.txt',
         ],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
         input=index_str.encode(),
     )
@@ -113,11 +113,11 @@ def set_version_on_bucket(area, version):
     print(f'setting version: {area} {version}')
     subprocess.run(
         [
-            config.rclone_bin,
+            tilegen_config.rclone_bin,
             'rcat',
             f'remote:ofm-assets/deployed_versions/{area}.txt',
         ],
-        env=dict(RCLONE_CONFIG=config.rclone_config),
+        env=dict(RCLONE_CONFIG=tilegen_config.rclone_config),
         check=True,
         input=version.strip().encode(),
     )

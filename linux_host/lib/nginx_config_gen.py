@@ -2,29 +2,29 @@ import subprocess
 import sys
 from pathlib import Path
 
-from linux_host.lib.config import config
+from linux_host.lib.linux_host_config import linux_host_config
 from linux_host.lib.utils import python_venv_executable
 
 
 def write_nginx_config():
     print('Writing nginx config')
 
-    if not config.mnt_dir.exists():
+    if not linux_host_config.mnt_dir.exists():
         sys.exit('  mount needs to be run first')
 
     # remove old configs
-    for file in config.nginx_sites_dir.glob('ofm-*.conf'):
+    for file in linux_host_config.nginx_sites_dir.glob('ofm-*.conf'):
         file.unlink()
 
     curl_help_text = ''
 
-    for domain_data in config.json_config['domains']:
+    for domain_data in linux_host_config.json_config['domains']:
         curl_help_text += process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    exclude_path = '/planet' if config.json_config.get('skip_planet') else '/monaco'
+    exclude_path = '/planet' if linux_host_config.json_config.get('skip_planet') else '/monaco'
     curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
 
     curl_help_joined = '\n'.join(curl_help_lines)
@@ -49,7 +49,7 @@ def process_domain(domain_data) -> str:
 def create_nginx_conf(domain_data: dict) -> str:
     dynamic_block_text, curl_help_text = dynamic_blocks(domain_data)
 
-    template = (config.nginx_templates / 'common.conf').read_text()
+    template = (linux_host_config.nginx_templates / 'common.conf').read_text()
 
     template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_text)
 
@@ -59,7 +59,7 @@ def create_nginx_conf(domain_data: dict) -> str:
     curl_help_text = curl_help_text.replace('__DOMAIN_SLUG__', domain_data['slug'])
     curl_help_text = curl_help_text.replace('__DOMAIN__', domain_data['domain'])
 
-    (config.nginx_sites_dir / f'ofm-{domain_data["slug"]}.conf').write_text(template)
+    (linux_host_config.nginx_sites_dir / f'ofm-{domain_data["slug"]}.conf').write_text(template)
     print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
 
     return curl_help_text
@@ -69,9 +69,9 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
     nginx_conf_text = ''
     curl_help_text = ''
 
-    help_area = 'monaco' if config.json_config.get('skip_planet') else 'planet'
+    help_area = 'monaco' if linux_host_config.json_config.get('skip_planet') else 'planet'
 
-    for subdir in config.mnt_dir.iterdir():
+    for subdir in linux_host_config.mnt_dir.iterdir():
         if not subdir.is_dir():
             continue
         area, version = subdir.name.split('-')
@@ -100,12 +100,12 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
         # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
         curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
 
-    nginx_conf_text += '\n' + (config.nginx_templates / 'static_blocks.conf').read_text()
+    nginx_conf_text += '\n' + (linux_host_config.nginx_templates / 'static_blocks.conf').read_text()
     return nginx_conf_text, curl_help_text
 
 
 def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_data: dict) -> str:
-    run_dir = config.runs_dir / area / version
+    run_dir = linux_host_config.runs_dir / area / version
     if not run_dir.is_dir():
         print(f"  {run_dir} doesn't exist, skipping")
         return ''
@@ -122,7 +122,7 @@ def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_da
     subprocess.run(
         [
             python_venv_executable(),
-            config.scripts_dir / 'metadata_to_tilejson.py',
+            linux_host_config.scripts_dir / 'metadata_to_tilejson.py',
             '--minify',
             metadata_path,
             tilejson_path,
@@ -170,7 +170,7 @@ def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_da
 def create_latest_locations(*, domain_data: dict) -> str:
     location_str = ''
 
-    local_version_files = config.deployed_versions_dir.glob('*.txt')
+    local_version_files = linux_host_config.deployed_versions_dir.glob('*.txt')
 
     for file in local_version_files:
         area = file.stem
@@ -180,7 +180,7 @@ def create_latest_locations(*, domain_data: dict) -> str:
         print(f'  linking latest version for {area}: {version}')
 
         # checking runs dir
-        run_dir = config.runs_dir / area / version
+        run_dir = linux_host_config.runs_dir / area / version
         tilejson_path = run_dir / f'tilejson-{domain_data["slug"]}.json'
         if not tilejson_path.is_file():
             print(
@@ -268,7 +268,7 @@ def create_latest_locations(*, domain_data: dict) -> str:
 #             '--webroot-path=/data/nginx/acme-challenges',
 #             '--noninteractive',
 #             '-m',
-#             config.ofm_config['letsencrypt_email'],
+#             linux_host_config.ofm_config['letsencrypt_email'],
 #             '--agree-tos',
 #             '--cert-name=ofm_direct',
 #             # '--staging',

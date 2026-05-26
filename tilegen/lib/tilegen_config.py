@@ -2,7 +2,7 @@ import subprocess
 from pathlib import Path
 
 
-class Configuration:
+class TilegenConfig:
     areas = ['planet', 'monaco']
 
     repo_root = Path(__file__).resolve().parents[2]
@@ -21,4 +21,4 @@ class Configuration:
     rclone_bin = subprocess.run(['which', 'rclone'], capture_output=True, text=True).stdout.strip()
 
 
-config = Configuration()
+tilegen_config = TilegenConfig()

@@ -2,7 +2,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from linux_host.lib.config import config
+from linux_host.lib.linux_host_config import linux_host_config
 from linux_host.lib.utils import assert_linux, assert_sudo
 
 
@@ -17,10 +17,10 @@ def auto_mount():
     assert_linux()
     assert_sudo()
 
-    if not config.runs_dir.exists():
+    if not linux_host_config.runs_dir.exists():
         sys.exit('  download-btrfs needs to be run first')
 
-    # clean_up_mounts(config.mnt_dir)  # disabling, as it can be in use before the nginx sync works
+    # clean_up_mounts(linux_host_config.mnt_dir)  # disabling, as it can be in use before the nginx sync works
     create_fstab()
 
     print('  running mount -a')
@@ -32,7 +32,7 @@ def create_fstab():
     fstab_new = []
 
     for area in ['planet', 'monaco']:
-        area_dir = (config.runs_dir / area).resolve()
+        area_dir = (linux_host_config.runs_dir / area).resolve()
         if not area_dir.exists():
             continue
 
@@ -44,14 +44,14 @@ def create_fstab():
                 print(f"  {btrfs_file} doesn't exist, skipping")
                 continue
 
-            mnt_folder = config.mnt_dir / f'{area}-{version_str}'
+            mnt_folder = linux_host_config.mnt_dir / f'{area}-{version_str}'
             mnt_folder.mkdir(exist_ok=True, parents=True)
 
             fstab_new.append(f'{btrfs_file} {mnt_folder} btrfs loop,ro 0 0\n')
             print(f'  created fstab entry for {mnt_folder}')
 
     with open('/etc/fstab') as fp:
-        fstab_orig = [l for l in fp.readlines() if f'{config.mnt_dir}/' not in l]
+        fstab_orig = [l for l in fp.readlines() if f'{linux_host_config.mnt_dir}/' not in l]
 
     with open('/etc/fstab', 'w') as fp:
         fp.writelines(fstab_orig + fstab_new)

@@ -4,7 +4,7 @@ from pathlib import Path
 from lib.linux_host_config import read_linux_host_config
 
 
-class Configuration:
+class LinuxHostConfig:
     areas = ['planet', 'monaco']
 
     repo_root = Path(__file__).resolve().parents[2]
@@ -35,4 +35,4 @@ class Configuration:
     deployed_versions_dir = linux_host_config_dir / 'deployed_versions'
 
 
-config = Configuration()
+linux_host_config = LinuxHostConfig()

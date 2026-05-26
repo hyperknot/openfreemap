@@ -3,7 +3,8 @@ import click
 
 from lib.deploy.cli_helpers import common_options, get_connection
 from lib.deploy.tasks_shared import prepare_shared
-from lib.deploy.tasks_tilegen import prepare_tilegen
+from tilegen.deploy_lib.tasks_tilegen import prepare_tilegen
+from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
 
 
 @click.group()
@@ -32,7 +33,7 @@ def tilegen(
     if reinstall:
         c.sudo('rm -rf /data/ofm')
 
-    prepare_shared(c)
+    prepare_shared(c, tilegen_deploy_config)
     prepare_tilegen(c, enable_cron=cron)
 
 

@@ -4,16 +4,17 @@ import json
 import click
 
 from lib.deploy.cli_helpers import common_options, get_connection
-from lib.deploy.tasks_linux_host import (
+from lib.deploy.tasks_shared import prepare_shared
+from lib.get_version_shared import get_deployed_version
+from lib.pycurl import pycurl_get
+from lib.ssh_lib.utils import get_ip_from_ssh_alias
+from linux_host.deploy_lib.linux_host_deploy_config import linux_host_deploy_config
+from linux_host.deploy_lib.tasks_linux_host import (
     install_linux_host_cron,
     prepare_linux_host,
     read_jsonc,
     run_linux_host_sync,
 )
-from lib.deploy.tasks_shared import prepare_shared
-from lib.get_version_shared import get_deployed_version
-from lib.pycurl import pycurl_get
-from lib.ssh_lib.utils import get_ip_from_ssh_alias
 
 
 @click.group()
@@ -29,7 +30,7 @@ def init_static(hostname, user, port, noninteractive):
 
     c = get_connection(hostname, user, port)
 
-    prepare_shared(c)
+    prepare_shared(c, linux_host_deploy_config)
     prepare_linux_host(c)
 
     run_linux_host_sync(c)
@@ -50,7 +51,7 @@ def init_autoupdate(hostname, user, port, noninteractive, sync):
 
     c.sudo('rm -f /etc/cron.d/ofm_linux_host')
 
-    prepare_shared(c)
+    prepare_shared(c, linux_host_deploy_config)
     prepare_linux_host(c)
 
     # if --sync, run manual sync
@@ -90,7 +91,7 @@ def check_server_health(hostname: str = None) -> dict:
     Check health of servers by verifying deployed version matches expected version.
 
     Args:
-        hostname: Optional hostname to check. If None, checks all servers in config.
+        hostname: Optional hostname to check. If None, checks all servers in linux_host_config.
 
     Returns:
         dict: Results for each server with structure:

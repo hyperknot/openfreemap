@@ -2,14 +2,12 @@ import os
 from pathlib import Path
 
 
-class Configuration:
-    repo_root = Path(__file__).resolve().parents[1]
+class LinuxHostDeployConfig:
+    repo_root = Path(__file__).resolve().parents[2]
 
-    local_assets_dir = Path(__file__).parent / 'assets'
     local_config_dir = repo_root / 'config'
     local_linux_host_config_dir = local_config_dir / 'linux_host'
     local_linux_host_dir = repo_root / 'linux_host'
-    local_tilegen_dir = repo_root / 'tilegen'
 
     ENV = os.getenv('ENV')
     if not ENV:
@@ -24,12 +22,8 @@ class Configuration:
     source_dir = f'{ofm_dir}/src'
     remote_config = f'{ofm_dir}/config'
     remote_linux_host_config = f'{remote_config}/linux_host'
-    remote_tilegen_config = f'{remote_config}/tilegen'
 
     linux_host_dir = f'{ofm_dir}/linux_host'
-    tilegen_dir = f'{ofm_dir}/tilegen'
-    planetiler_src = f'{tilegen_dir}/planetiler_src'
-    planetiler_bin = f'{tilegen_dir}/planetiler'
 
 
-config = Configuration()
+linux_host_deploy_config = LinuxHostDeployConfig()

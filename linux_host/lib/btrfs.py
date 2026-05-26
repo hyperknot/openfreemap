@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 from lib.get_version_shared import get_versions_for_area
-from linux_host.lib.config import config
+from linux_host.lib.linux_host_config import linux_host_config
 from linux_host.lib.telegram_wrapper import telegram_send_message
 from linux_host.lib.utils import download_file_aria2, get_remote_file_size
 
@@ -16,8 +16,8 @@ def download_area_version(area: str, version: str) -> bool:
     "deployed" version means to read the currently deployed version string from the config dir
     """
 
-    if area not in config.areas:
-        sys.exit(f'  Please specify area: {config.areas}')
+    if area not in linux_host_config.areas:
+        sys.exit(f'  Please specify area: {linux_host_config.areas}')
 
     try:
         versions = get_versions_for_area(area)
@@ -38,7 +38,9 @@ def download_area_version(area: str, version: str) -> bool:
     # deployed version
     elif version == 'deployed':
         try:
-            selected_version = (config.deployed_versions_dir / f'{area}.txt').read_text().strip()
+            selected_version = (
+                (linux_host_config.deployed_versions_dir / f'{area}.txt').read_text().strip()
+            )
         except Exception:
             return False
 
@@ -66,13 +68,13 @@ def download_and_extract_btrfs(area: str, version: str) -> bool:
 
     print(f'Downloading btrfs: {area} {version}')
 
-    version_dir = config.runs_dir / area / version
+    version_dir = linux_host_config.runs_dir / area / version
     btrfs_file = version_dir / 'tiles.btrfs'
     if btrfs_file.exists():
         print('  file exists, skipping download')
         return False
 
-    temp_dir = config.runs_dir / '_tmp'
+    temp_dir = linux_host_config.runs_dir / '_tmp'
     shutil.rmtree(temp_dir, ignore_errors=True)
     temp_dir.mkdir(parents=True)
 

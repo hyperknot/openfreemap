@@ -4,17 +4,17 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
-from tilegen.lib.config import config
+from tilegen.lib.tilegen_config import tilegen_config
 
 from .btrfs import cleanup_folder
 
 
 def run_planetiler(area: str) -> Path:
-    assert area in config.areas
+    assert area in tilegen_config.areas
 
     date = datetime.now(UTC).strftime('%Y%m%d_%H%M%S')
 
-    area_dir = config.runs_dir / area
+    area_dir = tilegen_config.runs_dir / area
 
     # delete all previous runs for the given area
     if area_dir.is_dir():
@@ -38,7 +38,7 @@ def run_planetiler(area: str) -> Path:
         'java',
         f'-Xmx{java_memory_gb}g',
         '-jar',
-        config.planetiler_path,
+        tilegen_config.planetiler_path,
         f'--area={area}',
         '--download',
         '--download-threads=10',

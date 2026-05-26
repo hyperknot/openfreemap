@@ -2,7 +2,7 @@ import shutil
 
 from linux_host.lib.assets import download_assets
 from linux_host.lib.btrfs import download_area_version
-from linux_host.lib.config import config
+from linux_host.lib.linux_host_config import linux_host_config
 from linux_host.lib.mount import auto_mount, clean_up_mounts
 from linux_host.lib.nginx_config_gen import write_nginx_config
 from linux_host.lib.utils import assert_linux, assert_sudo
@@ -20,19 +20,19 @@ def full_sync(force=False):
 
     # if it's a manual/forced run, we clean up old/deleted mounts
     if force:
-        clean_up_mounts(config.mnt_dir)
+        clean_up_mounts(linux_host_config.mnt_dir)
 
     remote_versions = {
         area: version
         for area, version in get_remote_deployed_versions().items()
-        if area != 'planet' or not config.json_config.get('skip_planet')
+        if area != 'planet' or not linux_host_config.json_config.get('skip_planet')
     }
 
     assets_changed = download_assets()
 
     btrfs_downloaded = False
-    for area in config.areas:
-        if area == 'planet' and config.json_config.get('skip_planet'):
+    for area in linux_host_config.areas:
+        if area == 'planet' and linux_host_config.json_config.get('skip_planet'):
             continue
 
         deployed_version = remote_versions.get(area)
@@ -49,7 +49,7 @@ def full_sync(force=False):
 
         write_nginx_config()
 
-        clean_up_mounts(config.mnt_dir)
+        clean_up_mounts(linux_host_config.mnt_dir)
 
 
 def auto_clean_btrfs():
@@ -64,8 +64,8 @@ def auto_clean_btrfs():
 
     print('Running auto clean btrfs')
 
-    for area in config.areas:
-        area_dir = config.runs_dir / area
+    for area in linux_host_config.areas:
+        area_dir = linux_host_config.runs_dir / area
         if not area_dir.is_dir():
             continue
 
@@ -79,9 +79,9 @@ def auto_clean_btrfs():
 
         # add deployed version
         try:
-            deployed_version_file = config.deployed_versions_dir / f'{area}.txt'
+            deployed_version_file = linux_host_config.deployed_versions_dir / f'{area}.txt'
             deployed_version = deployed_version_file.read_text().strip()
-            if (config.runs_dir / area / deployed_version).exists():
+            if (linux_host_config.runs_dir / area / deployed_version).exists():
                 versions_to_keep.add(deployed_version)
         except Exception:
             pass
@@ -99,5 +99,5 @@ def auto_clean_btrfs():
             # while the mount is still being used.
             # We delete the disk image, update nginx config and only then unmount the /mnt dir.
             print(f'  removing runs for {area}: {version}')
-            version_dir = config.runs_dir / area / version
+            version_dir = linux_host_config.runs_dir / area / version
             shutil.rmtree(version_dir)

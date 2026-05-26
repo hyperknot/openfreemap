@@ -1,18 +1,18 @@
-from lib.config import config
-from lib.deploy.planetiler import install_planetiler
 from lib.ssh_lib.utils import put
+from tilegen.deploy_lib.planetiler import install_planetiler
+from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
 
 
 def prepare_tilegen(c, *, enable_cron):
     c.sudo('rm -f /etc/cron.d/ofm_tilegen')
     install_planetiler(c)
 
-    rclone_config = config.local_config_dir / 'tilegen' / 'rclone.conf'
+    rclone_config = tilegen_deploy_config.local_config_dir / 'tilegen' / 'rclone.conf'
     if rclone_config.exists():
         put(
             c,
             rclone_config,
-            f'{config.remote_tilegen_config}/rclone.conf',
+            f'{tilegen_deploy_config.remote_tilegen_config}/rclone.conf',
             permissions='600',
             user='ofm',
             create_parent_dir=True,
@@ -26,4 +26,4 @@ def prepare_tilegen(c, *, enable_cron):
 
 
 def install_tilegen_cron(c):
-    put(c, config.local_tilegen_dir / 'cron.d' / 'ofm_tilegen', '/etc/cron.d/')
+    put(c, tilegen_deploy_config.local_tilegen_dir / 'cron.d' / 'ofm_tilegen', '/etc/cron.d/')

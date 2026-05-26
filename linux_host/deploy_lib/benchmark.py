@@ -1,6 +1,6 @@
-from lib.config import config
 from lib.ssh_lib.apt import apt_get_install
 from lib.ssh_lib.utils import exists, put
+from linux_host.deploy_lib.linux_host_deploy_config import linux_host_deploy_config
 
 
 def c1000k(c):
@@ -21,4 +21,8 @@ def c1000k(c):
 def wrk(c):
     apt_get_install(c, 'wrk')
     c.sudo('mkdir -p /data/ofm/benchmark')
-    put(c, config.repo_root / 'docs' / 'benchmark' / 'wrk_custom_list.lua', '/data/ofm/benchmark')
+    put(
+        c,
+        linux_host_deploy_config.repo_root / 'docs' / 'benchmark' / 'wrk_custom_list.lua',
+        '/data/ofm/benchmark',
+    )

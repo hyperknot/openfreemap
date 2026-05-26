@@ -1,10 +1,9 @@
-from lib.config import config
 from lib.ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from lib.ssh_lib.rclone import rclone
 from lib.ssh_lib.utils import add_user, enable_sudo, put_dir_tarball, sudo_cmd
 
 
-def prepare_shared(c):
+def prepare_shared(c, deploy_config):
     # Creates ofm user with uid=2000, disabled password and nopasswd sudo.
     add_user(c, 'ofm', uid=2000, system=False)
     enable_sudo(c, 'ofm', nopasswd=True)
@@ -13,19 +12,19 @@ def prepare_shared(c):
     pkg_base(c)
     rclone(c)
 
-    c.sudo(f'mkdir -p {config.remote_config}')
-    c.sudo(f'chown ofm:ofm {config.remote_config}')
-    c.sudo(f'chown ofm:ofm {config.ofm_dir}')
+    c.sudo(f'mkdir -p {deploy_config.remote_config}')
+    c.sudo(f'chown ofm:ofm {deploy_config.remote_config}')
+    c.sudo(f'chown ofm:ofm {deploy_config.ofm_dir}')
 
-    upload_source(c)
-    prepare_uv(c)
+    upload_source(c, deploy_config)
+    prepare_uv(c, deploy_config)
 
 
-def upload_source(c):
+def upload_source(c, deploy_config):
     put_dir_tarball(
         c,
-        config.repo_root,
-        config.source_dir,
+        deploy_config.repo_root,
+        deploy_config.source_dir,
         user='ofm',
         exclude_set={
             '*.egg-info',
@@ -48,9 +47,9 @@ def upload_source(c):
     )
 
 
-def prepare_uv(c):
+def prepare_uv(c, deploy_config):
     sudo_cmd(
         c, 'command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh', user='ofm'
     )
     c.sudo('test ! -x /home/ofm/.local/bin/uv || ln -sf /home/ofm/.local/bin/uv /usr/local/bin/uv')
-    sudo_cmd(c, 'uv sync', user='ofm', cwd=config.source_dir)
+    sudo_cmd(c, 'uv sync', user='ofm', cwd=deploy_config.source_dir)

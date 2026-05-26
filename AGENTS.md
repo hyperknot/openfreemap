@@ -71,8 +71,11 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
 
 - Keep shared code in `lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
 - Keep runtime package config local to each runtime package:
-  - `linux_host/lib/config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
-  - `tilegen/lib/config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
-  - deployment config in `lib/config.py`
+  - `linux_host/lib/linux_host_config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
+  - `tilegen/lib/tilegen_config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
+  - deployment config and deployment helpers live in each package's `deploy_lib/`:
+    - `linux_host/deploy_lib/`
+    - `tilegen/deploy_lib/`
+  - shared deployment helpers stay in `lib/deploy/`.
 - Use Click for CLIs.
 - Use ./lint.sh for linting and formatting.
