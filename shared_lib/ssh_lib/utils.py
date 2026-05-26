@@ -209,6 +209,10 @@ def random_string(length):
     return ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
+def get_arch(c):
+    return c.run('uname -m', hide=True).stdout.strip()
+
+
 def ubuntu_release(c):
     return int(c.run('lsb_release -rs').stdout.strip()[:2])
 
