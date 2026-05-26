@@ -4,13 +4,13 @@ from datetime import UTC, datetime
 
 import click
 
-from lib.get_version_shared import get_versions_for_area
 from linux_host.lib.assets import download_assets
 from linux_host.lib.btrfs import download_area_version
 from linux_host.lib.mount import auto_mount
 from linux_host.lib.nginx_config_gen import write_nginx_config
 from linux_host.lib.sync import auto_clean_btrfs, full_sync
 from linux_host.lib.versions import fetch_version_files
+from shared_lib.get_version_shared import get_versions_for_area
 
 
 now = datetime.now(UTC)

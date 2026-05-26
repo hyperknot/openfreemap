@@ -19,5 +19,5 @@ requires = ["uv_build"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = ["lib", "linux_host", "tilegen"]
+module-name = ["shared_lib", "linux_host", "tilegen"]
 module-root = ""

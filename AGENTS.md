@@ -6,9 +6,9 @@ This is a single Python uv project plus the website frontend.
 
 Python packages:
 
-- `lib/` — shared Python code.
-  - `lib/get_version_shared.py` — shared deployed/version helpers.
-  - `lib/deploy/` and `lib/ssh_lib/` — deployment and SSH server setup helpers.
+- `shared_lib/` — shared Python code.
+  - `shared_lib/get_version_shared.py` — shared deployed/version helpers.
+  - `shared_lib/deploy/` and `shared_lib/ssh_lib/` — deployment and SSH server setup helpers.
 - `linux_host/` — runtime code for Linux tile hosts.
   - Script: `linux_host/scripts/linux-host.py`
   - Runtime library: `linux_host/lib/`
@@ -69,13 +69,13 @@ cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py mak
 
 - Prefer simple, direct code over abstractions.
 
-- Keep shared code in `lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
+- Keep shared code in `shared_lib/`; do not duplicate helpers across `linux_host` and `tilegen`.
 - Keep runtime package config local to each runtime package:
   - `linux_host/lib/linux_host_config.py` reads `config/linux_host` locally and `/data/ofm/config/linux_host` remotely
   - `tilegen/lib/tilegen_config.py` reads `config/tilegen` locally and `/data/ofm/config/tilegen` remotely
   - deployment config and deployment helpers live in each package's `deploy_lib/`:
     - `linux_host/deploy_lib/`
     - `tilegen/deploy_lib/`
-  - shared deployment helpers stay in `lib/deploy/`.
+  - shared deployment helpers stay in `shared_lib/deploy/`.
 - Use Click for CLIs.
 - Use ./lint.sh for linting and formatting.

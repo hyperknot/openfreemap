@@ -5,7 +5,7 @@ from pathlib import Path
 import json5
 from jsonschema import ValidationError, validate
 
-from lib.slugify import slugify
+from shared_lib.slugify import slugify
 
 
 def read_linux_host_config(config_path: Path, *, validate_schema: bool = False) -> dict:

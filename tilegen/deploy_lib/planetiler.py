@@ -1,5 +1,5 @@
-from lib.ssh_lib.java import java
-from lib.ssh_lib.utils import exists, sudo_cmd
+from shared_lib.ssh_lib.java import java
+from shared_lib.ssh_lib.utils import exists, sudo_cmd
 from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
 
 

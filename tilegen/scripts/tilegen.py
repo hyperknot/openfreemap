@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 
 import click
 
-from lib.get_version_shared import get_deployed_version, get_versions_for_area
+from shared_lib.get_version_shared import get_deployed_version, get_versions_for_area
 from tilegen.lib.btrfs import append_sha256sum, gzip_btrfs, make_btrfs, move_logs
 from tilegen.lib.mbtiles import update_mbtiles_metadata
 from tilegen.lib.planetiler import run_planetiler

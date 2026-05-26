@@ -49,7 +49,7 @@ lint.ignore = [
 quote-style = "single"
 
 [lint.isort]
-known-first-party = ["lib", "linux_host", "tilegen"]
+known-first-party = ["shared_lib", "linux_host", "tilegen"]
 lines-after-imports = 2
 
 [lint.flake8-comprehensions]

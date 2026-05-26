@@ -1,7 +1,7 @@
 import socket
 from pathlib import Path
 
-from lib.linux_host_config import read_linux_host_config
+from shared_lib.linux_host_config import read_linux_host_config
 
 
 class LinuxHostConfig:

@@ -2,10 +2,10 @@ import shutil
 import subprocess
 import sys
 
-from lib.get_version_shared import get_versions_for_area
 from linux_host.lib.linux_host_config import linux_host_config
 from linux_host.lib.telegram_wrapper import telegram_send_message
 from linux_host.lib.utils import download_file_aria2, get_remote_file_size
+from shared_lib.get_version_shared import get_versions_for_area
 
 
 def download_area_version(area: str, version: str) -> bool:

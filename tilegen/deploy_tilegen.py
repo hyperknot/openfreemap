@@ -1,8 +1,8 @@
 #!/usr/bin/env -S uv run python -P
 import click
 
-from lib.deploy.cli_helpers import common_options, get_connection
-from lib.deploy.tasks_shared import prepare_shared
+from shared_lib.deploy.cli_helpers import common_options, get_connection
+from shared_lib.deploy.tasks_shared import prepare_shared
 from tilegen.deploy_lib.tasks_tilegen import prepare_tilegen
 from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
 

@@ -1,4 +1,4 @@
-from lib.ssh_lib.utils import put
+from shared_lib.ssh_lib.utils import put
 from tilegen.deploy_lib.planetiler import install_planetiler
 from tilegen.deploy_lib.tilegen_deploy_config import tilegen_deploy_config
 

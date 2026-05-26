@@ -1,6 +1,6 @@
-from lib.ssh_lib.apt import apt_get_install
-from lib.ssh_lib.utils import exists, put
 from linux_host.deploy_lib.linux_host_deploy_config import linux_host_deploy_config
+from shared_lib.ssh_lib.apt import apt_get_install
+from shared_lib.ssh_lib.utils import exists, put
 
 
 def c1000k(c):
