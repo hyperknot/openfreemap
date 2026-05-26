@@ -10,27 +10,27 @@
 # - We set the deployed planet version three days later, on Wednesday at 08:00 UTC.
 
 SHELL=/bin/bash
-PATH=/usr/local/bin:/usr/bin:/bin
-CMD="cd /data/ofm/src && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py"
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SRC_DIR=/data/ofm/src
 LOG_DIR=/data/ofm/tilegen/logs
 
 # --- Planet ---
 
 # Every Sunday at 08:00, build and upload planet tiles.
-0 8 * * 0 ofm     $CMD make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
+0 8 * * 0 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
 
 # Every Wednesday at 08:00, set the deployed planet version.
-0 8 * * 3 ofm     $CMD set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
+0 8 * * 3 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
 
 # --- Monaco ---
 
 # Every day at 03:00, build and upload Monaco tiles.
-0 3 * * * ofm     $CMD make-tiles monaco --upload >> $LOG_DIR/make_tiles_monaco.log 2>&1
+0 3 * * * ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles monaco --upload >> $LOG_DIR/make_tiles_monaco.log 2>&1
 
 # Every day at 01:00, set the deployed Monaco version.
-0 1 * * * ofm     $CMD set-version monaco >> $LOG_DIR/set_version_monaco.log 2>&1
+0 1 * * * ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py set-version monaco >> $LOG_DIR/set_version_monaco.log 2>&1
 
 # --- Utils ---
 
 # Every hour, on the hour, rebuild bucket indexes.
-0 * * * * ofm     $CMD make-indexes >> $LOG_DIR/make_indexes.log 2>&1
+0 * * * * ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-indexes >> $LOG_DIR/make_indexes.log 2>&1
