@@ -10,9 +10,9 @@ class TilegenConfig:
     repo_root: Path = Path(__file__).resolve().parents[2]
 
     tilegen_dir: Path = Path('/data/ofm/tilegen')
-    planetiler_bin: Path = tilegen_dir / 'planetiler'
+    planetiler_bin: Path = tilegen_dir / 'planetiler_bin'
     planetiler_path: Path = planetiler_bin / 'planetiler.jar'
-    pmtiles_bin: Path = tilegen_dir / 'pmtiles'
+    pmtiles_bin: Path = tilegen_dir / 'pmtiles_bin'
     pmtiles_path: Path = pmtiles_bin / 'pmtiles'
     runs_dir: Path = tilegen_dir / 'runs'
 
