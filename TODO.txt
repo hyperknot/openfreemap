@@ -51,3 +51,5 @@ sudo logrotate -vf /etc/logrotate.conf
 }
 
 ---
+
+align cadence with OFM publish dates
