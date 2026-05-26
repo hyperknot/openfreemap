@@ -9,8 +9,7 @@ from .utils import (
 )
 
 
-JAVA_VER = 24
-ADOPTIUM_REPO_NAME = 'adoptium'
+JAVA_VER = 25
 
 
 def java(c):
@@ -22,7 +21,7 @@ def java(c):
 
     setup_apt_repository(
         c,
-        repo_name=ADOPTIUM_REPO_NAME,
+        repo_name='adoptium',
         key_url='https://packages.adoptium.net/artifactory/api/gpg/key/public',
         repo_url='https://packages.adoptium.net/artifactory/deb',
         suite=codename,
