@@ -2,10 +2,9 @@ from pathlib import Path
 
 
 class TilegenDeployConfig:
-    repo_root = Path(__file__).resolve().parents[2]
-
-    local_config_dir = repo_root / 'config'
-    local_tilegen_dir = repo_root / 'tilegen'
+    local_repo_root = Path(__file__).resolve().parents[2]
+    local_config_dir = local_repo_root / 'config'
+    local_tilegen_dir = local_repo_root / 'tilegen'
 
     # Remote paths (always forward / on Linux - not using pathlib)
     remote_ofm_dir = '/data/ofm'
