@@ -1,5 +1,3 @@
-disable transliteration
-
 
 nginx acme
 
@@ -52,4 +50,5 @@ sudo logrotate -vf /etc/logrotate.conf
 
 ---
 
-align cadence with OFM publish dates
+todo later:
+disable DONE file, use shasums

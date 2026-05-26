@@ -15,6 +15,7 @@ from tilegen.tilegen_lib.rclone import (
     set_version_on_bucket,
     upload_run_file,
 )
+from tilegen.tilegen_lib.tilegen_config import tilegen_config
 
 
 now = datetime.now(UTC)
@@ -36,6 +37,9 @@ def make_tiles(area, upload):
     """
 
     print(f'---\n{now}\nStarting make-tiles {area} upload: {upload}')
+
+    if upload and not tilegen_config.rclone_config.exists():
+        raise click.ClickException(f'rclone config not found: {tilegen_config.rclone_config}')
 
     run_folder = run_planetiler(area)
     remote_dir = f'remote:ofm-btrfs/areas/{area}/{run_folder.name}'
