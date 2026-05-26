@@ -8,15 +8,15 @@ class TilegenDeployConfig:
     local_tilegen_dir = repo_root / 'tilegen'
 
     # Remote paths (always forward / on Linux - not using pathlib)
-    ofm_dir = '/data/ofm'
-    source_dir = f'{ofm_dir}/src'
-    remote_config = f'{ofm_dir}/config'
-    remote_tilegen_config = f'{remote_config}/tilegen'
+    remote_ofm_dir = '/data/ofm'
+    remote_source_dir = f'{remote_ofm_dir}/src'
+    remote_config_dir = f'{remote_ofm_dir}/config'
+    remote_tilegen_config = f'{remote_config_dir}/tilegen'
 
-    tilegen_dir = f'{ofm_dir}/tilegen'
-    planetiler_src = f'{tilegen_dir}/planetiler_src'
-    planetiler_bin = f'{tilegen_dir}/planetiler'
-    pmtiles_bin = f'{tilegen_dir}/pmtiles'
+    remote_tilegen_bin = f'{remote_ofm_dir}/tilegen'
+    remote_planetiler_src = f'{remote_tilegen_bin}/planetiler_src'
+    remote_planetiler_bin = f'{remote_tilegen_bin}/planetiler'
+    remote_pmtiles_bin = f'{remote_tilegen_bin}/pmtiles'
 
 
 tilegen_deploy_config = TilegenDeployConfig()

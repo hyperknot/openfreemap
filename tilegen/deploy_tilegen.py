@@ -7,16 +7,11 @@ from tilegen.deploy_tilegen.tasks_tilegen import prepare_tilegen
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
-@click.group()
-def cli():
-    pass
-
-
-@cli.command()
+@click.command()
 @common_options
 @click.option('--cron', is_flag=True, help='Enable cron task')
 @click.option('--reinstall', is_flag=True, help='Reinstall everything in /data/ofm folder')
-def tilegen(
+def cli(
     hostname,
     user,
     port,
@@ -34,7 +29,7 @@ def tilegen(
         c.sudo('rm -rf /data/ofm')
 
     prepare_shared(c, tilegen_deploy_config)
-    prepare_tilegen(c, enable_cron=cron)
+    # prepare_tilegen(c, enable_cron=cron)
 
 
 if __name__ == '__main__':
