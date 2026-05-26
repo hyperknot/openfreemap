@@ -8,12 +8,12 @@ def python_uv(c, install_python_ver=None):
     """Install Python using uv package manager."""
 
     # Clean up old root-only install
-    c.run('rm -f /root/.local/bin/uv /root/.local/bin/uvx', warn=True)
+    c.sudo('rm -f /root/.local/bin/uv /root/.local/bin/uvx', warn=True)
 
     # Install uv globally so all users can access it
     if not exists(c, f'{UV_BIN}/uv'):
-        c.run(
-            f'curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="{UV_BIN}" sh'
+        c.sudo(
+            f"env UV_UNMANAGED_INSTALL='{UV_BIN}' sh -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'"
         )
 
     # Install Python using uv
