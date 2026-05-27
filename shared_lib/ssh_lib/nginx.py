@@ -27,6 +27,7 @@ def nginx(c: Connection) -> None:
     c.sudo('rm -rf /data/nginx/logs')
     c.sudo('mkdir -p /data/nginx/logs')
 
+    c.sudo('rm -rf /data/nginx/sites')
     c.sudo('mkdir -p /data/nginx/sites')
 
     # ACME module state (account keys, issued certs, order bookkeeping)

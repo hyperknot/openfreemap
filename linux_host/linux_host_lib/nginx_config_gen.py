@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,11 @@ def write_nginx_config():
     # remove old configs
     for file in linux_host_config.nginx_sites_dir.glob('ofm-*.conf'):
         file.unlink()
+    acme_config_path = Path('/data/nginx/config/ofm-acme.conf')
+    if acme_config_path.exists():
+        acme_config_path.unlink()
+
+    write_acme_config()
 
     curl_help_text = ''
 
@@ -24,6 +30,7 @@ def write_nginx_config():
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
+    warm_up_letsencrypt_certs()
 
     exclude_path = '/planet' if linux_host_config.skip_planet else '/monaco'
     curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
@@ -32,17 +39,87 @@ def write_nginx_config():
     print(f'test with:\n{curl_help_joined}')
 
 
+def write_acme_config() -> None:
+    domains = letsencrypt_domains()
+    if not domains:
+        return
+
+    blocks = [
+        'resolver 1.1.1.1 8.8.8.8 ipv6=off;',
+        'acme_shared_zone zone=ofm_acme:1M;',
+    ]
+    for domain_data in domains:
+        blocks.append(
+            f"""
+acme_issuer ofm_{domain_data['slug']} {{
+    uri https://acme-v02.api.letsencrypt.org/directory;
+    contact mailto:{domain_data['cert']['email']};
+    state_path /data/nginx/acme/{domain_data['slug']};
+    accept_terms_of_service;
+}}""".strip()
+        )
+
+    Path('/data/nginx/config/ofm-acme.conf').write_text('\n\n'.join(blocks) + '\n')
+
+
+def warm_up_letsencrypt_certs() -> None:
+    reload_needed = False
+
+    for domain_data in letsencrypt_domains():
+        if has_letsencrypt_cert(domain_data):
+            continue
+
+        print(f'  requesting letsencrypt certificate: {domain_data["domain"]}')
+        subprocess.run(
+            [
+                'curl',
+                '-kfsS',
+                '--max-time',
+                '10',
+                '--resolve',
+                f'{domain_data["domain"]}:443:127.0.0.1',
+                f'https://{domain_data["domain"]}/',
+                '-o',
+                '/dev/null',
+            ],
+            check=False,
+        )
+
+        for _ in range(30):
+            if has_letsencrypt_cert(domain_data):
+                print(f'  letsencrypt certificate ready: {domain_data["domain"]}')
+                reload_needed = True
+                break
+            time.sleep(1)
+        else:
+            print(f'  letsencrypt certificate not ready yet: {domain_data["domain"]}')
+
+    if reload_needed:
+        subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
+
+
+def letsencrypt_domains() -> list[dict[str, Any]]:
+    return [
+        domain_data
+        for domain_data in linux_host_config.domains
+        if domain_data['cert']['type'] == 'letsencrypt'
+    ]
+
+
+def has_letsencrypt_cert(domain_data: dict[str, Any]) -> bool:
+    return any(Path(f'/data/nginx/acme/{domain_data["slug"]}').glob('*.crt'))
+
+
 def process_domain(domain_data: dict[str, Any]) -> str:
-    if domain_data['cert']['type'] == 'upload':
+    cert_type = domain_data['cert']['type']
+    if cert_type == 'upload':
         cert_file = Path(f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert')
         key_file = Path(f'/data/nginx/certs/ofm-{domain_data["slug"]}.key')
 
         if not cert_file.is_file() or not key_file.is_file():
             sys.exit(f'  cert or key file does not exist: {cert_file} {key_file}')
 
-        return create_nginx_conf(domain_data)
-
-    return ''
+    return create_nginx_conf(domain_data)
 
 
 def create_nginx_conf(domain_data: dict[str, Any]) -> str:
@@ -51,6 +128,9 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     template = (linux_host_config.nginx_templates_dir / 'common.conf').read_text()
 
     template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_text)
+    template = template.replace(
+        '    __SSL_CERTIFICATE_DIRECTIVES__', ssl_certificate_directives(domain_data)
+    )
 
     template = template.replace('__DOMAIN_SLUG__', domain_data['slug'])
     template = template.replace('__DOMAIN__', domain_data['domain'])
@@ -62,6 +142,25 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
 
     return curl_help_text
+
+
+def ssl_certificate_directives(domain_data: dict[str, Any]) -> str:
+    cert_type = domain_data['cert']['type']
+    if cert_type == 'upload':
+        return f"""    ssl_certificate /data/nginx/certs/ofm-{domain_data['slug']}.cert;
+    ssl_certificate_key /data/nginx/certs/ofm-{domain_data['slug']}.key;"""
+
+    if cert_type == 'dummy':
+        return """    ssl_certificate /etc/nginx/ssl/self_signed.cert;
+    ssl_certificate_key /etc/nginx/ssl/self_signed.key;"""
+
+    if cert_type == 'letsencrypt':
+        return f"""    acme_certificate ofm_{domain_data['slug']} {domain_data['domain']} key=ecdsa:256;
+    ssl_certificate $acme_certificate;
+    ssl_certificate_key $acme_certificate_key;
+    ssl_certificate_cache max=2;"""
+
+    raise ValueError(f'Unknown certificate type: {cert_type}')
 
 
 def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
