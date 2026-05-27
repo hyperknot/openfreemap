@@ -9,25 +9,29 @@ class TilegenConfig:
 
     repo_root: Path = Path(__file__).resolve().parents[2]
 
-    tilegen_dir: Path = Path('/data/ofm/tilegen')
-    planetiler_bin: Path = tilegen_dir / 'planetiler_bin'
-    planetiler_path: Path = planetiler_bin / 'planetiler.jar'
-    pmtiles_bin: Path = tilegen_dir / 'pmtiles_bin'
-    pmtiles_path: Path = pmtiles_bin / 'pmtiles'
+    ofm_dir: Path = Path('/data/ofm')
+    config_dir: Path = field(init=False)
+    tilegen_config_dir: Path = field(init=False)
+    tilegen_dir: Path = ofm_dir / 'tilegen'
     runs_dir: Path = tilegen_dir / 'runs'
 
-    tilegen_config_dir: Path = field(init=False)
+    planetiler_bin_dir: Path = tilegen_dir / 'planetiler_bin'
+    planetiler_path: Path = planetiler_bin_dir / 'planetiler.jar'
+    pmtiles_bin_dir: Path = tilegen_dir / 'pmtiles_bin'
+    pmtiles_path: Path = pmtiles_bin_dir / 'pmtiles'
+
     rclone_config: Path = field(init=False)
     rclone_bin: str = subprocess.run(
         ['which', 'rclone'], capture_output=True, text=True
     ).stdout.strip()
 
     def __post_init__(self) -> None:
-        if Path('/data/ofm').exists():
-            self.tilegen_config_dir = Path('/data/ofm/config/tilegen')
+        if self.ofm_dir.exists():
+            self.config_dir = self.ofm_dir / 'config'
         else:
-            self.tilegen_config_dir = self.repo_root / 'config' / 'tilegen'
+            self.config_dir = self.repo_root / 'config'
 
+        self.tilegen_config_dir = self.config_dir / 'tilegen'
         self.rclone_config = self.tilegen_config_dir / 'rclone.conf'
 
 
