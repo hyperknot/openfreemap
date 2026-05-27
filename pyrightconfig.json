@@ -12,7 +12,5 @@
   "reportUnknownMemberType": "none",
   "reportUnknownParameterType": "none",
   "reportUnknownVariableType": "none",
-  "reportUnusedCallResult": "none" // Allows intentionally unchecked return values like subprocess.run(...).
-  // "reportUnusedImport": "none",
-  // "reportUnusedParameter": "none"
+  "reportUnusedCallResult": "none" // forces ugly code like _ = subprocess.run(...).
 }
