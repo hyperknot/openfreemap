@@ -11,10 +11,14 @@
       "minItems": 1,
       "items": { "$ref": "#/definitions/domain" }
     },
-    "servers": {
+    "health_check": {
       "type": "array",
+      "description": "Optional hosts/IPs to check after deploy and with utils/server_health.py. These can be ~/.ssh/config aliases.",
       "minItems": 1,
-      "items": { "$ref": "#/definitions/server" }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "skip_planet": {
       "type": "boolean",
@@ -29,7 +33,7 @@
       "description": "Telegram chat id"
     }
   },
-  "required": ["domains", "servers"],
+  "required": ["domains"],
   "definitions": {
     "cert-upload": {
       "type": "object",
@@ -79,17 +83,6 @@
         "cert": { "$ref": "#/definitions/cert" }
       },
       "required": ["domain", "cert"]
-    },
-    "server": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "hostname": {
-          "type": "string",
-          "description": "hostname used for ssh to connect. can be an IP address"
-        }
-      },
-      "required": ["hostname"]
     }
   }
 }

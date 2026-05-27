@@ -24,12 +24,9 @@
     },
   ],
 
-  // SSH hosts used by linux_host/deploy_linux_host.py. These can be ~/.ssh/config aliases.
-  "servers": [
-    {
-      "hostname": "my-ofm-host",
-    },
-  ],
+  // Optional hosts/IPs checked after deploy and by utils/server_health.py.
+  // These can be ~/.ssh/config aliases.
+  // "health_check": ["my-ofm-host"],
 
   // Useful for first deploys and tests: only sync Monaco instead of the full planet.
   "skip_planet": true,

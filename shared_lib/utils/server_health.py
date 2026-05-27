@@ -9,23 +9,23 @@ from shared_lib.utils.pycurl import pycurl_get
 
 
 def check_server_health(config_data: dict[str, Any], hostname: str | None = None) -> dict[str, Any]:
+    health_check_hosts = config_data.get('health_check', [])
+
+    if hostname:
+        health_check_hosts = [host for host in health_check_hosts if host == hostname]
+        if not health_check_hosts:
+            raise ValueError(f'Host {hostname} not found in health_check config')
+
+    results: dict[str, Any] = {}
+    if not health_check_hosts:
+        return results
+
     area = 'monaco' if config_data.get('skip_planet') else 'planet'
     version = get_deployed_version(area)['version']
     domains = [d['domain'] for d in config_data['domains']]
-    servers = [
-        {'hostname': s['hostname'], 'ip': get_ip_from_ssh_alias(s['hostname'])}
-        for s in config_data['servers']
-    ]
-
-    if hostname:
-        servers = [s for s in servers if s['hostname'] == hostname]
-        if not servers:
-            raise ValueError(f'Server {hostname} not found in config')
-
-    results: dict[str, Any] = {}
-    for server in servers:
-        server_hostname = server['hostname']
-        server_ip = server['ip']
+    for health_check_host in health_check_hosts:
+        server_hostname = health_check_host
+        server_ip = get_ip_from_ssh_alias(health_check_host)
         results[server_hostname] = {'ip': server_ip, 'domains': {}, 'all_ok': True}
 
         for domain in domains:
