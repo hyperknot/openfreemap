@@ -46,8 +46,8 @@ def make_btrfs(run_folder: Path, area: str):
         subprocess.run(['sudo', 'chown', 'ofm:ofm', '-R', mount], check=True)
 
     with (
-        open('extract_out.log', 'w') as out,
-        open('extract_err.log', 'w') as err,
+        open('btrfs_extract_out.log', 'w') as out,
+        open('btrfs_extract_err.log', 'w') as err,
         contextlib.redirect_stdout(out),
         contextlib.redirect_stderr(err),
     ):
@@ -58,7 +58,7 @@ def make_btrfs(run_folder: Path, area: str):
 
     # unfortunately, by deleting files from the btrfs partition, the partition size grows
     # so we need to rsync onto a new partition instead of deleting
-    with open('rsync_out.log', 'w') as out, open('rsync_err.log', 'w') as err:
+    with open('btrfs_rsync_out.log', 'w') as out, open('btrfs_rsync_err.log', 'w') as err:
         subprocess.run(
             [
                 'rsync',
@@ -76,7 +76,7 @@ def make_btrfs(run_folder: Path, area: str):
 
     # collect stats
     for i, mount in enumerate(['mnt_rw', 'mnt_rw2'], 1):
-        with open(f'stats{i}.txt', 'w') as f:
+        with open(f'btrfs_stats{i}.txt', 'w') as f:
             for cmd in [
                 ['df', '-h', mount],
                 ['btrfs', 'filesystem', 'df', mount],
@@ -95,8 +95,8 @@ def make_btrfs(run_folder: Path, area: str):
     shutil.rmtree('mnt_rw2')
 
     with (
-        open('shrink_out.log', 'w') as out,
-        open('shrink_err.log', 'w') as err,
+        open('btrfs_shrink_out.log', 'w') as out,
+        open('btrfs_shrink_err.log', 'w') as err,
         contextlib.redirect_stdout(out),
         contextlib.redirect_stderr(err),
     ):
@@ -196,9 +196,9 @@ def balance_btrfs(mnt: Path) -> None:
 
 def write_dedupl_fixed_log():
     fixed_lines = [
-        line for line in Path('extract_out.log').read_text().splitlines() if 'fixed' in line
+        line for line in Path('btrfs_extract_out.log').read_text().splitlines() if 'fixed' in line
     ]
-    Path('dedupl_fixed.log').write_text('\n'.join(fixed_lines))
+    Path('btrfs_dedupl_fixed.log').write_text('\n'.join(fixed_lines))
 
 
 def cleanup_folder(run_folder: Path):

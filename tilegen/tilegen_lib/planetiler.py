@@ -60,8 +60,8 @@ def run_planetiler(area: str) -> Path:
 
     print(command)
 
-    out_path = run_folder / 'planetiler.out'
-    err_path = run_folder / 'planetiler.err'
+    out_path = run_folder / 'planetiler_out.log'
+    err_path = run_folder / 'planetiler_err.log'
 
     with out_path.open('w') as out_file, err_path.open('w') as err_file:
         subprocess.run(command, stdout=out_file, stderr=err_file, check=True, cwd=run_folder)
