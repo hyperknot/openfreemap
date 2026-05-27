@@ -7,7 +7,7 @@ This is a single Python uv project plus the website frontend.
 Python packages:
 
 - `shared_lib/` — shared Python code.
-  - `shared_lib/get_version_shared.py` — shared deployed/version helpers.
+  - `shared_lib/utils/get_version.py` — shared deployed/version helpers.
   - `shared_lib/deploy_shared/` and `shared_lib/ssh_lib/` — deployment and SSH server setup helpers.
 - `linux_host/` — runtime code for Linux tile hosts.
   - Script: `linux_host/scripts/linux-host.py`

@@ -3,9 +3,9 @@ from typing import Any
 
 import click
 
-from shared_lib.get_version_shared import get_deployed_version
-from shared_lib.pycurl import pycurl_get
 from shared_lib.ssh_lib.utils import get_ip_from_ssh_alias
+from shared_lib.utils.get_version import get_deployed_version
+from shared_lib.utils.pycurl import pycurl_get
 
 
 def check_server_health(config_data: dict[str, Any], hostname: str | None = None) -> dict[str, Any]:

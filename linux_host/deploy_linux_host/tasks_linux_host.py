@@ -3,11 +3,11 @@ from typing import Any
 
 from fabric import Connection
 
-from linux_host.deploy_linux_host.benchmark import c1000k, wrk
 from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
 from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from shared_lib.ssh_lib.nginx import nginx
 from shared_lib.ssh_lib.utils import put, sudo_cmd
+from shared_lib.utils.benchmark import c1000k, wrk
 
 
 def prepare_linux_host(

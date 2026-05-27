@@ -11,7 +11,7 @@ from linux_host.linux_host_lib.mount import auto_mount
 from linux_host.linux_host_lib.nginx_config_gen import write_nginx_config
 from linux_host.linux_host_lib.sync import auto_clean_btrfs, full_sync
 from linux_host.linux_host_lib.versions import fetch_version_files
-from shared_lib.get_version_shared import get_versions_for_area
+from shared_lib.utils.get_version import get_versions_for_area
 
 
 now = datetime.now(UTC)

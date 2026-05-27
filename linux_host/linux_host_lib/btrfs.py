@@ -5,7 +5,7 @@ import sys
 from linux_host.linux_host_lib.linux_host_config import linux_host_config
 from linux_host.linux_host_lib.telegram_wrapper import telegram_send_message
 from linux_host.linux_host_lib.utils import download_file_aria2, get_remote_file_size
-from shared_lib.get_version_shared import get_versions_for_area
+from shared_lib.utils.get_version import get_versions_for_area
 
 
 def download_area_version(area: str, version: str) -> bool:
