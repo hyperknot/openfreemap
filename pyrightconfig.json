@@ -1,14 +1,6 @@
 {
   "exclude": [".venv", ".ruff_cache", "**/_not_used", "**/node_modules", "**/__pycache__"],
-  "typeCheckingMode": "basic",
-
-  // "reportArgumentType": "none",
-  // "reportAttributeAccessIssue": "none",
-  "reportCallIssue": "none",
-  "reportIndexIssue": "none",
-  "reportOptionalSubscript": "none",
-  "reportRedeclaration": "none",
-  "reportReturnType": "none"
+  "typeCheckingMode": "basic"
 
   // Redundant with "typeCheckingMode": "basic":
   // "reportAny": "none",

@@ -1,5 +1,5 @@
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -16,15 +16,19 @@ class TilegenConfig:
     pmtiles_path: Path = pmtiles_bin / 'pmtiles'
     runs_dir: Path = tilegen_dir / 'runs'
 
-    if Path('/data/ofm').exists():
-        tilegen_config_dir: Path = Path('/data/ofm/config/tilegen')
-    else:
-        tilegen_config_dir: Path = repo_root / 'config' / 'tilegen'
-
-    rclone_config: Path = tilegen_config_dir / 'rclone.conf'
+    tilegen_config_dir: Path = field(init=False)
+    rclone_config: Path = field(init=False)
     rclone_bin: str = subprocess.run(
         ['which', 'rclone'], capture_output=True, text=True
     ).stdout.strip()
+
+    def __post_init__(self) -> None:
+        if Path('/data/ofm').exists():
+            self.tilegen_config_dir = Path('/data/ofm/config/tilegen')
+        else:
+            self.tilegen_config_dir = self.repo_root / 'config' / 'tilegen'
+
+        self.rclone_config = self.tilegen_config_dir / 'rclone.conf'
 
 
 tilegen_config = TilegenConfig()

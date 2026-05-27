@@ -14,11 +14,11 @@ def download_assets() -> bool:
 
     changed = False
 
-    changed += download_and_extract_asset_tar_gz('fonts')
-    changed += download_and_extract_asset_tar_gz('styles')
-    changed += download_and_extract_asset_tar_gz('natural_earth')
+    changed |= download_and_extract_asset_tar_gz('fonts')
+    changed |= download_and_extract_asset_tar_gz('styles')
+    changed |= download_and_extract_asset_tar_gz('natural_earth')
 
-    changed += download_sprites()
+    changed |= download_sprites()
 
     return changed
 
