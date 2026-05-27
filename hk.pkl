@@ -54,6 +54,13 @@ local linters = new Mapping<String, Step> {
         fix = ".venv/bin/ruff format --quiet --force-exclude {{ files }}"
     }
 
+    ["basedpyright"] {
+        glob = List("**/*.py", "**/*.pyi")
+        depends = "ruff-format"
+        condition = "exec('test -x .venv/bin/basedpyright && printf true || printf false') == 'true'"
+        check = "uv run basedpyright {{ files }}"
+    }
+
     ["nginxfmt"] {
         glob = "**/nginx/*.conf"
         condition = "exec('test -x .venv/bin/nginxfmt && printf true || printf false') == 'true'"
@@ -70,13 +77,6 @@ local linters = new Mapping<String, Step> {
     }
     ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
         exclude = Local.ignoreFiles
-    }
-
-    ["basedpyright"] {
-        glob = List("**/*.py", "**/*.pyi")
-        depends = "ruff-format"
-        condition = "exec('test -x .venv/bin/basedpyright && printf true || printf false') == 'true'"
-        check = "uv run basedpyright {{ files }}"
     }
 }
 
