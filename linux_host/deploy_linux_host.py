@@ -1,4 +1,5 @@
 #!/usr/bin/env -S uv run python -P
+
 from pathlib import Path
 from typing import Any
 
@@ -24,8 +25,16 @@ def cli():
 @cli.command()
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
+@click.option(
+    '--reinstall', is_flag=True, help='Reinstall everything in /data/ofm and /data/nginx folders'
+)
 def init_static(
-    hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str
+    hostname: str,
+    user: str | None,
+    port: int | None,
+    noninteractive: bool,
+    config: str,
+    reinstall: bool,
 ):
     jsonc_path, jsonc_data = load_jsonc_config(config)
 
@@ -33,6 +42,9 @@ def init_static(
         return
 
     c = get_connection(hostname, user, port)
+
+    if reinstall:
+        c.sudo('rm -rf /data/ofm /data/nginx')
 
     prepare_shared(c, linux_host_deploy_config)
     prepare_linux_host(c, jsonc_path)
@@ -46,6 +58,9 @@ def init_static(
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
 @click.option('--sync', is_flag=True, help='Run manual sync after init')
+@click.option(
+    '--reinstall', is_flag=True, help='Reinstall everything in /data/ofm and /data/nginx folders'
+)
 def init_autoupdate(
     hostname: str,
     user: str | None,
@@ -53,6 +68,7 @@ def init_autoupdate(
     noninteractive: bool,
     sync: bool,
     config: str,
+    reinstall: bool,
 ):
     jsonc_path, jsonc_data = load_jsonc_config(config)
 
@@ -60,6 +76,9 @@ def init_autoupdate(
         return
 
     c = get_connection(hostname, user, port)
+
+    if reinstall:
+        c.sudo('rm -rf /data/ofm /data/nginx')
 
     c.sudo('rm -f /etc/cron.d/ofm_linux_host')
 
