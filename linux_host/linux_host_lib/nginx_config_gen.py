@@ -18,13 +18,13 @@ def write_nginx_config():
 
     curl_help_text = ''
 
-    for domain_data in linux_host_config.json_config['domains']:
+    for domain_data in linux_host_config.jsonc_config['domains']:
         curl_help_text += process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    exclude_path = '/planet' if linux_host_config.json_config.get('skip_planet') else '/monaco'
+    exclude_path = '/planet' if linux_host_config.jsonc_config.get('skip_planet') else '/monaco'
     curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
 
     curl_help_joined = '\n'.join(curl_help_lines)
@@ -69,7 +69,7 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
     nginx_conf_text = ''
     curl_help_text = ''
 
-    help_area = 'monaco' if linux_host_config.json_config.get('skip_planet') else 'planet'
+    help_area = 'monaco' if linux_host_config.jsonc_config.get('skip_planet') else 'planet'
 
     for subdir in linux_host_config.mnt_dir.iterdir():
         if not subdir.is_dir():

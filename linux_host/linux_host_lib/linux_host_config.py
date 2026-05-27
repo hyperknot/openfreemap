@@ -1,4 +1,3 @@
-import copy
 import json
 import socket
 from dataclasses import dataclass, field
@@ -10,39 +9,30 @@ from jsonschema import ValidationError, validate
 from linux_host.linux_host_lib.slugify import slugify
 
 
-def read_linux_host_config(config_path: Path, *, validate_schema: bool = False) -> dict:
+def read_linux_host_jsonc_config(jsonc_config_path: Path) -> dict:
     try:
-        config_data = json5.loads(config_path.read_text())
+        jsonc_config = json5.loads(jsonc_config_path.read_text())
     except Exception as e:
-        raise RuntimeError(f'Error parsing config file: {e}') from e
+        raise RuntimeError(f'Error parsing config file {jsonc_config_path}: {e}') from e
 
-    if validate_schema:
-        validate_linux_host_config(config_data, config_path.parent / 'schema.json')
+    validate_jsonc_config_schema(jsonc_config)
 
-    return with_derived_linux_host_config(config_data)
-
-
-def with_derived_linux_host_config(config_data: dict) -> dict:
-    config_data = copy.deepcopy(config_data)
-
-    for domain_data in config_data['domains']:
+    for domain_data in jsonc_config['domains']:
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
 
         if domain_data['cert']['type'] == 'upload':
             domain_data['cert_file'] = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
             domain_data['key_file'] = f'/data/nginx/certs/ofm-{domain_data["slug"]}.key'
 
-    return config_data
+    return jsonc_config
 
 
-def validate_linux_host_config(config_data: dict, schema_path: Path) -> None:
+def validate_jsonc_config_schema(jsonc_config: dict) -> None:
+    schema_path = Path(__file__).resolve().parents[2] / 'config' / 'linux_host' / 'schema.json'
+
     try:
         schema = json.loads(schema_path.read_text())
-    except Exception as e:
-        raise RuntimeError(f'Error loading schema file: {e}') from e
-
-    try:
-        validate(instance=config_data, schema=schema)
+        validate(instance=jsonc_config, schema=schema)
         print('✓ Configuration is valid')
     except ValidationError as e:
         error_msg = f'Configuration validation failed: {e.message}'
@@ -71,21 +61,32 @@ class LinuxHostConfig:
     nginx_certs_dir: Path = Path('/data/nginx/certs')
     nginx_sites_dir: Path = Path('/data/nginx/sites')
 
-    if Path('/data/ofm').exists():
-        linux_host_config_dir: Path = Path('/data/ofm/config/linux_host')
-    else:
-        linux_host_config_dir: Path = repo_root / 'config' / 'linux_host'
+    linux_host_config_dir: Path = field(init=False)
+    jsonc_config_path: Path = field(init=False)
+    deployed_versions_dir: Path = field(init=False)
 
-    config_jsonc_path: Path = linux_host_config_dir / 'config.jsonc'
-
-    _json_config = read_linux_host_config(config_jsonc_path) if config_jsonc_path.exists() else {}
-    telegram_token: str | None = _json_config.pop('telegram_token', None)
-    telegram_chat_id: str | None = _json_config.pop('telegram_chat_id', None)
-    json_config: dict = field(default_factory=lambda: copy.deepcopy(LinuxHostConfig._json_config))
+    telegram_token: str | None = None
+    telegram_chat_id: str | None = None
+    jsonc_config: dict = field(default_factory=dict)
 
     ofm_host_prefix: str = f'OFM linux_host {socket.gethostname()}'
 
-    deployed_versions_dir: Path = linux_host_config_dir / 'deployed_versions'
+    def __post_init__(self) -> None:
+        if Path('/data/ofm').exists():
+            self.linux_host_config_dir = Path('/data/ofm/config/linux_host')
+        else:
+            self.linux_host_config_dir = self.repo_root / 'config' / 'linux_host'
+
+        self.jsonc_config_path = self.linux_host_config_dir / 'config.jsonc'
+        self.deployed_versions_dir = self.linux_host_config_dir / 'deployed_versions'
+
+    def load_jsonc_config(self) -> None:
+        if not self.jsonc_config_path.is_file():
+            raise FileNotFoundError(f'Linux host config file not found: {self.jsonc_config_path}')
+
+        self.jsonc_config = read_linux_host_jsonc_config(self.jsonc_config_path)
+        self.telegram_token = self.jsonc_config.pop('telegram_token', None)
+        self.telegram_chat_id = self.jsonc_config.pop('telegram_chat_id', None)
 
 
 linux_host_config = LinuxHostConfig()

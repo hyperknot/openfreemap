@@ -2,13 +2,12 @@ from pathlib import Path
 
 from linux_host.deploy_linux_host.benchmark import c1000k, wrk
 from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
-from linux_host.linux_host_lib.linux_host_config import read_linux_host_config
 from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from shared_lib.ssh_lib.nginx import nginx
 from shared_lib.ssh_lib.utils import put, sudo_cmd
 
 
-def prepare_linux_host(c):
+def prepare_linux_host(c, jsonc_config_path: Path, jsonc_config: dict):
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
     nginx(c)
@@ -19,16 +18,14 @@ def prepare_linux_host(c):
     c.sudo(f'mkdir -p {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
     c.sudo(f'chown nginx:nginx {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
 
-    upload_config_and_certs(c)
+    upload_jsonc_config_and_certs(c, jsonc_config_path, jsonc_config)
 
 
-def upload_config_and_certs(c):
-    config_data = read_jsonc()
-
+def upload_jsonc_config_and_certs(c, jsonc_config_path: Path, jsonc_config: dict):
     c.sudo('mkdir -p /data/nginx/certs')
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
 
-    for domain_data in config_data['domains']:
+    for domain_data in jsonc_config['domains']:
         if domain_data['cert']['type'] == 'upload':
             local_cert_path = Path(domain_data['cert']['cert_path'])
             if not local_cert_path.is_absolute():
@@ -50,20 +47,11 @@ def upload_config_and_certs(c):
 
     put(
         c,
-        linux_host_deploy_config.local_config_jsonc,
+        jsonc_config_path,
         f'{linux_host_deploy_config.remote_linux_host_config}/config.jsonc',
         user='ofm',
         create_parent_dir=True,
     )
-
-
-def read_jsonc():
-    if not linux_host_deploy_config.local_config_jsonc.is_file():
-        raise FileNotFoundError(
-            f'{linux_host_deploy_config.local_config_jsonc} not found. Make sure it exists in config/linux_host'
-        )
-
-    return read_linux_host_config(linux_host_deploy_config.local_config_jsonc, validate_schema=True)
 
 
 def install_linux_host_cron(c):
