@@ -7,7 +7,7 @@ from shared_lib.get_version_shared import get_deployed_version
 def get_remote_deployed_versions() -> dict[str, str]:
     print('Fetching remote deployed version files')
 
-    remote_versions = {}
+    remote_versions: dict[str, str] = {}
     for area in linux_host_config.areas:
         deployed_version = get_deployed_version(area)['version']
         if not deployed_version:

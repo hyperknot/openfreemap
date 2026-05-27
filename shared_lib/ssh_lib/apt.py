@@ -1,11 +1,14 @@
 import shlex
+from collections.abc import Iterable
 from urllib.parse import urlparse
+
+from fabric import Connection
 
 from .utils import put_str
 
 
 def setup_apt_repository(
-    c,
+    c: Connection,
     *,
     repo_name: str,
     key_url: str,
@@ -43,11 +46,11 @@ def setup_apt_repository(
     put_str(c, pin_path, pin_content)
 
 
-def apt_get_update(c):
+def apt_get_update(c: Connection) -> None:
     c.sudo('apt-get update')
 
 
-def apt_get_install(c, pkgs, warn=False):
+def apt_get_install(c: Connection, pkgs: str, warn: bool = False) -> None:
     c.sudo(
         f'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends {pkgs}',
         warn=warn,
@@ -55,7 +58,7 @@ def apt_get_install(c, pkgs, warn=False):
     )
 
 
-def apt_get_purge(c, pkgs):
+def apt_get_purge(c: Connection, pkgs: str | Iterable[str]) -> None:
     if isinstance(pkgs, str):
         pkg_list = shlex.split(pkgs)
     else:
@@ -68,7 +71,7 @@ def apt_get_purge(c, pkgs):
         )
 
 
-def apt_get_autoremove(c):
+def apt_get_autoremove(c: Connection) -> None:
     c.sudo('DEBIAN_FRONTEND=noninteractive apt-get autoremove -y')
 
 

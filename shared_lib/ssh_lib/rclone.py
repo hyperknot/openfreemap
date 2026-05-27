@@ -1,8 +1,10 @@
+from fabric import Connection
+
 from .apt import apt_get_update
 from .utils import exists
 
 
-def rclone(c):
+def rclone(c: Connection) -> None:
     if exists(c, '/usr/bin/rclone'):
         return
 

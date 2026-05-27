@@ -1,10 +1,14 @@
+from typing import Any
+
+from fabric import Connection
+
 from shared_lib.ssh_lib.pkg_base import pkg_base, pkg_upgrade
 from shared_lib.ssh_lib.python_uv import python_uv
 from shared_lib.ssh_lib.rclone import rclone
 from shared_lib.ssh_lib.utils import add_user, enable_sudo, put_dir_tarball, sudo_cmd
 
 
-def prepare_shared(c, deploy_config):
+def prepare_shared(c: Connection, deploy_config: Any) -> None:
     # Creates ofm user with uid=2000, disabled password and nopasswd sudo.
     add_user(c, 'ofm', uid=2000, system=False)
     enable_sudo(c, 'ofm', nopasswd=True)

@@ -7,6 +7,7 @@ import string
 import sys
 import tarfile
 import tempfile
+from collections.abc import Iterable
 from pathlib import Path
 
 from fabric import Connection
@@ -14,8 +15,14 @@ from invoke.exceptions import UnexpectedExit
 
 
 def put(
-    c, local_path, remote_path, permissions=None, user='root', group=None, create_parent_dir=False
-):
+    c: Connection,
+    local_path: str | Path,
+    remote_path: str,
+    permissions: str | int | None = None,
+    user: str = 'root',
+    group: str | None = None,
+    create_parent_dir: bool = False,
+) -> None:
     tmp_path = f'/tmp/fabtmp_{random_string(8)}'
     c.put(local_path, tmp_path)
 
@@ -38,15 +45,15 @@ def put(
 
 
 def put_dir(
-    c,
+    c: Connection,
     local_dir: Path,
-    remote_dir,
-    dir_permissions=None,
-    file_permissions=None,
-    user='root',
-    group=None,
-    exclude_set=None,
-):
+    remote_dir: str,
+    dir_permissions: str | int | None = None,
+    file_permissions: str | int | None = None,
+    user: str = 'root',
+    group: str | None = None,
+    exclude_set: set[str] | None = None,
+) -> None:
     """
     copies all files from local path to remote path
     not recursive
@@ -66,22 +73,22 @@ def put_dir(
 
 
 def put_dir_tarball(
-    c,
+    c: Connection,
     local_dir: Path,
-    remote_dir,
-    dir_permissions=None,
-    file_permissions=None,
-    user='root',
-    group=None,
-    exclude_patterns=None,
-):
+    remote_dir: str | Path,
+    dir_permissions: str | int | None = None,
+    file_permissions: str | int | None = None,
+    user: str = 'root',
+    group: str | None = None,
+    exclude_patterns: Iterable[str] | None = None,
+) -> None:
     local_dir = local_dir.resolve()
     remote_dir = str(remote_dir)
     exclude_patterns = {pattern.strip() for pattern in exclude_patterns or () if pattern.strip()}
     root_patterns = {pattern.strip('/') for pattern in exclude_patterns if '/' in pattern}
     component_patterns = {pattern for pattern in exclude_patterns if '/' not in pattern}
 
-    def include(tarinfo):
+    def include(tarinfo: tarfile.TarInfo) -> tarfile.TarInfo | None:
         relative_parts = Path(tarinfo.name).parts[1:]
         if not relative_parts:
             return tarinfo
@@ -122,14 +129,14 @@ def put_dir_tarball(
         )
 
 
-def put_str(c, remote_path, str_, create_parent_dir=False):
+def put_str(c: Connection, remote_path: str, str_: str, create_parent_dir: bool = False) -> None:
     with tempfile.NamedTemporaryFile(mode='w', suffix='.txt') as f:
         f.write(str_ + '\n')
         f.flush()
         put(c, f.name, remote_path, create_parent_dir=create_parent_dir)
 
 
-def file_contains(c, file_path, search_str):
+def file_contains(c: Connection, file_path: str, search_str: str) -> bool:
     """Check if a file contains a specific string."""
     if not exists(c, file_path):
         return False
@@ -140,7 +147,7 @@ def file_contains(c, file_path, search_str):
     return result.ok
 
 
-def append_str(c, remote_path, str_, check_duplicate=False):
+def append_str(c: Connection, remote_path: str, str_: str, check_duplicate: bool = False) -> bool:
     """Append string to file. If check_duplicate=True, only append if string doesn't exist."""
     if check_duplicate and file_contains(c, remote_path, str_.strip()):
         return False  # String already exists, didn't append
@@ -153,9 +160,11 @@ def append_str(c, remote_path, str_, check_duplicate=False):
     return True  # Successfully appended
 
 
-def sudo_cmd(c, cmd, *, user=None, cwd=None):
+def sudo_cmd(
+    c: Connection, cmd: str, *, user: str | None = None, cwd: str | Path | None = None
+) -> None:
     if cwd:
-        cmd = f'cd {shlex.quote(cwd)} && {cmd}'
+        cmd = f'cd {shlex.quote(str(cwd))} && {cmd}'
 
     try:
         c.sudo(f'bash -lc {shlex.quote(cmd)}', user=user)
@@ -165,7 +174,7 @@ def sudo_cmd(c, cmd, *, user=None, cwd=None):
         sys.exit(1)
 
 
-def run_nice(c, cmd):
+def run_nice(c: Connection, cmd: str) -> None:
     try:
         c.run(cmd)
     except UnexpectedExit as e:
@@ -174,7 +183,14 @@ def run_nice(c, cmd):
         sys.exit(1)
 
 
-def set_permission(c, path, *, permissions=None, user=None, group=None):
+def set_permission(
+    c: Connection,
+    path: str,
+    *,
+    permissions: str | int | None = None,
+    user: str | None = None,
+    group: str | None = None,
+) -> None:
     if user:
         if not group:
             group = user
@@ -184,7 +200,7 @@ def set_permission(c, path, *, permissions=None, user=None, group=None):
         c.sudo(f"chmod {permissions} '{path}'")
 
 
-def reboot(c):
+def reboot(c: Connection) -> None:
     print('Rebooting')
     try:
         c.sudo('reboot')
@@ -192,21 +208,21 @@ def reboot(c):
         pass
 
 
-def exists(c, path):
+def exists(c: Connection, path: str) -> bool:
     return c.sudo(f"test -e '{path}'", hide=True, warn=True).ok
 
 
-def is_dir(c, path):
+def is_dir(c: Connection, path: str) -> bool:
     return c.sudo(f"test -d '{path}'", hide=True, warn=True).ok
 
 
-def ensure_dirs(c, *paths):
+def ensure_dirs(c: Connection, *paths: str) -> None:
     quoted = ' '.join(shlex.quote(path) for path in paths if path)
     if quoted:
         c.run(f'mkdir -p {quoted}', echo=True)
 
 
-def truncate_files_in_dir(c, path):
+def truncate_files_in_dir(c: Connection, path: str) -> None:
     quoted = shlex.quote(path)
     c.run(
         f'mkdir -p {quoted} && find {quoted} -type f -exec truncate -s 0 {{}} +',
@@ -215,27 +231,29 @@ def truncate_files_in_dir(c, path):
     )
 
 
-def random_string(length):
+def random_string(length: int) -> str:
     return ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
-def get_arch(c):
+def get_arch(c: Connection) -> str:
     return c.run('uname -m', hide=True).stdout.strip()
 
 
-def ubuntu_release(c):
+def ubuntu_release(c: Connection) -> int:
     return int(c.run('lsb_release -rs').stdout.strip()[:2])
 
 
-def ubuntu_codename(c):
+def ubuntu_codename(c: Connection) -> str:
     return c.run('lsb_release -cs').stdout.strip()
 
 
-def get_username(c):
+def get_username(c: Connection) -> str:
     return c.run('whoami').stdout.strip()
 
 
-def add_user(c, username, passwd=None, uid=None, *, system: bool):
+def add_user(
+    c: Connection, username: str, passwd: str | None = None, uid: int | None = None, *, system: bool
+) -> None:
     """Create a user if it doesn't already exist."""
     if c.sudo(f'id -u {username}', hide=True, warn=True).ok:
         print(f'User {username} already exists, skipping.')
@@ -254,12 +272,12 @@ def add_user(c, username, passwd=None, uid=None, *, system: bool):
             c.sudo(f'echo "{username}:{passwd}" | chpasswd')
 
 
-def remove_user(c, username):
+def remove_user(c: Connection, username: str) -> None:
     c.sudo(f'userdel -r {username}', warn=True)
     c.sudo(f'rm -rf /home/{username}')
 
 
-def enable_sudo(c, username, nopasswd=False):
+def enable_sudo(c: Connection, username: str, nopasswd: bool = False) -> None:
     c.sudo(f'usermod -aG sudo {username}')
     if nopasswd:
         put_str(c, '/etc/sudoers.d/tmp.', f'{username} ALL=(ALL) NOPASSWD:ALL')
@@ -267,7 +285,7 @@ def enable_sudo(c, username, nopasswd=False):
         c.sudo(f'mv /etc/sudoers.d/tmp. /etc/sudoers.d/{username}')
 
 
-def get_latest_release_github(user, repo):
+def get_latest_release_github(user: str, repo: str) -> str:
     import requests
 
     url = f'https://api.github.com/repos/{user}/{repo}/releases/latest'
@@ -284,7 +302,7 @@ def get_latest_release_github(user, repo):
     return tag_name.strip()
 
 
-def get_ip_from_ssh_alias(ssh_alias):
+def get_ip_from_ssh_alias(ssh_alias: str) -> str:
     """
     Get IP address from SSH config alias.
 
@@ -302,8 +320,8 @@ def get_ip_from_ssh_alias(ssh_alias):
     conn = Connection(ssh_alias)
 
     # Get the resolved hostname from SSH config
-    hostname = conn.host
-    if not isinstance(hostname, str) or not hostname:
+    hostname = str(conn.host or '')
+    if not hostname:
         raise RuntimeError(f'Could not resolve hostname for SSH alias {ssh_alias!r}')
 
     # Resolve to IP

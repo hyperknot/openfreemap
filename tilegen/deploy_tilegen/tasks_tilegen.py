@@ -1,10 +1,12 @@
+from fabric import Connection
+
 from shared_lib.ssh_lib.utils import put
 from tilegen.deploy_tilegen.install_planetiler import install_planetiler
 from tilegen.deploy_tilegen.install_pmtiles import install_pmtiles
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
-def prepare_tilegen(c, *, enable_cron):
+def prepare_tilegen(c: Connection, *, enable_cron: bool) -> None:
     c.sudo('rm -f /etc/cron.d/ofm_tilegen')
 
     install_planetiler(c)

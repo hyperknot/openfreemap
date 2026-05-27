@@ -1,3 +1,5 @@
+from fabric import Connection
+
 from .apt import (
     apt_get_install,
     apt_get_purge,
@@ -12,7 +14,7 @@ from .utils import (
 JAVA_VER = 25
 
 
-def java(c):
+def java(c: Connection) -> None:
     """Install OpenJDK from Eclipse Adoptium."""
     # remove old Ubuntu version of OpenJDK
     apt_get_purge(c, 'openjdk* temurin*')

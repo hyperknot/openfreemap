@@ -1,15 +1,17 @@
 import os
+from collections.abc import Callable
+from typing import Any
 
 import click
 from fabric import Config, Connection
 from invoke.exceptions import UnexpectedExit
 
 
-def get_connection(hostname, user, port):
+def get_connection(hostname: str, user: str | None, port: int | None) -> Connection:
     ssh_password = os.getenv('SSH_PASSWD')
     sudo_password = os.getenv('SUDO_PASSWD', ssh_password)
 
-    connect_kwargs = {}
+    connect_kwargs: dict[str, Any] = {}
     if ssh_password:
         print('Using SSH password')
         connect_kwargs = {
@@ -33,7 +35,7 @@ def get_connection(hostname, user, port):
     return c
 
 
-def check_sudo(c, *, sudo_password):
+def check_sudo(c: Connection, *, sudo_password: bool) -> None:
     if c.run('id -u', hide=True).stdout.strip() == '0':
         if c.run('command -v sudo', hide=True, warn=True).ok:
             return
@@ -60,12 +62,12 @@ def check_sudo(c, *, sudo_password):
     )
 
 
-def common_options(func):
+def common_options(func: Callable[..., Any]) -> Callable[..., Any]:
     """Decorator to define common options."""
-    func = click.argument('hostname')(func)
-    func = click.option('--port', type=int, help='SSH port (if not in .ssh/config)')(func)
-    func = click.option('--user', help='SSH user (if not in .ssh/config)')(func)
-    func = click.option('-y', '--noninteractive', is_flag=True, help='Skip confirmation questions')(
-        func
-    )
-    return func
+    decorated = click.argument('hostname')(func)
+    decorated = click.option('--port', type=int, help='SSH port (if not in .ssh/config)')(decorated)
+    decorated = click.option('--user', help='SSH user (if not in .ssh/config)')(decorated)
+    decorated = click.option(
+        '-y', '--noninteractive', is_flag=True, help='Skip confirmation questions'
+    )(decorated)
+    return decorated

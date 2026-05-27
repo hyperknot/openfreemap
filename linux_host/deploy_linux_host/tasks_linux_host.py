@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any
 
+from fabric import Connection
+
 from linux_host.deploy_linux_host.benchmark import c1000k, wrk
 from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
 from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
@@ -8,7 +10,9 @@ from shared_lib.ssh_lib.nginx import nginx
 from shared_lib.ssh_lib.utils import put, sudo_cmd
 
 
-def prepare_linux_host(c, jsonc_config_path: Path, jsonc_config: dict[str, Any]):
+def prepare_linux_host(
+    c: Connection, jsonc_config_path: Path, jsonc_config: dict[str, Any]
+) -> None:
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
     nginx(c)
@@ -22,7 +26,9 @@ def prepare_linux_host(c, jsonc_config_path: Path, jsonc_config: dict[str, Any])
     upload_jsonc_config_and_certs(c, jsonc_config_path, jsonc_config)
 
 
-def upload_jsonc_config_and_certs(c, jsonc_config_path: Path, jsonc_config: dict[str, Any]):
+def upload_jsonc_config_and_certs(
+    c: Connection, jsonc_config_path: Path, jsonc_config: dict[str, Any]
+) -> None:
     c.sudo('mkdir -p /data/nginx/certs')
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
 
@@ -55,7 +61,7 @@ def upload_jsonc_config_and_certs(c, jsonc_config_path: Path, jsonc_config: dict
     )
 
 
-def install_linux_host_cron(c):
+def install_linux_host_cron(c: Connection) -> None:
     put(
         c,
         linux_host_deploy_config.local_linux_host_dir / 'cron.d' / 'ofm_linux_host',
@@ -63,7 +69,7 @@ def install_linux_host_cron(c):
     )
 
 
-def run_linux_host_sync(c):
+def run_linux_host_sync(c: Connection) -> None:
     print('Running linux_host sync --force')
     sudo_cmd(
         c,
@@ -72,7 +78,7 @@ def run_linux_host_sync(c):
     )
 
 
-def install_benchmark(c):
+def install_benchmark(c: Connection) -> None:
     """
     Read docs/quick_notes/http_benchmark.md
     """

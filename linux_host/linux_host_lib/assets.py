@@ -23,7 +23,7 @@ def download_assets() -> bool:
     return changed
 
 
-def download_and_extract_asset_tar_gz(asset_kind):
+def download_and_extract_asset_tar_gz(asset_kind: str) -> bool:
     """
     Download and extract asset.tgz if the file size differ or not available locally
     Returns True if modified

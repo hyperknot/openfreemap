@@ -1,10 +1,12 @@
+from fabric import Connection
+
 from .utils import exists
 
 
 UV_BIN = '/usr/local/bin'
 
 
-def python_uv(c, install_python_ver=None):
+def python_uv(c: Connection, install_python_ver: str | None = None) -> None:
     """Install Python using uv package manager."""
 
     # Clean up old root-only install

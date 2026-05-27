@@ -1,12 +1,14 @@
+from fabric import Connection
+
 from .config import config
 from .utils import put, put_str
 
 
-def kernel_somaxconn65k(c):
+def kernel_somaxconn65k(c: Connection) -> None:
     put_str(c, '/etc/sysctl.d/60-somaxconn65k.conf', 'net.core.somaxconn = 65535')
 
 
-def kernel_limits1m(c):
+def kernel_limits1m(c: Connection) -> None:
     put_str(
         c,
         '/etc/security/limits.d/limits1m.conf',
@@ -19,11 +21,11 @@ def kernel_limits1m(c):
     )
 
 
-def kernel_vmovercommit(c):
+def kernel_vmovercommit(c: Connection) -> None:
     put_str(c, '/etc/sysctl.d/60-vmovercommit.conf', 'vm.overcommit_memory = 1')
 
 
-def kernel_thp_fix(c):
+def kernel_thp_fix(c: Connection) -> None:
     # transparent_hugepage
     put(
         c,

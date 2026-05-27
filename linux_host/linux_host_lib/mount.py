@@ -6,7 +6,7 @@ from linux_host.linux_host_lib.linux_host_config import linux_host_config
 from linux_host.linux_host_lib.utils import assert_linux, assert_sudo
 
 
-def auto_mount():
+def auto_mount() -> None:
     """
     Mounts/unmounts the btrfs images from /data/ofm/linux_host/runs automatically.
     When finished, /mnt/ofm dir will have all the present tiles.btrfs files mounted in a read-only way.
@@ -27,7 +27,7 @@ def auto_mount():
     subprocess.run(['mount', '-a'], check=True)
 
 
-def create_fstab():
+def create_fstab() -> None:
     print('  creating fstab')
     fstab_new = []
 
@@ -57,7 +57,7 @@ def create_fstab():
         fp.writelines(fstab_orig + fstab_new)
 
 
-def clean_up_mounts(mnt_dir):
+def clean_up_mounts(mnt_dir: Path) -> None:
     if not mnt_dir.exists():
         return
 
@@ -68,7 +68,7 @@ def clean_up_mounts(mnt_dir):
     lines = [l for l in p.stdout.splitlines() if f'{mnt_dir}/' in l and '(deleted)' in l]
 
     # Extract unique mount paths (deduplicate)
-    mount_paths = set()
+    mount_paths: set[Path] = set()
     for l in lines:
         mnt_path = Path(l.split('(deleted) on ')[1].split(' type btrfs')[0])
         mount_paths.add(mnt_path)

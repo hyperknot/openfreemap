@@ -9,7 +9,7 @@ from linux_host.linux_host_lib.utils import assert_linux, assert_sudo
 from linux_host.linux_host_lib.versions import get_remote_deployed_versions, write_version_files
 
 
-def full_sync(force=False):
+def full_sync(force: bool = False) -> None:
     """
     Runs the sync task, normally called by cron every minute
     On a new server this also takes care of everything, no need to run anything manually.
@@ -52,7 +52,7 @@ def full_sync(force=False):
         clean_up_mounts(linux_host_config.mnt_dir)
 
 
-def auto_clean_btrfs():
+def auto_clean_btrfs() -> None:
     """
     Clean old btrfs runs
 
@@ -71,7 +71,7 @@ def auto_clean_btrfs():
 
         local_versions = sorted([i.name for i in area_dir.iterdir()])
 
-        versions_to_keep = set()
+        versions_to_keep: set[str] = set()
 
         # add newest version
         if local_versions:

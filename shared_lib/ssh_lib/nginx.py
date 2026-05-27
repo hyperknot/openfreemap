@@ -1,3 +1,5 @@
+from fabric import Connection
+
 from .apt import (
     apt_get_install,
     apt_get_update,
@@ -16,7 +18,7 @@ NGINX_REPO_NAME = 'nginx'
 ACME_MODULE_RUNTIME_PATH = '/usr/lib/nginx/modules/ngx_http_acme_module.so'
 
 
-def nginx(c):
+def nginx(c: Connection) -> None:
     install_nginx(c)
 
     c.sudo('rm -rf /data/nginx/config')
@@ -45,7 +47,7 @@ def nginx(c):
     verify_acme_module_after_restart(c)
 
 
-def install_nginx(c):
+def install_nginx(c: Connection) -> None:
     if exists(c, '/usr/sbin/nginx'):
         return
 
@@ -61,7 +63,7 @@ def install_nginx(c):
     apt_get_install(c, 'nginx nginx-module-acme')
 
 
-def verify_acme_module_after_restart(c):
+def verify_acme_module_after_restart(c: Connection) -> None:
     pid_result = c.sudo('cat /run/nginx.pid', warn=True, hide=True)
     if not pid_result.ok:
         raise RuntimeError(f'ACME verify failed on {c.host}. Could not read /run/nginx.pid.')
@@ -83,7 +85,7 @@ def verify_acme_module_after_restart(c):
     )
 
 
-def generate_self_signed_cert(c):
+def generate_self_signed_cert(c: Connection) -> None:
     if exists(c, '/etc/nginx/ssl/self_signed.cert'):
         return
 

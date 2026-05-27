@@ -1,10 +1,12 @@
+from fabric import Connection
+
 from .apt import (
     apt_get_install,
     apt_get_update,
 )
 
 
-def pkg_base(c):
+def pkg_base(c: Connection) -> None:
     pkg_list = [
         'aria2',
         'build-essential',
@@ -77,7 +79,7 @@ def pkg_base(c):
     c.sudo('ln -snf $(which fdfind) /usr/local/bin/fd', warn=True)
 
 
-def pkg_upgrade(c):
+def pkg_upgrade(c: Connection) -> None:
     apt_get_update(c)
     c.sudo(
         'DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -o Dpkg::Options::="--force-confold"'

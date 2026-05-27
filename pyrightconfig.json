@@ -11,6 +11,5 @@
   "reportUnknownArgumentType": "none",
   "reportUnknownMemberType": "none",
   "reportUnknownParameterType": "none",
-  "reportUnknownVariableType": "none",
   "reportUnusedCallResult": "none" // forces ugly code like _ = subprocess.run(...).
 }

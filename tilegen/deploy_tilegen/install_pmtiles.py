@@ -1,3 +1,5 @@
+from fabric import Connection
+
 from shared_lib.ssh_lib.utils import exists, get_arch, sudo_cmd
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
@@ -6,7 +8,7 @@ GO_PMTILES_RELEASE = '1.30.2'
 PMTILES_PATH = f'{tilegen_deploy_config.remote_pmtiles_bin}/pmtiles'
 
 
-def install_pmtiles(c):
+def install_pmtiles(c: Connection) -> None:
     if exists(c, PMTILES_PATH):
         print('pmtiles exists, skipping')
         return

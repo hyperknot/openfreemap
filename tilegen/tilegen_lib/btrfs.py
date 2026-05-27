@@ -142,13 +142,13 @@ def shrink_btrfs(btrfs_img: Path):
     print('shrink_btrfs DONE')
 
 
-def gzip_btrfs(run_folder: Path):
+def gzip_btrfs(run_folder: Path) -> None:
     """Gzip tiles.btrfs using pigz. Removes the original tiles.btrfs."""
     os.chdir(run_folder)
     subprocess.run(['pigz', 'tiles.btrfs', '--fast'], check=True)
 
 
-def move_logs(run_folder: Path):
+def move_logs(run_folder: Path) -> None:
     """Move log and stats files into a logs/ subdirectory."""
     os.chdir(run_folder)
     Path('logs').mkdir(exist_ok=True)
@@ -157,8 +157,7 @@ def move_logs(run_folder: Path):
             shutil.move(file, 'logs')
 
 
-def append_sha256sum(file, mode='a'):
-    file = Path(file)
+def append_sha256sum(file: Path, mode: str = 'a') -> None:
     with (file.parent / 'SHA256SUMS').open(mode) as out:
         subprocess.run(['sha256sum', file.name], cwd=file.parent, check=True, stdout=out)
 

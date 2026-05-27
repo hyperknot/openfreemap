@@ -1,9 +1,11 @@
+from fabric import Connection
+
 from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
 from shared_lib.ssh_lib.apt import apt_get_install
 from shared_lib.ssh_lib.utils import exists, put
 
 
-def c1000k(c):
+def c1000k(c: Connection) -> None:
     if exists(c, 'c1000k-master'):
         return
 
@@ -18,7 +20,7 @@ def c1000k(c):
     # make sure it runs till 1 million
 
 
-def wrk(c):
+def wrk(c: Connection) -> None:
     apt_get_install(c, 'wrk')
     c.sudo('mkdir -p /data/ofm/benchmark')
     put(

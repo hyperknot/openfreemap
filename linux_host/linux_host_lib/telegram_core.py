@@ -1,13 +1,15 @@
 import requests
 
 
-def telegram_send_message(message, bot_token, chat_id, *, markdown: bool = False):
+def telegram_send_message(
+    message: str, bot_token: str, chat_id: str, *, markdown: bool = False
+) -> None:
     if markdown:
         message = _telegram_escape_markdown(message)
 
     url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
 
-    payload = {
+    payload: dict[str, str | bool] = {
         'chat_id': chat_id,
         'text': message,
         'disable_web_page_preview': True,
