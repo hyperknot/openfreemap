@@ -14,7 +14,7 @@ def cli():
 
 @cli.command()
 @common_options
-def debug(hostname, user, port, noninteractive):
+def debug(hostname: str, user: str | None, port: int | None, noninteractive: bool):
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
 

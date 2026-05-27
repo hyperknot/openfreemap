@@ -32,7 +32,7 @@ def write_nginx_config():
     print(f'test with:\n{curl_help_joined}')
 
 
-def process_domain(domain_data) -> str:
+def process_domain(domain_data: dict[str, Any]) -> str:
     if domain_data['cert']['type'] == 'upload':
         if (
             not Path(domain_data['cert_file']).is_file()

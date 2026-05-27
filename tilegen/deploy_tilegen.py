@@ -12,13 +12,12 @@ from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 @click.option('--cron', is_flag=True, help='Enable cron task')
 @click.option('--reinstall', is_flag=True, help='Reinstall everything in /data/ofm folder')
 def cli(
-    hostname,
-    user,
-    port,
-    noninteractive,
-    #
-    cron,
-    reinstall,
+    hostname: str,
+    user: str | None,
+    port: int | None,
+    noninteractive: bool,
+    cron: bool,
+    reinstall: bool,
 ):
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return

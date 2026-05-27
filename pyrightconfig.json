@@ -10,6 +10,6 @@
   "reportUnannotatedClassAttribute": "none",
   "reportUnknownArgumentType": "none",
   "reportUnknownMemberType": "none",
-  "reportUnknownParameterType": "none",
+  // "reportUnknownParameterType": "none",
   "reportUnusedCallResult": "none" // forces ugly code like _ = subprocess.run(...).
 }

@@ -97,7 +97,7 @@ def nginx_config():
 
 @cli.command()
 @click.option('--force', is_flag=True, help='Force nginx sync run')
-def sync(force):
+def sync(force: bool):
     """
     Runs the sync task, normally called by cron every minute
     On a new server this also takes care of everything, no need to run anything manually.

@@ -24,7 +24,9 @@ def cli():
 @cli.command()
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
-def init_static(hostname, user, port, noninteractive, config):
+def init_static(
+    hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str
+):
     jsonc_config_path, jsonc_config = load_jsonc_config(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
@@ -44,7 +46,14 @@ def init_static(hostname, user, port, noninteractive, config):
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
 @click.option('--sync', is_flag=True, help='Run manual sync after init')
-def init_autoupdate(hostname, user, port, noninteractive, sync, config):
+def init_autoupdate(
+    hostname: str,
+    user: str | None,
+    port: int | None,
+    noninteractive: bool,
+    sync: bool,
+    config: str,
+):
     jsonc_config_path, jsonc_config = load_jsonc_config(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
@@ -68,7 +77,7 @@ def init_autoupdate(hostname, user, port, noninteractive, sync, config):
 @cli.command()
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
-def sync(hostname, user, port, noninteractive, config):
+def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str):
     _, jsonc_config = load_jsonc_config(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):

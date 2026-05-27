@@ -31,7 +31,7 @@ def cli():
 @cli.command()
 @click.argument('area', required=True)
 @click.option('--upload', is_flag=True, help='Upload after generation is complete')
-def make_tiles(area, upload):
+def make_tiles(area: str, upload: bool):
     """
     Generate tiles for a given area, optionally upload it to the btrfs bucket
     """
@@ -96,7 +96,7 @@ def make_indexes():
 @click.option(
     '--version', default='latest', help='Optional version string, like "20231227_043106_pt"'
 )
-def set_version(area, version):
+def set_version(area: str, version: str):
     """
     Set versions for a given area
     """
