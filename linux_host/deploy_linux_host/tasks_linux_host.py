@@ -1,18 +1,16 @@
 from pathlib import Path
-from typing import Any
 
 from fabric import Connection
 
 from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
+from linux_host.linux_host_lib.linux_host_jsonc_config import read_linux_host_jsonc_config
 from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from shared_lib.ssh_lib.nginx import nginx
 from shared_lib.ssh_lib.utils import put, sudo_cmd
 from shared_lib.utils.benchmark import c1000k, wrk
 
 
-def prepare_linux_host(
-    c: Connection, jsonc_config_path: Path, jsonc_config: dict[str, Any]
-) -> None:
+def prepare_linux_host(c: Connection, jsonc_config_path: Path) -> None:
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
     nginx(c)
@@ -23,12 +21,11 @@ def prepare_linux_host(
     c.sudo(f'mkdir -p {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
     c.sudo(f'chown nginx:nginx {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
 
-    upload_jsonc_config_and_certs(c, jsonc_config_path, jsonc_config)
+    upload_jsonc_config_and_certs(c, jsonc_config_path)
 
 
-def upload_jsonc_config_and_certs(
-    c: Connection, jsonc_config_path: Path, jsonc_config: dict[str, Any]
-) -> None:
+def upload_jsonc_config_and_certs(c: Connection, jsonc_config_path: Path) -> None:
+    jsonc_config = read_linux_host_jsonc_config(jsonc_config_path)
     c.sudo('mkdir -p /data/nginx/certs')
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
 
@@ -36,9 +33,7 @@ def upload_jsonc_config_and_certs(
         if domain_data['cert']['type'] == 'upload':
             local_cert_path = Path(domain_data['cert']['cert_path'])
             if not local_cert_path.is_absolute():
-                local_cert_path = (
-                    linux_host_deploy_config.local_linux_host_config_dir / local_cert_path
-                )
+                local_cert_path = jsonc_config_path.parent / local_cert_path
 
             cert_basename = local_cert_path.stem
             local_key_path = local_cert_path.parent / f'{cert_basename}.key'
@@ -58,6 +53,12 @@ def upload_jsonc_config_and_certs(
         f'{linux_host_deploy_config.remote_linux_host_config}/config.jsonc',
         user='ofm',
         create_parent_dir=True,
+    )
+    put(
+        c,
+        jsonc_config_path.parent / 'schema.json',
+        f'{linux_host_deploy_config.remote_linux_host_config}/schema.json',
+        user='ofm',
     )
 
 
