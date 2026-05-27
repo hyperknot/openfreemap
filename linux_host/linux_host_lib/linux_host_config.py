@@ -2,6 +2,7 @@ import json
 import socket
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, cast
 
 import json5
 from jsonschema import ValidationError, validate
@@ -9,9 +10,9 @@ from jsonschema import ValidationError, validate
 from linux_host.linux_host_lib.slugify import slugify
 
 
-def read_linux_host_jsonc_config(jsonc_config_path: Path) -> dict:
+def read_linux_host_jsonc_config(jsonc_config_path: Path) -> dict[str, Any]:
     try:
-        jsonc_config = json5.loads(jsonc_config_path.read_text())
+        jsonc_config = cast(dict[str, Any], json5.loads(jsonc_config_path.read_text()))
     except Exception as e:
         raise RuntimeError(f'Error parsing config file {jsonc_config_path}: {e}') from e
 
@@ -27,7 +28,7 @@ def read_linux_host_jsonc_config(jsonc_config_path: Path) -> dict:
     return jsonc_config
 
 
-def validate_jsonc_config_schema(jsonc_config: dict) -> None:
+def validate_jsonc_config_schema(jsonc_config: dict[str, Any]) -> None:
     schema_path = Path(__file__).resolve().parents[2] / 'config' / 'linux_host' / 'schema.json'
 
     try:
@@ -67,7 +68,7 @@ class LinuxHostConfig:
 
     telegram_token: str | None = None
     telegram_chat_id: str | None = None
-    jsonc_config: dict = field(default_factory=dict)
+    jsonc_config: dict[str, Any] = field(default_factory=dict)
 
     ofm_host_prefix: str = f'OFM linux_host {socket.gethostname()}'
 

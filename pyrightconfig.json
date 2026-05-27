@@ -2,7 +2,7 @@
   "exclude": [".venv", ".ruff_cache", "**/_not_used", "**/node_modules", "**/__pycache__"],
   "typeCheckingMode": "basic",
 
-  "reportArgumentType": "none",
+  // "reportArgumentType": "none",
   "reportAttributeAccessIssue": "none",
   "reportCallIssue": "none",
   "reportIndexIssue": "none",

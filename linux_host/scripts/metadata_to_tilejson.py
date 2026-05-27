@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 from pathlib import Path
+from typing import Any
 
 import click
 
@@ -21,7 +22,7 @@ def cli(metadata_path: Path, tilejson_path: Path, url_prefix: str, minify: bool)
     Reference: https://github.com/mapbox/tilejson-spec/tree/master/3.0.0
     """
 
-    tilejson = dict(tilejson='3.0.0')
+    tilejson: dict[str, Any] = dict(tilejson='3.0.0')
 
     with open(metadata_path) as fp:
         metadata = json.load(fp)
