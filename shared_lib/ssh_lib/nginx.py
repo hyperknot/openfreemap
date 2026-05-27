@@ -17,24 +17,7 @@ ACME_MODULE_RUNTIME_PATH = '/usr/lib/nginx/modules/ngx_http_acme_module.so'
 
 
 def nginx(c):
-    codename = ubuntu_codename(c)
-
-    # legacy file from previous setup style
-    # c.sudo('rm -f /etc/apt/sources.list.d/nginx-mainline.list')
-    # c.sudo('rm -f /etc/apt/preferences.d/99nginx')
-
-    if not exists(c, '/usr/sbin/nginx'):
-        setup_apt_repository(
-            c,
-            repo_name=NGINX_REPO_NAME,
-            key_url='https://nginx.org/keys/nginx_signing.key',
-            repo_url='https://nginx.org/packages/mainline/ubuntu',
-            suite=codename,
-            component='nginx',
-        )
-        apt_get_update(c)
-        apt_get_install(c, 'nginx')
-        apt_get_install(c, 'nginx-module-acme')
+    install_nginx(c)
 
     c.sudo('rm -rf /data/nginx/config')
     c.sudo('mkdir -p /data/nginx/config')
@@ -60,6 +43,22 @@ def nginx(c):
     c.sudo('nginx -t')
     c.sudo('service nginx restart')
     verify_acme_module_after_restart(c)
+
+
+def install_nginx(c):
+    if exists(c, '/usr/sbin/nginx'):
+        return
+
+    setup_apt_repository(
+        c,
+        repo_name=NGINX_REPO_NAME,
+        key_url='https://nginx.org/keys/nginx_signing.key',
+        repo_url='https://nginx.org/packages/mainline/ubuntu',
+        suite=ubuntu_codename(c),
+        component='nginx',
+    )
+    apt_get_update(c)
+    apt_get_install(c, 'nginx nginx-module-acme')
 
 
 def verify_acme_module_after_restart(c):
