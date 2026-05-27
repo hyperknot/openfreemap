@@ -11,11 +11,14 @@ class LinuxHostConfig:
     areas: tuple[str, ...] = ('planet', 'monaco')
 
     repo_root: Path = Path(__file__).resolve().parents[2]
-    package_dir: Path = Path(__file__).resolve().parents[1]
-    scripts_dir: Path = package_dir / 'scripts'
-    nginx_templates: Path = package_dir / 'nginx_templates'
+    linux_host_code_dir: Path = repo_root / 'linux_host'
+    scripts_dir: Path = linux_host_code_dir / 'scripts'
+    nginx_templates_dir: Path = linux_host_code_dir / 'nginx_templates'
 
-    linux_host_dir: Path = Path('/data/ofm/linux_host')
+    ofm_dir: Path = Path('/data/ofm')
+    config_dir: Path = field(init=False)
+    linux_host_config_dir: Path = field(init=False)
+    linux_host_dir: Path = ofm_dir / 'linux_host'
     runs_dir: Path = linux_host_dir / 'runs'
     assets_dir: Path = linux_host_dir / 'assets'
 
@@ -24,7 +27,6 @@ class LinuxHostConfig:
     nginx_certs_dir: Path = Path('/data/nginx/certs')
     nginx_sites_dir: Path = Path('/data/nginx/sites')
 
-    linux_host_config_dir: Path = field(init=False)
     deployed_versions_dir: Path = field(init=False)
 
     domains: list[dict[str, Any]] = field(init=False)
@@ -35,11 +37,12 @@ class LinuxHostConfig:
     ofm_host_prefix: str = f'OFM linux_host {socket.gethostname()}'
 
     def __post_init__(self) -> None:
-        if Path('/data/ofm').exists():
-            self.linux_host_config_dir = Path('/data/ofm/config/linux_host')
+        if self.ofm_dir.exists():
+            self.config_dir = self.ofm_dir / 'config'
         else:
-            self.linux_host_config_dir = self.repo_root / 'config' / 'linux_host'
+            self.config_dir = self.repo_root / 'config'
 
+        self.linux_host_config_dir = self.config_dir / 'linux_host'
         self.deployed_versions_dir = self.linux_host_config_dir / 'deployed_versions'
 
         jsonc_config_path = self.linux_host_config_dir / 'config.jsonc'
