@@ -27,7 +27,7 @@ def cli():
 def init_static(
     hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str
 ):
-    jsonc_config_path = find_jsonc_config_path(config)
+    jsonc_config_path, jsonc_config = load_jsonc_config(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
@@ -39,7 +39,7 @@ def init_static(
 
     run_linux_host_sync(c)
 
-    check_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname, print_results=True)
+    check_server_health(jsonc_config, hostname, print_results=True)
 
 
 @cli.command()
@@ -54,7 +54,7 @@ def init_autoupdate(
     sync: bool,
     config: str,
 ):
-    jsonc_config_path = find_jsonc_config_path(config)
+    jsonc_config_path, jsonc_config = load_jsonc_config(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
@@ -71,14 +71,14 @@ def init_autoupdate(
 
     install_linux_host_cron(c)
 
-    check_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname, print_results=True)
+    check_server_health(jsonc_config, hostname, print_results=True)
 
 
 @cli.command()
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
 def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str):
-    jsonc_config_path = find_jsonc_config_path(config)
+    _, jsonc_config = load_jsonc_config(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
@@ -86,10 +86,10 @@ def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool
     c = get_connection(hostname, user, port)
     run_linux_host_sync(c)
 
-    check_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname, print_results=True)
+    check_server_health(jsonc_config, hostname, print_results=True)
 
 
-def find_jsonc_config_path(config_name: str) -> Path:
+def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
     if config_name.endswith('.jsonc'):
         raise click.ClickException(
             'Pass the config name without .jsonc, for example: --config staging'
@@ -104,15 +104,12 @@ def find_jsonc_config_path(config_name: str) -> Path:
             + 'config/linux_host/config.jsonc or pass --config YOUR_CONFIG_NAME_WITHOUT_JSONC.'
         )
 
-    read_deploy_jsonc_config(jsonc_config_path)
-    return jsonc_config_path
-
-
-def read_deploy_jsonc_config(jsonc_config_path: Path) -> dict[str, Any]:
     try:
-        return read_linux_host_jsonc_config(jsonc_config_path)
+        jsonc_config = read_linux_host_jsonc_config(jsonc_config_path)
     except RuntimeError as e:
         raise click.ClickException(str(e)) from e
+
+    return jsonc_config_path, jsonc_config
 
 
 if __name__ == '__main__':
