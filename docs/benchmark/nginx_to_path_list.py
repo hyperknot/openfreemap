@@ -8,7 +8,7 @@ import json
 with open('access.jsonl') as fp:
     json_lines = fp.readlines()
 
-paths = []
+paths: list[str] = []
 for i, line in enumerate(json_lines):
     log_data = json.loads(line)
     if log_data['status'] != 200:

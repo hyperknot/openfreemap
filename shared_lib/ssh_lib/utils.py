@@ -319,12 +319,8 @@ def get_ip_from_ssh_alias(ssh_alias: str) -> str:
     # Create connection (doesn't actually connect)
     conn = Connection(ssh_alias)
 
-    # Get the resolved hostname from SSH config
-    hostname = str(conn.host or '')
+    hostname = f'{conn.host or ""}'
     if not hostname:
         raise RuntimeError(f'Could not resolve hostname for SSH alias {ssh_alias!r}')
 
-    # Resolve to IP
-    ip_address = socket.gethostbyname(hostname)
-
-    return ip_address
+    return socket.gethostbyname(hostname)
