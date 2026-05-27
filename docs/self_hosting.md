@@ -34,7 +34,7 @@ If you run it on a non-clean server, please understand that this will modify you
 
 ## Instructions
 
-I recommend running things quickly first, with `SKIP_PLANET=true` and then once it works, running it with `SKIP_PLANET=false`.
+I recommend running things quickly first, with `"skip_planet": true` and then once it works, running it with `"skip_planet": false`.
 
 #### 1. DNS setup
 
@@ -45,14 +45,15 @@ For example, make an A record for "maps.example.com" -> 185.199.110.153
 
 ```
 git clone https://github.com/hyperknot/openfreemap
+cd openfreemap
+cp config/linux_host/config.sample.jsonc config/linux_host/config.jsonc
 ```
 
-In the config folder, copy `.env.sample` to `.env` and set the values.
+Edit `config/linux_host/config.jsonc` and fill it out:
 
-`DOMAIN_DIRECT` - Your subdomain \
-`LETSENCRYPT_EMAIL` - Your email for Let's Encrypt
-
-Set `SKIP_PLANET=true` first.
+- replace `tiles.example.com` with your own domain
+- replace `admin@example.com` with your email for Let's Encrypt
+- keep `"skip_planet": true` for the first quick deploy
 
 #### 3. Set up Python if you don't have it yet
 
@@ -63,11 +64,10 @@ Install [uv](https://docs.astral.sh/uv/) locally and make sure it is on your `PA
 You run the deploy script locally, and it deploys to a remote server over SSH. You can use a virtualenv if you are used to working with them, but it's not necessary.
 
 ```
-cd openfreemap
 uv sync
 ```
 
-#### 5. Deploy quick version with `SKIP_PLANET=true`
+#### 5. Deploy quick version with `"skip_planet": true`
 
 Run the actual deploy command and wait a few minutes:
 
@@ -75,12 +75,14 @@ Run the actual deploy command and wait a few minutes:
 ./linux_host/deploy_linux_host.py init-static HOSTNAME
 ```
 
+The deploy script reads `config/linux_host/config.jsonc` by default. To use another config file from `config/linux_host/`, pass `--config`, for example `./linux_host/deploy_linux_host.py init-static HOSTNAME --config staging`.
+
 The deploy script connects over SSH. You can SSH as `root` or as a normal sudo-capable user; the script creates and uses an `ofm` runtime user. If needed, add `--user YOUR_SSH_USER` and/or `--port 22`.
 
 For password-based SSH, set `SSH_PASSWD`. If sudo uses a different password, set `SUDO_PASSWD` too:
 
 ```
-SSH_PASSWD='your-ssh-password' SUDO_PASSWD='your-sudo-password' ./linux_host/deploy_linux_host.py --user YOUR_SSH_USER --port 22 init-static HOSTNAME
+SSH_PASSWD='your-ssh-password' SUDO_PASSWD='your-sudo-password' ./linux_host/deploy_linux_host.py init-static HOSTNAME --user YOUR_SSH_USER --port 22
 ```
 
 #### 5. Check
@@ -104,9 +106,9 @@ server: nginx
 x-ofm-debug: latest JSON monaco
 ```
 
-#### 6. Deploy and check with `SKIP_PLANET=false`
+#### 6. Deploy and check with `"skip_planet": false`
 
-Update your `.env` file and re-run the same `./linux_host/deploy_linux_host.py init-static HOSTNAME` as before.
+Update `config/linux_host/config.jsonc` and re-run the same `./linux_host/deploy_linux_host.py init-static HOSTNAME` as before.
 
 Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
 
