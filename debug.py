@@ -17,9 +17,9 @@
 #     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
 #         return
 
-#     jsonc_config_path = linux_host_deploy_config.local_linux_host_config_dir / 'config.jsonc'
+#     jsonc_path = linux_host_deploy_config.local_linux_host_config_dir / 'config.jsonc'
 #     c = get_connection(hostname, user, port)
-#     upload_jsonc_config_and_certs(c, jsonc_config_path)
+#     upload_jsonc_config_and_certs(c, jsonc_path)
 
 
 # if __name__ == '__main__':

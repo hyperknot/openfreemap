@@ -8,28 +8,28 @@ from jsonschema import ValidationError, validate
 from linux_host.linux_host_lib.slugify import slugify
 
 
-def read_linux_host_jsonc_config(jsonc_config_path: Path) -> dict[str, Any]:
+def read_linux_host_jsonc_config(jsonc_path: Path) -> dict[str, Any]:
     try:
-        jsonc_config = cast(dict[str, Any], json5.loads(jsonc_config_path.read_text()))
+        jsonc_data = cast(dict[str, Any], json5.loads(jsonc_path.read_text()))
     except Exception as e:
-        raise RuntimeError(f'Error parsing config file {jsonc_config_path}: {e}') from e
+        raise RuntimeError(f'Error parsing config file {jsonc_path}: {e}') from e
 
-    _validate_jsonc_config_schema(jsonc_config, jsonc_config_path.parent / 'schema.json')
+    _validate_jsonc_config_schema(jsonc_data, jsonc_path.parent / 'schema.json')
 
-    for domain_data in jsonc_config['domains']:
+    for domain_data in jsonc_data['domains']:
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
 
         if domain_data['cert']['type'] == 'upload':
             domain_data['cert_file'] = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
             domain_data['key_file'] = f'/data/nginx/certs/ofm-{domain_data["slug"]}.key'
 
-    return jsonc_config
+    return jsonc_data
 
 
-def _validate_jsonc_config_schema(jsonc_config: dict[str, Any], schema_path: Path) -> None:
+def _validate_jsonc_config_schema(jsonc_data: dict[str, Any], schema_path: Path) -> None:
     try:
         schema = json.loads(schema_path.read_text())
-        validate(instance=jsonc_config, schema=schema)
+        validate(instance=jsonc_data, schema=schema)
         print('✓ Configuration is valid')
     except ValidationError as e:
         error_msg = f'Configuration validation failed: {e.message}'

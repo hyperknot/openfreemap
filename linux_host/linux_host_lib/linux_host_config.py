@@ -45,16 +45,16 @@ class LinuxHostConfig:
         self.linux_host_config_dir = self.config_dir / 'linux_host'
         self.deployed_versions_dir = self.linux_host_config_dir / 'deployed_versions'
 
-        jsonc_config_path = self.linux_host_config_dir / 'config.jsonc'
-        if not jsonc_config_path.is_file():
-            raise FileNotFoundError(f'Linux host config file not found: {jsonc_config_path}')
+        jsonc_path = self.linux_host_config_dir / 'config.jsonc'
+        if not jsonc_path.is_file():
+            raise FileNotFoundError(f'Linux host config file not found: {jsonc_path}')
 
-        jsonc_config = read_linux_host_jsonc_config(jsonc_config_path)
+        jsonc_data = read_linux_host_jsonc_config(jsonc_path)
 
-        self.domains = jsonc_config['domains']
-        self.skip_planet = jsonc_config.get('skip_planet', False)
-        self.telegram_token = jsonc_config.get('telegram_token')
-        self.telegram_chat_id = jsonc_config.get('telegram_chat_id')
+        self.domains = jsonc_data['domains']
+        self.skip_planet = jsonc_data.get('skip_planet', False)
+        self.telegram_token = jsonc_data.get('telegram_token')
+        self.telegram_chat_id = jsonc_data.get('telegram_chat_id')
 
 
 linux_host_config = LinuxHostConfig()

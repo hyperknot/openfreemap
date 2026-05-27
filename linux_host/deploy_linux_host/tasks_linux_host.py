@@ -10,7 +10,7 @@ from shared_lib.ssh_lib.utils import put, sudo_cmd
 from shared_lib.utils.benchmark import c1000k, wrk
 
 
-def prepare_linux_host(c: Connection, jsonc_config_path: Path) -> None:
+def prepare_linux_host(c: Connection, jsonc_path: Path) -> None:
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
     nginx(c)
@@ -21,19 +21,19 @@ def prepare_linux_host(c: Connection, jsonc_config_path: Path) -> None:
     c.sudo(f'mkdir -p {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
     c.sudo(f'chown nginx:nginx {linux_host_deploy_config.remote_linux_host_dir}/logs_nginx')
 
-    upload_jsonc_config_and_certs(c, jsonc_config_path)
+    upload_jsonc_config_and_certs(c, jsonc_path)
 
 
-def upload_jsonc_config_and_certs(c: Connection, jsonc_config_path: Path) -> None:
-    jsonc_config = read_linux_host_jsonc_config(jsonc_config_path)
+def upload_jsonc_config_and_certs(c: Connection, jsonc_path: Path) -> None:
+    jsonc_data = read_linux_host_jsonc_config(jsonc_path)
     c.sudo('mkdir -p /data/nginx/certs')
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
 
-    for domain_data in jsonc_config['domains']:
+    for domain_data in jsonc_data['domains']:
         if domain_data['cert']['type'] == 'upload':
             local_cert_path = Path(domain_data['cert']['cert_path'])
             if not local_cert_path.is_absolute():
-                local_cert_path = jsonc_config_path.parent / local_cert_path
+                local_cert_path = jsonc_path.parent / local_cert_path
 
             cert_basename = local_cert_path.stem
             local_key_path = local_cert_path.parent / f'{cert_basename}.key'
@@ -49,14 +49,14 @@ def upload_jsonc_config_and_certs(c: Connection, jsonc_config_path: Path) -> Non
 
     put(
         c,
-        jsonc_config_path,
+        jsonc_path,
         f'{linux_host_deploy_config.remote_linux_host_config}/config.jsonc',
         user='ofm',
         create_parent_dir=True,
     )
     put(
         c,
-        jsonc_config_path.parent / 'schema.json',
+        jsonc_path.parent / 'schema.json',
         f'{linux_host_deploy_config.remote_linux_host_config}/schema.json',
         user='ofm',
     )
