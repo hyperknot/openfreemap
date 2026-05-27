@@ -7,7 +7,7 @@
   "reportMissingParameterType": "none",
   "reportMissingTypeArgument": "none",
   "reportMissingTypeStubs": "none",
-  "reportUnannotatedClassAttribute": "none",
+  // "reportUnannotatedClassAttribute": "none",
   "reportUnknownMemberType": "none", // doesn't allow c.host
   "reportUnusedCallResult": "none" // forces ugly code like _ = subprocess.run(...).
 }
