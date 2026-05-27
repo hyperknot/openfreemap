@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 import click
 
@@ -7,7 +8,7 @@ from shared_lib.pycurl import pycurl_get
 from shared_lib.ssh_lib.utils import get_ip_from_ssh_alias
 
 
-def check_server_health(config_data: dict, hostname: str | None = None) -> dict:
+def check_server_health(config_data: dict[str, Any], hostname: str | None = None) -> dict[str, Any]:
     area = 'monaco' if config_data.get('skip_planet') else 'planet'
     version = get_deployed_version(area)['version']
     domains = [d['domain'] for d in config_data['domains']]
@@ -21,7 +22,7 @@ def check_server_health(config_data: dict, hostname: str | None = None) -> dict:
         if not servers:
             raise ValueError(f'Server {hostname} not found in config')
 
-    results = {}
+    results: dict[str, Any] = {}
     for server in servers:
         server_hostname = server['hostname']
         server_ip = server['ip']
@@ -48,7 +49,7 @@ def check_server_health(config_data: dict, hostname: str | None = None) -> dict:
     return results
 
 
-def print_server_health(results: dict) -> None:
+def print_server_health(results: dict[str, Any]) -> None:
     for server_hostname, server_data in results.items():
         status = (
             click.style('OK', fg='green')

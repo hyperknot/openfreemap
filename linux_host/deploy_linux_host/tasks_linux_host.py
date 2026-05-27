@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 from linux_host.deploy_linux_host.benchmark import c1000k, wrk
 from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
@@ -7,7 +8,7 @@ from shared_lib.ssh_lib.nginx import nginx
 from shared_lib.ssh_lib.utils import put, sudo_cmd
 
 
-def prepare_linux_host(c, jsonc_config_path: Path, jsonc_config: dict):
+def prepare_linux_host(c, jsonc_config_path: Path, jsonc_config: dict[str, Any]):
     kernel_somaxconn65k(c)
     kernel_limits1m(c)
     nginx(c)
@@ -21,7 +22,7 @@ def prepare_linux_host(c, jsonc_config_path: Path, jsonc_config: dict):
     upload_jsonc_config_and_certs(c, jsonc_config_path, jsonc_config)
 
 
-def upload_jsonc_config_and_certs(c, jsonc_config_path: Path, jsonc_config: dict):
+def upload_jsonc_config_and_certs(c, jsonc_config_path: Path, jsonc_config: dict[str, Any]):
     c.sudo('mkdir -p /data/nginx/certs')
     c.sudo('rm -rf /data/nginx/certs/ofm-*')
 

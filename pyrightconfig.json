@@ -1,19 +1,18 @@
 {
   "exclude": [".venv", ".ruff_cache", "**/_not_used", "**/node_modules", "**/__pycache__"],
-  "typeCheckingMode": "basic"
 
-  // Redundant with "typeCheckingMode": "basic":
-  // "reportAny": "none",
-  // "reportImplicitStringConcatenation": "none",
-  // "reportMissingParameterType": "none",
-  // "reportMissingTypeArgument": "none",
-  // "reportMissingTypeStubs": "none",
-  // "reportUnannotatedClassAttribute": "none",
-  // "reportUnknownArgumentType": "none",
-  // "reportUnknownMemberType": "none",
-  // "reportUnknownParameterType": "none",
-  // "reportUnknownVariableType": "none",
-  // "reportUnusedCallResult": "none",
-  // "reportUnusedImport": "none",
-  // "reportUnusedParameter": "none"
+  "reportAny": "none",
+  "reportExplicitAny": "none",
+  "reportImplicitStringConcatenation": "none",
+  "reportMissingParameterType": "none",
+  "reportMissingTypeArgument": "none",
+  "reportMissingTypeStubs": "none",
+  "reportUnannotatedClassAttribute": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownParameterType": "none",
+  "reportUnknownVariableType": "none",
+  "reportUnusedCallResult": "none",
+  "reportUnusedImport": "none",
+  "reportUnusedParameter": "none"
 }

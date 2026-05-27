@@ -2,18 +2,19 @@
 
 from datetime import datetime
 from email.utils import parsedate_to_datetime
+from typing import Any
 
 import requests
 
 
-def get_versions_for_area(area: str) -> list:
+def get_versions_for_area(area: str) -> list[str]:
     """
     Download the files.txt and check for the runs with the "done" file present
     """
     r = requests.get('https://btrfs.openfreemap.com/files.txt', timeout=30)
     r.raise_for_status()
 
-    versions = []
+    versions: list[str] = []
 
     files = r.text.splitlines()
     for f in files:
@@ -27,7 +28,7 @@ def get_versions_for_area(area: str) -> list:
     return sorted(versions)
 
 
-def get_deployed_version(area: str) -> dict:
+def get_deployed_version(area: str) -> dict[str, Any]:
     r = requests.get(f'https://assets.openfreemap.com/deployed_versions/{area}.txt', timeout=30)
     r.raise_for_status()
     version = r.text.strip()
@@ -41,5 +42,7 @@ def get_deployed_version(area: str) -> dict:
     )
 
 
-def parse_http_last_modified(date_string) -> datetime:
+def parse_http_last_modified(date_string: str | None) -> datetime:
+    if date_string is None:
+        raise ValueError('Last-Modified header is missing')
     return parsedate_to_datetime(date_string)

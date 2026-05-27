@@ -1,6 +1,7 @@
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 from linux_host.linux_host_lib.linux_host_config import linux_host_config
 from linux_host.linux_host_lib.utils import python_venv_executable
@@ -46,7 +47,7 @@ def process_domain(domain_data) -> str:
     return ''
 
 
-def create_nginx_conf(domain_data: dict) -> str:
+def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     dynamic_block_text, curl_help_text = dynamic_blocks(domain_data)
 
     template = (linux_host_config.nginx_templates / 'common.conf').read_text()
@@ -65,7 +66,7 @@ def create_nginx_conf(domain_data: dict) -> str:
     return curl_help_text
 
 
-def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
+def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
     nginx_conf_text = ''
     curl_help_text = ''
 
@@ -104,7 +105,9 @@ def dynamic_blocks(domain_data: dict) -> tuple[str, str]:
     return nginx_conf_text, curl_help_text
 
 
-def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_data: dict) -> str:
+def create_version_location(
+    *, area: str, version: str, mnt_dir: Path, domain_data: dict[str, Any]
+) -> str:
     run_dir = linux_host_config.runs_dir / area / version
     if not run_dir.is_dir():
         print(f"  {run_dir} doesn't exist, skipping")
@@ -167,7 +170,7 @@ def create_version_location(*, area: str, version: str, mnt_dir: Path, domain_da
     """
 
 
-def create_latest_locations(*, domain_data: dict) -> str:
+def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
     location_str = ''
 
     local_version_files = linux_host_config.deployed_versions_dir.glob('*.txt')

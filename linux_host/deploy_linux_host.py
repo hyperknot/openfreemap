@@ -1,5 +1,6 @@
 #!/usr/bin/env -S uv run python -P
 from pathlib import Path
+from typing import Any
 
 import click
 
@@ -79,7 +80,7 @@ def sync(hostname, user, port, noninteractive, config):
     print_linux_host_server_health(jsonc_config, hostname)
 
 
-def load_jsonc_config(config_name: str) -> tuple[Path, dict]:
+def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
     if config_name.endswith('.jsonc'):
         raise click.ClickException(
             'Pass the config name without .jsonc, for example: --config staging'
@@ -100,7 +101,7 @@ def load_jsonc_config(config_name: str) -> tuple[Path, dict]:
         raise click.ClickException(str(e)) from e
 
 
-def print_linux_host_server_health(jsonc_config: dict, hostname: str) -> None:
+def print_linux_host_server_health(jsonc_config: dict[str, Any], hostname: str) -> None:
     results = check_server_health(jsonc_config, hostname)
     print_server_health(results)
 
