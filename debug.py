@@ -15,6 +15,9 @@ def cli():
 @cli.command()
 @common_options
 def debug(hostname, user, port, noninteractive):
+    if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
+        return
+
     jsonc_config_path = linux_host_deploy_config.local_linux_host_config_dir / 'config.jsonc'
     jsonc_config = read_linux_host_jsonc_config(jsonc_config_path)
 

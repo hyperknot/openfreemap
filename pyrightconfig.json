@@ -12,7 +12,7 @@
   "reportUnknownMemberType": "none",
   "reportUnknownParameterType": "none",
   "reportUnknownVariableType": "none",
-  "reportUnusedCallResult": "none",
-  "reportUnusedImport": "none",
-  "reportUnusedParameter": "none"
+  "reportUnusedCallResult": "none" // Allows intentionally unchecked return values like subprocess.run(...).
+  // "reportUnusedImport": "none",
+  // "reportUnusedParameter": "none"
 }
