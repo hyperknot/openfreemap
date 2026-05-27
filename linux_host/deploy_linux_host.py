@@ -108,6 +108,24 @@ def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool
     check_server_health(jsonc_data, hostname, print_results=True)
 
 
+@cli.command('health-test')
+@click.argument('hostname', required=False)
+@click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
+def health_test(hostname: str | None, config: str):
+    _, jsonc_data = load_jsonc_config(config)
+
+    try:
+        results = check_server_health(jsonc_data, hostname, print_results=True)
+    except ValueError as e:
+        raise click.ClickException(str(e)) from e
+
+    if not results:
+        raise click.ClickException('No health_check hosts configured')
+
+    if not all(result['all_ok'] for result in results.values()):
+        raise click.ClickException('Health test failed')
+
+
 def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
     if config_name.endswith('.jsonc'):
         raise click.ClickException(
@@ -125,7 +143,7 @@ def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
             f'  cp {(config_dir / "config.sample.jsonc").relative_to(repo_root)} '
             f'{(config_dir / "config.jsonc").relative_to(repo_root)}\n\n'
             f'Or use a different config file:\n'
-            f'  ./deploy_linux_host.py init-static {{hostname}} --config dev\n\n'
+            f'  ./deploy_linux_host.py ... --config dev\n\n'
             f'This would read:\n'
             f'  {(config_dir / "dev.jsonc").relative_to(repo_root)}'
         )
