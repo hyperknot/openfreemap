@@ -5,5 +5,6 @@
   "reportExplicitAny": "none", // explodes the codebase with types
   "reportMissingTypeStubs": "none", // needed for libraries without types
   "reportUnknownMemberType": "none", // doesn't allow c.host
-  "reportUnusedCallResult": "none" // forces ugly code like _ = subprocess.run(...).
+  "reportUnusedCallResult": "none", // forces ugly code like _ = subprocess.run(...).
+  "reportImplicitStringConcatenation": "none" // allows readable multi-line messages built from adjacent strings
 }

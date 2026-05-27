@@ -111,14 +111,23 @@ def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool
 def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
     if config_name.endswith('.jsonc'):
         raise click.ClickException(
-            'Pass the config name without .jsonc, for example: --config staging'
+            'Config names should not include .jsonc.\n\nExample:\n  --config staging'
         )
 
     jsonc_path = linux_host_deploy_config.local_linux_host_config_dir / f'{config_name}.jsonc'
     if not jsonc_path.is_file():
+        config_dir = linux_host_deploy_config.local_linux_host_config_dir
+        repo_root = linux_host_deploy_config.local_repo_root
         raise click.ClickException(
-            f'{jsonc_path} not found. Copy config/linux_host/config.sample.jsonc to '
-            + 'config/linux_host/config.jsonc or pass --config YOUR_CONFIG_NAME_WITHOUT_JSONC.'
+            f'Config file not found:\n'
+            f'  {jsonc_path.relative_to(repo_root)}\n\n'
+            f'To create the default config, run from the repo root:\n'
+            f'  cp {(config_dir / "config.sample.jsonc").relative_to(repo_root)} '
+            f'{(config_dir / "config.jsonc").relative_to(repo_root)}\n\n'
+            f'Or use a different config file:\n'
+            f'  ./deploy_linux_host.py init-static {{hostname}} --config dev\n\n'
+            f'This would read:\n'
+            f'  {(config_dir / "dev.jsonc").relative_to(repo_root)}'
         )
 
     try:
