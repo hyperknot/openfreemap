@@ -46,7 +46,7 @@ def upload_jsonc_config_and_certs(
             if not local_cert_path.is_file() or not local_key_path.is_file():
                 raise FileNotFoundError(
                     f'cert or key file for {domain_data["domain"]} is not found.\n'
-                    f'Make sure these files exists:\n{local_cert_path}\n{local_key_path}'
+                    + f'Make sure these files exists:\n{local_cert_path}\n{local_key_path}'
                 )
 
             put(c, local_cert_path, domain_data['cert_file'])

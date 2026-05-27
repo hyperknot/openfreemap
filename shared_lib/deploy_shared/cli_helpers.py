@@ -49,7 +49,7 @@ def check_sudo(c: Connection, *, sudo_password: bool) -> None:
         except UnexpectedExit as e:
             raise click.ClickException(
                 'SSH user could not run sudo with the provided password. Check that the user is '
-                'in the sudo group and that SUDO_PASSWD/SSH_PASSWD is correct.'
+                + 'in the sudo group and that SUDO_PASSWD/SSH_PASSWD is correct.'
             ) from e
         return
 
@@ -58,7 +58,7 @@ def check_sudo(c: Connection, *, sudo_password: bool) -> None:
 
     raise click.ClickException(
         'SSH user cannot run passwordless sudo. Use a root SSH user, configure NOPASSWD sudo, '
-        'or set SUDO_PASSWD/SSH_PASSWD for password-based sudo.'
+        + 'or set SUDO_PASSWD/SSH_PASSWD for password-based sudo.'
     )
 
 

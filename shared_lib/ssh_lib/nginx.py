@@ -81,7 +81,7 @@ def verify_acme_module_after_restart(c: Connection) -> None:
 
     raise RuntimeError(
         f'ACME verify failed on {c.host}. '
-        f'{ACME_MODULE_RUNTIME_PATH} is not loaded in the running nginx process.'
+        + f'{ACME_MODULE_RUNTIME_PATH} is not loaded in the running nginx process.'
     )
 
 
@@ -92,7 +92,7 @@ def generate_self_signed_cert(c: Connection) -> None:
     c.sudo('mkdir -p /etc/nginx/ssl')
     c.sudo(
         'openssl req -x509 -nodes -days 3650 -newkey rsa:2048 '
-        '-keyout /etc/nginx/ssl/self_signed.key -out /etc/nginx/ssl/self_signed.cert '
-        '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
+        + '-keyout /etc/nginx/ssl/self_signed.key -out /etc/nginx/ssl/self_signed.cert '
+        + '-subj "/C=US/ST=Dummy/L=Dummy/O=Dummy/CN=example.com"',
         hide=True,
     )

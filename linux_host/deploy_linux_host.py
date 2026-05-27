@@ -101,7 +101,7 @@ def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
     if not jsonc_config_path.is_file():
         raise click.ClickException(
             f'{jsonc_config_path} not found. Copy config/linux_host/config.sample.jsonc to '
-            'config/linux_host/config.jsonc or pass --config YOUR_CONFIG_NAME_WITHOUT_JSONC.'
+            + 'config/linux_host/config.jsonc or pass --config YOUR_CONFIG_NAME_WITHOUT_JSONC.'
         )
 
     try:

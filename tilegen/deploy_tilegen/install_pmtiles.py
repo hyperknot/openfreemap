@@ -27,9 +27,9 @@ def install_pmtiles(c: Connection) -> None:
     sudo_cmd(
         c,
         f'curl -fsSL https://github.com/protomaps/go-pmtiles/releases/download/v{GO_PMTILES_RELEASE}/go-pmtiles_{GO_PMTILES_RELEASE}_Linux_{pmtiles_arch}.tar.gz -o /tmp/go-pmtiles.tar.gz && '
-        f'tar -xzf /tmp/go-pmtiles.tar.gz -C {tilegen_deploy_config.remote_pmtiles_bin} pmtiles && '
-        f'chmod +x {PMTILES_PATH} && '
-        'rm -f /tmp/go-pmtiles.tar.gz',
+        + f'tar -xzf /tmp/go-pmtiles.tar.gz -C {tilegen_deploy_config.remote_pmtiles_bin} pmtiles && '
+        + f'chmod +x {PMTILES_PATH} && '
+        + 'rm -f /tmp/go-pmtiles.tar.gz',
     )
 
     c.sudo(f'{PMTILES_PATH} --help', hide=True)

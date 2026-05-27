@@ -3,11 +3,7 @@
 
   "reportAny": "none",
   "reportExplicitAny": "none",
-  "reportImplicitStringConcatenation": "none",
-  "reportMissingParameterType": "none",
-  "reportMissingTypeArgument": "none",
-  "reportMissingTypeStubs": "none",
-  // "reportUnannotatedClassAttribute": "none",
+  "reportMissingTypeStubs": "none", // needed for libraries without types
   "reportUnknownMemberType": "none", // doesn't allow c.host
   "reportUnusedCallResult": "none" // forces ugly code like _ = subprocess.run(...).
 }
