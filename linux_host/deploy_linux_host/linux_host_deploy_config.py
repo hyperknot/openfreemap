@@ -12,6 +12,7 @@ class LinuxHostDeployConfig:
     remote_ofm_dir: str = '/data/ofm'
     remote_source_dir: str = f'{remote_ofm_dir}/src'
     remote_config_dir: str = f'{remote_ofm_dir}/config'
+
     remote_linux_host_config: str = f'{remote_config_dir}/linux_host'
     remote_linux_host_dir: str = f'{remote_ofm_dir}/linux_host'
 

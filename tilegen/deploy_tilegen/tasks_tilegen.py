@@ -12,7 +12,7 @@ def prepare_tilegen(c: Connection, *, enable_cron: bool) -> None:
     install_planetiler(c)
     install_pmtiles(c)
 
-    rclone_config = tilegen_deploy_config.local_config_dir / 'tilegen' / 'rclone.conf'
+    rclone_config = tilegen_deploy_config.local_tilegen_config_dir / 'rclone.conf'
     if rclone_config.exists():
         put(
             c,
@@ -23,8 +23,11 @@ def prepare_tilegen(c: Connection, *, enable_cron: bool) -> None:
             create_parent_dir=True,
         )
 
-    c.sudo('mkdir -p /data/ofm/tilegen/logs')
-    c.sudo('chown ofm:ofm /data/ofm/tilegen /data/ofm/tilegen/logs')
+    c.sudo(f'mkdir -p {tilegen_deploy_config.remote_tilegen_dir}/logs')
+    c.sudo(
+        f'chown ofm:ofm {tilegen_deploy_config.remote_tilegen_dir} '
+        + f'{tilegen_deploy_config.remote_tilegen_dir}/logs'
+    )
 
     if enable_cron:
         put(c, tilegen_deploy_config.local_tilegen_dir / 'cron.d' / 'ofm_tilegen', '/etc/cron.d/')
