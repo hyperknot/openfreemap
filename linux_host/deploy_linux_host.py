@@ -13,7 +13,7 @@ from linux_host.deploy_linux_host.tasks_linux_host import (
 from linux_host.linux_host_lib.linux_host_jsonc_config import read_linux_host_jsonc_config
 from shared_lib.deploy_shared.cli_helpers import common_options, get_connection
 from shared_lib.deploy_shared.tasks_shared import prepare_shared
-from shared_lib.utils.server_health import check_server_health, print_server_health
+from shared_lib.utils.server_health import check_server_health
 
 
 @click.group()
@@ -39,7 +39,7 @@ def init_static(
 
     run_linux_host_sync(c)
 
-    print_linux_host_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname)
+    check_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname, print_results=True)
 
 
 @cli.command()
@@ -71,7 +71,7 @@ def init_autoupdate(
 
     install_linux_host_cron(c)
 
-    print_linux_host_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname)
+    check_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname, print_results=True)
 
 
 @cli.command()
@@ -86,7 +86,7 @@ def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool
     c = get_connection(hostname, user, port)
     run_linux_host_sync(c)
 
-    print_linux_host_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname)
+    check_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname, print_results=True)
 
 
 def find_jsonc_config_path(config_name: str) -> Path:
@@ -113,11 +113,6 @@ def read_deploy_jsonc_config(jsonc_config_path: Path) -> dict[str, Any]:
         return read_linux_host_jsonc_config(jsonc_config_path)
     except RuntimeError as e:
         raise click.ClickException(str(e)) from e
-
-
-def print_linux_host_server_health(jsonc_config: dict[str, Any], hostname: str) -> None:
-    results = check_server_health(jsonc_config, hostname)
-    print_server_health(results)
 
 
 if __name__ == '__main__':

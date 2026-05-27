@@ -8,7 +8,9 @@ from shared_lib.utils.get_version import get_deployed_version
 from shared_lib.utils.pycurl import pycurl_get
 
 
-def check_server_health(jsonc_data: dict[str, Any], hostname: str | None = None) -> dict[str, Any]:
+def check_server_health(
+    jsonc_data: dict[str, Any], hostname: str | None = None, *, print_results: bool = False
+) -> dict[str, Any]:
     health_check_hosts = jsonc_data.get('health_check', [])
 
     if hostname:
@@ -46,10 +48,13 @@ def check_server_health(jsonc_data: dict[str, Any], hostname: str | None = None)
                 results[server_hostname]['domains'][domain] = {'status': 'failed', 'error': str(e)}
                 results[server_hostname]['all_ok'] = False
 
+    if print_results:
+        _print_server_health(results)
+
     return results
 
 
-def print_server_health(results: dict[str, Any]) -> None:
+def _print_server_health(results: dict[str, Any]) -> None:
     for server_hostname, server_data in results.items():
         status = (
             click.style('OK', fg='green')
