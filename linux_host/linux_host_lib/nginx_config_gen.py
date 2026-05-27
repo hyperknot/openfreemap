@@ -1,6 +1,5 @@
 import subprocess
 import sys
-import time
 from pathlib import Path
 from typing import Any
 
@@ -30,7 +29,6 @@ def write_nginx_config():
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
-    warm_up_letsencrypt_certs()
 
     exclude_path = '/planet' if linux_host_config.skip_planet else '/monaco'
     curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
@@ -62,52 +60,12 @@ acme_issuer ofm_{domain_data['slug']} {{
     Path('/data/nginx/config/ofm-acme.conf').write_text('\n\n'.join(blocks) + '\n')
 
 
-def warm_up_letsencrypt_certs() -> None:
-    reload_needed = False
-
-    for domain_data in letsencrypt_domains():
-        if has_letsencrypt_cert(domain_data):
-            continue
-
-        print(f'  requesting letsencrypt certificate: {domain_data["domain"]}')
-        subprocess.run(
-            [
-                'curl',
-                '-kfsS',
-                '--max-time',
-                '10',
-                '--resolve',
-                f'{domain_data["domain"]}:443:127.0.0.1',
-                f'https://{domain_data["domain"]}/',
-                '-o',
-                '/dev/null',
-            ],
-            check=False,
-        )
-
-        for _ in range(30):
-            if has_letsencrypt_cert(domain_data):
-                print(f'  letsencrypt certificate ready: {domain_data["domain"]}')
-                reload_needed = True
-                break
-            time.sleep(1)
-        else:
-            print(f'  letsencrypt certificate not ready yet: {domain_data["domain"]}')
-
-    if reload_needed:
-        subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
-
-
 def letsencrypt_domains() -> list[dict[str, Any]]:
     return [
         domain_data
         for domain_data in linux_host_config.domains
         if domain_data['cert']['type'] == 'letsencrypt'
     ]
-
-
-def has_letsencrypt_cert(domain_data: dict[str, Any]) -> bool:
-    return any(Path(f'/data/nginx/acme/{domain_data["slug"]}').glob('*.crt'))
 
 
 def process_domain(domain_data: dict[str, Any]) -> str:

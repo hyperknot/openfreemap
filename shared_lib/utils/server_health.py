@@ -1,4 +1,5 @@
 import json
+import time
 from typing import Any
 
 import click
@@ -77,8 +78,21 @@ def _print_server_health(results: dict[str, Any]) -> None:
 
 
 def check_host_using_tilejson(*, url: str, ip: str, version: str) -> None:
-    tilejson_str = pycurl_get(url, ip)
-    tilejson = json.loads(tilejson_str)
-    tiles_url = tilejson['tiles'][0]
-    version_in_tilejson = tiles_url.split('/')[4]
-    assert version_in_tilejson == version
+    last_error: Exception | None = None
+
+    for _ in range(30):
+        try:
+            tilejson_str = pycurl_get(url, ip)
+            tilejson = json.loads(tilejson_str)
+            tiles_url = tilejson['tiles'][0]
+            version_in_tilejson = tiles_url.split('/')[4]
+            assert version_in_tilejson == version
+            return
+        except AssertionError:
+            raise
+        except Exception as e:
+            last_error = e
+            time.sleep(1)
+
+    if last_error:
+        raise last_error
