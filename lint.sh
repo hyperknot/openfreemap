@@ -10,5 +10,8 @@ hk install
 
 hk fix --all
 
+echo basedpyright
+uv run basedpyright --project pyrightconfig.json
+
 #pnpm typecheck
 #pnpm --dir website typecheck

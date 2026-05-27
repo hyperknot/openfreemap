@@ -1,18 +1,3 @@
 {
-  "exclude": [
-    "*.ipynb",
-    "build",
-    "docs",
-    "fe/build",
-    "server/debug*.py",
-    "server/dist",
-    "server/maphub_web/alembic",
-    "server/scripts_manual",
-    "server/maphub_web/tests/test_data",
-    "temp",
-    "**/_not_used",
-    "**/node_modules",
-    "**/__pycache__",
-    "**/.*"
-  ]
+  "exclude": [".venv", ".ruff_cache", "**/_not_used", "**/node_modules", "**/__pycache__"]
 }
