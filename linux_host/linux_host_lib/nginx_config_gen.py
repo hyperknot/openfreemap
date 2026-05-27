@@ -19,13 +19,13 @@ def write_nginx_config():
 
     curl_help_text = ''
 
-    for domain_data in linux_host_config.jsonc_config['domains']:
+    for domain_data in linux_host_config.domains:
         curl_help_text += process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    exclude_path = '/planet' if linux_host_config.jsonc_config.get('skip_planet') else '/monaco'
+    exclude_path = '/planet' if linux_host_config.skip_planet else '/monaco'
     curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
 
     curl_help_joined = '\n'.join(curl_help_lines)
@@ -50,7 +50,7 @@ def process_domain(domain_data: dict[str, Any]) -> str:
 def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     dynamic_block_text, curl_help_text = dynamic_blocks(domain_data)
 
-    template = (linux_host_config.nginx_templates / 'common.conf').read_text()
+    template = (linux_host_config.nginx_templates_dir / 'common.conf').read_text()
 
     template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_text)
 
@@ -70,7 +70,7 @@ def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
     nginx_conf_text = ''
     curl_help_text = ''
 
-    help_area = 'monaco' if linux_host_config.jsonc_config.get('skip_planet') else 'planet'
+    help_area = 'monaco' if linux_host_config.skip_planet else 'planet'
 
     for subdir in linux_host_config.mnt_dir.iterdir():
         if not subdir.is_dir():
@@ -101,7 +101,9 @@ def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
         # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
         curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
 
-    nginx_conf_text += '\n' + (linux_host_config.nginx_templates / 'static_blocks.conf').read_text()
+    nginx_conf_text += (
+        '\n' + (linux_host_config.nginx_templates_dir / 'static_blocks.conf').read_text()
+    )
     return nginx_conf_text, curl_help_text
 
 

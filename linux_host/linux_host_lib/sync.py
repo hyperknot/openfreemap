@@ -25,14 +25,14 @@ def full_sync(force: bool = False) -> None:
     remote_versions = {
         area: version
         for area, version in get_remote_deployed_versions().items()
-        if area != 'planet' or not linux_host_config.jsonc_config.get('skip_planet')
+        if area != 'planet' or not linux_host_config.skip_planet
     }
 
     assets_changed = download_assets()
 
     btrfs_downloaded = False
     for area in linux_host_config.areas:
-        if area == 'planet' and linux_host_config.jsonc_config.get('skip_planet'):
+        if area == 'planet' and linux_host_config.skip_planet:
             continue
 
         deployed_version = remote_versions.get(area)

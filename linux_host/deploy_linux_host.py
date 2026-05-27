@@ -10,7 +10,7 @@ from linux_host.deploy_linux_host.tasks_linux_host import (
     prepare_linux_host,
     run_linux_host_sync,
 )
-from linux_host.linux_host_lib.linux_host_config import read_linux_host_jsonc_config
+from linux_host.linux_host_lib.linux_host_jsonc_config import read_linux_host_jsonc_config
 from shared_lib.deploy_shared.cli_helpers import common_options, get_connection
 from shared_lib.deploy_shared.tasks_shared import prepare_shared
 from shared_lib.utils.server_health import check_server_health, print_server_health
@@ -27,7 +27,7 @@ def cli():
 def init_static(
     hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str
 ):
-    jsonc_config_path, jsonc_config = load_jsonc_config(config)
+    jsonc_config_path = find_jsonc_config_path(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
@@ -35,11 +35,11 @@ def init_static(
     c = get_connection(hostname, user, port)
 
     prepare_shared(c, linux_host_deploy_config)
-    prepare_linux_host(c, jsonc_config_path, jsonc_config)
+    prepare_linux_host(c, jsonc_config_path)
 
     run_linux_host_sync(c)
 
-    print_linux_host_server_health(jsonc_config, hostname)
+    print_linux_host_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname)
 
 
 @cli.command()
@@ -54,7 +54,7 @@ def init_autoupdate(
     sync: bool,
     config: str,
 ):
-    jsonc_config_path, jsonc_config = load_jsonc_config(config)
+    jsonc_config_path = find_jsonc_config_path(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
@@ -64,21 +64,21 @@ def init_autoupdate(
     c.sudo('rm -f /etc/cron.d/ofm_linux_host')
 
     prepare_shared(c, linux_host_deploy_config)
-    prepare_linux_host(c, jsonc_config_path, jsonc_config)
+    prepare_linux_host(c, jsonc_config_path)
 
     if sync:
         run_linux_host_sync(c)
 
     install_linux_host_cron(c)
 
-    print_linux_host_server_health(jsonc_config, hostname)
+    print_linux_host_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname)
 
 
 @cli.command()
 @common_options
 @click.option('--config', default='config', show_default=True, help='Config name without .jsonc')
 def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool, config: str):
-    _, jsonc_config = load_jsonc_config(config)
+    jsonc_config_path = find_jsonc_config_path(config)
 
     if not noninteractive and not click.confirm(f'Run script on {hostname}?'):
         return
@@ -86,10 +86,10 @@ def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool
     c = get_connection(hostname, user, port)
     run_linux_host_sync(c)
 
-    print_linux_host_server_health(jsonc_config, hostname)
+    print_linux_host_server_health(read_deploy_jsonc_config(jsonc_config_path), hostname)
 
 
-def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
+def find_jsonc_config_path(config_name: str) -> Path:
     if config_name.endswith('.jsonc'):
         raise click.ClickException(
             'Pass the config name without .jsonc, for example: --config staging'
@@ -104,8 +104,13 @@ def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:
             + 'config/linux_host/config.jsonc or pass --config YOUR_CONFIG_NAME_WITHOUT_JSONC.'
         )
 
+    read_deploy_jsonc_config(jsonc_config_path)
+    return jsonc_config_path
+
+
+def read_deploy_jsonc_config(jsonc_config_path: Path) -> dict[str, Any]:
     try:
-        return jsonc_config_path, read_linux_host_jsonc_config(jsonc_config_path)
+        return read_linux_host_jsonc_config(jsonc_config_path)
     except RuntimeError as e:
         raise click.ClickException(str(e)) from e
 

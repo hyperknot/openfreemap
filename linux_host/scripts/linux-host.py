@@ -6,7 +6,6 @@ import click
 
 from linux_host.linux_host_lib.assets import download_assets
 from linux_host.linux_host_lib.btrfs import download_area_version
-from linux_host.linux_host_lib.linux_host_config import linux_host_config
 from linux_host.linux_host_lib.mount import auto_mount
 from linux_host.linux_host_lib.nginx_config_gen import write_nginx_config
 from linux_host.linux_host_lib.sync import auto_clean_btrfs, full_sync
@@ -27,10 +26,7 @@ def cli():
     - Fetches version files\n
     - Running the sync cron task (called every minute with linux-host-autoupdate)
     """
-    try:
-        linux_host_config.load_jsonc_config()
-    except (FileNotFoundError, RuntimeError) as e:
-        raise click.ClickException(str(e)) from e
+    pass
 
 
 @cli.command()
