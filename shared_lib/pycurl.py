@@ -41,14 +41,14 @@ def pycurl_status(url: str, target_ip: str) -> int:
     port = parsed.port or (443 if parsed.scheme == 'https' else 80)
 
     c = pycurl.Curl()
-    c.setopt(c.URL, url)
-    c.setopt(c.SSL_VERIFYPEER, 0)  # Skip cert validation
-    c.setopt(c.SSL_VERIFYHOST, 0)  # Skip hostname validation
-    c.setopt(c.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
-    c.setopt(c.NOBODY, True)  # HEAD request
-    c.setopt(c.TIMEOUT, 5)
+    c.setopt(pycurl.URL, url)
+    c.setopt(pycurl.SSL_VERIFYPEER, 0)  # Skip cert validation
+    c.setopt(pycurl.SSL_VERIFYHOST, 0)  # Skip hostname validation
+    c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
+    c.setopt(pycurl.NOBODY, True)  # HEAD request
+    c.setopt(pycurl.TIMEOUT, 5)
     c.perform()
-    status_code = c.getinfo(c.RESPONSE_CODE)
+    status_code = c.getinfo(pycurl.RESPONSE_CODE)
     c.close()
 
     return status_code
@@ -78,14 +78,14 @@ def pycurl_get(url: str, target_ip: str, binary: bool = False) -> str | bytes:
 
     buffer = BytesIO()
     c = pycurl.Curl()
-    c.setopt(c.URL, url)
-    c.setopt(c.SSL_VERIFYPEER, 0)  # Skip cert validation
-    c.setopt(c.SSL_VERIFYHOST, 0)  # Skip hostname validation
-    c.setopt(c.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
-    c.setopt(c.WRITEDATA, buffer)
-    c.setopt(c.TIMEOUT, 5)
+    c.setopt(pycurl.URL, url)
+    c.setopt(pycurl.SSL_VERIFYPEER, 0)  # Skip cert validation
+    c.setopt(pycurl.SSL_VERIFYHOST, 0)  # Skip hostname validation
+    c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
+    c.setopt(pycurl.WRITEDATA, buffer)
+    c.setopt(pycurl.TIMEOUT, 5)
     c.perform()
-    status_code = c.getinfo(c.RESPONSE_CODE)
+    status_code = c.getinfo(pycurl.RESPONSE_CODE)
     c.close()
 
     if status_code != 200:

@@ -2,14 +2,16 @@
 
 import click
 
-from linux_host.deploy_linux_host.tasks_linux_host import read_jsonc
+from linux_host.deploy_linux_host.linux_host_deploy_config import linux_host_deploy_config
+from linux_host.linux_host_lib.linux_host_config import read_linux_host_jsonc_config
 from shared_lib.server_health import check_server_health, print_server_health
 
 
 @click.command()
 @click.option('--hostname', help='Check only a specific server')
 def cli(hostname):
-    results = check_server_health(read_jsonc(), hostname)
+    jsonc_config_path = linux_host_deploy_config.local_linux_host_config_dir / 'config.jsonc'
+    results = check_server_health(read_linux_host_jsonc_config(jsonc_config_path), hostname)
     print_server_health(results)
 
 

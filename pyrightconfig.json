@@ -3,7 +3,7 @@
   "typeCheckingMode": "basic",
 
   // "reportArgumentType": "none",
-  "reportAttributeAccessIssue": "none",
+  // "reportAttributeAccessIssue": "none",
   "reportCallIssue": "none",
   "reportIndexIssue": "none",
   "reportOptionalSubscript": "none",
