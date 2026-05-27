@@ -95,6 +95,15 @@
       },
     },
     {
+      "includes": ["pyrightconfig.json"],
+      "json": {
+        "parser": {
+          "allowComments": true,
+          "allowTrailingCommas": true,
+        },
+      },
+    },
+    {
       "includes": ["**/*.jsonc"],
       "json": {
         "formatter": {
