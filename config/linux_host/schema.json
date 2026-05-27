@@ -48,6 +48,7 @@
     },
     "cert-letsencrypt": {
       "type": "object",
+      "description": "Issue and renew certificates with nginx's built-in ACME module. The domain must be publicly reachable on port 80 for HTTP-01 validation.",
       "additionalProperties": false,
       "properties": {
         "type": { "const": "letsencrypt" },
@@ -86,10 +87,6 @@
         "hostname": {
           "type": "string",
           "description": "hostname used for ssh to connect. can be an IP address"
-        },
-        "server_ssh_passwd": {
-          "type": "string",
-          "description": "Leave this empty if you use SSH keys"
         }
       },
       "required": ["hostname"]

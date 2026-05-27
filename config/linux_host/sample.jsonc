@@ -6,20 +6,21 @@
     {
       "domain": "tiles.example.com",
 
+      // Public server with direct Let's Encrypt access.
+      // Certificates are issued and renewed by nginx's built-in ACME module:
+      "cert": { "type": "letsencrypt", "email": "admin@example.com" },
+
       // Recommended for production behind Cloudflare:
       // create an Origin Certificate and put both files next to each other:
       //   certs/tiles.example.com.cert
       //   certs/tiles.example.com.key
-      "cert": {
-        "type": "upload",
-        "cert_path": "certs/tiles.example.com.cert",
-      },
+      // "cert": {
+      // "type": "upload",
+      // "cert_path": "certs/tiles.example.com.cert",
+      // },
 
       // Alternative for local testing only:
       // "cert": { "type": "dummy" }
-
-      // Alternative for a public server with direct Let's Encrypt access:
-      // "cert": { "type": "letsencrypt", "email": "admin@example.com" }
     },
   ],
 
@@ -27,9 +28,6 @@
   "servers": [
     {
       "hostname": "my-ofm-host",
-
-      // Optional, only if you do not use SSH keys:
-      // "server_ssh_passwd": "change-me"
     },
   ],
 
