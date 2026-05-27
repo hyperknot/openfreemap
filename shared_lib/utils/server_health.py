@@ -8,8 +8,8 @@ from shared_lib.utils.get_version import get_deployed_version
 from shared_lib.utils.pycurl import pycurl_get
 
 
-def check_server_health(config_data: dict[str, Any], hostname: str | None = None) -> dict[str, Any]:
-    health_check_hosts = config_data.get('health_check', [])
+def check_server_health(jsonc_data: dict[str, Any], hostname: str | None = None) -> dict[str, Any]:
+    health_check_hosts = jsonc_data.get('health_check', [])
 
     if hostname:
         health_check_hosts = [host for host in health_check_hosts if host == hostname]
@@ -20,9 +20,9 @@ def check_server_health(config_data: dict[str, Any], hostname: str | None = None
     if not health_check_hosts:
         return results
 
-    area = 'monaco' if config_data.get('skip_planet') else 'planet'
+    area = 'monaco' if jsonc_data.get('skip_planet') else 'planet'
     version = get_deployed_version(area)['version']
-    domains = [d['domain'] for d in config_data['domains']]
+    domains = [d['domain'] for d in jsonc_data['domains']]
     for health_check_host in health_check_hosts:
         server_hostname = health_check_host
         server_ip = get_ip_from_ssh_alias(health_check_host)
