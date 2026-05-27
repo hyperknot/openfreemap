@@ -19,10 +19,6 @@ def read_linux_host_jsonc_config(jsonc_path: Path) -> dict[str, Any]:
     for domain_data in jsonc_data['domains']:
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
 
-        if domain_data['cert']['type'] == 'upload':
-            domain_data['cert_file'] = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
-            domain_data['key_file'] = f'/data/nginx/certs/ofm-{domain_data["slug"]}.key'
-
     return jsonc_data
 
 

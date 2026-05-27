@@ -44,8 +44,11 @@ def upload_jsonc_config_and_certs(c: Connection, jsonc_path: Path) -> None:
                     + f'Make sure these files exists:\n{local_cert_path}\n{local_key_path}'
                 )
 
-            put(c, local_cert_path, domain_data['cert_file'])
-            put(c, local_key_path, domain_data['key_file'])
+            remote_cert_path = f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert'
+            remote_key_path = f'/data/nginx/certs/ofm-{domain_data["slug"]}.key'
+
+            put(c, local_cert_path, remote_cert_path)
+            put(c, local_key_path, remote_key_path)
 
     put(
         c,

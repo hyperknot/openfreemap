@@ -34,13 +34,11 @@ def write_nginx_config():
 
 def process_domain(domain_data: dict[str, Any]) -> str:
     if domain_data['cert']['type'] == 'upload':
-        if (
-            not Path(domain_data['cert_file']).is_file()
-            or not Path(domain_data['key_file']).is_file()
-        ):
-            sys.exit(
-                f'  cert or key file does not exist: {domain_data["cert_file"]} {domain_data["key_file"]}'
-            )
+        cert_file = Path(f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert')
+        key_file = Path(f'/data/nginx/certs/ofm-{domain_data["slug"]}.key')
+
+        if not cert_file.is_file() or not key_file.is_file():
+            sys.exit(f'  cert or key file does not exist: {cert_file} {key_file}')
 
         return create_nginx_conf(domain_data)
 
