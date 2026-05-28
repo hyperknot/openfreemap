@@ -52,6 +52,7 @@ def init_static(
     run_linux_host_sync(c)
 
     check_server_health(jsonc_data, hostname, print_results=True)
+    print_success_message(jsonc_data)
 
 
 @cli.command()
@@ -91,6 +92,7 @@ def init_autoupdate(
     install_linux_host_cron(c)
 
     check_server_health(jsonc_data, hostname, print_results=True)
+    print_success_message(jsonc_data)
 
 
 @cli.command()
@@ -106,6 +108,7 @@ def sync(hostname: str, user: str | None, port: int | None, noninteractive: bool
     run_linux_host_sync(c)
 
     check_server_health(jsonc_data, hostname, print_results=True)
+    print_success_message(jsonc_data)
 
 
 @cli.command('health-test')
@@ -124,6 +127,18 @@ def health_test(hostname: str | None, config: str):
 
     if not all(result['all_ok'] for result in results.values()):
         raise click.ClickException('Health test failed')
+
+
+def print_success_message(jsonc_data: dict[str, Any]) -> None:
+    style_url = f'https://{jsonc_data["domains"][0]["domain"]}/styles/liberty'
+
+    click.echo()
+    click.secho('Congratulations, your OpenFreeMap tile server is deployed!', fg='green')
+    click.echo()
+    click.echo('Use the following style URL in a MapLibre map:')
+    click.echo()
+    click.secho(style_url, fg='cyan')
+    click.echo()
 
 
 def load_jsonc_config(config_name: str) -> tuple[Path, dict[str, Any]]:

@@ -49,22 +49,14 @@ def write_nginx_config():
     for file in linux_host_config.nginx_sites_dir.glob('ofm-*.conf'):
         file.unlink()
 
-    curl_help_text = ''
-
     for domain_data in linux_host_config.domains:
-        curl_help_text += process_domain(domain_data)
+        process_domain(domain_data)
 
     subprocess.run(['nginx', '-t'], check=True)
     subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
 
-    exclude_path = '/planet' if linux_host_config.skip_planet else '/monaco'
-    curl_help_lines = [l for l in curl_help_text.splitlines() if exclude_path not in l]
 
-    curl_help_joined = '\n'.join(curl_help_lines)
-    print(f'test with:\n{curl_help_joined}')
-
-
-def process_domain(domain_data: dict[str, Any]) -> str:
+def process_domain(domain_data: dict[str, Any]) -> None:
     cert_type = domain_data['cert']['type']
     if cert_type == 'upload':
         cert_file = Path(f'/data/nginx/certs/ofm-{domain_data["slug"]}.cert')
@@ -73,11 +65,11 @@ def process_domain(domain_data: dict[str, Any]) -> str:
         if not cert_file.is_file() or not key_file.is_file():
             sys.exit(f'  cert or key file does not exist: {cert_file} {key_file}')
 
-    return create_nginx_conf(domain_data)
+    create_nginx_conf(domain_data)
 
 
-def create_nginx_conf(domain_data: dict[str, Any]) -> str:
-    dynamic_block_text, curl_help_text = dynamic_blocks(domain_data)
+def create_nginx_conf(domain_data: dict[str, Any]) -> None:
+    dynamic_block_text = dynamic_blocks(domain_data)
 
     template = (linux_host_config.nginx_templates_dir / 'common.conf').read_text()
 
@@ -94,13 +86,8 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     template = template.replace('__DOMAIN_SLUG__', domain_data['slug'])
     template = template.replace('__DOMAIN__', domain_data['domain'])
 
-    curl_help_text = curl_help_text.replace('__DOMAIN_SLUG__', domain_data['slug'])
-    curl_help_text = curl_help_text.replace('__DOMAIN__', domain_data['domain'])
-
     (linux_host_config.nginx_sites_dir / f'ofm-{domain_data["slug"]}.conf').write_text(template)
     print(f'  nginx config written: {domain_data["domain"]} {domain_data["slug"]}')
-
-    return curl_help_text
 
 
 def acme_issuer(domain_data: dict[str, Any]) -> str:
@@ -134,11 +121,8 @@ def ssl_certificate_directives(domain_data: dict[str, Any]) -> str:
     raise ValueError(f'Unknown certificate type: {cert_type}')
 
 
-def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
+def dynamic_blocks(domain_data: dict[str, Any]) -> str:
     nginx_conf_text = ''
-    curl_help_text = ''
-
-    help_area = 'monaco' if linux_host_config.skip_planet else 'planet'
 
     for subdir in linux_host_config.mnt_dir.iterdir():
         if not subdir.is_dir():
@@ -149,30 +133,12 @@ def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
             area=area, version=version, mnt_dir=subdir, domain_data=domain_data
         )
 
-        if area == help_area:
-            for path in [
-                f'/{area}/{version}',
-                f'/{area}/{version}/14/8529/5974.pbf',
-                # f'/{area}/{version}/9999/9999/9999.pbf',  # empty_tile test
-            ]:
-                # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
-                curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
-
     nginx_conf_text += create_latest_locations(domain_data=domain_data)
-
-    for path in [
-        f'/{help_area}',
-        f'/{help_area}/latest',
-        f'/{help_area}/latest/14/8529/5974.pbf',
-        # f'/{help_area}/latest/9999/9999/9999.pbf',  # empty_tile test
-    ]:
-        # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
-        curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
 
     static_blocks = (linux_host_config.nginx_templates_dir / 'static_blocks.conf').read_text()
     static_blocks = static_blocks.replace('__ROOT_REDIRECT_BLOCK__', root_redirect_block())
     nginx_conf_text += '\n' + static_blocks
-    return nginx_conf_text, curl_help_text
+    return nginx_conf_text
 
 
 def root_redirect_block() -> str:
