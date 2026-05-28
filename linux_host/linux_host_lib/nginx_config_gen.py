@@ -209,6 +209,7 @@ def create_version_location(
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
         add_header X-Robots-Tag "noindex, nofollow" always;
+        add_header Strict-Transport-Security "max-age=63072000" always;
 
         add_header x-ofm-debug 'specific JSON {area} {version}';
     }}
@@ -228,6 +229,7 @@ def create_version_location(
         add_header 'Access-Control-Allow-Origin' '*' always;
         add_header Cache-Control public;
         add_header X-Robots-Tag "noindex, nofollow" always;
+        add_header Strict-Transport-Security "max-age=63072000" always;
 
         add_header x-ofm-debug 'specific PBF {area} {version}';
     }}
@@ -275,6 +277,7 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
             add_header X-Robots-Tag "noindex, nofollow" always;
+            add_header Strict-Transport-Security "max-age=63072000" always;
 
             add_header x-ofm-debug 'latest JSON {area}';
         }}
@@ -297,6 +300,7 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
             add_header X-Robots-Tag "noindex, nofollow" always;
+            add_header Strict-Transport-Security "max-age=63072000" always;
 
             add_header x-ofm-debug 'wildcard JSON {area}';
         }}
@@ -318,6 +322,7 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
             add_header 'Access-Control-Allow-Origin' '*' always;
             add_header Cache-Control public;
             add_header X-Robots-Tag "noindex, nofollow" always;
+            add_header Strict-Transport-Security "max-age=63072000" always;
 
             add_header x-ofm-debug 'wildcard PBF {area}';
         }}
