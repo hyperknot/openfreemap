@@ -32,7 +32,12 @@ SSL_INTERMEDIATE_CONFIG = """# intermediate configuration
     ssl_session_cache shared:MozSSL:10m; # about 40000 sessions"""
 
 # Do not assume the operator controls every subdomain, and do not preload.
-HSTS_DIRECTIVE = 'add_header Strict-Transport-Security "max-age=63072000" always;'
+NOINDEX_HEADERS = """add_header X-Robots-Tag "noindex, nofollow" always;
+add_header Strict-Transport-Security "max-age=63072000" always;"""
+
+PUBLIC_HEADERS = f"""add_header 'Access-Control-Allow-Origin' '*' always;
+add_header Cache-Control public;
+{NOINDEX_HEADERS}"""
 
 
 def write_nginx_config():
@@ -80,7 +85,8 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     template = template.replace('__ACME_ISSUER__', acme_issuer(domain_data))
     template = template.replace('__HTTP_REDIRECT_SERVER__', HTTP_REDIRECT_SERVER)
     template = template.replace('__SSL_INTERMEDIATE_CONFIG__', SSL_INTERMEDIATE_CONFIG)
-    template = template.replace('__HSTS_DIRECTIVE__', HSTS_DIRECTIVE)
+    template = template.replace('__NOINDEX_HEADERS__', NOINDEX_HEADERS)
+    template = template.replace('__PUBLIC_HEADERS__', PUBLIC_HEADERS)
     template = template.replace(
         '    __SSL_CERTIFICATE_DIRECTIVES__', ssl_certificate_directives(domain_data)
     )
@@ -206,10 +212,7 @@ def create_version_location(
         expires 1w;
         default_type application/json;
 
-        add_header 'Access-Control-Allow-Origin' '*' always;
-        add_header Cache-Control public;
-        add_header X-Robots-Tag "noindex, nofollow" always;
-        add_header Strict-Transport-Security "max-age=63072000" always;
+        {PUBLIC_HEADERS}
 
         add_header x-ofm-debug 'specific JSON {area} {version}';
     }}
@@ -226,10 +229,7 @@ def create_version_location(
             application/vnd.mapbox-vector-tile pbf;
         }}
 
-        add_header 'Access-Control-Allow-Origin' '*' always;
-        add_header Cache-Control public;
-        add_header X-Robots-Tag "noindex, nofollow" always;
-        add_header Strict-Transport-Security "max-age=63072000" always;
+        {PUBLIC_HEADERS}
 
         add_header x-ofm-debug 'specific PBF {area} {version}';
     }}
@@ -274,10 +274,7 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
             expires 1d;
             default_type application/json;
 
-            add_header 'Access-Control-Allow-Origin' '*' always;
-            add_header Cache-Control public;
-            add_header X-Robots-Tag "noindex, nofollow" always;
-            add_header Strict-Transport-Security "max-age=63072000" always;
+            {PUBLIC_HEADERS}
 
             add_header x-ofm-debug 'latest JSON {area}';
         }}
@@ -297,10 +294,7 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
             expires 1w;
             default_type application/json;
 
-            add_header 'Access-Control-Allow-Origin' '*' always;
-            add_header Cache-Control public;
-            add_header X-Robots-Tag "noindex, nofollow" always;
-            add_header Strict-Transport-Security "max-age=63072000" always;
+            {PUBLIC_HEADERS}
 
             add_header x-ofm-debug 'wildcard JSON {area}';
         }}
@@ -319,10 +313,7 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
                 application/vnd.mapbox-vector-tile pbf;
             }}
 
-            add_header 'Access-Control-Allow-Origin' '*' always;
-            add_header Cache-Control public;
-            add_header X-Robots-Tag "noindex, nofollow" always;
-            add_header Strict-Transport-Security "max-age=63072000" always;
+            {PUBLIC_HEADERS}
 
             add_header x-ofm-debug 'wildcard PBF {area}';
         }}
