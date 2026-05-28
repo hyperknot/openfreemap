@@ -9,7 +9,6 @@ from .config import config
 from .utils import (
     exists,
     put,
-    sudo_cmd,
     ubuntu_codename,
 )
 
@@ -40,8 +39,6 @@ def nginx(c: Connection) -> None:
     put(c, f'{config.local_assets_dir}/nginx/mime.types', '/etc/nginx/')
     put(c, f'{config.local_assets_dir}/nginx/default_disable.conf', '/data/nginx/sites')
     put(c, f'{config.local_assets_dir}/nginx/cloudflare.conf', '/data/nginx/config')
-
-    sudo_cmd(c, 'curl https://ssl-config.mozilla.org/ffdhe2048.txt -o /etc/nginx/ffdhe2048.txt')
 
     c.sudo('nginx -t')
     c.sudo('service nginx restart')

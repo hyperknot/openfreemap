@@ -7,6 +7,34 @@ from linux_host.linux_host_lib.linux_host_config import linux_host_config
 from linux_host.linux_host_lib.utils import python_venv_executable
 
 
+HTTP_REDIRECT_SERVER = """server {
+    listen 80;
+    listen [::]:80;
+    server_name __DOMAIN_SLUG__ __DOMAIN__;
+
+    # ACME HTTP-01 challenge requests are intercepted by ngx_http_acme_module
+    # before normal location processing, so regular HTTP traffic can redirect.
+    return 308 https://$host$request_uri;
+}"""
+
+# Mozilla Guideline v6.0 intermediate config for nginx + OpenSSL 3.x.
+# 3.0.2 and 3.0.13 currently generate the same config.
+# Do not use the OpenSSL 4.0 X25519MLKEM768 variant yet: current Ubuntu 24.04
+# servers with OpenSSL 3.0 reject it in nginx -t.
+# https://ssl-config.mozilla.org/#server=nginx&version=1.27.3&config=intermediate&openssl=3.0.2&guideline=6.0
+SSL_INTERMEDIATE_CONFIG = """# intermediate configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ecdh_curve X25519:prime256v1:secp384r1;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305;
+    ssl_prefer_server_ciphers off;
+
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m; # about 40000 sessions"""
+
+# Do not assume the operator controls every subdomain, and do not preload.
+HSTS_DIRECTIVE = 'add_header Strict-Transport-Security "max-age=63072000" always;'
+
+
 def write_nginx_config():
     print('Writing nginx config')
 
@@ -86,6 +114,9 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     template = (linux_host_config.nginx_templates_dir / 'common.conf').read_text()
 
     template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_text)
+    template = template.replace('__HTTP_REDIRECT_SERVER__', HTTP_REDIRECT_SERVER)
+    template = template.replace('__SSL_INTERMEDIATE_CONFIG__', SSL_INTERMEDIATE_CONFIG)
+    template = template.replace('__HSTS_DIRECTIVE__', HSTS_DIRECTIVE)
     template = template.replace(
         '    __SSL_CERTIFICATE_DIRECTIVES__', ssl_certificate_directives(domain_data)
     )
@@ -317,36 +348,3 @@ def create_latest_locations(*, domain_data: dict[str, Any]) -> str:
         """
 
     return location_str
-
-
-# if not self_signed_certs:
-#     subprocess.run(
-#         [
-#             'certbot',
-#             'certonly',
-#             '--webroot',
-#             '--webroot-path=/data/nginx/acme-challenges',
-#             '--noninteractive',
-#             '-m',
-#             linux_host_config.ofm_config['letsencrypt_email'],
-#             '--agree-tos',
-#             '--cert-name=ofm_direct',
-#             # '--staging',
-#             '--deploy-hook',
-#             'nginx -t && service nginx reload',
-#             '-d',
-#             domain_direct,
-#         ],
-#         check=True,
-#     )
-#
-#     # link certs to nginx dir
-#     direct_cert.unlink()
-#     direct_key.unlink()
-#
-#     etc_cert = Path('/etc/letsencrypt/live/ofm_direct/fullchain.pem')
-#     etc_key = Path('/etc/letsencrypt/live/ofm_direct/privkey.pem')
-#     assert etc_cert.is_file()
-#     assert etc_key.is_file()
-#     direct_cert.symlink_to(etc_cert)
-#     direct_key.symlink_to(etc_key)
