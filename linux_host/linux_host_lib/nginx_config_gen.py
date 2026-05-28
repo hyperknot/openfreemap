@@ -41,14 +41,8 @@ def write_nginx_config():
     if not linux_host_config.mnt_dir.exists():
         sys.exit('  mount needs to be run first')
 
-    # remove old configs
     for file in linux_host_config.nginx_sites_dir.glob('ofm-*.conf'):
         file.unlink()
-    acme_config_path = Path('/data/nginx/config/ofm-acme.conf')
-    if acme_config_path.exists():
-        acme_config_path.unlink()
-
-    write_acme_config()
 
     curl_help_text = ''
 
@@ -63,37 +57,6 @@ def write_nginx_config():
 
     curl_help_joined = '\n'.join(curl_help_lines)
     print(f'test with:\n{curl_help_joined}')
-
-
-def write_acme_config() -> None:
-    domains = letsencrypt_domains()
-    if not domains:
-        return
-
-    blocks = [
-        'resolver 1.1.1.1 8.8.8.8 ipv6=off;',
-        'acme_shared_zone zone=ofm_acme:1M;',
-    ]
-    for domain_data in domains:
-        blocks.append(
-            f"""
-acme_issuer ofm_{domain_data['slug']} {{
-    uri https://acme-v02.api.letsencrypt.org/directory;
-    contact mailto:{domain_data['cert']['email']};
-    state_path /data/nginx/acme/{domain_data['slug']};
-    accept_terms_of_service;
-}}""".strip()
-        )
-
-    Path('/data/nginx/config/ofm-acme.conf').write_text('\n\n'.join(blocks) + '\n')
-
-
-def letsencrypt_domains() -> list[dict[str, Any]]:
-    return [
-        domain_data
-        for domain_data in linux_host_config.domains
-        if domain_data['cert']['type'] == 'letsencrypt'
-    ]
 
 
 def process_domain(domain_data: dict[str, Any]) -> str:
@@ -114,6 +77,7 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     template = (linux_host_config.nginx_templates_dir / 'common.conf').read_text()
 
     template = template.replace('__DYNAMIC_BLOCKS__', dynamic_block_text)
+    template = template.replace('__ACME_ISSUER__', acme_issuer(domain_data))
     template = template.replace('__HTTP_REDIRECT_SERVER__', HTTP_REDIRECT_SERVER)
     template = template.replace('__SSL_INTERMEDIATE_CONFIG__', SSL_INTERMEDIATE_CONFIG)
     template = template.replace('__HSTS_DIRECTIVE__', HSTS_DIRECTIVE)
@@ -133,6 +97,18 @@ def create_nginx_conf(domain_data: dict[str, Any]) -> str:
     return curl_help_text
 
 
+def acme_issuer(domain_data: dict[str, Any]) -> str:
+    if domain_data['cert']['type'] != 'letsencrypt':
+        return ''
+
+    return f"""acme_issuer ofm_{domain_data['slug']} {{
+    uri https://acme-v02.api.letsencrypt.org/directory;
+    contact mailto:{domain_data['cert']['email']};
+    state_path /data/nginx/acme/{domain_data['slug']};
+    accept_terms_of_service;
+}}"""
+
+
 def ssl_certificate_directives(domain_data: dict[str, Any]) -> str:
     cert_type = domain_data['cert']['type']
     if cert_type == 'upload':
@@ -147,7 +123,7 @@ def ssl_certificate_directives(domain_data: dict[str, Any]) -> str:
         return f"""    acme_certificate ofm_{domain_data['slug']} {domain_data['domain']} key=ecdsa:256;
     ssl_certificate $acme_certificate;
     ssl_certificate_key $acme_certificate_key;
-    ssl_certificate_cache max=2;"""
+    ssl_certificate_cache max=10 inactive=1h valid=10m;"""
 
     raise ValueError(f'Unknown certificate type: {cert_type}')
 
