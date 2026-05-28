@@ -13,7 +13,7 @@ Example:
 
 How it works:
     Overrides DNS resolution to connect to a specific IP while using the correct
-    hostname for TLS/SNI. Verifies HTTPS is working without validating certificate chain.
+    hostname for TLS/SNI. Certificate validation is configurable.
 """
 
 from io import BytesIO
@@ -22,16 +22,22 @@ from urllib.parse import urlparse
 import pycurl
 
 
-def pycurl_status(url: str, target_ip: str) -> int:
+def pycurl_status(
+    url: str,
+    target_ip: str | None = None,
+    *,
+    validate_certs: bool = True,
+    ca_cert_path: str | None = None,
+) -> int:
     """
     Check HTTP status of a specific server behind round-robin DNS.
 
     Makes a HEAD request to the target IP while using the hostname for HTTPS/SNI.
-    Verifies HTTPS is configured but does not validate certificate chain.
+    Certificate validation is enabled by default and can use a custom CA/cert file.
 
     Args:
         url: Full URL to request (e.g., 'https://api.example.com/health')
-        target_ip: IP address of specific server (e.g., '192.168.1.101')
+        target_ip: Optional IP address of specific server (e.g., '192.168.1.101')
 
     Returns:
         HTTP status code (e.g., 200, 404, 500)
@@ -42,9 +48,12 @@ def pycurl_status(url: str, target_ip: str) -> int:
 
     c = pycurl.Curl()
     c.setopt(pycurl.URL, url)
-    c.setopt(pycurl.SSL_VERIFYPEER, 0)  # Skip cert validation
-    c.setopt(pycurl.SSL_VERIFYHOST, 0)  # Skip hostname validation
-    c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
+    c.setopt(pycurl.SSL_VERIFYPEER, 1 if validate_certs else 0)
+    c.setopt(pycurl.SSL_VERIFYHOST, 2 if validate_certs else 0)
+    if ca_cert_path:
+        c.setopt(pycurl.CAINFO, ca_cert_path)
+    if target_ip:
+        c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(pycurl.NOBODY, True)  # HEAD request
     c.setopt(pycurl.TIMEOUT, 5)
     c.perform()
@@ -54,16 +63,23 @@ def pycurl_status(url: str, target_ip: str) -> int:
     return status_code
 
 
-def pycurl_get(url: str, target_ip: str, binary: bool = False) -> str | bytes:
+def pycurl_get(
+    url: str,
+    target_ip: str | None = None,
+    binary: bool = False,
+    *,
+    validate_certs: bool = True,
+    ca_cert_path: str | None = None,
+) -> str | bytes:
     """
     Fetch content from a specific server behind round-robin DNS.
 
     Makes a GET request to the target IP while using the hostname for HTTPS/SNI.
-    Verifies HTTPS is configured but does not validate certificate chain.
+    Certificate validation is enabled by default and can use a custom CA/cert file.
 
     Args:
         url: Full URL to request (e.g., 'https://api.example.com/data')
-        target_ip: IP address of specific server (e.g., '192.168.1.101')
+        target_ip: Optional IP address of specific server (e.g., '192.168.1.101')
         binary: If True, return bytes; if False, decode as UTF-8 string
 
     Returns:
@@ -79,9 +95,12 @@ def pycurl_get(url: str, target_ip: str, binary: bool = False) -> str | bytes:
     buffer = BytesIO()
     c = pycurl.Curl()
     c.setopt(pycurl.URL, url)
-    c.setopt(pycurl.SSL_VERIFYPEER, 0)  # Skip cert validation
-    c.setopt(pycurl.SSL_VERIFYHOST, 0)  # Skip hostname validation
-    c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
+    c.setopt(pycurl.SSL_VERIFYPEER, 1 if validate_certs else 0)
+    c.setopt(pycurl.SSL_VERIFYHOST, 2 if validate_certs else 0)
+    if ca_cert_path:
+        c.setopt(pycurl.CAINFO, ca_cert_path)
+    if target_ip:
+        c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(pycurl.WRITEDATA, buffer)
     c.setopt(pycurl.TIMEOUT, 5)
     c.perform()

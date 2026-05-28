@@ -18,6 +18,12 @@ def read_linux_host_jsonc_config(jsonc_path: Path) -> dict[str, Any]:
 
     for domain_data in jsonc_data['domains']:
         domain_data['slug'] = slugify(domain_data['domain'], separator='_')
+        cert = domain_data['cert']
+        if cert['type'] == 'upload':
+            cert_path = Path(cert['cert_path'])
+            if not cert_path.is_absolute():
+                cert_path = jsonc_path.parent / cert_path
+            cert['resolved_cert_path'] = str(cert_path)
 
     return jsonc_data
 
