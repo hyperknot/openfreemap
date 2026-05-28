@@ -20,6 +20,11 @@
         "minLength": 1
       }
     },
+    "root_redirect_url": {
+      "type": "string",
+      "description": "Optional URL to redirect the tile server root path (/) to. Omit to show a plain text OpenFreeMap tile server message.",
+      "pattern": "^https?://[^\\s;{}]+$"
+    },
     "skip_planet": {
       "type": "boolean",
       "description": "Skip the full planet download, useful for testing"

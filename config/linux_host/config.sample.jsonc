@@ -28,6 +28,10 @@
   // These can be ~/.ssh/config aliases.
   // "health_check": ["my-ofm-host"],
 
+  // Optional: redirect requests to the tile server root path (/).
+  // Omit to show a plain text OpenFreeMap tile server message.
+  // "root_redirect_url": "https://openfreemap.org",
+
   // Useful for first deploys and tests: only sync Monaco instead of the full planet.
   "skip_planet": true,
 

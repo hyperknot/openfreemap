@@ -30,6 +30,7 @@ class LinuxHostConfig:
     deployed_versions_dir: Path = field(init=False)
 
     domains: list[dict[str, Any]] = field(init=False)
+    root_redirect_url: str | None = field(init=False)
     skip_planet: bool = field(init=False)
     telegram_token: str | None = None
     telegram_chat_id: str | None = None
@@ -52,6 +53,7 @@ class LinuxHostConfig:
         jsonc_data = read_linux_host_jsonc_config(jsonc_path)
 
         self.domains = jsonc_data['domains']
+        self.root_redirect_url = jsonc_data.get('root_redirect_url')
         self.skip_planet = jsonc_data.get('skip_planet', False)
         self.telegram_token = jsonc_data.get('telegram_token')
         self.telegram_chat_id = jsonc_data.get('telegram_chat_id')

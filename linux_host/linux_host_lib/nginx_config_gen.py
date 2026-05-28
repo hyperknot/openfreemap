@@ -169,10 +169,24 @@ def dynamic_blocks(domain_data: dict[str, Any]) -> tuple[str, str]:
         # curl_help_text += f'curl -H "Host: __DOMAIN_SLUG__" -I http://localhost{path}\n'
         curl_help_text += f'curl -sI https://__DOMAIN__{path}\n'
 
-    nginx_conf_text += (
-        '\n' + (linux_host_config.nginx_templates_dir / 'static_blocks.conf').read_text()
-    )
+    static_blocks = (linux_host_config.nginx_templates_dir / 'static_blocks.conf').read_text()
+    static_blocks = static_blocks.replace('__ROOT_REDIRECT_BLOCK__', root_redirect_block())
+    nginx_conf_text += '\n' + static_blocks
     return nginx_conf_text, curl_help_text
+
+
+def root_redirect_block() -> str:
+    if linux_host_config.root_redirect_url:
+        return f"""location = / {{
+    return 302 {linux_host_config.root_redirect_url};
+}}
+"""
+
+    return """location = / {
+    default_type text/plain;
+    return 200 'This is an OpenFreeMap tile server.\nhttps://openfreemap.org\n';
+}
+"""
 
 
 def create_version_location(
