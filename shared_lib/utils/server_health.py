@@ -10,6 +10,10 @@ from shared_lib.utils.get_version import get_deployed_version
 from shared_lib.utils.pycurl import pycurl_get
 
 
+HEALTH_CHECK_ATTEMPTS = 3
+HEALTH_CHECK_RETRY_DELAY_SECONDS = 1
+
+
 def check_server_health(
     jsonc_data: dict[str, Any], hostname: str | None = None, *, print_results: bool = False
 ) -> dict[str, Any]:
@@ -79,7 +83,7 @@ def check_host_using_tilejson(
 ) -> None:
     last_error: Exception | None = None
 
-    for _ in range(30):
+    for _ in range(HEALTH_CHECK_ATTEMPTS):
         try:
             tilejson_str = pycurl_get(
                 url, ip, validate_certs=validate_certs, ca_cert_path=ca_cert_path
@@ -93,7 +97,7 @@ def check_host_using_tilejson(
             raise
         except Exception as e:
             last_error = e
-            time.sleep(1)
+            time.sleep(HEALTH_CHECK_RETRY_DELAY_SECONDS)
 
     if last_error:
         raise last_error

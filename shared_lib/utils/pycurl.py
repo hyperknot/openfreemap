@@ -23,6 +23,8 @@ import pycurl
 
 
 USER_AGENT = 'OpenFreeMap health check'
+CONNECT_TIMEOUT_SECONDS = 3
+REQUEST_TIMEOUT_SECONDS = 8
 
 
 def pycurl_status(
@@ -59,7 +61,8 @@ def pycurl_status(
     if target_ip:
         c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(pycurl.NOBODY, True)  # HEAD request
-    c.setopt(pycurl.TIMEOUT, 5)
+    c.setopt(pycurl.CONNECTTIMEOUT, CONNECT_TIMEOUT_SECONDS)
+    c.setopt(pycurl.TIMEOUT, REQUEST_TIMEOUT_SECONDS)
     c.perform()
     status_code = c.getinfo(pycurl.RESPONSE_CODE)
     c.close()
@@ -107,7 +110,8 @@ def pycurl_get(
     if target_ip:
         c.setopt(pycurl.RESOLVE, [f'{hostname}:{port}:{target_ip}'])
     c.setopt(pycurl.WRITEDATA, buffer)
-    c.setopt(pycurl.TIMEOUT, 5)
+    c.setopt(pycurl.CONNECTTIMEOUT, CONNECT_TIMEOUT_SECONDS)
+    c.setopt(pycurl.TIMEOUT, REQUEST_TIMEOUT_SECONDS)
     c.perform()
     status_code = c.getinfo(pycurl.RESPONSE_CODE)
     c.close()
