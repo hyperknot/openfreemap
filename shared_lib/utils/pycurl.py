@@ -22,6 +22,9 @@ from urllib.parse import urlparse
 import pycurl
 
 
+USER_AGENT = 'OpenFreeMap health check'
+
+
 def pycurl_status(
     url: str,
     target_ip: str | None = None,
@@ -48,6 +51,7 @@ def pycurl_status(
 
     c = pycurl.Curl()
     c.setopt(pycurl.URL, url)
+    c.setopt(pycurl.USERAGENT, USER_AGENT)
     c.setopt(pycurl.SSL_VERIFYPEER, 1 if validate_certs else 0)
     c.setopt(pycurl.SSL_VERIFYHOST, 2 if validate_certs else 0)
     if ca_cert_path:
@@ -95,6 +99,7 @@ def pycurl_get(
     buffer = BytesIO()
     c = pycurl.Curl()
     c.setopt(pycurl.URL, url)
+    c.setopt(pycurl.USERAGENT, USER_AGENT)
     c.setopt(pycurl.SSL_VERIFYPEER, 1 if validate_certs else 0)
     c.setopt(pycurl.SSL_VERIFYHOST, 2 if validate_certs else 0)
     if ca_cert_path:
