@@ -117,6 +117,8 @@ The created .mbtiles file is then extracted into a Btrfs partition image using t
 
 Finally, it's uploaded to a public Cloudflare R2 bucket using rclone.
 
+See [tile generation release cadence](docs/tilegen_release_cadence.md) for observed full-planet run timings and options for tightening the weekly release schedule.
+
 #### styles - [styles repo](https://github.com/hyperknot/openfreemap-styles)
 
 The default styles. I've already put countless hours into tweaking up some nice looking styles. Still, it'll take probably the most work in the long term future.

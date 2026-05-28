@@ -7,7 +7,7 @@
 #   08:26 UTC. The latest release was Sunday 05:51 UTC for the 2026-02-09 snapshot.
 # - We picked Sunday 08:00 UTC as the safe build time, giving a buffer before Planetiler
 #   downloads the latest planet.
-# - We set the deployed planet version three days later, on Wednesday at 08:00 UTC.
+# - We set the deployed planet version two days later, on Tuesday at 08:00 UTC.
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -19,8 +19,8 @@ LOG_DIR=/data/ofm/tilegen/logs
 # Every Sunday at 08:00, build and upload planet tiles.
 0 8 * * 0 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
 
-# Every Wednesday at 08:00, set the deployed planet version.
-0 8 * * 3 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
+# Every Tuesday at 08:00, set the deployed planet version.
+0 8 * * 2 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
 
 # --- Monaco ---
 

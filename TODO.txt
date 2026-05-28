@@ -1,5 +1,4 @@
-
-nginx acme
+remove ungzip
 
 logrotate
 
