@@ -21,6 +21,7 @@ local linters = new Mapping<String, Step> {
     ["prettier"] {
         glob = List(
             "**/*.md",
+            "**/*.json5",
             "**/*.yml",
             "**/*.html",
             "**/*.astro",

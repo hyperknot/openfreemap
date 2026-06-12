@@ -1,28 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true,
-  },
-  "files": {
-    "maxSize": 100000,
-    "ignoreUnknown": true,
-    "includes": [
-      "**",
-      //
-      "!**/*.astro",
-      "!**/*.css",
-      "!**/*.html",
-      "!**/*.scss",
-      //
-      "!!**/_not_used",
-      "!!**/fixtures",
-      "!!**/public/cdn",
-      "!!packages/shared/db/migrations/meta",
-    ],
-  },
-
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 100,
@@ -33,7 +10,7 @@
     },
     "rules": {
       "style": {
-        "noNonNullAssertion": "off", // TS: value!
+        "noNonNullAssertion": "off",
         "useConsistentArrayType": {
           "level": "error",
           "options": {
@@ -53,12 +30,11 @@
         "useObjectSpread": "error",
       },
       "correctness": {
-        "noUnusedFunctionParameters": "error",
         "noGlobalDirnameFilename": "error",
         "useSingleJsDocAsterisk": "error",
       },
       "suspicious": {
-        "noExplicitAny": "off", // TS: any
+        "noExplicitAny": "off",
         "useStaticResponseMethods": "error",
       },
       "complexity": {
@@ -86,21 +62,11 @@
       "allowTrailingCommas": true,
     },
   },
-
   "overrides": [
     {
       "includes": ["**/3rd_party/**"],
       "linter": {
         "enabled": false,
-      },
-    },
-    {
-      "includes": ["pyrightconfig.json"],
-      "json": {
-        "parser": {
-          "allowComments": true,
-          "allowTrailingCommas": true,
-        },
       },
     },
     {
@@ -112,4 +78,24 @@
       },
     },
   ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+  },
+  "files": {
+    "maxSize": 100000,
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!**/*.astro",
+      "!**/*.css",
+      "!**/*.html",
+      "!**/*.scss",
+      "!!**/_not_used",
+      "!!**/fixtures",
+      "!!**/public/cdn",
+      "!!packages/shared/db/migrations/meta",
+    ],
+  },
 }
