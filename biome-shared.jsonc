@@ -1,0 +1,101 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+  },
+  "files": {
+    "maxSize": 100000,
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      //
+      "!**/*.astro",
+      "!**/*.css",
+      "!**/*.html",
+      "!**/*.scss",
+      "!**/worker-configuration.d.ts",
+    ],
+  },
+
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 100,
+  },
+  "linter": {
+    "domains": {
+      "solid": "all",
+    },
+    "rules": {
+      "style": {
+        "noNonNullAssertion": "off", // TS: value!
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "generic",
+          },
+        },
+        "useAsConstAssertion": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noParameterAssign": "error",
+        "useDefaultParameterLast": "error",
+        "useGroupedAccessorPairs": "error",
+        "useObjectSpread": "error",
+      },
+      "correctness": {
+        "noGlobalDirnameFilename": "error",
+        "useSingleJsDocAsterisk": "error",
+      },
+      "suspicious": {
+        "noExplicitAny": "off", // TS: any
+        "useStaticResponseMethods": "error",
+      },
+      "complexity": {
+        "noImplicitCoercions": "error",
+        "noUselessUndefined": "error",
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "options": {
+            "attributes": ["class", "classList"],
+          },
+        },
+      },
+    },
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "quoteStyle": "single",
+    },
+  },
+  "json": {
+    "parser": {
+      "allowTrailingCommas": true,
+    },
+  },
+
+  "overrides": [
+    {
+      "includes": ["**/3rd_party/**"],
+      "linter": {
+        "enabled": false,
+      },
+    },
+    {
+      "includes": ["**/*.jsonc"],
+      "json": {
+        "formatter": {
+          "trailingCommas": "all",
+        },
+      },
+    },
+  ],
+}
