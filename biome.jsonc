@@ -1,5 +1,4 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
   "extends": ["./biome-shared.jsonc"],
   "files": {
     "includes": ["!!**/_not_used"],
