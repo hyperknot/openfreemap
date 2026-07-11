@@ -40,10 +40,12 @@ def setup_apt_repository(
     c.sudo(f"rm -f '{tmp_key_path}'")
 
     put_str(c, source_path, source_line)
+    c.sudo(f"chmod 0644 '{source_path}'")
 
     origin_host = _extract_repo_origin_host(repo_url)
     pin_content = f'Package: *\nPin: origin {origin_host}\nPin-Priority: 900'
     put_str(c, pin_path, pin_content)
+    c.sudo(f"chmod 0644 '{pin_path}'")
 
 
 def apt_get_update(c: Connection) -> None:

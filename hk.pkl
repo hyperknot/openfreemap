@@ -2,7 +2,9 @@ amends "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Config.
 import "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Builtins.pkl"
 import "./hk-local.pkl" as Local
 
-local linters = new Mapping<String, Step> {
+local projectLinters = Local.getPropertyOrNull("projectLinters") ?? new Mapping<String, Step> {}
+
+local linters = (projectLinters) {
     ["biome"] = (Builtins.biome) {
         glob = List(
             "**/*.js",
@@ -91,6 +93,7 @@ hooks {
 
     ["fix"] {
         fix = true
+        stage = false
         steps = linters
     }
 
