@@ -83,6 +83,14 @@
 
   "overrides": [
     {
+      "includes": ["**/pyrightconfig.json"],
+      "json": {
+        "parser": {
+          "allowComments": true,
+        },
+      },
+    },
+    {
       "includes": ["**/3rd_party/**"],
       "linter": {
         "enabled": false,
