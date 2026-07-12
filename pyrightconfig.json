@@ -1,10 +1,9 @@
 {
-  "exclude": [".venv", ".ruff_cache", "**/_not_used", "**/node_modules", "**/__pycache__"],
-
-  "reportAny": "none", // explodes the codebase with types
-  "reportExplicitAny": "none", // explodes the codebase with types
-  "reportMissingTypeStubs": "none", // needed for libraries without types
-  "reportUnknownMemberType": "none", // doesn't allow c.host
-  "reportUnusedCallResult": "none", // forces ugly code like _ = subprocess.run(...).
-  "reportImplicitStringConcatenation": "none" // allows readable multi-line messages built from adjacent strings
+  "exclude": ["**/.*", "**/__pycache__", "**/node_modules", "**/_not_used"],
+  "pythonVersion": "3.13",
+  "typeCheckingMode": "standard",
+  "useLibraryCodeForTypes": true,
+  "reportMissingTypeStubs": "none",
+  "reportArgumentType": "none",
+  "reportOptionalMemberAccess": "none"
 }

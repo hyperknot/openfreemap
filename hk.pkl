@@ -58,10 +58,10 @@ local linters = (projectLinters) {
     }
 
     ["basedpyright"] {
-        glob = List("**/*.py", "**/*.pyi")
+        glob = List("**/*.py", "**/*.pyi", "pyrightconfig.json")
         depends = "ruff-format"
         condition = "exec('test -x .venv/bin/basedpyright && printf true || printf false') == 'true'"
-        check = "uv run basedpyright {{ files }}"
+        check = "uv run basedpyright"
     }
 
     ["nginxfmt"] {
