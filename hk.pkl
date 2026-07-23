@@ -64,6 +64,18 @@ local linters = (projectLinters) {
         check = "uv run basedpyright"
     }
 
+    ["swift-format"] {
+        glob = "**/*.swift"
+        check = "xcrun swift-format lint --strict --parallel {{ files }}"
+        fix = "xcrun swift-format format --in-place --parallel {{ files }}"
+    }
+
+    ["swiftlint"] = (Builtins.swiftlint) {
+        depends = "swift-format"
+        check = "swiftlint lint --strict --quiet --force-exclude {{ files }}"
+        fix = "swiftlint lint --fix --quiet --force-exclude {{ files }} && swiftlint lint --strict --quiet --force-exclude {{ files }}"
+    }
+
     ["nginxfmt"] {
         glob = "**/nginx/*.conf"
         condition = "exec('test -x .venv/bin/nginxfmt && printf true || printf false') == 'true'"
