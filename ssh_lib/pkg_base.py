@@ -38,7 +38,7 @@ def pkg_base(c):
         'autojump',
         'bash-completion',
         'btop',
-        'ctop',
+        #'ctop',
         'dbus',
         'direnv',
         'fd-find',
