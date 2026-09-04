@@ -1,0 +1,31 @@
+from fabric import Connection
+
+from .apt import apt_get_install, apt_get_purge, apt_get_update, setup_apt_repository
+from .utils import (
+    ubuntu_codename,
+)
+
+
+JAVA_VER = 25
+
+
+def update_java(c: Connection) -> None:
+    """Install OpenJDK from Eclipse Adoptium."""
+    # Remove old Ubuntu versions of OpenJDK.
+    apt_get_purge(c, 'openjdk*')
+
+    codename = ubuntu_codename(c)
+
+    setup_apt_repository(
+        c,
+        repo_name='adoptium',
+        key_url='https://packages.adoptium.net/artifactory/api/gpg/key/public',
+        repo_url='https://packages.adoptium.net/artifactory/deb',
+        suite=codename,
+        component='main',
+    )
+
+    apt_get_update(c, 'adoptium')
+    apt_get_install(c, f'temurin-{JAVA_VER}-jdk')
+
+    c.run('java -version')

@@ -1,6 +1,6 @@
 df -h
 Filesystem      Size  Used Avail Use% Mounted on
-/dev/loop0      200G  139G   61G  70% /data/ofm/tile_gen/runs/planet/20231221_134737_pt/mnt_rw
+/dev/loop0      200G  139G   61G  70% /data/ofm/tilegen/runs/planet/20231221_134737_pt/mnt_rw
 
 
 btrfs filesystem df

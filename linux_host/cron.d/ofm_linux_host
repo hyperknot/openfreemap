@@ -1,0 +1,3 @@
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+* * * * * ofm     cd /data/ofm/src && sudo env PYTHONUNBUFFERED=1 ./linux_host/scripts/linux_host.py sync >> /data/ofm/linux_host/logs/linux_host_sync.log 2>&1

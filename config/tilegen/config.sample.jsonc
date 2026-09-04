@@ -1,0 +1,12 @@
+{
+  "$schema": "./schema.json",
+
+  "hosts": ["my-tilegen-host"],
+  // Enables automated tile builds, uploads, version publication, and index refreshes.
+  "cron": false,
+
+  // Operational Telegram alerts (optional):
+  // "telegram_token": "123456:ABC...",
+  // "telegram_chat_id": "123456789",
+  // "telegram_topic_id": 42
+}

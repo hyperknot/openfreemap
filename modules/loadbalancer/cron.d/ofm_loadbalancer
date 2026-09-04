@@ -1,8 +1,0 @@
-# every minute
-
-# fix
-#* * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/loadbalancer/loadbalancer.py fix >> /data/ofm/loadbalancer/logs/run.log 2>&1
-
-
-# check
-* * * * * ofm     sudo /data/ofm/venv/bin/python -u /data/ofm/loadbalancer/loadbalancer.py check >> /data/ofm/loadbalancer/logs/run.log 2>&1

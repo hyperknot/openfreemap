@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
-set -e
+set -euxo pipefail
 
-node_modules/.bin/prettier -w "**/*.md"
+find . -type d -name __pycache__ -prune -exec rm -rf {} +
 
-# biome
-#pnpm biome check --write --unsafe --colors=off --log-level=info --log-kind=pretty . | grep path | sort
-pnpm biome check --write --unsafe .
-
-ruff check --fix .
-ruff format .
-
-find . -type f -name '*.conf' -path '*/nginx*' -exec nginxfmt -v {} +;
-
-
-
+if ! command -v hk >/dev/null 2>&1; then
+  brew install hk
+fi
+hk install
+hk fix --all

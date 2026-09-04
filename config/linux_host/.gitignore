@@ -1,0 +1,6 @@
+# User-specific linux_host configs and uploaded certs should not be committed.
+*.jsonc
+certs/
+
+# Keep the public sample config tracked.
+!config.sample.jsonc

@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/domain" }
+    },
+    "hosts": {
+      "type": "array",
+      "description": "SSH aliases of the servers this config deploys to.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "auto_update": {
+      "type": "boolean",
+      "description": "Install the once-per-minute sync cron and prefetch the newest completed tile version"
+    },
+    "root_redirect_url": {
+      "type": "string",
+      "description": "Optional URL to redirect the tile server root path (/) to. Omit to show a plain text OpenFreeMap tile server message.",
+      "pattern": "^https?://[^\\s;{}]+$"
+    },
+    "areas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": ["planet", "monaco"]
+      }
+    },
+    "telegram_token": {
+      "type": "string",
+      "description": "Telegram bot token"
+    },
+    "telegram_chat_id": {
+      "type": "string",
+      "description": "Telegram chat id"
+    },
+    "telegram_topic_id": {
+      "type": "integer",
+      "description": "Telegram topic id"
+    }
+  },
+  "required": ["domains", "hosts", "auto_update", "areas"],
+  "definitions": {
+    "cert-upload": {
+      "type": "object",
+      "description": "Upload your own certificate. Ideal for Cloudflare Origin Certificates with 15 year expiry. Steps: 1) Create an Origin Certificate on Cloudflare at SSL/TLS / Origin Server. 2) Generate private key and CSR with Cloudflare: Private key type: ECC, Certificate Validity: 15 years. 3) Key format: PEM. Save origin certificate as something.cert and private key as something.key in the same directory.",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "upload" },
+        "cert_path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^.*\\.cert$",
+          "description": "Path to your certificate file (*.cert). Both absolute and relative paths are supported. The corresponding private key (.key) should be in the same directory with the same basename."
+        }
+      },
+      "required": ["type", "cert_path"]
+    },
+    "cert-letsencrypt": {
+      "type": "object",
+      "description": "Issue and renew certificates with nginx's built-in ACME module. The domain must be publicly reachable on port 80 for HTTP-01 validation.",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "letsencrypt" },
+        "email": { "type": "string", "format": "email" }
+      },
+      "required": ["type", "email"]
+    },
+    "cert-dummy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "dummy" }
+      },
+      "required": ["type"]
+    },
+    "cert": {
+      "oneOf": [
+        { "$ref": "#/definitions/cert-upload" },
+        { "$ref": "#/definitions/cert-letsencrypt" },
+        { "$ref": "#/definitions/cert-dummy" }
+      ]
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": { "type": "string", "format": "hostname" },
+        "cert": { "$ref": "#/definitions/cert" }
+      },
+      "required": ["domain", "cert"]
+    }
+  }
+}

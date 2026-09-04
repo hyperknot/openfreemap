@@ -4,12 +4,12 @@
 
 On macOS, I recommend [OrbStack](https://orbstack.dev/).
 
-I saved this function into my bash_profile. It sets up a clean x64-based Ubuntu 22 VM in a few seconds.
+I saved this function into my bash_profile. It sets up a clean x64-based Ubuntu 24.04 VM in a few seconds.
 
 ```
 orb_reset() {
    orbctl delete -f ubuntu-test
-   orbctl create -a amd64 ubuntu:jammy ubuntu-test
+   orbctl create -a amd64 ubuntu:noble ubuntu-test
 }
 ```
 
@@ -22,9 +22,11 @@ Host orb_my
   IdentityFile ~/.orbstack/ssh/id_ed25519
 ```
 
-Then I run commands like the following:
+Create a linux_host config once (its `hosts` array should contain your VM alias,
+e.g. `orb_my`), then deploy to it:
 
 ```
-./init-server.py http-host-static orb_my
-./init-server.py debug orb_my
+cp config/linux_host/config.sample.jsonc config/linux_host/orb.jsonc
+# edit orb.jsonc: set "hosts": ["orb_my"], pick "areas", set "auto_update"
+./linux_host/deploy_linux_host.py --config orb --host orb_my
 ```

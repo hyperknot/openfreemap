@@ -1,6 +1,6 @@
-# HTTP Hosts Benchmarking
+# linux_host Benchmarking
 
-This repository contains tools and scripts for benchmarking HTTP hosts performance.
+This repository contains tools and scripts for benchmarking linux_host server performance.
 
 ## Prerequisites
 

@@ -1,0 +1,5 @@
+import "package://github.com/jdx/hk/releases/download/v1.56.1/hk@1.56.1#/Config.pkl" as Config
+
+exclude = List()
+
+projectLinters = new Mapping<String, Config.Step> {}

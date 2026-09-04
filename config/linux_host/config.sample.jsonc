@@ -1,0 +1,45 @@
+{
+  "$schema": "./schema.json",
+
+  // Domains served by this linux_host. Use multiple entries for multiple hostnames.
+  "domains": [
+    {
+      "domain": "tiles.example.com",
+
+      // Public server with direct Let's Encrypt access.
+      // Certificates are issued and renewed by nginx's built-in ACME module:
+      "cert": { "type": "letsencrypt", "email": "admin@example.com" },
+
+      // Recommended for production behind Cloudflare:
+      // create an Origin Certificate and put both files next to each other:
+      //   certs/tiles.example.com.cert
+      //   certs/tiles.example.com.key
+      // "cert": {
+      // "type": "upload",
+      // "cert_path": "certs/tiles.example.com.cert",
+      // },
+
+      // Alternative for local testing only:
+      // "cert": { "type": "dummy" }
+    },
+  ],
+
+  // SSH aliases used as deploy targets.
+  "hosts": ["my-ofm-host"],
+
+  // Prefetch completed releases and follow the shared deployed-version file.
+  // Set to false to start one detached sync at deployment and install no cron.
+  "auto_update": true,
+
+  // Optional: redirect requests to the tile server root path (/).
+  // Omit to show a plain text OpenFreeMap tile server message.
+  // "root_redirect_url": "https://openfreemap.org",
+
+  // Use ["monaco"] for first deploys and tests (planet is a ~162 GB download).
+  "areas": ["monaco"],
+
+  // Optional operational Telegram alerts:
+  // "telegram_token": "123456:ABC...",
+  // "telegram_chat_id": "123456789",
+  // "telegram_topic_id": 42
+}

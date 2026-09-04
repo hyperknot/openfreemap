@@ -1,0 +1,6 @@
+# User-specific tilegen configs and rclone credentials should not be committed.
+*.jsonc
+rclone.conf
+
+# Keep the public sample config tracked.
+!config.sample.jsonc

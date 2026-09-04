@@ -8,7 +8,7 @@ import json
 with open('access.jsonl') as fp:
     json_lines = fp.readlines()
 
-paths = []
+paths: list[str] = []
 for i, line in enumerate(json_lines):
     log_data = json.loads(line)
     if log_data['status'] != 200:
@@ -27,5 +27,5 @@ for i, line in enumerate(json_lines):
 
     print(f'{i / len(json_lines) * 100:.1f}%')
 
-with open('path_list.txt', 'w') as fp:
+with open('path_list_500k.txt', 'w') as fp:
     fp.writelines(paths)

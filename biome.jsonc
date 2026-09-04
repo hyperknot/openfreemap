@@ -1,28 +1,3 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
-  "formatter": {
-    "indentStyle": "space",
-    "lineWidth": 100
-  },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "complexity": {
-        "noForEach": "off"
-      }
-    },
-    "includes": ["**"]
-  },
-  "javascript": {
-    "formatter": {
-      "semicolons": "asNeeded",
-      "quoteStyle": "single"
-    }
-  },
-  "files": {
-    "maxSize": 100000,
-    "includes": ["**", "!**/venv", "!**/dist", "!**/.astro"]
-  }
+  "extends": ["./biome-shared.jsonc"],
 }

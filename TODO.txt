@@ -1,0 +1,9 @@
+remove ungzip
+
+
+todo later:
+disable DONE file, use shasums
+
+---
+
+planet caching 24 hours too long

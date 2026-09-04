@@ -1,0 +1,10 @@
+# rclone.conf is only needed if you want to generate tiles or upload styles.
+# For hosting, rclone is not used.
+
+[remote]
+type = s3
+provider = Cloudflare
+access_key_id = xxx
+secret_access_key = xxx
+endpoint = https://xxx.r2.cloudflarestorage.com
+no_check_bucket = true
