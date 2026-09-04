@@ -11,6 +11,8 @@ To check whether a feature or label is present in the tile data, use the Maputni
 
 3. Zoom into the area in question and click on the feature. The panel will show all raw data fields in the tile (e.g. `name`, `name:en`, `class`, `subclass`, etc.).
 
+4. Take a screenshot of the Inspect mode result and include it when reporting the issue.
+
 ## Interpreting the results
 
 - **Feature is visible in Inspect mode:** the data is in the tiles. Any rendering change is a style issue and belongs in the [styles repo](https://github.com/hyperknot/openfreemap-styles).
