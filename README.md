@@ -130,6 +130,10 @@ Of course, you are welcome to use custom styles.
 
 `https://tiles.openfreemap.org/planet/latest` always points to the latest deployed TileJSON. Tile URLs can use `/planet/latest/{z}/{x}/{y}.pbf`. Non-existing versions are automatically served as the latest version.
 
+### Inspecting tile data
+
+If a feature or label seems wrong or missing, you can check the raw tile data. See [inspecting tiles](docs/inspecting_tiles.md).
+
 ### Full planet downloads
 
 Full planet runs are uploaded weekly. You can download them both in Btrfs and in MBTiles formats. The files have the following URL patterns:
