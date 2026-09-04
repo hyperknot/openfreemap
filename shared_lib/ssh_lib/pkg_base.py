@@ -19,7 +19,6 @@ def pkg_base(c: Connection) -> None:
         'lsb-release',
         'pigz',
         'rsync',
-        'ufw',
         'unzip',
         'wget',
         'psmisc',
