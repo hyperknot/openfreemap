@@ -34,11 +34,15 @@ def run_planetiler(area: str) -> Path:
     # https://github.com/onthegomap/planetiler/discussions/690#discussioncomment-7756397
     java_memory_gb = 30 if area == 'planet' else 1
 
+    base_dir = Path(__file__).resolve().parent.parent
+    custom_profile_path=base_dir / "custom_profile" / "OFMProfile.java"
+
     command = [
         'java',
         f'-Xmx{java_memory_gb}g',
-        '-jar',
+        '-cp',
         get_tilegen_config().planetiler_path,
+        custom_profile_path,
         f'--area={area}',
         '--download',
         '--download-threads=10',
