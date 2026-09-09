@@ -5,7 +5,7 @@ title: 'Terms of Service'
 
 # OpenFreeMap Terms of Service
 
-**Last Updated:** February 26, 2025
+**Last Updated:** September 9, 2026
 
 ## Overview
 
@@ -15,7 +15,9 @@ OpenFreeMap is a completely free service provided "as-is," with no warranties. B
 
 ## Eligibility
 
-You must be at least 18 years old and legally able to enter into this Agreement. If representing an organization, you must have authority to bind it.
+You must be at least 18 years old and legally able to enter into this Agreement to integrate our public service into a website or application. If representing an organization, you must have authority to bind it.
+
+This age requirement does not apply to end users who merely view or interact with embedded maps. Websites and applications using OpenFreeMap may serve users of any age.
 
 ## User Conduct
 
