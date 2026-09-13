@@ -5,7 +5,7 @@ from shared_lib.ssh_lib.utils import exists, sudo_cmd
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
-PLANETILER_COMMIT = '9af08233'
+PLANETILER_COMMIT = '546486f63c00d56b9f697b5c4659aa40e30e6e5c'
 PLANETILER_PATH = f'{tilegen_deploy_config.remote_planetiler_bin}/planetiler.jar'
 
 

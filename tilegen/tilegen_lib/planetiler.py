@@ -37,6 +37,7 @@ def run_planetiler(area: str) -> Path:
     command = [
         'java',
         f'-Xmx{java_memory_gb}g',
+        f'-DEPSG-HSQL.directory={run_folder / "geotools"}',
         '-jar',
         get_tilegen_config().planetiler_path,
         f'--area={area}',
