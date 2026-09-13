@@ -1,8 +1,12 @@
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+# OpenFreeMap website content
+
+This directory contains OpenFreeMap product documentation, legal text, and the source for its public debug examples.
+
+## Content map
+
+- `content/index/` — homepage sections
+- `content/how_to_use/` — integration and self-hosting guides
+- `content/donate/` — sponsorship information
+- `content/policies/` — privacy policy and terms of service
+- `public/debug/lang/` — language-expression examples served under `/debug/lang/`
+- `public/debug/terrain/` — terrain example served under `/debug/terrain/`

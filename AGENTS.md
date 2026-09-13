@@ -2,7 +2,7 @@
 
 ## Project shape
 
-This is a single Python uv project plus the website frontend.
+This is a single Python uv project. The `website/` directory contains public product documentation, legal text, and debug examples.
 
 Python packages:
 
@@ -21,7 +21,7 @@ Python packages:
   - `linux_host/deploy_linux_host.py`
   - `tilegen/deploy_tilegen.py`
 
-Frontend/site code lives in `website/` and uses pnpm.
+Public website prose lives in `website/content/`, and debug examples live in `website/public/debug/`.
 
 ## Python workflow
 

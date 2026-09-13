@@ -1,14 +1,6 @@
-/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} */
+/** @type {import('prettier').Config} */
 export default {
   printWidth: 100,
   semi: false,
   singleQuote: true,
-  plugins: [
-    'prettier-plugin-astro',
-    '@ianvs/prettier-plugin-sort-imports',
-    'prettier-plugin-tailwindcss',
-  ],
-
-  // tailwindStylesheet: './packages/shared/styles/_tailwind.css',
-  astroAllowShorthand: true,
 }
