@@ -9,6 +9,24 @@ from tilegen.tilegen_lib.tilegen_config import get_tilegen_config
 from .btrfs import cleanup_folder
 
 
+def fetch_wikidata_cache(area: str) -> None:
+    assert area in get_tilegen_config().areas
+
+    wikidata_dir = get_tilegen_config().tilegen_dir / 'wikidata' / area
+    wikidata_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = get_tilegen_config().tilegen_dir / 'wikidata' / f'{area}.json'
+
+    command = _planetiler_command(area, wikidata_dir / 'geotools')
+    command.extend(['--only-fetch-wikidata', f'--wikidata-cache={cache_path}'])
+    print(command)
+
+    with (
+        (wikidata_dir / 'planetiler_out.log').open('w') as out_file,
+        (wikidata_dir / 'planetiler_err.log').open('w') as err_file,
+    ):
+        subprocess.run(command, stdout=out_file, stderr=err_file, check=True, cwd=wikidata_dir)
+
+
 def run_planetiler(area: str) -> Path:
     assert area in get_tilegen_config().areas
 
@@ -30,36 +48,20 @@ def run_planetiler(area: str) -> Path:
 
     os.chdir(run_folder)
 
-    # link to discussion about why exactly 30 GB
-    # https://github.com/onthegomap/planetiler/discussions/690#discussioncomment-7756397
-    java_memory_gb = 30 if area == 'planet' else 1
-
-    command = [
-        'java',
-        f'-Xmx{java_memory_gb}g',
-        f'-DEPSG-HSQL.directory={run_folder / "geotools"}',
-        '-jar',
-        get_tilegen_config().planetiler_path,
-        f'--area={area}',
-        '--download',
-        '--download-threads=10',
-        '--download-chunk-size-mb=1000',
-        '--http-timeout=60s',
-        '--http-retries=10',
-        '--http-retry-wait=30s',
-        '--fetch-wikidata',
-        '--output=tiles.mbtiles',
-        '--storage=mmap',
-        '--force',
-        '--languages=default,tok',
-        '--transliterate=false',
-    ]
+    command = _planetiler_command(area, run_folder / 'geotools')
+    command.extend(
+        [
+            '--fetch-wikidata',
+            '--output=tiles.mbtiles',
+            '--storage=mmap',
+            '--languages=default,tok',
+            '--transliterate=false',
+        ]
+    )
 
     if area == 'planet':
-        command.append('--nodemap-type=array')
-        command.append('--bounds=planet')
-
-    if area == 'monaco':
+        command.extend(['--nodemap-type=array', '--bounds=planet'])
+    elif area == 'monaco':
         command.append('--nodemap-type=sortedtable')
 
     print(command)
@@ -79,3 +81,23 @@ def run_planetiler(area: str) -> Path:
     print('planetiler.jar DONE')
 
     return run_folder
+
+
+def _planetiler_command(area: str, geotools_dir: Path) -> list[str | Path]:
+    # https://github.com/onthegomap/planetiler/discussions/690#discussioncomment-7756397
+    java_memory_gb = 30 if area == 'planet' else 1
+    return [
+        'java',
+        f'-Xmx{java_memory_gb}g',
+        f'-DEPSG-HSQL.directory={geotools_dir}',
+        '-jar',
+        get_tilegen_config().planetiler_path,
+        f'--area={area}',
+        '--download',
+        '--download-threads=10',
+        '--download-chunk-size-mb=1000',
+        '--http-timeout=60s',
+        '--http-retries=10',
+        '--http-retry-wait=30s',
+        '--force',
+    ]

@@ -11,7 +11,7 @@ from shared_lib.utils.telegram_v2_shared import send_telegram_message
 from tilegen.tilegen_lib.btrfs import append_sha256sum, build_btrfs_image, gzip_btrfs, move_logs
 from tilegen.tilegen_lib.lock import tile_build_lock
 from tilegen.tilegen_lib.mbtiles import update_mbtiles_metadata
-from tilegen.tilegen_lib.planetiler import run_planetiler
+from tilegen.tilegen_lib.planetiler import fetch_wikidata_cache, run_planetiler
 from tilegen.tilegen_lib.pmtiles import make_pmtiles
 from tilegen.tilegen_lib.rclone import (
     finalize_run_upload,
@@ -30,6 +30,16 @@ def cli():
     """
     Generates tiles and uploads to CloudFlare
     """
+
+
+@cli.command()
+@click.argument('area', required=True)
+def fetch_wikidata(area: str):
+    """Build or update the persistent Wikidata cache for an area."""
+    print(f'---\n{now}\nStarting fetch-wikidata {area}')
+
+    with tile_build_lock():
+        fetch_wikidata_cache(area)
 
 
 @cli.command()
