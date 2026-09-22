@@ -14,10 +14,8 @@ def fetch_wikidata_cache(area: str) -> None:
 
     wikidata_dir = get_tilegen_config().tilegen_dir / 'wikidata' / area
     wikidata_dir.mkdir(parents=True, exist_ok=True)
-    cache_path = get_tilegen_config().tilegen_dir / 'wikidata' / f'{area}.json'
-
     command = _planetiler_command(area, wikidata_dir / 'geotools')
-    command.extend(['--only-fetch-wikidata', f'--wikidata-cache={cache_path}'])
+    command.extend(['--only-fetch-wikidata', f'--wikidata-cache={_wikidata_cache_path(area)}'])
     print(command)
 
     with (
@@ -30,6 +28,8 @@ def fetch_wikidata_cache(area: str) -> None:
 def run_planetiler(area: str) -> Path:
     assert area in get_tilegen_config().areas
 
+    wikidata_cache_path = _wikidata_cache_path(area)
+    wikidata_cache_path.parent.mkdir(parents=True, exist_ok=True)
     date = datetime.now(UTC).strftime('%Y%m%d_%H%M%S')
 
     area_dir = get_tilegen_config().runs_dir / area
@@ -52,6 +52,7 @@ def run_planetiler(area: str) -> Path:
     command.extend(
         [
             '--fetch-wikidata',
+            f'--wikidata-cache={wikidata_cache_path}',
             '--output=tiles.mbtiles',
             '--storage=mmap',
             '--languages=default,tok',
@@ -81,6 +82,10 @@ def run_planetiler(area: str) -> Path:
     print('planetiler.jar DONE')
 
     return run_folder
+
+
+def _wikidata_cache_path(area: str) -> Path:
+    return get_tilegen_config().tilegen_dir / 'wikidata' / f'{area}.json'
 
 
 def _planetiler_command(area: str, geotools_dir: Path) -> list[str | Path]:
