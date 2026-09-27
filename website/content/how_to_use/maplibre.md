@@ -1,22 +1,33 @@
 ## How to load MapLibre?
 
-Include <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank">MapLibre GL JS</a> in the `<head>`. If you are using npm, you can install the `maplibre-gl` package. Make sure to import the CSS as well.
+Install [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/):
 
-```html
-<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
-<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet" />
+```sh
+npm install maplibre-gl
 ```
 
-Initialize it to a div like this:
+Add a map container to your page:
 
 ```html
-<div id="map" style="width: 100%; height: 500px"></div>
-<script>
-  const map = new maplibregl.Map({
-    style: 'https://tiles.openfreemap.org/styles/liberty',
-    center: [13.388, 52.517],
-    zoom: 9.5,
-    container: 'map',
-  })
-</script>
+<div id="map" style="height: 500px"></div>
 ```
+
+Then initialize the map:
+
+```js
+import { Map, setWorkerUrl } from 'maplibre-gl'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
+import 'maplibre-gl/dist/maplibre-gl.css'
+
+// Vite worker setup
+setWorkerUrl(workerUrl)
+
+new Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [13.388, 52.517],
+  zoom: 9.5,
+})
+```
+
+For other bundlers, see MapLibre's [installation guide](https://maplibre.org/maplibre-gl-js/docs/#installation).
