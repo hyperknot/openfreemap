@@ -85,7 +85,8 @@ def run_planetiler(area: str) -> Path:
 
 
 def _wikidata_cache_path(area: str) -> Path:
-    return get_tilegen_config().tilegen_dir / 'wikidata' / f'{area}.json'
+    # Outside /data/ofm, so --reinstall keeps it.
+    return Path('/data/ofm_keep/wikidata') / f'{area}.json'
 
 
 def _planetiler_command(area: str, geotools_dir: Path) -> list[str | Path]:

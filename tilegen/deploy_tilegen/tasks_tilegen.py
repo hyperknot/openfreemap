@@ -79,6 +79,10 @@ def prepare_tilegen(c: Connection, config_path: Path, *, enable_cron: bool) -> N
             user='ofm',
         )
 
+    # /data is owned by root, so deploy creates the persistent Wikidata cache dir for ofm.
+    c.sudo('mkdir -p /data/ofm_keep/wikidata')
+    c.sudo('chown -R ofm:ofm /data/ofm_keep')
+
     c.sudo(f'mkdir -p {tilegen_deploy_config.remote_tilegen_dir}/logs')
     c.sudo(
         f'chown ofm:ofm {tilegen_deploy_config.remote_tilegen_dir} '

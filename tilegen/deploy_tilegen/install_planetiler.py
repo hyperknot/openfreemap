@@ -5,7 +5,8 @@ from shared_lib.ssh_lib.utils import exists, sudo_cmd
 from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
-PLANETILER_COMMIT = '546486f63c00d56b9f697b5c4659aa40e30e6e5c'
+# Downloader metadata timeout/retries fix: https://github.com/onthegomap/planetiler/pull/1621
+PLANETILER_COMMIT = '523efa6b702b470326f507d51889c850f3c31c62'
 PLANETILER_PATH = f'{tilegen_deploy_config.remote_planetiler_bin}/planetiler.jar'
 
 
