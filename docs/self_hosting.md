@@ -155,7 +155,7 @@ The same `--user`, `--port`, `SSH_PASSWD` and `SUDO_PASSWD` options from the lin
 
 A normal deployment refuses to make any server change if a `make-tiles` build is running.
 
-Reinstall stops all tilegen commands and their child processes, verifies that they stopped, unmounts and verifies filesystems below `/data/ofm`, and then removes `/data/ofm`.
+Reinstall stops all tilegen commands and their child processes, verifies that they stopped, unmounts and verifies filesystems below `/data/ofm`, and then removes `/data/ofm`. `/data/ofm_keep` (Wikidata cache) is never deleted.
 
 Trigger a run manually over SSH as the `ofm` runtime user:
 

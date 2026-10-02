@@ -51,46 +51,46 @@ public class OFMProfile extends OpenMapTilesProfile {
         ),
 
         new FeatureOverwrite(
-                "outdoor_route", // Target layer
-                TargetGeometry.LINE,
-                List.of(
-                    new HasTagsFilter("highway"), // Only process if it's a physical highway/trail
-                    new RelationsFilter(List.of(   // AND it belongs to a hiking route relation
+            "outdoor_route", // Target layer
+            TargetGeometry.LINE,
+            List.of(
+                new HasTagsFilter("highway"), // Only process if it's a physical highway/trail
+                new RelationsFilter(List.of(   // AND it belongs to a hiking route relation
+                    new TagValueFilter("type", "route"),
+                    new TagValueFilter("route", "hiking")
+                ))
+            ),
+            List.of(
+                new RelationTagMap(
+                    List.of(
                         new TagValueFilter("type", "route"),
                         new TagValueFilter("route", "hiking")
-                    ))
-                ),
-                List.of(
-                    new RelationTagMap(
-                        List.of(
-                            new TagValueFilter("type", "route"),
-                            new TagValueFilter("route", "hiking")
-                        ),
-                        // NOTE: add tags used in processor as hint to the preprocessor
-                        Set.of("name", "ref", "network", "symbol", "color"),
-                        (matchedRelations, vectorFeature) -> {
-                            // Your exact sorting and attribute building lambda goes here seamlessly!
-                            Map<String, Integer> hikingPriority = Map.of("iwn", 1, "nwn", 2, "rwn", 3, "lwn", 4);
-                            var sorted = matchedRelations.stream()
-                                .sorted((r1, r2) -> Integer.compare(
-                                    hikingPriority.getOrDefault(String.valueOf(r1.getTag("network")), 99), 
-                                    hikingPriority.getOrDefault(String.valueOf(r2.getTag("network")), 99)
-                                )).toList();
+                    ),
+                    // NOTE: add tags used in processor as hint to the preprocessor
+                    Set.of("name", "ref", "network", "symbol", "color"),
+                    (matchedRelations, vectorFeature) -> {
+                        // Your exact sorting and attribute building lambda goes here seamlessly!
+                        Map<String, Integer> hikingPriority = Map.of("iwn", 1, "nwn", 2, "rwn", 3, "lwn", 4);
+                        var sorted = matchedRelations.stream()
+                            .sorted((r1, r2) -> Integer.compare(
+                                hikingPriority.getOrDefault(String.valueOf(r1.getTag("network")), 99), 
+                                hikingPriority.getOrDefault(String.valueOf(r2.getTag("network")), 99)
+                            )).toList();
 
-                            int i = 1;
-                            for (var rel : sorted) {
-                                for (String key : List.of("name", "ref", "network", "symbol", "color")) {
-                                    if (rel.hasTag(key)) {
-                                        vectorFeature.setAttr("route_" + i + "_" + key, rel.getTag(key));
-                                    }
+                        int i = 1;
+                        for (var rel : sorted) {
+                            for (String key : List.of("name", "ref", "network", "symbol", "color")) {
+                                if (rel.hasTag(key)) {
+                                    vectorFeature.setAttr("route_" + i + "_" + key, rel.getTag(key));
                                 }
-                                i++;
                             }
+                            i++;
                         }
-                    )
+                    }
                 )
             )
-        );
+        )
+    );
 
     @Override
     public void processFeature(SourceFeature sourceFeature, FeatureCollector features) {

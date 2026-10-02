@@ -6,6 +6,10 @@ from fabric import Connection
 from .utils import exists, put_str
 
 
+# Wait for the dpkg lock (e.g. unattended-upgrades) instead of failing immediately.
+APT_GET = 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=600'
+
+
 def setup_apt_repository(
     c: Connection,
     *,
@@ -52,19 +56,19 @@ def setup_apt_repository(
 
 def apt_get_update(c: Connection, repo_name: str | None = None) -> None:
     if repo_name is None:
-        c.sudo('apt-get update')
+        c.sudo(f'{APT_GET} update')
         return
 
     source_path = apt_repo_source_path(repo_name)
     c.sudo(
-        f'apt-get update -o Dir::Etc::sourcelist={shlex.quote(source_path)} '
+        f'{APT_GET} update -o Dir::Etc::sourcelist={shlex.quote(source_path)} '
         "-o Dir::Etc::sourceparts='-' -o APT::Get::List-Cleanup='0'"
     )
 
 
 def apt_get_install(c: Connection, pkgs: str, warn: bool = False) -> None:
     c.sudo(
-        f'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends {pkgs}',
+        f'{APT_GET} install -y --no-install-recommends {pkgs}',
         warn=warn,
         echo=True,
     )
@@ -78,13 +82,13 @@ def apt_get_purge(c: Connection, pkgs: str | Iterable[str]) -> None:
 
     for pkg in pkg_list:
         c.sudo(
-            f'DEBIAN_FRONTEND=noninteractive apt-get purge -y {shlex.quote(pkg)}',
+            f'{APT_GET} purge -y {shlex.quote(pkg)}',
             warn=True,
         )
 
 
 def apt_get_autoremove(c: Connection) -> None:
-    c.sudo('DEBIAN_FRONTEND=noninteractive apt-get autoremove -y')
+    c.sudo(f'{APT_GET} autoremove -y')
 
 
 def apt_repo_keyring_path(repo_name: str) -> str:
