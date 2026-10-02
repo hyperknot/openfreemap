@@ -1,10 +1,9 @@
 /data/nginx/logs/*.log /data/ofm/linux_host/logs_nginx/*.log /data/ofm/linux_host/logs_nginx/*.jsonl {
     daily
-    rotate 7
+    rotate 6
     maxage 7
     dateext
     missingok
-    notifempty
     compress
     delaycompress
     create 0640 nginx adm

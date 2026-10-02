@@ -71,9 +71,7 @@ def prepare_linux_host(c: Connection, jsonc_path: Path) -> None:
     nginx_log_paths = ['/data/nginx/logs/nginx-error.log']
     for domain_data in jsonc_data['domains']:
         base_path = f'{nginx_logs_dir}/{domain_data["slug"]}'
-        nginx_log_paths.extend(
-            [f'{base_path}-access.jsonl', f'{base_path}-error.log', f'{base_path}-deny.log']
-        )
+        nginx_log_paths.append(f'{base_path}-access.jsonl')
     quoted_log_paths = ' '.join(shlex.quote(path) for path in nginx_log_paths)
     c.sudo(f'touch {quoted_log_paths}')
     c.sudo(f'chown nginx:adm {quoted_log_paths}')
