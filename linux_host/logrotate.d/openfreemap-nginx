@@ -1,4 +1,4 @@
-/data/nginx/logs/*.log /data/ofm/linux_host/logs_nginx/*.log /data/ofm/linux_host/logs_nginx/*.jsonl {
+/data/nginx/logs/*.log /data/ofm/linux_host/logs_nginx/*.jsonl {
     daily
     rotate 6
     maxage 7
