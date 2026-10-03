@@ -9,7 +9,6 @@ from linux_host.linux_host_lib.config_loader import (
     read_linux_host_jsonc_config,
     resolve_upload_cert_paths,
 )
-from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from shared_lib.ssh_lib.utils import exists, put
 
 
@@ -53,8 +52,6 @@ def clean_linux_host(c: Connection, areas: list[str]) -> None:
 
 
 def prepare_linux_host(c: Connection, jsonc_path: Path) -> None:
-    kernel_somaxconn65k(c)
-    kernel_limits1m(c)
     configure_nginx(c)
     if exists(c, '/usr/sbin/ufw'):
         c.sudo('ufw allow 80/tcp comment "HTTP"', echo=True)
