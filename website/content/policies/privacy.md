@@ -4,7 +4,7 @@ title: 'Privacy Policy'
 
 # OpenFreeMap Privacy Policy
 
-**Last Updated:** October 3, 2026
+**Last Updated:** October 4, 2026
 
 ## Summary
 
@@ -21,7 +21,7 @@ OpenFreeMap is completely free and collects minimal data. We believe your privac
 **What We DO Collect:**
 
 - **Access Logs:** We collect anonymized logs that include browser type, referring pages, date/time stamps, and operating system—but no IP addresses by default
-- **Error Logs:** If a request fails, we log the error, including the IP address. These logs are deleted after 7 days
+- **Error Logs:** If the server encounters an error, the error log may include the IP address and requested URL. These logs are deleted after 7 days
 - **Temporary IP Logs (Only During Security Incidents):** If we detect abuse or a security threat, we may temporarily enable IP logging for up to 30 days to investigate. These logs are deleted after the investigation or 30 days, whichever comes first
 
 **Updates & Communication:**
@@ -45,7 +45,7 @@ We collect minimal data to maintain functionality and security:
 
 - **Access Logs:** We collect anonymized logs that include browser type, referring/exit pages, date/time stamps, and operating system. These logs **do not** contain IP addresses.
 
-- **Error Logs:** If a request fails, we log the error details, including the IP address and the requested URL.
+- **Error Logs:** If the server encounters an error, the error log may include the IP address and requested URL. These logs are deleted after 7 days.
 
 - **IP Addresses (Temporary & Limited):** By default, our access logs do not contain IP addresses. However, if we detect a security incident (such as an attack on our service) or misuse, we may temporarily enable IP logging for a maximum of 30 days to investigate and resolve the issue. After this period or once the issue is resolved (whichever comes first), any logs containing IP addresses are permanently deleted.
 
