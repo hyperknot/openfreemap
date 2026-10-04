@@ -12,6 +12,7 @@ Planet release jobs run in UTC:
 | -------------------------------------- | ------------------------------- |
 | Sunday 08:00                           | Build and upload planet tiles   |
 | Tuesday 08:00 to 23:50, every 10 min   | Set the deployed planet version |
+| Wednesday 08:30                        | Purge old runs (all areas)      |
 
 Monaco is built daily at 03:30 and its deployed version is set every 10 minutes from 01:00 to 02:50, so a Monaco build is deployed the next morning.
 
@@ -19,7 +20,7 @@ Once the latest version is deployed, later `set-version` runs in the window do n
 
 ### Rolling back
 
-During a set-version window, the next cron run overwrites a manual rollback. First comment out the set-version line in `/etc/cron.d/ofm_tilegen`, then run `set-version {area} --version OLD`.
+During a set-version window, the next cron run overwrites a manual rollback. First comment out the set-version line in `/etc/cron.d/ofm_tilegen`, then run `set-version {area} --version OLD`. Only retained runs (see below) can be rolled back to.
 
 Cron runs all jobs as the `ofm` runtime user. The equivalent manual build command is:
 
@@ -65,18 +66,15 @@ The pipeline is:
 6. Shrink the Btrfs image.
 7. Write SHA256 checksum for `tiles.btrfs`.
 8. Upload `tiles.btrfs`.
-9. Gzip the Btrfs image to `tiles.btrfs.gz`.
-10. Write SHA256 checksum for `tiles.btrfs.gz`.
-11. Upload `tiles.btrfs.gz`.
-12. Delete local Btrfs files to save disk space.
-13. Convert `tiles.mbtiles` to `tiles.pmtiles`.
-14. Verify `tiles.pmtiles`.
-15. Write SHA256 checksum for `tiles.pmtiles`.
-16. Upload `tiles.pmtiles`.
-17. Move logs and stats into the run `logs/` directory.
-18. Upload remaining small files and `SHA256SUMS`.
-19. Create the remote `done` marker.
-20. Rebuild the `ofm-btrfs` bucket indexes.
+9. Delete the local Btrfs image to save disk space.
+10. Convert `tiles.mbtiles` to `tiles.pmtiles`.
+11. Verify `tiles.pmtiles`.
+12. Write SHA256 checksum for `tiles.pmtiles`.
+13. Upload `tiles.pmtiles`.
+14. Move logs and stats into the run `logs/` directory.
+15. Upload remaining small files and `SHA256SUMS`.
+16. Create the remote `done` marker.
+17. Rebuild the `ofm-btrfs` bucket indexes.
 
 The remote run is uploaded under:
 
@@ -131,6 +129,26 @@ The tilegen host maintains public index files for the R2 buckets:
 - <https://assets.openfreemap.com/dirs.txt>
 
 The hourly `make-indexes` cron refreshes indexes for both buckets. The planet build job also refreshes the `ofm-btrfs` index after a successful upload.
+
+## Bucket retention
+
+`purge-versions` deletes old runs from the `ofm-btrfs` bucket, with the same rule for every area. It keeps:
+
+- the deployed version
+- the last 4 complete runs
+- the first complete run of each of the last 6 months with runs
+
+It deletes every other complete run, and incomplete runs (no `done` file) older than 7 days. Then it rebuilds the `ofm-btrfs` indexes and sends a silent Telegram message per area.
+
+The Wednesday run follows the Tuesday planet deploy. Purging is safe at any time: linux_host only uses the deployed version and the newest complete run, both always kept, and an upload in progress is younger than 7 days.
+
+A planet run is about 360 GB (MBTiles ~105 GB, Btrfs ~165 GB, PMTiles ~90 GB), so the planet retention needs about 3.5 TB of R2 storage. Monaco runs are negligible.
+
+Preview what would be deleted:
+
+```bash
+cd /data/ofm/src && sudo -u ofm env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py purge-versions --dry-run
+```
 
 ## Observed full-planet runtime
 

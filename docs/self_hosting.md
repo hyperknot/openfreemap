@@ -12,9 +12,9 @@ There is a 99.9% chance you only need **linux_host**. tilegen is slow, needs a h
 
 ### System requirements
 
-**linux_host**: 300 GB disk space for hosting a single planet run. SSD is recommended, but not required. Note that an `auto_update: true` host may hold TWO complete versions during a release transition (the active version plus a prefetched candidate), so provide capacity for two complete versions on automatic planet hosts.
+**linux_host**: a planet version is about 170 GB. `auto_update: false` hosts need 200 GB disk space. `auto_update: true` hosts hold TWO complete versions during a release transition (the active version plus a prefetched candidate), so they need 400 GB. SSD is recommended, but not required.
 
-**tilegen**: 500 GB SDD and at least 64 GB ram
+**tilegen**: 1 TB SSD and at least 64 GB ram. A planet build peaks at about 500 GB, both during Planetiler and during the Btrfs image build. With `--upload`, the R2 bucket needs about 3.5 TB for the retained planet runs (see [bucket retention](tilegen_release_cadence.md#bucket-retention)).
 
 **Ubuntu 24.04 or newer**
 
@@ -38,7 +38,7 @@ I recommend running things quickly first, with `"areas": ["monaco"]` and then on
 
 #### 1. DNS setup
 
-Set up a server with at least 300 GB SSD space and configure the DNS for the subdomain of your choice.
+Set up a server with enough SSD space (see system requirements) and configure the DNS for the subdomain of your choice.
 For example, make an A record for "maps.example.com" -> 185.199.110.153
 
 #### 2. Clone and prepare `config` folder
@@ -145,7 +145,7 @@ Edit `config/linux_host/self-hosted.jsonc` to set `"areas": ["planet", "monaco"]
 
 Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about `cloudflare: ...; retrying next minute` lines in the meantime; a failed download restarts from zero on the next run.
 
-If your server doesn't have an SSD, the download + uncompressing process can take hours.
+If your server doesn't have an SSD, the download can take hours.
 
 ---
 

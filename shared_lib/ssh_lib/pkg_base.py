@@ -17,7 +17,6 @@ def pkg_base(c: Connection) -> None:
         'htop',
         'logrotate',
         'lsb-release',
-        'pigz',
         'rsync',
         'unzip',
         'wget',

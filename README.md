@@ -138,11 +138,11 @@ If a feature or label seems wrong or missing, you can check the raw tile data. S
 
 ### Full planet downloads
 
-Full planet runs are uploaded weekly. You can download them both in Btrfs and in MBTiles formats. The files have the following URL patterns:
+Full planet runs are uploaded weekly. You can download them in Btrfs, MBTiles and PMTiles formats. The files have the following URL patterns:
 
-https://btrfs.openfreemap.com/areas/planet/{version}/tiles.btrfs.gz (and .mbtiles)
+https://btrfs.openfreemap.com/areas/planet/{version}/tiles.btrfs (and .mbtiles, .pmtiles)
 
-Use the [index file](https://btrfs.openfreemap.com/files.txt) to find out about versions.
+Use the [index file](https://btrfs.openfreemap.com/files.txt) to find out about versions. We keep the last 4 runs and the first run of each of the last 6 months; older runs are deleted.
 
 _Note: MBTiles files are not required for this project. We provide them for your convenience, allowing you to use the processed planet tiles with any other tool of your choice._
 

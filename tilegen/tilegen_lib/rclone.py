@@ -6,7 +6,7 @@ from tilegen.tilegen_lib.tilegen_config import get_tilegen_config
 
 
 # Files that are uploaded individually before finalize_run_upload
-LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz', 'tiles.pmtiles'}
+LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.pmtiles'}
 
 
 def rclone_env() -> dict[str, str]:
@@ -146,6 +146,33 @@ def get_versions_on_bucket(area: str) -> list[str]:
         text=True,
     )
     return sorted(line.split('/')[0] for line in p.stdout.splitlines())
+
+
+def get_runs_on_bucket(area: str) -> list[str]:
+    """All run folders, complete or not."""
+    p = subprocess.run(
+        [
+            'rclone',
+            'lsf',
+            '--dirs-only',
+            '--dir-slash=false',
+            f'remote:ofm-btrfs/areas/{area}/',
+        ],
+        env=rclone_env(),
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return sorted(p.stdout.splitlines())
+
+
+def delete_run_on_bucket(area: str, version: str) -> None:
+    print(f'deleting run: {area} {version}')
+    subprocess.run(
+        ['rclone', 'purge', f'remote:ofm-btrfs/areas/{area}/{version}'],
+        env=rclone_env(),
+        check=True,
+    )
 
 
 def get_deployed_version_on_bucket(area: str) -> str | None:

@@ -37,3 +37,8 @@ OFM_CRON=1
 
 # Every hour, on the hour, rebuild bucket indexes.
 0 * * * * ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-indexes >> $LOG_DIR/make_indexes.log 2>&1
+
+# Every Wednesday at 08:30, delete old runs from the btrfs bucket.
+# Runs the day after the Tuesday planet deploy, outside every build, set-version and
+# index window.
+30 8 * * 3 ofm    cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py purge-versions >> $LOG_DIR/purge_versions.log 2>&1
