@@ -8,12 +8,20 @@ The tilegen cron file is `tilegen/cron.d/ofm_tilegen`.
 
 Planet release jobs run in UTC:
 
-| Time          | Job                             |
-| ------------- | ------------------------------- |
-| Sunday 08:00  | Build and upload planet tiles   |
-| Tuesday 08:00 | Set the deployed planet version |
+| Time                                   | Job                             |
+| -------------------------------------- | ------------------------------- |
+| Sunday 08:00                           | Build and upload planet tiles   |
+| Tuesday 08:00 to 23:50, every 10 min   | Set the deployed planet version |
 
-Cron runs both jobs as the `ofm` runtime user. The equivalent manual build command is:
+Monaco is built daily at 03:30 and its deployed version is set every 10 minutes from 01:00 to 02:50, so a Monaco build is deployed the next morning.
+
+Once the latest version is deployed, later `set-version` runs in the window do nothing. It uses rclone with credentials, so every error sends a Telegram alert and the next run retries. Successful uploads and deploys send a silent Telegram message.
+
+### Rolling back
+
+During a set-version window, the next cron run overwrites a manual rollback. First comment out the set-version line in `/etc/cron.d/ofm_tilegen`, then run `set-version {area} --version OLD`.
+
+Cron runs all jobs as the `ofm` runtime user. The equivalent manual build command is:
 
 ```bash
 cd /data/ofm/src && sudo -u ofm env PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet --upload
@@ -84,23 +92,22 @@ The `done` file marks a run as complete. Version discovery only considers runs t
 
 The command:
 
-1. Reads <https://btrfs.openfreemap.com/files.txt>.
-2. Finds completed planet versions by looking for:
+1. Lists completed planet versions with `rclone lsf`, looking for:
 
    ```text
    areas/planet/{version}/done
    ```
 
-3. Sorts the completed versions.
-4. Selects the latest version.
-5. Reads the currently deployed version from:
+2. Sorts the completed versions.
+3. Selects the latest version.
+4. Reads the currently deployed version with `rclone cat` from:
 
    ```text
-   https://assets.openfreemap.com/deployed_versions/planet.txt
+   remote:ofm-assets/deployed_versions/planet.txt
    ```
 
-6. If the latest completed version is already deployed, exits without changes.
-7. Otherwise writes the selected version to:
+5. If the latest completed version is already deployed, exits without changes.
+6. Otherwise writes the selected version to:
 
    ```text
    remote:ofm-assets/deployed_versions/planet.txt
@@ -111,6 +118,8 @@ linux_host servers use this deployed version file to decide which planet version
 ## Host transition coordination
 
 The delay between the Sunday build and Tuesday publication coordinates normal releases. Automatic linux_host replicas prefetch the newest completed run while they continue to serve the active version. Publication changes only the shared deployed-version file. Each healthy host then activates the prefetched version during its next once-per-minute sync, after the image is verified, mounted, and included in a tested nginx configuration.
+
+A delayed build that completes inside the Tuesday window is deployed without prefetch. Hosts keep serving the old version while they download it.
 
 ## Public bucket indexes
 

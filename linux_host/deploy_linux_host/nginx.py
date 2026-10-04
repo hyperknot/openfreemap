@@ -11,6 +11,8 @@ LOGROTATE_PATH = '/etc/logrotate.d/openfreemap-nginx'
 
 def configure_nginx(c: Connection) -> None:
     deploy_nginx_base_config(c, config.local_assets_dir / 'nginx')
+    # Sync starts nginx after mounting the images, including after a reboot.
+    c.sudo('systemctl disable nginx')
     put(
         c,
         linux_host_deploy_config.local_linux_host_dir / 'logrotate.d' / 'openfreemap-nginx',

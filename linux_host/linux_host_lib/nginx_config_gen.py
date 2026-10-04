@@ -1,11 +1,9 @@
 import subprocess
-import sys
 from pathlib import Path
 from typing import Any
 
 from linux_host.linux_host_lib.linux_host_config import get_linux_host_config
 from linux_host.linux_host_lib.metadata_to_tilejson import write_tilejson
-from linux_host.linux_host_lib.telegram_alerts import send_telegram_alert
 
 
 HTTP_REDIRECT_SERVER = """server {
@@ -55,8 +53,11 @@ def write_nginx_config_if_changed(
     }
     existing_files = list(get_linux_host_config().nginx_sites_dir.glob('ofm-*.conf'))
     existing = {path.name: path.read_text() for path in existing_files}
-    changed = desired != existing
-    if changed:
+    reload_pending = get_linux_host_config().linux_host_dir / 'state' / 'nginx_reload_pending'
+    if desired != existing:
+        # Marker first, so a crash mid-write still triggers the reload next run.
+        reload_pending.parent.mkdir(parents=True, exist_ok=True)
+        reload_pending.touch()
         for filename, content in desired.items():
             (get_linux_host_config().nginx_sites_dir / filename).write_text(content)
         for path in existing_files:
@@ -65,14 +66,12 @@ def write_nginx_config_if_changed(
     else:
         print('nginx config unchanged')
 
-    # Always validate saved files, but reload only for generated changes. Keeping
-    # no persistent reload marker makes stable minutely syncs stateless.
-    result = subprocess.run(['nginx', '-t'])
-    if result.returncode != 0:
-        send_telegram_alert('ERROR\nnginx config test failed')
-        result.check_returncode()
-    if changed:
+    # The marker survives a failed test or reload, so the next run retries, and
+    # GC (which runs after this) never removes versions the loaded config uses.
+    if reload_pending.exists():
+        subprocess.run(['nginx', '-t'], check=True)
         subprocess.run(['systemctl', 'reload', 'nginx'], check=True)
+        reload_pending.unlink()
 
 
 def create_domain_config(
@@ -86,7 +85,7 @@ def create_domain_config(
         key_file = Path(f'/data/nginx/certs/ofm-{domain_data["slug"]}.key')
 
         if not cert_file.is_file() or not key_file.is_file():
-            sys.exit(f'  cert or key file does not exist: {cert_file} {key_file}')
+            raise FileNotFoundError(f'cert or key file does not exist: {cert_file} {key_file}')
 
     return create_nginx_conf(domain_data, retained_versions, active_versions)
 
@@ -253,7 +252,7 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
             continue
 
         # checking mnt dir
-        mnt_dir = Path(f'/mnt/ofm/{area}-{version}')
+        mnt_dir = get_linux_host_config().mnt_dir / f'{area}-{version}'
         mnt_file = mnt_dir / 'metadata.json'
         if not mnt_file.is_file():
             print(f'    skipping latest block for {area} / {version}: {mnt_file} does not exist')
@@ -277,8 +276,7 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
 
         # Missing version URLs intentionally fall back to the active version.
         # This bounded-storage policy accepts mixed responses from shared caches.
-        # wildcard
-        # identical to create_version_location
+        # wildcard: like create_version_location, but cached 1d
         location_str += f"""
 
         # wildcard JSON {area}
@@ -288,7 +286,7 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
             root {run_dir}; # no trailing slash
             try_files /tilejson-{domain_data['slug']}.json =404;
 
-            expires 1w;
+            expires 1d;
             default_type application/json;
 
             {PUBLIC_HEADERS}
@@ -301,10 +299,10 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
             # regex location is unreliable with alias, only root is reliable
 
             root {mnt_dir}/tiles/; # trailing slash
-            try_files /$2 @empty_tile;
+            try_files /$2 @empty_tile_wildcard;
             add_header Content-Encoding gzip;
 
-            expires 10y;
+            expires 1d;
 
             types {{
                 application/vnd.mapbox-vector-tile pbf;

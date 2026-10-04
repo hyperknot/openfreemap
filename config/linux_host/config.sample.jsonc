@@ -28,7 +28,8 @@
   "hosts": ["my-ofm-host"],
 
   // Prefetch completed releases and follow the shared deployed-version file.
-  // Set to false to start one detached sync at deployment and install no cron.
+  // Set to false to pin the host to the first synced version, with no network access
+  // afterwards. Only a redeploy updates it.
   "auto_update": true,
 
   // Optional: redirect requests to the tile server root path (/).
@@ -38,7 +39,7 @@
   // Use ["monaco"] for first deploys and tests (planet is a ~162 GB download).
   "areas": ["monaco"],
 
-  // Optional operational Telegram alerts:
+  // Optional Telegram notifications and alerts:
   // "telegram_token": "123456:ABC...",
   // "telegram_chat_id": "123456789",
   // "telegram_topic_id": 42

@@ -102,7 +102,9 @@ It does the following:
 
 - Fetches version files
 
-- Running the sync cron task (called every minute when `auto_update` is enabled)
+- Running the sync cron task (called every minute)
+
+- Starting nginx once the images are mounted
 
 You can run `./linux_host/scripts/linux_host.py --help` to see which options are available.
 
@@ -128,7 +130,7 @@ Of course, you are welcome to use custom styles.
 
 ### Tile versions
 
-`https://tiles.openfreemap.org/planet/latest` always points to the latest deployed TileJSON. Tile URLs can use `/planet/latest/{z}/{x}/{y}.pbf`. Non-existing versions are automatically served as the latest version.
+`https://tiles.openfreemap.org/planet/latest` always points to the latest deployed TileJSON. Tile URLs can use `/planet/latest/{z}/{x}/{y}.pbf`. Non-existing versions are automatically served as the latest version. Responses for `/planet/latest` and non-existing versions may be cached for up to 1 day; specific version URLs are cached long term.
 
 ### Inspecting tile data
 

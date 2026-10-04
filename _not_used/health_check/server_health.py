@@ -29,7 +29,7 @@ def check_server_health(
         return results
 
     area = jsonc_data.get('areas', ['planet', 'monaco'])[0]
-    version = get_deployed_version(area)['version']
+    version = get_deployed_version(area)
     for host in hosts:
         server_hostname = host
         server_ip = get_ip_from_ssh_alias(server_hostname)

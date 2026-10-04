@@ -10,7 +10,6 @@ from linux_host.deploy_linux_host.tasks_linux_host import (
     clean_linux_host,
     install_linux_host_cron,
     prepare_linux_host,
-    run_linux_host_sync_detached,
 )
 from linux_host.linux_host_lib.config_loader import (
     read_linux_host_jsonc_config,
@@ -40,11 +39,9 @@ def deploy(
         clean_linux_host(c, jsonc_data['areas'])
         prepare_shared(c, linux_host_deploy_config)
         prepare_linux_host(c, jsonc_path)
-        if jsonc_data['auto_update']:
-            install_linux_host_cron(c)
-            click.echo(f'Automatic sync scheduled on {host}.')
-        else:
-            run_linux_host_sync_detached(c, host)
+        install_linux_host_cron(c)
+        click.echo(f'Automatic sync scheduled on {host}.')
+        click.echo('Follow progress with: tail -f /data/ofm/linux_host/logs/linux_host_sync.log')
         print_success_message(jsonc_data)
 
 
