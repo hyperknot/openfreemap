@@ -17,7 +17,6 @@ def send_telegram_message(
     chat_id,
     topic_id=None,
     header=None,
-    silent=False,
 ):
     """Send literal text with an optional bold MarkdownV2 header."""
     # Alerts must not hide the original failure when optional config is absent.
@@ -43,8 +42,6 @@ def send_telegram_message(
     # Telegram forum topics use message_thread_id; omit it for ordinary chats.
     if topic_id is not None:
         payload['message_thread_id'] = topic_id
-    if silent:
-        payload['disable_notification'] = True
 
     # Notification delivery is best effort. A Telegram or network failure must
     # not replace the application exception that caused the alert.

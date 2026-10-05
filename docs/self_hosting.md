@@ -137,7 +137,7 @@ A Cloudflare failure (request error, invalid content, failed download) ends the 
 
 nginx is disabled at boot; after a reboot, the first sync mounts the images and starts it. If you stop nginx manually, the next sync starts it again; remove `/etc/cron.d/ofm_linux_host` to keep it stopped.
 
-Telegram is optional (`telegram_token`, `telegram_chat_id`, `telegram_topic_id`). It sends silent messages for each download and version switch. Repeated downloads of the same version (tracked in `/data/ofm/linux_host/download_ledger.txt`) notify with sound. Other errors (mount, nginx, disk space, SHA-256 mismatch, failed candidate) alert on every run until fixed.
+Telegram is optional (`telegram_token`, `telegram_chat_id`, `telegram_topic_id`). It only sends failures. A repeated download of the same version (tracked in `/data/ofm/linux_host/download_ledger.txt`) alerts. Other errors (mount, nginx, disk space, SHA-256 mismatch, failed candidate) alert on every run until fixed.
 
 #### 7. Deploy and check with `"areas": ["planet", "monaco"]`
 

@@ -78,7 +78,8 @@ def prepare_version(area: str, version: str) -> None:
         )
     gb = remote_size / 1e9
     minutes = (time.monotonic() - start) / 60
-    send_telegram(
-        f'downloaded {area} {version} ({gb:.1f} GB, {minutes:.0f} min, download #{count + 1})',
-        silent=count == 0,
-    )
+    message = f'downloaded {area} {version} ({gb:.1f} GB, {minutes:.0f} min, download #{count + 1})'
+    print(message)
+    # A repeated download means a local image was lost, so only that alerts.
+    if count > 0:
+        send_telegram(message)

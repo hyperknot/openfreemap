@@ -87,11 +87,6 @@ def make_tiles(area: str, upload: bool):
         move_logs(run_folder)
         if upload:
             finalize_run_upload(run_folder, remote_dir)
-            minutes = int((datetime.now(UTC) - now).total_seconds() // 60)
-            duration = f'{minutes // 60}h {minutes % 60}m' if minutes >= 60 else f'{minutes}m'
-            _send_telegram(
-                f'{area} {run_folder.name} uploaded (build {duration})', area, silent=True
-            )
             make_indexes_for_bucket('ofm-btrfs')
 
 
@@ -136,7 +131,7 @@ def set_version(area: str, version: str):
         return
 
     set_version_on_bucket(area, version)
-    _send_telegram(f'{area} deployed version set {deployed} → {version}', area, silent=True)
+    print(f'  Deployed version set: {area} {deployed} → {version}')
 
 
 @cli.command()
@@ -179,13 +174,12 @@ def purge_versions(dry_run: bool):
         for run in to_delete:
             delete_run_on_bucket(area, run)
         deleted_any = True
-        _send_telegram(f'purged {len(to_delete)} runs: {", ".join(to_delete)}', area, silent=True)
 
     if deleted_any:
         make_indexes_for_bucket('ofm-btrfs')
 
 
-def _send_telegram(message: str, area: str | None, silent: bool = False):
+def _send_telegram(message: str, area: str | None):
     config = get_tilegen_config()
     send_telegram_message(
         message,
@@ -193,7 +187,6 @@ def _send_telegram(message: str, area: str | None, silent: bool = False):
         chat_id=config.telegram_chat_id,
         topic_id=config.telegram_topic_id,
         header=f'Tilegen {area.title()}' if area else 'Tilegen',
-        silent=silent,
     )
 
 

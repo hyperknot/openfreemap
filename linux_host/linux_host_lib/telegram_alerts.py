@@ -4,7 +4,7 @@ from linux_host.linux_host_lib.linux_host_config import get_linux_host_config
 from shared_lib.utils.telegram_v2_shared import send_telegram_message
 
 
-def send_telegram(message: str, silent: bool = False) -> None:
+def send_telegram(message: str) -> None:
     print(f'telegram: {message}')
     send_telegram_message(
         message,
@@ -12,5 +12,4 @@ def send_telegram(message: str, silent: bool = False) -> None:
         chat_id=get_linux_host_config().telegram_chat_id,
         topic_id=get_linux_host_config().telegram_topic_id,
         header=f'OFM {socket.gethostname()}',
-        silent=silent,
     )

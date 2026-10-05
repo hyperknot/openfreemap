@@ -16,7 +16,7 @@ Planet release jobs run in UTC:
 
 Monaco is built daily at 03:30 and its deployed version is set every 10 minutes from 01:00 to 02:50, so a Monaco build is deployed the next morning.
 
-Once the latest version is deployed, later `set-version` runs in the window do nothing. It uses rclone with credentials, so every error sends a Telegram alert and the next run retries. Successful uploads and deploys send a silent Telegram message.
+Once the latest version is deployed, later `set-version` runs in the window do nothing. It uses rclone with credentials, so every error sends a Telegram alert and the next run retries. Telegram is only used for failures.
 
 ### Rolling back
 
@@ -138,7 +138,7 @@ The hourly `make-indexes` cron refreshes indexes for both buckets. The planet bu
 - the last 4 complete runs
 - the first complete run of each of the last 6 months with runs
 
-It deletes every other complete run, and incomplete runs (no `done` file) older than 7 days. Then it rebuilds the `ofm-btrfs` indexes and sends a silent Telegram message per area.
+It deletes every other complete run, and incomplete runs (no `done` file) older than 7 days. Then it rebuilds the `ofm-btrfs` indexes.
 
 The Wednesday run follows the Tuesday planet deploy. Purging is safe at any time: linux_host only uses the deployed version and the newest complete run, both always kept, and an upload in progress is younger than 7 days.
 

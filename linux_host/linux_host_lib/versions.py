@@ -1,5 +1,4 @@
 from linux_host.linux_host_lib.linux_host_config import get_linux_host_config
-from linux_host.linux_host_lib.telegram_alerts import send_telegram
 from shared_lib.utils.get_version import get_deployed_version
 
 
@@ -25,7 +24,4 @@ def write_version_files(remote_versions: dict[str, str]) -> None:
         if deployed_version != local_version_old:
             get_linux_host_config().deployed_versions_dir.mkdir(exist_ok=True, parents=True)
             local_version_file.write_text(deployed_version)
-            if local_version_old is not None:
-                send_telegram(
-                    f'{area} switched {local_version_old} → {deployed_version}', silent=True
-                )
+            print(f'  switched {area} {local_version_old} → {deployed_version}')
