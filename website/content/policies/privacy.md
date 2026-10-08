@@ -4,7 +4,7 @@ title: 'Privacy Policy'
 
 # OpenFreeMap Privacy Policy
 
-**Last Updated:** October 4, 2026
+**Last Updated:** October 8, 2026
 
 ## Summary
 
@@ -31,7 +31,7 @@ All announcements are shared exclusively through our X and Bluesky accounts.
 
 ## Full Privacy Policy
 
-Your privacy matters to us. Hyperknot Software Kft., based in Hungary, has created this Privacy Policy to explain what information we collect when you visit our Site https://openfreemap.org, why we collect it, and how we use it.
+Your privacy matters to us. Hyperknot Software Kft., based in Hungary, has created this Privacy Policy to explain what information we collect when you visit our Site https://openfreemap.org, why we collect it, and how we use it. This policy also covers our public tile service at https://tiles.openfreemap.org, including when our maps are embedded in other websites or apps.
 
 The terms "You" and "User" refer to anyone using our Site. "We," "Us," and "Our" refer to Hyperknot Software Kft.
 
