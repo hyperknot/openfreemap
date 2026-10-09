@@ -99,12 +99,15 @@ def _wikidata_cache_path(area: str) -> Path:
 def _planetiler_command(area: str, geotools_dir: Path) -> list[str | Path]:
     # https://github.com/onthegomap/planetiler/discussions/690#discussioncomment-7756397
     java_memory_gb = 30 if area == 'planet' else 1
+    tilegen_config = get_tilegen_config()
+
     return [
         'java',
         f'-Xmx{java_memory_gb}g',
         f'-DEPSG-HSQL.directory={geotools_dir}',
-        '-jar',
-        get_tilegen_config().planetiler_path,
+        '-cp',
+        tilegen_config.planetiler_path,
+        tilegen_config.planetiler_profile,
         f'--area={area}',
         '--download',
         '--download-threads=10',
