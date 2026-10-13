@@ -265,7 +265,7 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
         location = /{area} {{ # no trailing slash
             alias {tilejson_path}; # no trailing slash
 
-            expires 1d;
+            expires 1h;
             default_type application/json;
 
             {PUBLIC_HEADERS}
@@ -276,7 +276,7 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
 
         # Missing version URLs intentionally fall back to the active version.
         # This bounded-storage policy accepts mixed responses from shared caches.
-        # wildcard: like create_version_location, but cached 1d
+        # wildcard: like create_version_location, but JSON cached 1h, PBF 1d
         location_str += f"""
 
         # wildcard JSON {area}
@@ -286,7 +286,7 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
             root {run_dir}; # no trailing slash
             try_files /tilejson-{domain_data['slug']}.json =404;
 
-            expires 1d;
+            expires 1h;
             default_type application/json;
 
             {PUBLIC_HEADERS}

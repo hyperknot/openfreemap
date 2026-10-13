@@ -118,7 +118,7 @@ server: nginx
 x-ofm-debug: latest JSON monaco
 ```
 
-`https://YOUR_DOMAIN/planet/latest` always points to the active deployed Planet TileJSON, and `/planet/latest/{z}/{x}/{y}.pbf` serves its tiles. Any non-existing version also serves the active version. `/planet/latest` and non-existing version responses may be cached for up to 1 day; specific version URLs are cached long term.
+`https://YOUR_DOMAIN/planet/latest` always points to the active deployed Planet TileJSON, and `/planet/latest/{z}/{x}/{y}.pbf` serves its tiles. Any non-existing version also serves the active version. `/planet/latest` and non-existing version TileJSON responses may be cached for up to 1 hour, and their tiles for up to 1 day; specific version URLs are cached long term.
 
 ### Synchronization and retained versions
 

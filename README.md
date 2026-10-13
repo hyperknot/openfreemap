@@ -130,7 +130,7 @@ Of course, you are welcome to use custom styles.
 
 ### Tile versions
 
-`https://tiles.openfreemap.org/planet/latest` always points to the latest deployed TileJSON. Tile URLs can use `/planet/latest/{z}/{x}/{y}.pbf`. Non-existing versions are automatically served as the latest version. Responses for `/planet/latest` and non-existing versions may be cached for up to 1 day; specific version URLs are cached long term.
+`https://tiles.openfreemap.org/planet/latest` always points to the latest deployed TileJSON. Tile URLs can use `/planet/latest/{z}/{x}/{y}.pbf`. Non-existing versions are automatically served as the latest version. TileJSON responses for `/planet/latest` and non-existing versions may be cached for up to 1 hour, and their tiles for up to 1 day; specific version URLs are cached long term.
 
 ### Inspecting tile data
 
