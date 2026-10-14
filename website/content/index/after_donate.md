@@ -2,6 +2,10 @@
 
 Yes.
 
+## Can my app download areas for offline use?
+
+Yes, as long as each download is at most 3,000 tiles or 50 MB, uses at most 4 parallel requests, and sends a unique User-Agent identifying your app. For anything larger, please [contact us](mailto:info@openfreemap.org). See the [Terms of Service](/tos).
+
 ## Do you offer support and SLA guarantees?
 
 At the moment, I don't offer SLA guarantees or personalized support. However, if there's enough interest, I may introduce a Pro plan in the future. If you're interested, please let me know by sending an [email](mailto:zsolt@openfreemap.org).

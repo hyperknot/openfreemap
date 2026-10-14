@@ -4,7 +4,7 @@ title: 'Terms of Service'
 
 # OpenFreeMap Terms of Service
 
-**Last Updated:** September 9, 2026
+**Last Updated:** October 14, 2026
 
 ## Overview
 
@@ -25,7 +25,17 @@ You agree to use the Site legally and responsibly. You will not:
 - Use it for illegal activities
 - Disrupt the service or introduce harmful code
 - Violate intellectual property rights
-- Attempt to collect data from the service in automated ways without permission
+- Collect data from the service in automated ways, except for offline downloads as described below
+
+## Offline Downloads
+
+Your app may let users download areas for offline use if each download is:
+
+- at most 3,000 tiles or 50 MB
+- made with at most 4 parallel requests
+- sent with a unique User-Agent identifying your app
+
+For anything larger, please contact us at info@openfreemap.org.
 
 ## Intellectual Property
 
