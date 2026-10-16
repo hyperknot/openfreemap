@@ -2,19 +2,22 @@
 
 import os
 import sys
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import click
 
-from shared_lib.utils.get_version import get_deployed_version, get_versions_for_area
 from shared_lib.utils.telegram_v2_shared import send_telegram_message
-from tilegen.tilegen_lib.btrfs import append_sha256sum, build_btrfs_image, gzip_btrfs, move_logs
+from tilegen.tilegen_lib.btrfs import append_sha256sum, build_btrfs_image, move_logs
 from tilegen.tilegen_lib.lock import tile_build_lock
 from tilegen.tilegen_lib.mbtiles import update_mbtiles_metadata
 from tilegen.tilegen_lib.planetiler import fetch_wikidata_cache, run_planetiler
 from tilegen.tilegen_lib.pmtiles import make_pmtiles
 from tilegen.tilegen_lib.rclone import (
+    delete_run_on_bucket,
     finalize_run_upload,
+    get_deployed_version_on_bucket,
+    get_runs_on_bucket,
+    get_versions_on_bucket,
     make_indexes_for_bucket,
     set_version_on_bucket,
     upload_run_file,
@@ -71,15 +74,8 @@ def make_tiles(area: str, upload: bool):
         if upload:
             upload_run_file(run_folder / 'tiles.btrfs', remote_dir)
 
-        # gzip btrfs (pigz removes original), checksum, upload
-        gzip_btrfs(run_folder)
-        append_sha256sum(run_folder / 'tiles.btrfs.gz')
-        if upload:
-            upload_run_file(run_folder / 'tiles.btrfs.gz', remote_dir)
-
-        # delete btrfs files to save space
-        for btrfs_file in [run_folder / 'tiles.btrfs', run_folder / 'tiles.btrfs.gz']:
-            btrfs_file.unlink(missing_ok=True)
+        # delete btrfs file to save space
+        (run_folder / 'tiles.btrfs').unlink()
 
         # pmtiles: create from mbtiles, checksum and upload
         make_pmtiles(run_folder)
@@ -118,24 +114,80 @@ def set_version(area: str, version: str):
 
     print(f'---\n{now}\nStarting set-version {area}')
 
-    versions = get_versions_for_area(area)
-    if version == 'latest':
-        if not versions:
-            print(f'  No versions found for {area}')
-            return
+    # Reads go through the private R2 API (not the public URLs), so every error alerts.
+    versions = get_versions_on_bucket(area)
+    deployed = get_deployed_version_on_bucket(area)
+    if not versions:
+        raise click.ClickException(f'no versions on bucket: {area}')
 
+    if version == 'latest':
         version = versions[-1]
         print(f'  Latest version on bucket: {area} {version}')
     elif version not in versions:
         raise click.ClickException(f'version is not complete: {area} {version}')
 
-    try:
-        if get_deployed_version(area)['version'] == version:
-            return
-    except Exception:
-        pass
+    if deployed == version:
+        print(f'  Already deployed: {area} {version}')
+        return
 
     set_version_on_bucket(area, version)
+    print(f'  Deployed version set: {area} {deployed} → {version}')
+
+
+@cli.command()
+@click.option('--dry-run', is_flag=True, help='Only print the runs that would be deleted')
+def purge_versions(dry_run: bool):
+    """
+    Delete old runs from the btrfs bucket
+
+    Keeps the deployed version, the last 4 complete runs and the first complete run
+    of each of the last 6 months with runs. Incomplete runs are deleted after 7 days.
+    """
+
+    print(f'---\n{now}\nStarting purge-versions dry-run: {dry_run}')
+
+    incomplete_cutoff = (now - timedelta(days=7)).strftime('%Y%m%d_%H%M%S')
+    deleted_any = False
+
+    for area in get_tilegen_config().areas:
+        versions = get_versions_on_bucket(area)
+        deployed = get_deployed_version_on_bucket(area)
+        if not deployed:
+            raise click.ClickException(f'no deployed version: {area}')
+
+        first_of_month: dict[str, str] = {}
+        for version in versions:
+            first_of_month.setdefault(version[:6], version)
+        monthly = [first_of_month[month] for month in sorted(first_of_month)[-6:]]
+        keep = {deployed, *versions[-4:], *monthly}
+
+        to_delete = [
+            run
+            for run in get_runs_on_bucket(area)
+            if run not in keep and (run in versions or run < incomplete_cutoff)
+        ]
+        print(f'  {area}: keeping {sorted(keep)}')
+        print(f'  {area}: deleting {to_delete}')
+        if dry_run or not to_delete:
+            continue
+
+        for run in to_delete:
+            delete_run_on_bucket(area, run)
+        deleted_any = True
+
+    if deleted_any:
+        make_indexes_for_bucket('ofm-btrfs')
+
+
+def _send_telegram(message: str, area: str | None):
+    config = get_tilegen_config()
+    send_telegram_message(
+        message,
+        token=config.telegram_token,
+        chat_id=config.telegram_chat_id,
+        topic_id=config.telegram_topic_id,
+        header=f'Tilegen {area.title()}' if area else 'Tilegen',
+    )
 
 
 if __name__ == '__main__':
@@ -145,17 +197,8 @@ if __name__ == '__main__':
         try:
             cli(standalone_mode=False)
         except Exception as e:
-            area = next(
-                (arg.title() for arg in sys.argv if arg in get_tilegen_config().areas),
-                None,
-            )
+            area = next((arg for arg in sys.argv if arg in get_tilegen_config().areas), None)
             message = f'ERROR\n{type(e).__name__}: {e}'
             print(message)
-            send_telegram_message(
-                message,
-                token=get_tilegen_config().telegram_token,
-                chat_id=get_tilegen_config().telegram_chat_id,
-                topic_id=get_tilegen_config().telegram_topic_id,
-                header=f'Tilegen {area}' if area else 'Tilegen',
-            )
+            _send_telegram(message, area)
             raise

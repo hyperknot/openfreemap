@@ -12,7 +12,7 @@ IMAGE_SIZE = '200G'
 
 
 def build_btrfs_image(run_folder: Path, area: str):
-    """Create tiles.btrfs from tiles.mbtiles. Does not gzip or move logs."""
+    """Create tiles.btrfs from tiles.mbtiles. Does not move logs."""
     os.chdir(run_folder)
 
     cleanup_folder(run_folder)
@@ -142,12 +142,6 @@ def shrink_btrfs(btrfs_img: Path):
     print('shrink_btrfs DONE')
 
 
-def gzip_btrfs(run_folder: Path) -> None:
-    """Gzip tiles.btrfs using pigz. Removes the original tiles.btrfs."""
-    os.chdir(run_folder)
-    subprocess.run(['pigz', 'tiles.btrfs', '--fast'], check=True)
-
-
 def move_logs(run_folder: Path) -> None:
     """Move log and stats files into a logs/ subdirectory."""
     os.chdir(run_folder)
@@ -207,7 +201,7 @@ def cleanup_folder(run_folder: Path):
     for mount in mounts:
         subprocess.run(['sudo', 'umount', mount], capture_output=True)
 
-    for pattern in ['mnt_rw*', 'tmp_*', '*.btrfs', '*.gz', '*.log', '*.txt', 'logs', 'osm_date']:
+    for pattern in ['mnt_rw*', 'tmp_*', '*.btrfs', '*.log', '*.txt', 'logs', 'osm_date']:
         for item in run_folder.glob(pattern):
             if item.is_dir():
                 shutil.rmtree(item)

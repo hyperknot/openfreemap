@@ -12,9 +12,9 @@ There is a 99.9% chance you only need **linux_host**. tilegen is slow, needs a h
 
 ### System requirements
 
-**linux_host**: 300 GB disk space for hosting a single planet run. SSD is recommended, but not required. Note that an `auto_update: true` host may hold TWO complete versions during a release transition (the active version plus a prefetched candidate), so provide capacity for two complete versions on automatic planet hosts.
+**linux_host**: a planet version is about 170 GB. `auto_update: false` hosts need 200 GB disk space. `auto_update: true` hosts hold TWO complete versions during a release transition (the active version plus a prefetched candidate), so they need 400 GB. SSD is recommended, but not required.
 
-**tilegen**: 500 GB SDD and at least 64 GB ram
+**tilegen**: 1 TB SSD and at least 64 GB ram. A planet build peaks at about 500 GB, both during Planetiler and during the Btrfs image build. With `--upload`, the R2 bucket needs about 3.5 TB for the retained planet runs (see [bucket retention](tilegen_release_cadence.md#bucket-retention)).
 
 **Ubuntu 24.04 or newer**
 
@@ -38,7 +38,7 @@ I recommend running things quickly first, with `"areas": ["monaco"]` and then on
 
 #### 1. DNS setup
 
-Set up a server with at least 300 GB SSD space and configure the DNS for the subdomain of your choice.
+Set up a server with enough SSD space (see system requirements) and configure the DNS for the subdomain of your choice.
 For example, make an A record for "maps.example.com" -> 185.199.110.153
 
 #### 2. Clone and prepare `config` folder
@@ -54,7 +54,7 @@ Edit `config/linux_host/self-hosted.jsonc` and fill it out:
 - replace `tiles.example.com` with your own domain
 - choose a certificate type: `letsencrypt` (set your `email`), `upload` (provide your cert/key files), or `dummy` for local testing only — see the comments in the sample
 - set `hosts` to your SSH alias(es)
-- set `auto_update`: `true` installs a once-per-minute sync cron (deployment is asynchronous); `false` starts one detached sync session at deploy time and installs no cron
+- set `auto_update`: `true` follows new releases; `false` pins the host to the version deployed at setup time, with no network access after the first successful sync
 - set `areas`: use `["monaco"]` for the first quick deploy, then `["planet", "monaco"]` for the full deploy
 
 #### 3. Set up Python if you don't have it yet
@@ -97,8 +97,7 @@ SSH_PASSWD='your-ssh-password' SUDO_PASSWD='your-sudo-password' ./linux_host/dep
 
 Deployment is asynchronous: the deploy command does not print curl lines and does not wait for tiles to become live. It prints a success message and a MapLibre style URL, `https://YOUR_DOMAIN/styles/liberty`.
 
-- With `auto_update: true`, the once-per-minute cron downloads and serves the tiles in the background.
-- With `auto_update: false`, the deploy prints a tmux attach command so you can watch the one-off sync.
+Every host gets a once-per-minute sync cron, so the first download starts within a minute. Follow it with `tail -f /data/ofm/linux_host/logs/linux_host_sync.log` on the host.
 
 Once the sync has finished, verify it yourself. Run this locally and make sure it shows HTTP/2 200. For example this is an OK response:
 
@@ -119,19 +118,34 @@ server: nginx
 x-ofm-debug: latest JSON monaco
 ```
 
-`https://YOUR_DOMAIN/planet/latest` always points to the active deployed Planet TileJSON, and `/planet/latest/{z}/{x}/{y}.pbf` serves its tiles. Any non-existing version also serves the active version.
+`https://YOUR_DOMAIN/planet/latest` always points to the active deployed Planet TileJSON, and `/planet/latest/{z}/{x}/{y}.pbf` serves its tiles. Any non-existing version also serves the active version. `/planet/latest` and non-existing version TileJSON responses may be cached for up to 1 hour, and their tiles for up to 1 day; specific version URLs are cached long term.
 
 ### Synchronization and retained versions
 
 A sync keeps the active deployed version available while it downloads and verifies a replacement in full. Verified images live under `versions/`. Each download starts from zero in a disposable `tmp/` directory; downloads are not resumed.
 
+Sync runs every minute on every host. Each run:
+
+1. Mounts every complete image on disk and starts nginx. With `auto_update: false`, the run stops here after the first successful sync, so the host needs no network access afterwards.
+2. Reads the deployed versions and `files.txt` from Cloudflare.
+3. Downloads the deployed versions.
+4. With `auto_update: true`, downloads the newest completed version as a candidate.
+5. Mounts the images, reloads nginx if its config changed and `nginx -t` passes, then removes versions no longer needed.
+6. Downloads the assets.
+
+A Cloudflare failure (request error, invalid content, failed download) ends the run with a `cloudflare: ...; retrying next minute` line, and the next run tries again.
+
+nginx is disabled at boot; after a reboot, the first sync mounts the images and starts it. If you stop nginx manually, the next sync starts it again; remove `/etc/cron.d/ofm_linux_host` to keep it stopped.
+
+Telegram is optional (`telegram_token`, `telegram_chat_id`, `telegram_topic_id`). It only sends failures. A repeated download of the same version (tracked in `/data/ofm/linux_host/download_ledger.txt`) alerts. Other errors (mount, nginx, disk space, SHA-256 mismatch, failed candidate) alert on every run until fixed.
+
 #### 7. Deploy and check with `"areas": ["planet", "monaco"]`
 
 Edit `config/linux_host/self-hosted.jsonc` to set `"areas": ["planet", "monaco"]` and re-run the same `./linux_host/deploy_linux_host.py --config self-hosted [--host HOSTNAME]` as before.
 
-Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about the "Download aborted" lines in the meanwhile, it's a bug in CloudFlare.
+Go for a walk and by the time you come back it should be up and running with the latest planet tiles deployed. Don't worry about `cloudflare: ...; retrying next minute` lines in the meantime; a failed download restarts from zero on the next run.
 
-If your server doesn't have an SSD, the download + uncompressing process can take hours.
+If your server doesn't have an SSD, the download can take hours.
 
 ---
 

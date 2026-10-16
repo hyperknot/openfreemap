@@ -1,48 +1,37 @@
 """Shared version helpers for tilegen and linux_host."""
 
-from datetime import datetime
-from email.utils import parsedate_to_datetime
-from typing import Any
+import re
 
 import requests
 
+from shared_lib.utils.cloudflare import CloudflareError
 
-def get_versions_for_area(area: str) -> list[str]:
+
+def get_versions_by_area(areas: list[str]) -> dict[str, list[str]]:
     """
     Download the files.txt and check for the runs with the "done" file present
     """
     r = requests.get('https://btrfs.openfreemap.com/files.txt', timeout=30)
     r.raise_for_status()
 
-    versions: list[str] = []
+    versions: dict[str, list[str]] = {area: [] for area in areas}
+    for f in r.text.splitlines():
+        parts = f.split('/')
+        if len(parts) == 4 and parts[0] == 'areas' and parts[1] in versions and parts[3] == 'done':
+            versions[parts[1]].append(parts[2])
 
-    files = r.text.splitlines()
-    for f in files:
-        if not f.startswith(f'areas/{area}/'):
-            continue
-        if not f.endswith('/done'):
-            continue
-        version_str = f.split('/')[2]
-        versions.append(version_str)
+    for area, area_versions in versions.items():
+        if not area_versions:
+            raise CloudflareError(f'no finished versions in files.txt for {area}')
+        area_versions.sort()
 
-    return sorted(versions)
+    return versions
 
 
-def get_deployed_version(area: str) -> dict[str, Any]:
+def get_deployed_version(area: str) -> str:
     r = requests.get(f'https://assets.openfreemap.com/deployed_versions/{area}.txt', timeout=30)
     r.raise_for_status()
     version = r.text.strip()
-
-    last_modified_str = r.headers.get('Last-Modified')
-    last_modified = parse_http_last_modified(last_modified_str)
-
-    return dict(
-        version=version,
-        last_modified=last_modified,
-    )
-
-
-def parse_http_last_modified(date_string: str | None) -> datetime:
-    if date_string is None:
-        raise ValueError('Last-Modified header is missing')
-    return parsedate_to_datetime(date_string)
+    if not re.fullmatch(r'\d{8}_\d{6}_pt', version):
+        raise CloudflareError(f'invalid deployed version for {area}: {version[:50]!r}')
+    return version

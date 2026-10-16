@@ -9,7 +9,6 @@ from linux_host.linux_host_lib.config_loader import (
     read_linux_host_jsonc_config,
     resolve_upload_cert_paths,
 )
-from shared_lib.ssh_lib.kernel import kernel_limits1m, kernel_somaxconn65k
 from shared_lib.ssh_lib.utils import exists, put
 
 
@@ -18,7 +17,6 @@ def clean_linux_host(c: Connection, areas: list[str]) -> None:
     # code. Assets, ACME state, and complete images for configured areas survive.
     c.sudo('rm -f /etc/cron.d/ofm_linux_host')
     c.sudo('rm -f /etc/logrotate.d/openfreemap-nginx')
-    c.sudo('tmux kill-session -t ofm_linux_host_sync', warn=True, hide=True)
     for signal in ('TERM', 'KILL'):
         command = (
             f"for pid in $(pgrep -f '[l]inux_host.py sync'); do "
@@ -53,8 +51,6 @@ def clean_linux_host(c: Connection, areas: list[str]) -> None:
 
 
 def prepare_linux_host(c: Connection, jsonc_path: Path) -> None:
-    kernel_somaxconn65k(c)
-    kernel_limits1m(c)
     configure_nginx(c)
     if exists(c, '/usr/sbin/ufw'):
         c.sudo('ufw allow 80/tcp comment "HTTP"', echo=True)
@@ -71,9 +67,7 @@ def prepare_linux_host(c: Connection, jsonc_path: Path) -> None:
     nginx_log_paths = ['/data/nginx/logs/nginx-error.log']
     for domain_data in jsonc_data['domains']:
         base_path = f'{nginx_logs_dir}/{domain_data["slug"]}'
-        nginx_log_paths.extend(
-            [f'{base_path}-access.jsonl', f'{base_path}-error.log', f'{base_path}-deny.log']
-        )
+        nginx_log_paths.append(f'{base_path}-access.jsonl')
     quoted_log_paths = ' '.join(shlex.quote(path) for path in nginx_log_paths)
     c.sudo(f'touch {quoted_log_paths}')
     c.sudo(f'chown nginx:adm {quoted_log_paths}')
@@ -111,15 +105,6 @@ def upload_jsonc_config_and_certs(c: Connection, jsonc_path: Path) -> None:
         f'{linux_host_deploy_config.remote_linux_host_config}/schema.json',
         user='ofm',
     )
-
-
-def run_linux_host_sync_detached(c: Connection, hostname: str) -> None:
-    command = (
-        f'cd {linux_host_deploy_config.remote_source_dir} && '
-        'env PYTHONUNBUFFERED=1 ./linux_host/scripts/linux_host.py sync'
-    )
-    c.sudo(f'tmux new-session -d -s ofm_linux_host_sync {shlex.quote(command)}')
-    print(f'Attach with: ssh -t {shlex.quote(hostname)} sudo tmux attach -t ofm_linux_host_sync')
 
 
 def install_linux_host_cron(c: Connection) -> None:

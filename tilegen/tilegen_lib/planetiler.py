@@ -18,11 +18,15 @@ def fetch_wikidata_cache(area: str) -> None:
     command.extend(['--only-fetch-wikidata', f'--wikidata-cache={_wikidata_cache_path(area)}'])
     print(command)
 
-    with (
-        (wikidata_dir / 'planetiler_out.log').open('w') as out_file,
-        (wikidata_dir / 'planetiler_err.log').open('w') as err_file,
-    ):
-        subprocess.run(command, stdout=out_file, stderr=err_file, check=True, cwd=wikidata_dir)
+    err_path = wikidata_dir / 'planetiler_err.log'
+    try:
+        with (
+            (wikidata_dir / 'planetiler_out.log').open('w') as out_file,
+            err_path.open('w') as err_file,
+        ):
+            subprocess.run(command, stdout=out_file, stderr=err_file, check=True, cwd=wikidata_dir)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(_planetiler_failure_message(e, err_path)) from e
 
 
 def run_planetiler(area: str) -> Path:
@@ -74,14 +78,17 @@ def run_planetiler(area: str) -> Path:
         with out_path.open('w') as out_file, err_path.open('w') as err_file:
             subprocess.run(command, stdout=out_file, stderr=err_file, check=True, cwd=run_folder)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(
-            f'Planetiler failed with exit code {e.returncode}; see {err_path}'
-        ) from e
+        raise RuntimeError(_planetiler_failure_message(e, err_path)) from e
 
     shutil.rmtree(run_folder / 'data', ignore_errors=True)
     print('planetiler.jar DONE')
 
     return run_folder
+
+
+def _planetiler_failure_message(e: subprocess.CalledProcessError, err_path: Path) -> str:
+    tail = '\n'.join(err_path.read_text(errors='replace').splitlines()[-15:])
+    return f'Planetiler failed with exit code {e.returncode}; see {err_path}\n{tail}'
 
 
 def _wikidata_cache_path(area: str) -> Path:

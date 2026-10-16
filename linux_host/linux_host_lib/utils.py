@@ -5,6 +5,8 @@ from pathlib import Path
 
 import requests
 
+from shared_lib.utils.cloudflare import CloudflareError
+
 
 def assert_sudo():
     if os.geteuid() != 0:
@@ -16,11 +18,13 @@ def assert_linux():
         sys.exit('  needs to be run on Linux')
 
 
-def get_remote_file_size(url: str) -> int | None:
+def get_remote_file_size(url: str) -> int:
     r = requests.head(url, timeout=30)
     r.raise_for_status()
     size = r.headers.get('Content-Length')
-    return int(size) if size else None
+    if not size:
+        raise CloudflareError(f'missing Content-Length for {url}')
+    return int(size)
 
 
 def download_file_aria2(url: str, local_file: Path) -> None:
@@ -39,4 +43,10 @@ def download_file_aria2(url: str, local_file: Path) -> None:
         local_file.name,
         url,
     ]
-    subprocess.run(args, check=True)
+    code = subprocess.run(args).returncode
+    # Local, not Cloudflare: negative = killed by a signal (e.g. OOM); 9, 13-18: disk
+    # full, file exists, rename, open/create/IO, mkdir; 28: bad option (code/aria2 version)
+    if code < 0 or code in {9, 13, 14, 15, 16, 17, 18, 28}:
+        raise RuntimeError(f'aria2c exit {code} for {url}')
+    if code != 0:
+        raise CloudflareError(f'aria2c exit {code} for {url}')

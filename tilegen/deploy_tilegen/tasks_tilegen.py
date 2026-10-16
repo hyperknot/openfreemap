@@ -12,7 +12,6 @@ from tilegen.deploy_tilegen.tilegen_deploy_config import tilegen_deploy_config
 
 
 TILE_BUILD_PATTERN = r'[t]ilegen/scripts/tilegen\.py make-tiles'
-TILEGEN_PROCESS_PATTERN = r'[t]ilegen/scripts/tilegen\.py'
 
 
 def tile_build_running(c: Connection) -> bool:
@@ -24,20 +23,46 @@ def disable_tilegen_cron(c: Connection) -> None:
 
 
 def stop_tilegen(c: Connection) -> None:
-    # Reinstall is explicitly destructive, so stop every tilegen command before
-    # removing data. Child processes include Java, rclone, rsync, and mount helpers.
-    for signal in ('TERM', 'KILL'):
-        command = (
-            f'for pid in $(pgrep -f {shlex.quote(TILEGEN_PROCESS_PATTERN)}); do '
-            f'pkill -{signal} -P "$pid" || true; done'
-        )
-        c.sudo(f'bash -c {shlex.quote(command)}', warn=True)
-        c.sudo(f'pkill -{signal} -f {shlex.quote(TILEGEN_PROCESS_PATTERN)}', warn=True)
-        if signal == 'TERM':
-            c.run('sleep 5')
+    # Reinstall is explicitly destructive, so stop every process working under
+    # /data/ofm before removing it. Processes are selected by cwd, not by parent:
+    # tilegen commands run from /data/ofm/src and their children (Java, rclone,
+    # mount helpers) inherit a cwd below /data/ofm. This also catches orphans, e.g.
+    # Java that ignored SIGTERM after its Python parent exited, even if the
+    # directory was already deleted (cwd then reads '<path> (deleted)').
+    ofm_dir = tilegen_deploy_config.remote_ofm_dir
+    script = f"""
+list_pids() {{
+  for d in /proc/[0-9]*; do
+    case "$(readlink "$d/cwd" 2>/dev/null)" in
+      {ofm_dir}|{ofm_dir}/*) echo "${{d#/proc/}}" ;;
+    esac
+  done
+}}
 
-    if c.sudo(f'pgrep -f {shlex.quote(TILEGEN_PROCESS_PATTERN)}', warn=True, hide=True).ok:
-        raise RuntimeError('Tilegen processes are still running after SIGKILL')
+wait_gone() {{
+  for _ in $(seq "$1"); do
+    [ -z "$(list_pids)" ] && return 0
+    sleep 1
+  done
+  return 1
+}}
+
+pids=$(list_pids)
+[ -z "$pids" ] && exit 0
+ps -o pid,user,args -p "$(echo $pids | tr ' ' ,)" | cut -c1-150
+
+kill -TERM $pids 2>/dev/null
+wait_gone 30 && exit 0
+
+echo 'Processes still running after SIGTERM, sending SIGKILL'
+kill -KILL $(list_pids) 2>/dev/null
+wait_gone 60 && exit 0
+
+echo 'Processes still running after SIGKILL:'
+ps -o pid,user,args -p "$(list_pids | paste -sd,)"
+exit 1
+"""
+    c.sudo(f'bash -c {shlex.quote(script)}')
 
 
 def unmount_tilegen_filesystems(c: Connection) -> None:

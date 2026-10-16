@@ -22,6 +22,7 @@ class LinuxHostConfig:
     versions_dir: Path = linux_host_dir / 'versions'
     tmp_dir: Path = linux_host_dir / 'tmp'
     assets_dir: Path = linux_host_dir / 'assets'
+    download_ledger: Path = linux_host_dir / 'download_ledger.txt'
 
     mnt_dir: Path = Path('/mnt/ofm')
 

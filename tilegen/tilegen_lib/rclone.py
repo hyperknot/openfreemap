@@ -1,3 +1,4 @@
+import re
 import subprocess
 from pathlib import Path
 
@@ -5,7 +6,7 @@ from tilegen.tilegen_lib.tilegen_config import get_tilegen_config
 
 
 # Files that are uploaded individually before finalize_run_upload
-LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.btrfs.gz', 'tiles.pmtiles'}
+LARGE_FILES = {'tiles.mbtiles', 'tiles.btrfs', 'tiles.pmtiles'}
 
 
 def rclone_env() -> dict[str, str]:
@@ -71,7 +72,7 @@ def make_indexes_for_bucket(bucket: str) -> None:
     )
     index_str = p.stdout
 
-    # upload to files.txt
+    # upload to files.txt (hosts find new versions through it)
     subprocess.run(
         [
             'rclone',
@@ -79,7 +80,7 @@ def make_indexes_for_bucket(bucket: str) -> None:
             f'remote:{bucket}/files.txt',
         ],
         env=rclone_env(),
-        check=False,
+        check=True,
         input=index_str.encode(),
     )
 
@@ -109,7 +110,7 @@ def make_indexes_for_bucket(bucket: str) -> None:
             f'remote:{bucket}/dirs.txt',
         ],
         env=rclone_env(),
-        check=False,
+        check=True,
         input=index_str.encode(),
     )
 
@@ -126,3 +127,62 @@ def set_version_on_bucket(area: str, version: str) -> None:
         check=True,
         input=version.strip().encode(),
     )
+
+
+def get_versions_on_bucket(area: str) -> list[str]:
+    p = subprocess.run(
+        [
+            'rclone',
+            'lsf',
+            '--recursive',
+            '--files-only',
+            '--include',
+            '*/done',
+            f'remote:ofm-btrfs/areas/{area}/',
+        ],
+        env=rclone_env(),
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return sorted(line.split('/')[0] for line in p.stdout.splitlines())
+
+
+def get_runs_on_bucket(area: str) -> list[str]:
+    """All run folders, complete or not."""
+    p = subprocess.run(
+        [
+            'rclone',
+            'lsf',
+            '--dirs-only',
+            '--dir-slash=false',
+            f'remote:ofm-btrfs/areas/{area}/',
+        ],
+        env=rclone_env(),
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return sorted(p.stdout.splitlines())
+
+
+def delete_run_on_bucket(area: str, version: str) -> None:
+    print(f'deleting run: {area} {version}')
+    subprocess.run(
+        ['rclone', 'purge', f'remote:ofm-btrfs/areas/{area}/{version}'],
+        env=rclone_env(),
+        check=True,
+    )
+
+
+def get_deployed_version_on_bucket(area: str) -> str | None:
+    p = subprocess.run(
+        ['rclone', 'cat', f'remote:ofm-assets/deployed_versions/{area}.txt'],
+        env=rclone_env(),
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    version = p.stdout.strip()
+    # A missing (empty output) or invalid file counts as not deployed and is rewritten.
+    return version if re.fullmatch(r'\d{8}_\d{6}_pt', version) else None
