@@ -11,10 +11,12 @@ Planet release jobs run in UTC:
 | Time                                   | Job                             |
 | -------------------------------------- | ------------------------------- |
 | Sunday 08:00                           | Build and upload planet tiles   |
-| Tuesday 08:00 to 23:50, every 10 min   | Set the deployed planet version |
+| Tuesday 02:00 to 23:50, every 10 min   | Set the deployed planet version |
 | Wednesday 08:30                        | Purge old runs (all areas)      |
 
 Monaco is built daily at 03:30 and its deployed version is set every 10 minutes from 01:00 to 02:50, so a Monaco build is deployed the next morning.
+
+The planet switch starts at 02:00, the lowest traffic hour, because every switch makes clients fetch new tile URLs and the CDN cache refills from the tile servers.
 
 Once the latest version is deployed, later `set-version` runs in the window do nothing. It uses rclone with credentials, so every error sends a Telegram alert and the next run retries. Telegram is only used for failures.
 

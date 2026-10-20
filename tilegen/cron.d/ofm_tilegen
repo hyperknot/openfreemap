@@ -8,7 +8,8 @@
 # - We picked Sunday 08:00 UTC as the safe build time, giving a buffer before Planetiler
 #   downloads the latest planet.
 # - We set the deployed planet version two days later, every 10 minutes on Tuesday from
-#   08:00 to 23:50 UTC. Once deployed, later runs do nothing.
+#   02:00 to 23:50 UTC. Once deployed, later runs do nothing. 02:00 UTC is the lowest
+#   traffic hour, so the CDN cache refill after the switch lands on the quietest period.
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -21,8 +22,8 @@ OFM_CRON=1
 # Every Sunday at 08:00, build and upload planet tiles.
 0 8 * * 0 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py make-tiles planet --upload >> $LOG_DIR/make_tiles_planet.log 2>&1
 
-# Every Tuesday, every 10 minutes from 08:00 to 23:50, set the deployed planet version.
-*/10 8-23 * * 2 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
+# Every Tuesday, every 10 minutes from 02:00 to 23:50, set the deployed planet version.
+*/10 2-23 * * 2 ofm     cd $SRC_DIR && PYTHONUNBUFFERED=1 ./tilegen/scripts/tilegen.py set-version planet >> $LOG_DIR/set_version_planet.log 2>&1
 
 # --- Monaco ---
 
