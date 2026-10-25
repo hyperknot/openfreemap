@@ -65,6 +65,7 @@ def run_planetiler(area: str) -> Path:
             '--storage=mmap',
             '--languages=default,tok',
             '--transliterate=false',
+            '--building-hide-outlines-with-parts=true',
         ]
     )
 
