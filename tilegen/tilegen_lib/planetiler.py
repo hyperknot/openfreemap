@@ -7,6 +7,7 @@ from pathlib import Path
 from tilegen.tilegen_lib.tilegen_config import get_tilegen_config
 
 from .btrfs import cleanup_folder
+from .water_polygons import WATER_POLYGONS_PATH, ensure_water_polygons
 
 
 def fetch_wikidata_cache(area: str) -> None:
@@ -14,6 +15,7 @@ def fetch_wikidata_cache(area: str) -> None:
 
     wikidata_dir = get_tilegen_config().tilegen_dir / 'wikidata' / area
     wikidata_dir.mkdir(parents=True, exist_ok=True)
+    ensure_water_polygons(refresh=False)
     command = _planetiler_command(area, wikidata_dir / 'geotools')
     command.extend(['--only-fetch-wikidata', f'--wikidata-cache={_wikidata_cache_path(area)}'])
     print(command)
@@ -34,6 +36,8 @@ def run_planetiler(area: str) -> Path:
 
     wikidata_cache_path = _wikidata_cache_path(area)
     wikidata_cache_path.parent.mkdir(parents=True, exist_ok=True)
+    # only the weekly planet run refreshes, Monaco runs daily and only downloads when missing
+    ensure_water_polygons(refresh=area == 'planet')
     date = datetime.now(UTC).strftime('%Y%m%d_%H%M%S')
 
     area_dir = get_tilegen_config().runs_dir / area
@@ -61,6 +65,7 @@ def run_planetiler(area: str) -> Path:
             '--storage=mmap',
             '--languages=default,tok',
             '--transliterate=false',
+            '--building-hide-outlines-with-parts=true',
         ]
     )
 
@@ -109,6 +114,7 @@ def _planetiler_command(area: str, geotools_dir: Path) -> list[str | Path]:
         tilegen_config.planetiler_path,
         tilegen_config.planetiler_profile,
         f'--area={area}',
+        f'--water_polygons_path={WATER_POLYGONS_PATH}',
         '--download',
         '--download-threads=10',
         '--download-chunk-size-mb=1000',

@@ -9,18 +9,23 @@ from .utils import exists, put, ubuntu_codename
 NGINX_REPO_NAME = 'nginx'
 
 
-def deploy_nginx_base_config(c: Connection, assets_dir: str | Path) -> None:
+def deploy_nginx_base_config(
+    c: Connection, assets_dir: str | Path, *, install_cloudflare_conf: bool = True
+) -> None:
     update_nginx_packages(c)
 
     c.sudo('mkdir -p /data/nginx/config /data/nginx/logs /data/nginx/sites /data/nginx/acme')
-    c.sudo('chown -R nginx:nginx /data/nginx/acme')
+    lock_down_acme_dir(c, '/data/nginx/acme')
     ensure_self_signed_cert(c)
 
     assets_dir = Path(assets_dir)
     put(c, assets_dir / 'nginx.conf', '/etc/nginx/nginx.conf')
     put(c, assets_dir / 'mime.types', '/etc/nginx/mime.types')
     put(c, assets_dir / 'default_disable.conf', '/data/nginx/sites/default_disable.conf')
-    put(c, assets_dir / 'cloudflare.conf', '/data/nginx/config/cloudflare.conf')
+    if install_cloudflare_conf:
+        put(c, assets_dir / 'cloudflare.conf', '/data/nginx/config/cloudflare.conf')
+    else:
+        c.sudo('rm -f /data/nginx/config/cloudflare.conf')
 
     c.sudo('nginx -t')
     c.sudo('systemctl restart nginx')
@@ -38,6 +43,13 @@ def update_nginx_packages(c: Connection) -> None:
 
     apt_get_update(c, NGINX_REPO_NAME)
     apt_get_install(c, 'nginx nginx-module-acme')
+
+
+def lock_down_acme_dir(c: Connection, path: str) -> None:
+    # nginx-acme writes its key files 0666, so the directory modes protect them.
+    c.sudo(f'chown -R nginx:nginx {path}')
+    c.sudo(f'find {path} -type d -exec chmod 700 {{}} +')
+    c.sudo(f'find {path} -type f -exec chmod 600 {{}} +')
 
 
 def ensure_self_signed_cert(c: Connection) -> None:
