@@ -57,11 +57,11 @@ local linters = (projectLinters) {
 
     ["ruff"] = (Builtins.ruff) {
         condition = "exec('test -x .venv/bin/ruff && printf true || printf false') == 'true'"
-        check = ".venv/bin/ruff check --force-exclude --extend-select S602,S604,S605 {{ files }}"
+        check = ".venv/bin/ruff check --force-exclude {{ files }}"
         check_diff {
-            command = ".venv/bin/ruff check --force-exclude --extend-select S602,S604,S605 --diff --exit-non-zero-on-fix {{ files }} && .venv/bin/ruff check --force-exclude --extend-select S602,S604,S605 {{ files }}"
+            command = ".venv/bin/ruff check --force-exclude --diff --exit-non-zero-on-fix {{ files }} && .venv/bin/ruff check --force-exclude {{ files }}"
         }
-        fix = ".venv/bin/ruff check --force-exclude --extend-select S602,S604,S605 --fix {{ files }}"
+        fix = ".venv/bin/ruff check --force-exclude --fix {{ files }}"
     }
 
     ["ruff-format"] = (Builtins.ruff_format) {

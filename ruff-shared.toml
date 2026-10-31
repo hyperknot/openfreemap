@@ -1,0 +1,62 @@
+# Shared hard-linked file: do not rename or move this file.
+# Projects extend it from their .ruff.toml. Never set lint.select there: it silently
+# replaces this list. Use lint.extend-select or lint.ignore for project differences.
+
+target-version = "py313"
+unsafe-fixes = true
+line-length = 100
+extend-exclude = ["alembic", "*.ipynb", "temp"]
+
+
+lint.select = [
+  'A',    # flake8-builtins
+  "C4",   # flake8-comprehensions
+  'DTZ',  # flake8-datetimez
+  "E",    # pycodestyle errors
+  'EXE',  # flake8-executable
+  "F",    # Pyflakes
+  'FA',   # flake8-future-annotations
+  "I",    # isort
+  'PT',   # flake8-pytest-style
+  'RSE',  # flake8-raise
+  'S602', # subprocess with shell=True
+  'S604', # function call with shell=True
+  'S605', # process started with a shell
+  'SIM',  # flake8-simplify
+  'UP',   # pyupgrade
+  "W",    # pycodestyle warnings
+]
+
+lint.ignore = [
+  'A003',
+  # 'C408',  # keep dict() as-is
+  # 'DTZ007', # naive datetime.strptime() without %z
+  'E501',
+  'E711',
+  'E712',
+  'E721', # type() comparison
+  # 'E722', # bare except
+  'E741',
+  'F401',   # unused imports
+  'F841',
+  'PT018',  # assertion should be broken into multiple parts
+  'SIM102',
+  'SIM103', # return the condition directly
+  'SIM105',
+  'SIM108',
+  # 'SIM110', # use any() instead of a for loop
+  # 'SIM114',
+  'SIM115',
+  # 'UP007', # use X | Y instead of Union[X, Y]
+  # 'UP032', # use an f-string instead of format()
+  # 'UP046', # prefer type parameters over Generic subclasses
+]
+
+[format]
+quote-style = "single"
+
+[lint.isort]
+lines-after-imports = 2
+
+[lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
