@@ -19,6 +19,7 @@ class TilegenConfig:
 
     planetiler_bin_dir: Path = tilegen_dir / 'planetiler_bin'
     planetiler_path: Path = planetiler_bin_dir / 'planetiler.jar'
+    planetiler_profile: Path = tilegen_dir / 'custom_profile' / 'OFMProfile.java'
     pmtiles_bin_dir: Path = tilegen_dir / 'pmtiles_bin'
     pmtiles_path: Path = pmtiles_bin_dir / 'pmtiles'
 
