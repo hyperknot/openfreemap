@@ -1,4 +1,4 @@
-import "package://github.com/jdx/hk/releases/download/v2.4.0/hk@2.4.0#/Config.pkl" as Config
+import "package://github.com/jdx/hk/releases/download/v2.11.0/hk@2.11.0#/Config.pkl" as Config
 
 exclude = List()
 
