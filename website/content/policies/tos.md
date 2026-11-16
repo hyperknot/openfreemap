@@ -1,5 +1,6 @@
 ---
 title: 'Terms of Service'
+description: 'OpenFreeMap is a completely free service provided "as is", with no warranties. The terms cover eligibility, user conduct, offline downloads and liability.'
 ---
 
 # OpenFreeMap Terms of Service
@@ -77,4 +78,4 @@ We may update these Terms at any time. Updates will be announced on X and Bluesk
 
 For questions about these Terms, email info@openfreemap.org.
 
-By using this Site, you also accept our [Privacy Policy](/privacy).
+By using this Site, you also accept our [Privacy Policy](/privacy/).
