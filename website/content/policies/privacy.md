@@ -1,5 +1,6 @@
 ---
 title: 'Privacy Policy'
+description: 'OpenFreeMap is completely free and collects minimal data: no user accounts, no cookies and no IP addresses in the access logs.'
 ---
 
 # OpenFreeMap Privacy Policy
@@ -35,7 +36,7 @@ Your privacy matters to us. Hyperknot Software Kft., based in Hungary, has creat
 
 The terms "You" and "User" refer to anyone using our Site. "We," "Us," and "Our" refer to Hyperknot Software Kft.
 
-This Privacy Policy is governed by our [Terms of Service](/tos).
+This Privacy Policy is governed by our [Terms of Service](/tos/).
 
 For questions about this policy or data processing, contact us at privacy@openfreemap.org.
 

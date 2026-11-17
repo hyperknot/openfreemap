@@ -1,6 +1,6 @@
 ## Who is behind this project and how can I follow it?
 
-I'm Zsolt Ero ([blog](https://blog.hyperknot.com/), [email](mailto:zsolt@openfreemap.org)).
+I'm [Zsolt Ero](https://hyperknot.com/) ([email](mailto:zsolt@openfreemap.org)).
 
 After 9 years of running my own map tile infrastructure for [MapHub](https://maphub.net/), I've open-sourced it and launched OpenFreeMap.
 
