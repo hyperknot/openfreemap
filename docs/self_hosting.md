@@ -30,6 +30,8 @@ This project is made to run on **clean servers** or virtual machines dedicated f
 
 If you run it on a non-clean server, please understand that this will modify your nginx config!
 
+The scripts do not manage your firewall. Make sure ports 80 and 443 are reachable. If your domains are proxied through Cloudflare, consider allowing these ports only from [Cloudflare's IP ranges](https://www.cloudflare.com/ips/), so the server cannot be reached directly.
+
 ---
 
 ## Instructions
