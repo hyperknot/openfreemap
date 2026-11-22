@@ -73,8 +73,8 @@ The pipeline is:
 11. Verify `tiles.pmtiles`.
 12. Write SHA256 checksum for `tiles.pmtiles`.
 13. Upload `tiles.pmtiles`.
-14. Move logs and stats into the run `logs/` directory.
-15. Upload remaining small files and `SHA256SUMS`.
+14. Move Btrfs logs and stats into the run `logs/` directory, which is not uploaded.
+15. Upload remaining small files (including the Planetiler logs) and `SHA256SUMS`.
 16. Create the remote `done` marker.
 17. Rebuild the `ofm-btrfs` bucket indexes.
 

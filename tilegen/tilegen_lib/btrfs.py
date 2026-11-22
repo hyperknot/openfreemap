@@ -143,12 +143,14 @@ def shrink_btrfs(btrfs_img: Path):
 
 
 def move_logs(run_folder: Path) -> None:
-    """Move log and stats files into a logs/ subdirectory."""
+    """
+    Move the Btrfs logs and stats into a logs/ subdirectory, which is not uploaded.
+    Planetiler logs stay in the run folder, so they are uploaded with the run.
+    """
     os.chdir(run_folder)
     Path('logs').mkdir(exist_ok=True)
-    for pattern in ['*.log', '*.txt']:
-        for file in Path().glob(pattern):
-            shutil.move(file, 'logs')
+    for file in Path().glob('btrfs_*'):
+        shutil.move(file, 'logs')
 
 
 def append_sha256sum(file: Path, mode: str = 'a') -> None:
@@ -201,7 +203,7 @@ def cleanup_folder(run_folder: Path):
     for mount in mounts:
         subprocess.run(['sudo', 'umount', mount], capture_output=True)
 
-    for pattern in ['mnt_rw*', 'tmp_*', '*.btrfs', '*.log', '*.txt', 'logs', 'osm_date']:
+    for pattern in ['mnt_rw*', 'tmp_*', '*.btrfs', 'logs', 'osm_date']:
         for item in run_folder.glob(pattern):
             if item.is_dir():
                 shutil.rmtree(item)

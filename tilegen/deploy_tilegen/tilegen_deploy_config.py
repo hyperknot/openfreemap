@@ -16,7 +16,6 @@ class TilegenDeployConfig:
     remote_tilegen_config: str = f'{remote_config_dir}/tilegen'
     remote_tilegen_dir: str = f'{remote_ofm_dir}/tilegen'
 
-    remote_planetiler_src: str = f'{remote_tilegen_dir}/planetiler_src'
     remote_planetiler_bin: str = f'{remote_tilegen_dir}/planetiler_bin'
     remote_pmtiles_bin: str = f'{remote_tilegen_dir}/pmtiles_bin'
 
