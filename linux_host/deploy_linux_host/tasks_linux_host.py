@@ -9,7 +9,7 @@ from linux_host.linux_host_lib.config_loader import (
     read_linux_host_jsonc_config,
     resolve_upload_cert_paths,
 )
-from shared_lib.ssh_lib.utils import exists, put
+from shared_lib.ssh_lib.utils import put
 
 
 def clean_linux_host(c: Connection, areas: list[str]) -> None:
@@ -52,9 +52,6 @@ def clean_linux_host(c: Connection, areas: list[str]) -> None:
 
 def prepare_linux_host(c: Connection, jsonc_path: Path) -> None:
     configure_nginx(c)
-    if exists(c, '/usr/sbin/ufw'):
-        c.sudo('ufw allow 80/tcp comment "HTTP"', echo=True)
-        c.sudo('ufw allow 443/tcp comment "HTTPS"', echo=True)
 
     c.sudo(f'mkdir -p {linux_host_deploy_config.remote_linux_host_dir}/logs')
     c.sudo(f'chown ofm:ofm {linux_host_deploy_config.remote_linux_host_dir}/logs')

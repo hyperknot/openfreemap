@@ -30,6 +30,8 @@ This project is made to run on **clean servers** or virtual machines dedicated f
 
 If you run it on a non-clean server, please understand that this will modify your nginx config!
 
+The scripts do not manage your firewall. Make sure ports 80 and 443 are reachable. If your domains are proxied through Cloudflare, consider allowing these ports only from [Cloudflare's IP ranges](https://www.cloudflare.com/ips/), so the server cannot be reached directly.
+
 ---
 
 ## Instructions
@@ -169,7 +171,7 @@ The same `--user`, `--port`, `SSH_PASSWD` and `SUDO_PASSWD` options from the lin
 
 A normal deployment refuses to make any server change if a `make-tiles` build is running.
 
-Reinstall stops all tilegen commands and their child processes, verifies that they stopped, unmounts and verifies filesystems below `/data/ofm`, and then removes `/data/ofm`. `/data/ofm_keep` (Wikidata cache and water polygons) is never deleted.
+Reinstall stops all tilegen commands and their child processes, verifies that they stopped, unmounts and verifies filesystems below `/data/ofm`, and then removes `/data/ofm`. `/data/ofm_keep` (Wikidata cache) is never deleted.
 
 Trigger a run manually over SSH as the `ofm` runtime user:
 

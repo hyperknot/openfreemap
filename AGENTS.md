@@ -20,6 +20,7 @@ Python packages:
 - Deploy scripts:
   - `linux_host/deploy_linux_host.py`
   - `tilegen/deploy_tilegen.py`
+  - `tilegen/upload_planetiler.py` — copies the pinned Planetiler CI jar to the assets bucket; run it after changing `PLANETILER_COMMIT`
 
 Public website prose lives in `website/content/`, and debug examples live in `website/public/debug/`.
 
