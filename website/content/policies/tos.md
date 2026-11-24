@@ -5,7 +5,7 @@ description: 'OpenFreeMap is a completely free service provided "as is", with no
 
 # OpenFreeMap Terms of Service
 
-**Last Updated:** October 14, 2026
+**Last Updated:** November 24, 2026
 
 ## Overview
 
@@ -32,11 +32,11 @@ You agree to use the Site legally and responsibly. You will not:
 
 Your app may let users download areas for offline use if each download is:
 
-- at most 3,000 tiles or 50 MB
+- at most 3,000 tiles and at most 50 MB
 - made with at most 4 parallel requests
 - sent with a unique User-Agent identifying your app
 
-For anything larger, please contact us at info@openfreemap.org.
+Larger areas or long routes can be saved as several separate downloads, each started by the user and each within these limits. For anything else, please contact us at info@openfreemap.org.
 
 ## Intellectual Property
 
