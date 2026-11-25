@@ -32,6 +32,8 @@ If you run it on a non-clean server, please understand that this will modify you
 
 The scripts do not manage your firewall. Make sure ports 80 and 443 are reachable. If your domains are proxied through Cloudflare, consider allowing these ports only from [Cloudflare's IP ranges](https://www.cloudflare.com/ips/), so the server cannot be reached directly.
 
+Behind Cloudflare, also add a request header transform rule that removes the `Origin` header for your tile hostname (Rules → Transform Rules → Modify Request Header, operation Remove, header `Origin`). Cloudflare's default cache key includes `Origin`, so without the rule every website embedding your map gets its own cached copy of every tile, and a cache purge by URL misses those copies. The responses are the same for every website (`Access-Control-Allow-Origin: *`), so removing it is safe.
+
 ---
 
 ## Instructions
