@@ -10,6 +10,7 @@ from linux_host.linux_host_lib.config_loader import read_linux_host_jsonc_config
 class LinuxHostConfig:
     areas: tuple[str, ...] = field(init=False)
     auto_update: bool = field(init=False)
+    backup_mode: bool = field(init=False)
 
     repo_root: Path = Path(__file__).resolve().parents[2]
     linux_host_code_dir: Path = repo_root / 'linux_host'
@@ -56,6 +57,7 @@ class LinuxHostConfig:
 
         self.areas = tuple(jsonc_data['areas'])
         self.auto_update = jsonc_data['auto_update']
+        self.backup_mode = jsonc_data.get('backup_mode', False)
         self.domains = jsonc_data['domains']
         self.hosts = jsonc_data['hosts']
         self.root_redirect_url = jsonc_data.get('root_redirect_url')

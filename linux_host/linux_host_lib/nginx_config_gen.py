@@ -105,6 +105,7 @@ def create_nginx_conf(
     template = template.replace('__SSL_INTERMEDIATE_CONFIG__', SSL_INTERMEDIATE_CONFIG)
     template = template.replace('__NOINDEX_HEADERS__', NOINDEX_HEADERS)
     template = template.replace('__PUBLIC_HEADERS__', PUBLIC_HEADERS)
+    template = template.replace('__STYLES_BACKUP_SUB_FILTER__', styles_backup_sub_filter())
     template = template.replace(
         '    __SSL_CERTIFICATE_DIRECTIVES__', ssl_certificate_directives(domain_data)
     )
@@ -193,21 +194,21 @@ def create_version_location(
         print(f"  {run_dir} doesn't exist, skipping")
         return ''
 
-    tilejson_path = run_dir / f'tilejson-{domain_data["slug"]}.json'
-
     metadata_path = mnt_dir / 'metadata.json'
     if not metadata_path.is_file():
         print(f"  {metadata_path} doesn't exist, skipping")
         return ''
 
-    url_prefix = f'https://{domain_data["domain"]}/{area}/{version}'
+    location_str = ''
+    for name in url_names(area):
+        tilejson_path = tilejson_path_for(run_dir, domain_data, name)
+        if not tilejson_path.exists():
+            url_prefix = f'https://{domain_data["domain"]}/{name}/{version}'
+            write_tilejson(metadata_path, tilejson_path, url_prefix)
 
-    if not tilejson_path.exists():
-        write_tilejson(metadata_path, tilejson_path, url_prefix)
-
-    return f"""
-    # specific JSON {area} {version}
-    location = /{area}/{version} {{ # no trailing slash
+        location_str += f"""
+    # specific JSON {name} {version}
+    location = /{name}/{version} {{ # no trailing slash
         alias {tilejson_path}; # no trailing slash
 
         expires 1w;
@@ -215,11 +216,11 @@ def create_version_location(
 
         {PUBLIC_HEADERS}
 
-        add_header x-ofm-debug 'specific JSON {area} {version}';
+        add_header x-ofm-debug 'specific JSON {name} {version}';
     }}
 
-    # specific PBF {area} {version}
-    location ^~ /{area}/{version}/ {{ # trailing slash
+    # specific PBF {name} {version}
+    location ^~ /{name}/{version}/ {{ # trailing slash
         alias {mnt_dir}/tiles/; # trailing slash
         try_files $uri @empty_tile;
         add_header Content-Encoding gzip;
@@ -232,9 +233,11 @@ def create_version_location(
 
         {PUBLIC_HEADERS}
 
-        add_header x-ofm-debug 'specific PBF {area} {version}';
+        add_header x-ofm-debug 'specific PBF {name} {version}';
     }}
     """
+
+    return location_str
 
 
 def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dict[str, str]) -> str:
@@ -244,12 +247,6 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
         print(f'  linking latest version for {area}: {version}')
 
         run_dir = get_linux_host_config().versions_dir / area / version
-        tilejson_path = run_dir / f'tilejson-{domain_data["slug"]}.json'
-        if not tilejson_path.is_file():
-            print(
-                f'    skipping latest block for {area} / {version}: {tilejson_path} does not exist'
-            )
-            continue
 
         # checking mnt dir
         mnt_dir = get_linux_host_config().mnt_dir / f'{area}-{version}'
@@ -258,11 +255,19 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
             print(f'    skipping latest block for {area} / {version}: {mnt_file} does not exist')
             continue
 
-        # latest
-        location_str += f"""
+        for name in url_names(area):
+            tilejson_path = tilejson_path_for(run_dir, domain_data, name)
+            if not tilejson_path.is_file():
+                print(
+                    f'    skipping latest block for {name} / {version}: {tilejson_path} does not exist'
+                )
+                continue
 
-        # latest JSON {area}
-        location = /{area} {{ # no trailing slash
+            # latest
+            location_str += f"""
+
+        # latest JSON {name}
+        location = /{name} {{ # no trailing slash
             alias {tilejson_path}; # no trailing slash
 
             expires 1h;
@@ -270,32 +275,32 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
 
             {PUBLIC_HEADERS}
 
-            add_header x-ofm-debug 'latest JSON {area}';
+            add_header x-ofm-debug 'latest JSON {name}';
         }}
         """
 
-        # Missing version URLs intentionally fall back to the active version.
-        # This bounded-storage policy accepts mixed responses from shared caches.
-        # wildcard: like create_version_location, but JSON cached 1h, PBF 1d
-        location_str += f"""
+            # Missing version URLs intentionally fall back to the active version.
+            # This bounded-storage policy accepts mixed responses from shared caches.
+            # wildcard: like create_version_location, but JSON cached 1h, PBF 1d
+            location_str += f"""
 
-        # wildcard JSON {area}
-        location ~ ^/{area}/([^/]+)$ {{
+        # wildcard JSON {name}
+        location ~ ^/{name}/([^/]+)$ {{
             # regex location is unreliable with alias, only root is reliable
 
             root {run_dir}; # no trailing slash
-            try_files /tilejson-{domain_data['slug']}.json =404;
+            try_files /{tilejson_path.name} =404;
 
             expires 1h;
             default_type application/json;
 
             {PUBLIC_HEADERS}
 
-            add_header x-ofm-debug 'wildcard JSON {area}';
+            add_header x-ofm-debug 'wildcard JSON {name}';
         }}
 
-        # wildcard PBF {area}
-        location ~ ^/{area}/([^/]+)/(.+)$ {{
+        # wildcard PBF {name}
+        location ~ ^/{name}/([^/]+)/(.+)$ {{
             # regex location is unreliable with alias, only root is reliable
 
             root {mnt_dir}/tiles/; # trailing slash
@@ -310,8 +315,25 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
 
             {PUBLIC_HEADERS}
 
-            add_header x-ofm-debug 'wildcard PBF {area}';
+            add_header x-ofm-debug 'wildcard PBF {name}';
         }}
         """
 
     return location_str
+
+
+# EasyPrivacy blocks ||tiles.openfreemap.org/planet (easylist/easylist#26522), so
+# every area is also served under backup_{area}. backup_mode points the hosted
+# styles there.
+def url_names(area: str) -> list[str]:
+    return [area, f'backup_{area}']
+
+
+def styles_backup_sub_filter() -> str:
+    if not get_linux_host_config().backup_mode:
+        return ''
+    return "sub_filter '/planet\"' '/backup_planet\"';"
+
+
+def tilejson_path_for(run_dir: Path, domain_data: dict[str, Any], name: str) -> Path:
+    return run_dir / f'tilejson-{domain_data["slug"]}-{name}.json'

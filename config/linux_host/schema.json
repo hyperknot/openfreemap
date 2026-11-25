@@ -24,6 +24,10 @@
       "type": "boolean",
       "description": "Install the once-per-minute sync cron and prefetch the newest completed tile version"
     },
+    "backup_mode": {
+      "type": "boolean",
+      "description": "Point the hosted styles to /backup_{area} instead of /{area} (EasyPrivacy workaround). backup_ paths are always served."
+    },
     "root_redirect_url": {
       "type": "string",
       "description": "Optional URL to redirect the tile server root path (/) to. Omit to show a plain text OpenFreeMap tile server message.",

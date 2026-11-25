@@ -32,6 +32,10 @@
   // afterwards. Only a redeploy updates it.
   "auto_update": true,
 
+  // Optional: point the hosted styles to /backup_planet instead of /planet, for when
+  // ad-block filter lists block /planet. /backup_{area} paths are always served.
+  // "backup_mode": false,
+
   // Optional: redirect requests to the tile server root path (/).
   // Omit to show a plain text OpenFreeMap tile server message.
   // "root_redirect_url": "https://openfreemap.org",
