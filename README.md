@@ -132,6 +132,8 @@ Of course, you are welcome to use custom styles.
 
 `https://tiles.openfreemap.org/planet/latest` always points to the latest deployed TileJSON. Tile URLs can use `/planet/latest/{z}/{x}/{y}.pbf`. Non-existing versions are automatically served as the latest version. TileJSON responses for `/planet/latest` and non-existing versions may be cached for up to 1 hour, and their tiles for up to 1 day; specific version URLs are cached long term.
 
+Every `/planet` URL is also served under `/backup_planet` with the same data, for when a filter list blocks `/planet`. If a custom style's map is blank for ad-block users, change its source URL to `https://tiles.openfreemap.org/backup_planet`.
+
 ### Inspecting tile data
 
 If a feature or label seems wrong or missing, you can check the raw tile data. See [inspecting tiles](docs/inspecting_tiles.md).

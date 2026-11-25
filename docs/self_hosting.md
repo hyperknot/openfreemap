@@ -122,6 +122,8 @@ x-ofm-debug: latest JSON monaco
 
 `https://YOUR_DOMAIN/planet/latest` always points to the active deployed Planet TileJSON, and `/planet/latest/{z}/{x}/{y}.pbf` serves its tiles. Any non-existing version also serves the active version. `/planet/latest` and non-existing version TileJSON responses may be cached for up to 1 hour, and their tiles for up to 1 day; specific version URLs are cached long term.
 
+Every area is also served under `backup_{area}` with the same data, for example `https://YOUR_DOMAIN/backup_planet/latest`. The `backup_mode` config flag points the hosted styles there.
+
 ### Synchronization and retained versions
 
 A sync keeps the active deployed version available while it downloads and verifies a replacement in full. Verified images live under `versions/`. Each download starts from zero in a disposable `tmp/` directory; downloads are not resumed.

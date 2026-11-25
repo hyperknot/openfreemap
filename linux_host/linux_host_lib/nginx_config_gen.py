@@ -202,6 +202,7 @@ def create_version_location(
     location_str = ''
     for name in url_names(area):
         tilejson_path = tilejson_path_for(run_dir, domain_data, name)
+        # Written once. If a killed sync leaves it truncated, delete it by hand.
         if not tilejson_path.exists():
             url_prefix = f'https://{domain_data["domain"]}/{name}/{version}'
             write_tilejson(metadata_path, tilejson_path, url_prefix)
@@ -256,12 +257,8 @@ def create_latest_locations(*, domain_data: dict[str, Any], active_versions: dic
             continue
 
         for name in url_names(area):
+            # written by create_version_location
             tilejson_path = tilejson_path_for(run_dir, domain_data, name)
-            if not tilejson_path.is_file():
-                print(
-                    f'    skipping latest block for {name} / {version}: {tilejson_path} does not exist'
-                )
-                continue
 
             # latest
             location_str += f"""

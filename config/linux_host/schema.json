@@ -26,7 +26,7 @@
     },
     "backup_mode": {
       "type": "boolean",
-      "description": "Point the hosted styles to /backup_{area} instead of /{area} (EasyPrivacy workaround). backup_ paths are always served."
+      "description": "Point the hosted styles' planet source to /backup_planet instead of /planet (EasyPrivacy workaround). backup_{area} paths are always served."
     },
     "root_redirect_url": {
       "type": "string",
